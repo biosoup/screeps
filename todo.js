@@ -5,6 +5,7 @@
     - smarter energy redistribution
         - room based logic
         - calculate aginst maximum energy production
+    - https://screeps.fandom.com/wiki/Tips
 
 - stats !!
     - process execution time

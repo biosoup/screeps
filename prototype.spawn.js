@@ -78,7 +78,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                     }
                 }
                 // if no claim order was found, check other roles
-                else if (numberOfCreeps[role] < this.memory.minCreeps[role]) {
+                else if (numberOfCreeps[role] < this.memory.minCreeps[role] && role != 'claimer') {
                     if (role == 'lorry') {
                         name = this.createLorry(150);
                     } else {
