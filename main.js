@@ -76,8 +76,6 @@ module.exports.loop = function () {
         }
     }
 
-    console.log("test");
-
     //other stats
     let containers = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
         filter: {structureType: STRUCTURE_CONTAINER}  });

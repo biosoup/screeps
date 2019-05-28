@@ -38,10 +38,14 @@
     - better spawning process -> multiwork creep
     - spawn que with prioritization
     - compute expected ROI of worker
+    - output into console buld of current creep
     
 - lorry logic
     - do not supply tower?
     - prioritization!
+    
+- better pathfingin
+    - https://docs.screeps.com/api/#Creep.moveTo
     
 - multiwork creep
     - internal prioritization of tasks -> room level !
