@@ -31,7 +31,7 @@ module.exports = {
                 creep.moveTo(container);
             }
 
-            //když je to rozbité
+            //kdyÅ¾ je to rozbitÃ©
         } else {
             // if creep is bringing energy to a structure but has no energy left
             if (creep.memory.working == true && creep.carry.energy == 0) {

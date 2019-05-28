@@ -31,7 +31,7 @@ module.exports.loop = function () {
             let creepsInRoom = spawns.room.find(FIND_MY_CREEPS);
             var evolve = numberOfCreeps['miner'] = _.sum(creepsInRoom, (c) => c.memory.role == 'miner');
             spawns.memory.minCreeps = minCreeps;
-            spawns.memory.minCreeps.upgrader = 1
+            spawns.memory.minCreeps.upgrader = 2
             spawns.memory.minCreeps.builder = 2
             spawns.memory.minCreeps.repairer = 1
             spawns.memory.minCreeps.wallRepairer = 0
@@ -42,14 +42,16 @@ module.exports.loop = function () {
             spawns.memory.minCreeps.lorry = 2
             spawns.memory.booted = true;
             spawns.memory.minLongDistanceHarvesters = {}
-            spawns.memory.minLongDistanceHarvesters.W28N13 = 4
+            spawns.memory.minLongDistanceHarvesters.W28N13 = 2
+            spawns.memory.minLongDistanceHarvesters.W27N14 = 2
         }
         
         //what do want to claim/reserve
+        /*
         if (Game.time % 900 === 0) {
             spawns.memory.minCreeps.claimer = 1
             spawns.memory.claimRoom = "W28N13";
-        }
+        }*/
     }
     
     
@@ -75,6 +77,8 @@ module.exports.loop = function () {
             Game.spawns[spawnName].spawnCreepsIfNecessary();
         }
     }
+
+    //console.log("test");
 
     //other stats
     let containers = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {

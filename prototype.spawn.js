@@ -61,6 +61,8 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                 }
             }
         }
+        
+        //console.log(name);
 
         // if none of the above caused a spawn command check for other roles
         if (name == undefined) {
@@ -78,12 +80,13 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                     }
                 }
                 // if no claim order was found, check other roles
-                else if (numberOfCreeps[role] < this.memory.minCreeps[role] && role != 'claimer') {
+                else if (numberOfCreeps[role] < this.memory.minCreeps[role]) {
                     if (role == 'lorry') {
                         name = this.createLorry(150);
-                    } else {
+                    } else if (role != 'claimer') {
                         name = this.createCustomCreep(maxEnergy, role);
                     }
+                    //console.log(name);
                     break;
                 }
             }
@@ -104,14 +107,20 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                 if (numberOfLongDistanceHarvesters[roomName] < this.memory.minLongDistanceHarvesters[roomName]) {
                     //var randSource = ((numberOfLongDistanceHarvesters[roomName]+1) % 2)
                     //console.log(randSource);
-                    var randSource = _.random(0, 1);
+                    var randSource = 0;
+                    if(roomName == "W28N13") {
+                        randSource = _.random(0, 1);
+                    }
+                    
                     name = this.createLongDistanceHarvester(maxEnergy, 2, room.name, roomName, randSource);
                 }
             }
         }
 
+        var debug = 0;
+
         // print name to console if spawning was a success
-        if (name != undefined && _.isString(name)) {
+        if (name != undefined && _.isString(name) || debug == 1) {
             console.log(this.name + " spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
             for (let role of listOfRoles) {
                 //console.log(role + ": " + numberOfCreeps[role]);
@@ -146,7 +155,7 @@ StructureSpawn.prototype.createCustomCreep =
         }
 
         // create creep with the created body and the given role
-        return this.createCreep(body, roleName + "–c-" + Game.time, {
+        return this.createCreep(body, roleName + "-c-" + Game.time, {
             role: roleName,
             working: false,
             targetW: false
@@ -176,7 +185,7 @@ StructureSpawn.prototype.createLongDistanceHarvester =
         }
 
         // create creep with the created body
-        return this.createCreep(body, 'longDistanceHarvester-' + Game.time, {
+        return this.createCreep(body, 'longDistanceHarvester-' + "-" +target + "-" + Game.time, {
             role: 'longDistanceHarvester',
             home: home,
             target: target,

@@ -6,6 +6,8 @@
         - room based logic
         - calculate aginst maximum energy production
     - https://screeps.fandom.com/wiki/Tips
+    - states of things (and gotos?)
+        - https://screeps.com/forum/topic/2556/workflow-tips-and-prioritization-for-new-players/5
 
 - stats !!
     - process execution time
@@ -46,6 +48,7 @@
     
 - better pathfingin
     - https://docs.screeps.com/api/#Creep.moveTo
+    - https://www.reddit.com/r/screeps/comments/6yr4em/how_to_cache_paths/
     
 - multiwork creep
     - internal prioritization of tasks -> room level !

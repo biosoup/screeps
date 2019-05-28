@@ -20,7 +20,7 @@ StructureTower.prototype.defend =
                 // get the creep object
                 var creep = Game.creeps[name];
                 if (creep.hits < creep.hitsMax) {
-                    tower.heal(creep);
+                    this.heal(creep);
                     console.log("Tower is healing Creeps.");
                 }
             }
@@ -50,7 +50,10 @@ StructureTower.prototype.defend =
                 //console.log(target);
 
                 if (target) {
-                    this.repair(target);
+                    //TEMPORARILY LIMIT TOWER REPAIR
+                    if (target.hits < 1000) {
+                        this.repair(target);
+                    }
 
                     //console.log("The tower is repairing buildings.");
                 }
