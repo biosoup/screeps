@@ -4,7 +4,7 @@
     - https://www.reddit.com/r/screeps/comments/6uzqkb/tips_for_multiroom_architecture/dmozat8/
     - smarter energy redistribution
         - room based logic
-        - 
+        - calculate aginst maximum energy production
 
 - stats !!
     - process execution time
@@ -36,6 +36,7 @@
 - spawner logic 
     - better spawning process -> multiwork creep
     - spawn que with prioritization
+    - compute expected ROI of worker
     
 - lorry logic
     - do not supply tower?

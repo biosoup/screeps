@@ -76,14 +76,11 @@ module.exports.loop = function () {
         }
     }
 
-
+    console.log(test);
 
     //other stats
     let containers = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
-        filter: {
-            structureType: STRUCTURE_CONTAINER
-        }
-    });
+        filter: {structureType: STRUCTURE_CONTAINER}  });
     var containerStorage = 0;
     for (let container of containers) {
         containerStorage = containerStorage + container.store[RESOURCE_ENERGY];
