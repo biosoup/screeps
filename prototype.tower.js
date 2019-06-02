@@ -9,14 +9,14 @@ StructureTower.prototype.defend =
             this.attack(hostiles);
             //var username = hostiles[0].owner.username;
             //Game.notify(`User ${username} spotted in room ${myRoomName}`);
-            console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            console.log(this.room.name + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
         }
 
         //if there are no hostiles....
         if (hostiles === null) {
 
             //....first heal any damaged creeps
-            for (let name in Game.creeps) {
+            for (var name in Game.creeps) {
                 // get the creep object
                 var creep = Game.creeps[name];
                 if (creep.hits < creep.hitsMax) {
@@ -30,35 +30,53 @@ StructureTower.prototype.defend =
             //Because we don't want to be exposed if something shows up at our door :)
             var roomEnergyCapacity = this.room.energyCapacityAvailable;
             var roomEnergy = this.room.energyAvailable;
-            //work only when there is max spawn energy
-            if (this.energy >= (this.energyCapacity / 2) && roomEnergy == roomEnergyCapacity) {
+            //work only when there is max spawn energy && roomEnergy == roomEnergyCapacity
+            if (this.energy >= (this.energyCapacity / 2)) {
                 //Find the closest damaged Structure
                 var targets = this.room.find(FIND_STRUCTURES, {
                     filter: (s) =>
-                        (s.hits < 250000 && s.hits < s.hitsMax) &&
+                        ((s.hits / s.hitsMax) < 0.5) &&
                         s.structureType != STRUCTURE_CONTROLLER &&
                         s.structureType != STRUCTURE_EXTENSION &&
                         s.structureType != STRUCTURE_TOWER &&
+                        s.structureType != STRUCTURE_WALL &&
                         s.structureType != STRUCTURE_SPAWN
                     //|| (s.structureType == STRUCTURE_WALL && s.hits < 30000)
                     //|| (s.structureType == STRUCTURE_RAMPART && s.hits < 30000)
                 });
 
+
+
                 target = targets.sort(function (a, b) {
                     return +a.hits - +b.hits
                 })[0];
-                //console.log(target);
+                //console.log(JSON.stringify(targets))
 
                 if (target) {
-                    //TEMPORARILY LIMIT TOWER REPAIR
-                    if (target.hits < 1000) {
-                        this.repair(target);
-                    }
-
-                    //console.log("The tower is repairing buildings.");
+                    //this.repair(target);
                 }
             }
+            
+                //Find the closest damaged Structure
+                var targets = this.room.find(FIND_STRUCTURES, {
+                    filter: (s) =>
+                        (s.hits < 1000) &&
+                        s.structureType != STRUCTURE_CONTROLLER &&
+                        s.structureType != STRUCTURE_EXTENSION &&
+                        s.structureType != STRUCTURE_TOWER &&
+                        s.structureType != STRUCTURE_WALL &&
+                        s.structureType != STRUCTURE_SPAWN
+                });
 
+                target = targets.sort(function (a, b) {
+                    return +a.hits - +b.hits
+                })[0];
 
+                if (target) {
+                    this.repair(target);
+                }
+            
         }
+
+
     };

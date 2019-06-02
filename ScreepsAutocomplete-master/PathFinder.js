@@ -42,7 +42,7 @@ PathFinder =
      * This method should be invoked every tick.
      * @static
      *
-     * @note It affects the following methods behavior: Room.findPath, RoomPosition.findPathTo, RoomPosition.findClosestByPath, Creep.moveTo.
+     * @note It affects the following methods behavior: Room.findPath, RoomPosition.findPathTo, RoomPosition.findClosestByPath, Creep.travelTo.
      *
      * @see {@link http://support.screeps.com/hc/en-us/articles/207023879-PathFinder#use}
      *

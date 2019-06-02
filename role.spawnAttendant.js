@@ -1,7 +1,7 @@
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    run: function(creep) {
+    run: function (creep) {
         // if creep is bringing energy to a structure but has no energy left
         if (creep.memory.working == true && creep.carry.energy == 0) {
             // switch state
@@ -20,15 +20,19 @@ module.exports = {
                 // the second argument for findClosestByPath is an object which takes
                 // a property called filter which can be a function
                 // we use the arrow operator to define it
-                filter: (s) => (s.structureType == STRUCTURE_SPAWN
-                             || s.structureType == STRUCTURE_EXTENSION
-                             //|| s.structureType == STRUCTURE_TOWER
-                               )
-                             && s.energy < s.energyCapacity
+                filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
+                        s.structureType == STRUCTURE_EXTENSION) &&
+                    s.energy < s.energyCapacity
             });
 
             if (structure == undefined) {
-                structure = creep.room.storage;
+                structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    // the second argument for findClosestByPath is an object which takes
+                    // a property called filter which can be a function
+                    // we use the arrow operator to define it
+                    filter: (s) => (s.structureType == STRUCTURE_TOWER) &&
+                        s.energy < s.energyCapacity
+                });
             }
 
             // if we found one
@@ -40,9 +44,20 @@ module.exports = {
                 }
             }
         }
-        // if creep is supposed to harvest energy from source
+        // if creep is supposed to get energy
         else {
-            creep.getEnergy(false, true);
+            container = creep.room.storage;
+
+            // if one was found
+            if (container != undefined) {
+                // try to withdraw energy, if the container is not in range
+                if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    // move towards it
+                    creep.travelTo(container);
+                }
+            }
+
+
         }
     }
 };

@@ -1,3 +1,5 @@
+// REWRITE !!!!
+
 var roleUpgrader = require('role.upgrader');
 
 module.exports = {
@@ -10,7 +12,7 @@ module.exports = {
             // find exit to target room
             var exit = creep.room.findExitTo(creep.memory.target);
             // move to exit
-            creep.travelTo(creep.pos.findClosestByPath(exit));
+            creep.travelTo(creep.pos.findClosestByRange(exit));
             // return the function to not do anything else
             return;
         }
@@ -35,7 +37,7 @@ module.exports = {
                 // try to build, if the constructionSite is not in range
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
                     // move towards the constructionSite
-                    creep.travelTo(constructionSite, {visualizePathStyle: {stroke: '#ffffff'}});
+                    creep.travelTo(constructionSite);
                 }
             }
             // if no constructionSite is found

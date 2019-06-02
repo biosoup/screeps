@@ -24,7 +24,7 @@ module.exports = {
             var walls = creep.room.find(FIND_STRUCTURES, {
                 filter: (s) =>
                     (s.structureType == STRUCTURE_WALL || s.structureType == STRUCTURE_RAMPART) &&
-                    s.hits < 30000
+                    s.hits < 50000
             });
 
             target = walls.sort(function (a, b) {
@@ -39,7 +39,7 @@ module.exports = {
                 // try to repair it, if not in range
                 if (creep.repair(target) == ERR_NOT_IN_RANGE) {
                     // move towards it
-                    creep.moveTo(target);
+                    creep.travelTo(target);
                 }
             }
             // if we can't fine one
@@ -62,7 +62,7 @@ module.exports = {
 
                 if (creep.repair(target) == ERR_NOT_IN_RANGE) {
                     // move towards it
-                    creep.moveTo(target);
+                    creep.travelTo(target);
                 }
             }
             // if we can't fine one

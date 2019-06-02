@@ -20,6 +20,8 @@
     - screeps work
         - energy transfers
         - idle time per workgroup !!!
+    - enemy room statistics?
+        - to know their expansion rate, and how much creeps are getting killed
     
 - visual / console
     - add a visual for spawn
@@ -47,7 +49,7 @@
     - prioritization!
     
 - better pathfingin
-    - https://docs.screeps.com/api/#Creep.moveTo
+    - https://docs.screeps.com/api/#Creep.travelTo
     - https://www.reddit.com/r/screeps/comments/6yr4em/how_to_cache_paths/
     
 - multiwork creep

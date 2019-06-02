@@ -6,12 +6,23 @@ var roles = {
     wallRepairer: require('role.wallRepairer'),
     longDistanceHarvester: require('role.longDistanceHarvester'),
     claimer: require('role.claimer'),
-    miner: require('role.miner'),
-    lorry: require('role.lorry')
+    miner: require('role.minerN'),
+    lorry: require('role.lorry'),
+    guard: require('role.guard'),
+    spawnAttendant: require('role.spawnAttendant')
 };
+
+/** ADD
+- task handling
+    - request task
+    - fullfill task
+
+
+*/
 
 Creep.prototype.runRole =
     function () {
+        //console.log(this.memory.role);
         roles[this.memory.role].run(this);
     };
 
@@ -21,20 +32,29 @@ Creep.prototype.runRole =
 Creep.prototype.getEnergy =
     function (useContainer, useSource) {
         /** @type {StructureContainer} */
-        let container;
+        var container;
         // if the Creep should look for containers
         if (useContainer) {
-            // find closest container
+            // find closest storage
             container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
-                             s.store[RESOURCE_ENERGY] > 100
+                filter: s => (s.structureType == STRUCTURE_STORAGE) &&
+                             s.store[RESOURCE_ENERGY] > 300
             });
+            
+            //if storage empty
+            if (container == undefined) {
+                container = this.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
+                                 s.store[RESOURCE_ENERGY] > 100
+                });
+            }
+
             // if one was found
             if (container != undefined) {
                 // try to withdraw energy, if the container is not in range
                 if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     // move towards it
-                    this.moveTo(container);
+                    this.travelTo(container);
                 }
             }
         }
@@ -46,7 +66,7 @@ Creep.prototype.getEnergy =
             // try to harvest energy, if the source is not in range
             if (this.harvest(source) == ERR_NOT_IN_RANGE) {
                 // move towards it
-                this.moveTo(source);
+                this.travelTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
     };

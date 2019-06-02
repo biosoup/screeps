@@ -6,21 +6,18 @@ module.exports = {
             // find exit to target room
             var exit = creep.room.findExitTo(creep.memory.target);
             // move to exit
-            creep.moveTo(creep.pos.findClosestByRange(exit));
+            creep.travelTo(creep.pos.findClosestByPath(exit));
         }
-        else {
-            // try to reserve controller
-            if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                // move towards the controller
-                creep.moveTo(creep.room.controller);
-            }
-            /*
+        else {            
             // try to claim controller
-            if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+            //console.log(creep.claimController(creep.room.controller))
+            if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE && creep.claimController(creep.room.controller) != ERR_GCL_NOT_ENOUGH) {
                 // move towards the controller
-                creep.moveTo(creep.room.controller);
+                creep.travelTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            } else if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                creep.travelTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
-            */
+            
         }
     }
 };

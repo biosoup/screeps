@@ -21,17 +21,17 @@ module.exports = {
 
         if (typeof container !== 'undefined') {
             // if creep is on top of the container
-            if (creep.pos.isEqualTo(container.pos)) {
+            if (creep.pos.isEqualTo(container.pos) && container.energy < container.energyCapacity) {
                 // harvest source
                 creep.harvest(source);
             }
             // if creep is not on top of the container
             else {
                 // move towards it
-                creep.moveTo(container);
+                creep.travelTo(container);
             }
 
-            //kdyÅ¾ je to rozbitÃ©
+            //kdyz je to rozbite
         } else {
             // if creep is bringing energy to a structure but has no energy left
             if (creep.memory.working == true && creep.carry.energy == 0) {
@@ -66,7 +66,7 @@ module.exports = {
                     // try to transfer energy, if it is not in range
                     if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         // move towards it
-                        creep.moveTo(structure);
+                        creep.travelTo(structure);
                     }
                 }
             }

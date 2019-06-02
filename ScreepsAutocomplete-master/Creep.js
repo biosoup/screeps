@@ -334,7 +334,7 @@ Creep.prototype =
      * If the target is in another room, then the corresponding exit will be used as a target.
      * Requires the MOVE body part.
      *
-     * @see {@link http://support.screeps.com/hc/en-us/articles/203013212-Creep#moveTo}
+     * @see {@link http://support.screeps.com/hc/en-us/articles/203013212-Creep#travelTo}
      *
      * @type {function}
      *
@@ -343,14 +343,14 @@ Creep.prototype =
      * @param {object} [opts] An object containing additional options
      * @param {number} [opts.reusePath] This option enables reusing the path found along multiple game ticks. It allows to save CPU time, but can result in a slightly slower creep reaction behavior. The path is stored into the creep's memory to the _move property. The reusePath value defines the amount of ticks which the path should be reused for. The default value is 5. Increase the amount to save more CPU, decrease to make the movement more consistent. Set to 0 if you want to disable path reusing.
      * @param {boolean} [opts.serializeMemory] If reusePath is enabled and this option is set to true, the path will be stored in memory in the short serialized form using Room.serializePath. The default value is true.
-     * @param {boolean} [opts.noPathFinding] If this option is set to true, moveTo method will return ERR_NOT_FOUND if there is no memorized path to reuse. This can significantly save CPU time in some cases. The default value is false.
+     * @param {boolean} [opts.noPathFinding] If this option is set to true, travelTo method will return ERR_NOT_FOUND if there is no memorized path to reuse. This can significantly save CPU time in some cases. The default value is false.
      * @note opts also supports any method from the Room.findPath options.
      *
-     * @alias moveTo(target, [opts])
+     * @alias travelTo(target, [opts])
      *
      * @return {number|OK|ERR_NOT_OWNER|ERR_BUSY|ERR_TIRED|ERR_NO_BODYPART|ERR_INVALID_TARGET|ERR_NO_PATH}
      */
-    moveTo: function(x, y, opts) { },
+    travelTo: function(x, y, opts) { },
 
     /**
      * Toggle auto notification when the creep is under attack.

@@ -50,7 +50,7 @@ class InfluxDB {
     this.cpuReset = Game.cpu.getUsed()
 
     if (!this.opts.measureMemoryParse) return
-    let start = Game.cpu.getUsed()
+    var start = Game.cpu.getUsed()
     if (this.lastTime && global.LastMemory && Game.time === (this.lastTime + 1)) {
       delete global.Memory
       global.Memory = global.LastMemory
@@ -61,8 +61,8 @@ class InfluxDB {
       global.LastMemory = RawMemory._parsed
     }
     this.lastTime = Game.time
-    let end = Game.cpu.getUsed()
-    let el = end - start
+    var end = Game.cpu.getUsed()
+    var el = end - start
     this.memoryParseTime = el
     this.addStat('memory', {}, {
       parse: el,
@@ -93,7 +93,7 @@ class InfluxDB {
       credits: Game.market.credits
     })
     _.each(Game.rooms, room => {
-      let { controller, storage, terminal } = room
+      var { controller, storage, terminal } = room
       if (!controller || !controller.my) return
       this.addStat('room', {
         room: room.name
@@ -129,7 +129,7 @@ class InfluxDB {
     if (typeof Game.cpu.getHeapStatistics === 'function') {
       this.addStat('heap', {}, Game.cpu.getHeapStatistics())
     }
-    let used = Game.cpu.getUsed()
+    var used = Game.cpu.getUsed()
     this.addStat('cpu', {}, {
       bucket: Game.cpu.bucket,
       used: used,
@@ -139,19 +139,19 @@ class InfluxDB {
     })
   }
   commit () {
-    let usermap = this.opts.usermap
+    var usermap = this.opts.usermap
     this.shard = (Game.shard && Game.shard.name) || 'shard0'
     this.user = usermap[module.user] || _.find(Game.spawns, v => v).owner.username
-    let start = Game.cpu.getUsed()
+    var start = Game.cpu.getUsed()
     if (this.opts.baseStats) this.addBaseStats()
-    let stats = `text/${this.opts.driver.toLowerCase()}\n`
+    var stats = `text/${this.opts.driver.toLowerCase()}\n`
     stats += `${Game.time}\n`
     stats += `${Date.now()}\n`
-    let format = this[`format${this.opts.driver}`].bind(this)
+    var format = this[`format${this.opts.driver}`].bind(this)
     _.each(this.stats, (v, k) => {
       stats += format(v)
     })
-    let end = Game.cpu.getUsed()
+    var end = Game.cpu.getUsed()
     stats += format({ name: 'stats', tags: {}, values: { count: this.stats.length, size: stats.length, cpu: end - start } })
     if (this.opts.types.includes('segment')) {
       RawMemory.segments[this.opts.segment] = stats
@@ -164,16 +164,16 @@ class InfluxDB {
     }
   }
   formatInfluxDB (stat) {
-    let { name, tags, values } = stat
+    var { name, tags, values } = stat
     Object.assign(tags, { user: this.user, shard: this.shard })
     return `${name},${this.kv(tags)} ${this.kv(values)}\n`
   }
   formatGraphite (stat) {
-    let { name, tags, values } = stat
+    var { name, tags, values } = stat
     if (!this.prefix) {
       this.prefix = `${this.shard}`
     }
-    let pre = [this.prefix, this.kv(tags, '.').join('.'), name].filter(v => v).join('.')
+    var pre = [this.prefix, this.kv(tags, '.').join('.'), name].filter(v => v).join('.')
     return this.kv(values, ' ').map(v => `${pre}.${v}\n`).join('')
   }
   kv (obj, sep = '=') {
