@@ -1,5 +1,16 @@
 /** TODO or TO BE DONE
 
+
+PRIORITIES
+* tasks
+
+* mutliroom navigation overhaul
+* screep WORKER role
+* scout role
+* tower logic
+------
+
+
 - multiroom focused rewrite
     - https://www.reddit.com/r/screeps/comments/6uzqkb/tips_for_multiroom_architecture/dmozat8/
     - smarter energy redistribution

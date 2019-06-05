@@ -8,7 +8,7 @@
 
 module.exports = {
         // a function to run the logic for this role
-        run: function (creep) {
+        work: function (creep) {
             if (creep.room.name == creep.memory.target) {
                 // find source
                 var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {

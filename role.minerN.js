@@ -1,15 +1,18 @@
 module.exports = {
     // a function to run the logic for this role
-    run: function (creep) {
+    work: function (creep) {
 
         // get source
         var source = Game.getObjectById(creep.memory.sourceId);
 
-
-        // find container next to source
-        var container = source.pos.findInRange(FIND_STRUCTURES, 1, {
-            filter: s => s.structureType == STRUCTURE_CONTAINER
-        })[0];
+        if (source != null) {
+            // find container next to source
+            var container = source.pos.findInRange(FIND_STRUCTURES, 1, {
+                filter: s => s.structureType == STRUCTURE_CONTAINER
+            })[0];
+        } else {
+            creep.say("missing container")
+        }
 
         //console.log(JSON.stringify(container))
 
@@ -43,7 +46,7 @@ module.exports = {
                 filter: s => s.structureType == STRUCTURE_LINK
             })[0];
 
-            console.log(JSON.stringify(link))
+            //console.log(JSON.stringify(link))
 
             if (typeof link !== 'undefined') {
                 if (link.energy < link.energyCapacity) {

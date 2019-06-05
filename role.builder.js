@@ -3,7 +3,7 @@ var roleUpgrader = require('role.upgrader');
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    run: function (creep) {
+    work: function (creep) {
         
         // if target is defined and creep is not in target room
         if (creep.memory.target != undefined && creep.room.name != creep.memory.target) {
@@ -35,13 +35,13 @@ module.exports = {
                 // try to build, if the constructionSite is not in range
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
                     // move towards the constructionSite
-                    creep.travelTo(constructionSite, {visualizePathStyle: {stroke: '#ffffff'}});
+                    creep.travelTo(constructionSite);
                 }
             }
             // if no constructionSite is found
             else {
                 // go upgrading the controller
-                roleUpgrader.run(creep);
+                roleUpgrader.work(creep);
             }
         }
         // if creep is supposed to get energy

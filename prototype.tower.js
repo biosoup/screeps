@@ -21,7 +21,7 @@ StructureTower.prototype.defend =
                 var creep = Game.creeps[name];
                 if (creep.hits < creep.hitsMax) {
                     this.heal(creep);
-                    console.log("Tower is healing Creeps.");
+                    //console.log("Tower is healing Creeps.");
                 }
             }
 
@@ -53,7 +53,7 @@ StructureTower.prototype.defend =
                 //console.log(JSON.stringify(targets))
 
                 if (target) {
-                    //this.repair(target);
+                    this.repair(target);
                 }
             }
             

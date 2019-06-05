@@ -7,7 +7,7 @@ var roles = {
     longDistanceHarvester: require('role.longDistanceHarvester'),
     claimer: require('role.claimer'),
     miner: require('role.minerN'),
-    lorry: require('role.lorry'),
+    lorry: require('role.lorry.backup'),
     guard: require('role.guard'),
     spawnAttendant: require('role.spawnAttendant')
 };
@@ -23,7 +23,7 @@ var roles = {
 Creep.prototype.runRole =
     function () {
         //console.log(this.memory.role);
-        roles[this.memory.role].run(this);
+        roles[this.memory.role].work(this);
     };
 
 /** @function 
@@ -38,14 +38,14 @@ Creep.prototype.getEnergy =
             // find closest storage
             container = this.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: s => (s.structureType == STRUCTURE_STORAGE) &&
-                             s.store[RESOURCE_ENERGY] > 300
+                    s.store[RESOURCE_ENERGY] > 300
             });
-            
+
             //if storage empty
             if (container == undefined) {
                 container = this.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
-                                 s.store[RESOURCE_ENERGY] > 100
+                        s.store[RESOURCE_ENERGY] > 100
                 });
             }
 
@@ -66,7 +66,11 @@ Creep.prototype.getEnergy =
             // try to harvest energy, if the source is not in range
             if (this.harvest(source) == ERR_NOT_IN_RANGE) {
                 // move towards it
-                this.travelTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+                this.travelTo(source, {
+                    visualizePathStyle: {
+                        stroke: '#ffaa00'
+                    }
+                });
             }
         }
     };

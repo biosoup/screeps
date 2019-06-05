@@ -1,7 +1,7 @@
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    run: function (creep) {
+    work: function (creep) {
         // if creep is bringing energy to a structure but has no energy left
         if (creep.memory.working == true && creep.carry.energy == 0) {
             // switch state
@@ -62,6 +62,7 @@ module.exports = {
                 var exit = creep.room.findExitTo(creep.memory.home);
                 // and move to exit
                 creep.travelTo(creep.pos.findClosestByPath(exit));
+                //creep.travelTo(RoomPosition(25,25,creep.memory.home));   
             }
         }
         // if creep is supposed to harvest energy from source
@@ -83,6 +84,7 @@ module.exports = {
                 var exit = creep.room.findExitTo(creep.memory.target);
                 // move to exit
                 creep.travelTo(creep.pos.findClosestByPath(exit));
+                //creep.travelTo(RoomPosition(25,25,creep.memory.target));                
             }
         }
     }

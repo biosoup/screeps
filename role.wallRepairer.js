@@ -3,7 +3,7 @@ var roleBuilder = require('role.builder');
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    run: function (creep) {
+    work: function (creep) {
         var startCpu = Game.cpu.getUsed();
         // if creep is trying to repair something but has no energy left
         if (creep.memory.working == true && creep.carry.energy == 0) {
@@ -45,7 +45,7 @@ module.exports = {
             // if we can't fine one
             else {
                 // look for construction sites
-                roleBuilder.run(creep);
+                roleBuilder.work(creep);
             }
 
             //pracuje a uz zna svuj cil
@@ -68,7 +68,7 @@ module.exports = {
             // if we can't fine one
             else {
                 // look for construction sites
-                roleBuilder.run(creep);
+                roleBuilder.work(creep);
             }
 
             // if creep is supposed to get energy

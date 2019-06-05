@@ -1,10 +1,12 @@
 const stats = require('stats');
 var Traveler = require('Traveler');
+require("creep-tasks");
 
 // import modules
 require('prototype.creep');
 require('prototype.tower');
 require('prototype.spawn');
+require('prototype.room');
 
 
 
@@ -20,6 +22,20 @@ module.exports.loop = function () {
             // if not, delete the memory entry
             delete Memory.creeps[name];
         }
+    }
+
+    // for each creeps
+    for (var name in Game.creeps) {
+            // run creep logic
+            Game.creeps[name].runRole();
+    }
+
+    // find all towers
+    var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
+    // for each tower
+    for (var tower of towers) {
+        // run tower logic
+        tower.defend();
     }
 
     //run every 25 ticks and only when we have spare bucket CPU
@@ -46,14 +62,14 @@ module.exports.loop = function () {
 
             var evolve = numberOfCreeps['miner'] = _.sum(creepsInRoom, (c) => c.memory.role == 'miner');
             spawns.memory.minCreeps.miner = numberOfSources;
-            spawns.memory.minCreeps.lorry = numberOfSources+1;
+            spawns.memory.minCreeps.lorry = numberOfSources + 1;
             spawns.memory.minCreeps.harvester = numberOfSources - evolve;
 
             //service creeps
             spawns.memory.minCreeps.upgrader = numberOfSources;
-            if(spawns.room.storage.isActive) {
+            if (spawns.room.storage.isActive) {
                 spawns.memory.minCreeps.spawnAttendant = 1;
-                spawns.memory.minCreeps.lorry = spawns.memory.minCreeps.lorry-1;
+                spawns.memory.minCreeps.lorry = spawns.memory.minCreeps.lorry - 1;
             }
 
             //create a builder for construction sites
@@ -71,7 +87,8 @@ module.exports.loop = function () {
                     s.structureType != STRUCTURE_SPAWN
             })).length;
             if (numberOfRepairSites >= 5) {
-                spawns.memory.minCreeps.repairer = _.round(numberOfRepairSites / 10, 1);
+                //spawns.memory.minCreeps.repairer = _.round(numberOfRepairSites / 10, 1);
+                spawns.memory.minCreeps.repairer = 1
             }
 
             //figure when wall repair is needed
@@ -94,12 +111,12 @@ module.exports.loop = function () {
                 spawns.memory.minLongDistanceHarvesters = {}
                 spawns.memory.minLongDistanceHarvesters.W28N13 = 2
                 spawns.memory.minLongDistanceHarvesters.W27N14 = 2
-                spawns.memory.minLongDistanceHarvesters.W29N14 = 0
+                spawns.memory.minLongDistanceHarvesters.W27N15 = 0
                 spawns.memory.minLongDistanceBuilders = {}
                 spawns.memory.minLongDistanceBuilders.W28N13 = 1
                 spawns.memory.minLongDistanceBuilders.W27N14 = 1
                 spawns.memory.minGuards = {}
-                spawns.memory.minGuards.W27N14 = 0
+                spawns.memory.minGuards.W27N15 = 0
                 spawns.memory.claimer = {};
                 spawns.memory.claimer.W28N13 = 0;
                 spawns.memory.claimer.W29N14 = 0;
@@ -107,12 +124,12 @@ module.exports.loop = function () {
 
             if (spawns.room.name == "W29N14") {
                 spawns.memory.minCreeps.claimers = 0
-                spawns.memory.minCreeps.LongDistanceHarvester = 2
+                spawns.memory.minCreeps.LongDistanceHarvester = 1
                 spawns.memory.minCreeps.guard = 0
                 spawns.memory.booted = true;
 
                 spawns.memory.minLongDistanceHarvesters = {}
-                spawns.memory.minLongDistanceHarvesters.W29N13 = 2
+                spawns.memory.minLongDistanceHarvesters.W29N13 = 1
                 spawns.memory.minLongDistanceBuilders = {}
                 spawns.memory.minLongDistanceBuilders.W29N13 = 1
                 spawns.memory.minGuards = {}
@@ -120,7 +137,7 @@ module.exports.loop = function () {
                 spawns.memory.claimer = {};
                 spawns.memory.claimer.W29N13 = 0;
             }
-            console.log(Game.time+" Room " + spawns.room.name + " initialized!")
+            //console.log(Game.time+" Room " + spawns.room.name + " initialized!")
         }
 
         // for each spawn
@@ -132,21 +149,57 @@ module.exports.loop = function () {
         }
     }
 
+    //check for new tasks everywhere
+/*     if ((Game.time % 5) == 0 && Game.cpu.bucket > 5000) {
+        for (var roomName in Game.rooms) {
+            var roomName = Game.rooms[roomName];
+            //find possible sources in room
+            var energySources = roomName.find(FIND_STRUCTURES, {
+                filter: (s) =>
+                    s.structureType == STRUCTURE_CONTAINER ||
+                    //s.structureType == STRUCTURE_LINK ||
+                    s.structureType == STRUCTURE_TERMINAL
+                //|| s.structureType == STRUCTURE_STORAGE
+            });
+            //add dropped resources
+            //energySources = energySources.concat(roomName.find(FIND_DROPPED_RESOURCES));
+
+            //check if memory for room exists
+            if (roomName.memory.tasks == undefined) {
+                roomName.memory.tasks = {};
+            }
+
+            if (energySources !== undefined && energySources.length > 0) {
+                //console.log(roomName + " " + JSON.stringify(energySources))
+                for (var energySource of energySources) {
+                    //check if the task is not currently present
+
+                    if (!roomName.getExistingTransportTask(roomName, energySource)) {
+                        //add transport task
+                        roomName.addTransportTask(roomName, energySource);
+                    }
+                }
+            }
+
+        }
+    } */
 
 
-    // for each creeps
-    for (var name in Game.creeps) {
-        // run creep logic
-        Game.creeps[name].runRole();
+    //new task system
+    if ((Game.time % 5) == 0 && Game.cpu.bucket > 5000) {
+        //cycle creeps
+        for (var creep in Game.creeps) {
+            if (creep.isIdle) {
+                //give new task
+                role = creep.role;
+                //creep.newTask()
+            } else if (creep.hasValidTask) {
+                //run creep
+                //creep.run();
+            }
+        }
     }
 
-    // find all towers
-    var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
-    // for each tower
-    for (var tower of towers) {
-        // run tower logic
-        tower.defend();
-    }
 
 
 
@@ -167,5 +220,5 @@ module.exports.loop = function () {
     stats.addSimpleStat('energy-container', containerStorage);
     stats.addSimpleStat('creep-population', Object.keys(Game.creeps).length);
 
-    stats.commit()
+    stats.commit();
 };

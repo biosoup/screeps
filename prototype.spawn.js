@@ -27,13 +27,11 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
 
             // if no harvesters are left AND either no miners or no lorries are left
             //  create a backup creep
-            if (numberOfCreeps['harvester'] == 0 && numberOfCreeps['lorry'] == 0) {
-                //console.log(7);
+            if (numberOfCreeps['harvester'] == 0 && numberOfCreeps['spawnAttendant'] == 0) {
                 // if there are still miners or enough energy in Storage left
-                if (numberOfCreeps['miner'] > 0 ||
-                    (room.storage != undefined && room.storage.store[RESOURCE_ENERGY] >= 150 + 550)) {
+                if (numberOfCreeps['miner'] > 0 || (room.storage != undefined && room.storage.store[RESOURCE_ENERGY] >= 150 + 550)) {
                     // create a lorry
-                    name = this.createLorry(maxEnergy);
+                    name = this.createLorry(room.energyAvailable, 'spawnAttendant');
                 }
                 // if there is no miner and not enough energy in Storage left
                 else {
@@ -131,7 +129,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                         c.memory.role == 'repairer' && c.memory.target == roomName)
 
                     if (numberOfLongDistanceBuilders[roomName] < this.memory.minLongDistanceBuilders[roomName]) {
-                        name = this.createCustomCreep(maxEnergy, 'repairer', roomName);
+                        name = this.createCustomCreep(350, 'repairer', roomName);
                     }
                 }
             }

@@ -1,6 +1,6 @@
 module.exports = {
     // a function to run the logic for this role
-    run: function (creep) {
+    work: function (creep) {
 
 
         //get number of sources in room
