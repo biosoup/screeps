@@ -3,71 +3,56 @@ var Tasks = require("creep-tasks");
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    work: function (creep) {
+    newTask: function (creep) {
+        if (creep.carry.energy <= 0) {
+            // find closest container
+            var containers = creep.room.find(FIND_STRUCTURES, {
+                filter: s => s.structureType == STRUCTURE_CONTAINER &&
+                    s.store[RESOURCE_ENERGY] > 100
+            });
 
+            //sort from the fullest
+            var container = containers.sort(function (a, b) {
+                return b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]
+            })[0];
 
-        // if creep is bringing energy to a structure but has no energy left
-        if (creep.carry.energy > 0) {
-            var task = creep.memory.currentTask;
-            if (task != undefined) {
-                var source = Game.getObjectById(task['source']);
-                creep.task = Tasks.withdraw(source)
+            //add a withraw task
+            if (container != undefined) {
+                creep.task = Tasks.withdraw(container);
             } else {
-                //console.log("faulty current task memory")
-                if (!creep.isActive) {
-                    if (creep.room.energyAvailable < 500) {
-                        structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                            filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
-                                    s.structureType == STRUCTURE_EXTENSION) &&
-                                s.energy < s.energyCapacity
-                        });
-
-                        if (structure == undefined) {
-                            structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                                // the second argument for findClosestByPath is an object which takes
-                                // a property called filter which can be a function
-                                // we use the arrow operator to define it
-                                filter: (s) => (s.structureType == STRUCTURE_TOWER) &&
-                                    s.energy < s.energyCapacity
-                            });
-                        }
-                    } else {
-                        structure = creep.room.storage;
-                    }
-
-                    creep.task = Tasks.transfer(structure);
-                    
-                    //console.log(structure)
-                } else if (creep.hasValidTask) {
-                    creep.run()
-                }
-
+                creep.say("no energy source")
             }
+            
         } else {
-            var task = creep.memory.currentTask;
-            if (task != undefined) {
-                var destination = Game.getObjectById(task['destination']);
-                creep.task = Tasks.transfer(destination)
+            //find towers to get their energy
+            towers = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                // the second argument for findClosestByPath is an object which takes
+                // a property called filter which can be a function
+                // we use the arrow operator to define it
+                filter: (s) => (s.structureType == STRUCTURE_TOWER) &&
+                    s.energy < s.energyCapacity
+            });
+
+            //if energy is missing in main structures
+            if (creep.room.energyAvailable < 1000) {
+                //find spawn and extension to refill
+                structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
+                            s.structureType == STRUCTURE_EXTENSION) &&
+                        s.energy < s.energyCapacity
+                });
+            } else if (towers != undefined) {
+                // if no spawn structers need energy, then towers
+                structure = towers;
             } else {
-                //console.log("faulty current task memory")
-                if (!creep.isActive) {
-                    // find closest container
-                    var containers = creep.room.find(FIND_STRUCTURES, {
-                        filter: s => s.structureType == STRUCTURE_CONTAINER &&
-                            s.store[RESOURCE_ENERGY]
-                    });
+                //if nothing urgently need energy, then to storage
+                structure = creep.room.storage;
+            }
 
-                    var container = containers.sort(function (a, b) {
-                        return b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]
-                    })[0];
-
-                    if (container == undefined) {
-                        container = creep.room.storage;
-                    }
-
-                } else if (creep.hasValidTask) {
-                    creep.run()
-                }
+            if (structure != undefined) {
+                creep.task = Tasks.transfer(structure);
+            } else {
+                creep.say('no place for energy')
             }
         }
     }

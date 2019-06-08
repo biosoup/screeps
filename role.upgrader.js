@@ -1,32 +1,48 @@
-module.exports = {
+var Tasks = require("creep-tasks");
+
+module.exports = upgrader = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    work: function(creep) {
-        // if creep is bringing energy to the controller but has no energy left
-        if (creep.memory.working == true && creep.carry.energy == 0) {
-            // switch state
-            creep.memory.working = false;
-        }
-        // if creep is harvesting energy but is full
-        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
-            // switch state
-            creep.memory.working = true;
-        }
+    newTask: function (creep) {
+        if (creep.carry.energy > 0) {
+            //do the actual job
+            creep.task = Tasks.upgrade(creep.room.controller);
 
-        // if creep is supposed to transfer energy to the controller
-        if (creep.memory.working == true) {
-            // instead of upgraderController we could also use:
-            // if (creep.transfer(creep.room.controller, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        } else {
+            //first link nearby
+            var container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
+                filter: s => s.structureType == STRUCTURE_LINK &&
+                    s.energy > 400
+            });
 
-            // try to upgrade the controller
-            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                // if not in range, move towards the controller
-                creep.travelTo(creep.room.controller);
+            //then use storage if there is anything in it
+            if (container == undefined || _.isEmpty(container) && creep.room.storage.store[RESOURCE_ENERGY] > 500) {
+                container = creep.room.storage;
             }
-        }
-        // if creep is supposed to get energy
-        else {
-            creep.getEnergy(true, true);
+
+
+            //then closest container
+            if (container == undefined || _.isEmpty(container)) {
+                container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: s => s.structureType == STRUCTURE_CONTAINER &&
+                        s.store[RESOURCE_ENERGY]
+                });
+            }
+
+            //add a withraw task
+            if (container !== undefined && container !== null) {
+                creep.task = Tasks.withdraw(container);
+                //console.log(JSON.stringify(container) + " 1")
+            } else {
+                // find closest source
+                let source = creep.pos.findClosestByPath(FIND_SOURCES);
+                if (source !== undefined && source != null) {
+                    console.log(creep + " " + source)
+                    creep.task = Tasks.harvest(source);
+                    creep.say("harvesting")
+                    return;
+                }
+            }
         }
     }
 };

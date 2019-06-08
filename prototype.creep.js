@@ -1,29 +1,40 @@
-var roles = {
-    harvester: require('role.harvester'),
-    upgrader: require('role.upgrader'),
-    builder: require('role.builder'),
-    repairer: require('role.repairer'),
-    wallRepairer: require('role.wallRepairer'),
-    longDistanceHarvester: require('role.longDistanceHarvester'),
-    claimer: require('role.claimer'),
-    miner: require('role.minerN'),
-    lorry: require('role.lorry.backup'),
-    guard: require('role.guard'),
-    spawnAttendant: require('role.spawnAttendant')
-};
+require("creep-tasks");
 
-/** ADD
-- task handling
-    - request task
-    - fullfill task
+let builder = require('role.builder')
+let upgrader = require('role.upgrader')
+let harvester = require('role.harvester')
+let longDistanceHarvester = require('role.longDistanceHarvester')
+let claimer = require('role.claimer')
+let miner = require('role.miner')
+let lorry = require('role.lorry')
+let guard = require('role.guard')
+let spawnAttendant = require('role.spawnAttendant')
 
-
-*/
 
 Creep.prototype.runRole =
     function () {
-        //console.log(this.memory.role);
-        roles[this.memory.role].work(this);
+        //console.log(this)
+        if (this.memory.role == 'builder') {
+            builder.newTask(this)
+        } else if (this.memory.role == 'upgrader') {
+            upgrader.newTask(this)
+        } else if (this.memory.role == 'harvester') {
+            harvester.newTask(this)
+        } else if (this.memory.role == 'longDistanceHarvester') {
+            longDistanceHarvester.newTask(this)
+        } else if (this.memory.role == 'claimer') {
+            claimer.newTask(this)
+        } else if (this.memory.role == 'miner') {
+            miner.newTask(this)
+        } else if (this.memory.role == 'lorry') {
+            lorry.newTask(this)
+        } else if (this.memory.role == 'guard') {
+            guard.newTask(this)
+        } else if (this.memory.role == 'spawnAttendant') {
+            spawnAttendant.newTask(this)
+        } else {
+            console.log("error")
+        }
     };
 
 /** @function 
@@ -66,11 +77,7 @@ Creep.prototype.getEnergy =
             // try to harvest energy, if the source is not in range
             if (this.harvest(source) == ERR_NOT_IN_RANGE) {
                 // move towards it
-                this.travelTo(source, {
-                    visualizePathStyle: {
-                        stroke: '#ffaa00'
-                    }
-                });
+                this.travelTo(source);
             }
         }
     };

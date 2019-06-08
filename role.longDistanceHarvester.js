@@ -1,91 +1,78 @@
-module.exports = {
+var Tasks = require("creep-tasks");
+
+let longDistanceHarvester = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    work: function (creep) {
-        // if creep is bringing energy to a structure but has no energy left
-        if (creep.memory.working == true && creep.carry.energy == 0) {
-            // switch state
-            creep.memory.working = false;
-            creep.memory.workingTimeStart = Game.time;
-            workingTimeEnd = parseInt(creep.memory.workingTimeEnd)
-            workingTimeStart = parseInt(creep.memory.workingTimeStart)
-            console.log("Long haul took time:" + (workingTimeStart - workingTimeEnd) + " from:" + creep.memory.target + " with:" + creep.carryCapacity)
-            creep.memory.workingTimeEnd = Game.time;
-        }
-        // if creep is harvesting energy but is full
-        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
-            // switch state
-            creep.memory.working = true;
-
-
-        }
-
-        // if creep is supposed to transfer energy to a structure
-        if (creep.memory.working == true) {
-            // if in home room
-            if (creep.room.name == creep.memory.home) {
-                // find closest spawn, extension or tower which is not full
+    newTask: function (creep) {
+        if (creep.memory.home != undefined && creep.room.name == creep.memory.home) {
+            //if in home room
+            if (creep.carry.energy > 0) {
+                // check if spawn needs energy
                 var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                    // the second argument for findClosestByPath is an object which takes
-                    // a property called filter which can be a function
-                    // we use the arrow operator to define it
-                    filter: (s) => (s.structureType == STRUCTURE_SPAWN
-                        //|| s.structureType == STRUCTURE_EXTENSION
-                        //|| s.structureType == STRUCTURE_TOWER
-                        ||
-                        s.structureType == STRUCTURE_STORAGE
-                    ) && s.energy < s.energyCapacity
+                    filter: (s) => (s.structureType == STRUCTURE_SPAWN) &&
+                        s.energy < s.energyCapacity
                 });
-                //creep.say(structure)
 
+                //if spawn is ok, then to storage
                 if (structure == undefined) {
-                    //structure = creep.room.storage;
+                    structure = creep.room.storage;
+                }
+
+                //if there is no storage, then to container
+                if (structure == undefined) {
                     structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                         filter: s => s.structureType == STRUCTURE_CONTAINER
                         //&& s.store < s.storeCapacity
                     });
                 }
 
-
-                // if we found one
                 if (structure != undefined) {
-                    // try to transfer energy, if it is not in range
-                    if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        // move towards it
-                        creep.travelTo(structure);
+                    //if full and destination known, dump energy
+                    creep.task = Tasks.transfer(structure)
+                } else {
+                    //if no structure as a destination, go wait near spawn
+                    var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                        filter: (s) => (s.structureType == STRUCTURE_SPAWN)
+                    });
+
+                    creep.task = Tasks.goTo(structure);
+                }
+            } else {
+                //go to target room
+                creep.task = Tasks.goToRoom(creep.memory.target)
+            }
+        } else if (creep.memory.target != undefined && creep.room.name == creep.memory.target) {
+            //if in target room
+
+            //console.log(creep)
+
+            // if creep need energy, get him refilled
+            if (creep.carry.energy < creep.carryCapacity) {
+                let sources = creep.room.find(FIND_SOURCES);
+                let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
+
+                if (unattendedSource !== undefined && unattendedSource != null) {
+
+                    unattendedSource = creep.pos.findClosestByPath(unattendedSource);
+                    if (unattendedSource !== null) {
+                        //console.log(creep + " un " + unattendedSource)
+                        creep.task = Tasks.harvest(unattendedSource);
+                    } 
+                } else {
+                    if (sources !== undefined) {
+                        //console.log(creep + " " + sources[0])
+                        creep.task = Tasks.harvest(sources[0]);
                     }
                 }
+                creep.say("harvesting")
+            } else {
+                //if full, go home
+                creep.task = Tasks.goToRoom(creep.memory.home)
             }
-            // if not in home room...
-            else {
-                // find exit to home room
-                var exit = creep.room.findExitTo(creep.memory.home);
-                // and move to exit
-                creep.travelTo(creep.pos.findClosestByPath(exit));
-                //creep.travelTo(RoomPosition(25,25,creep.memory.home));   
-            }
-        }
-        // if creep is supposed to harvest energy from source
-        else {
-            // if in target room
-            if (creep.room.name == creep.memory.target) {
-                // find source
-                var source = creep.room.find(FIND_SOURCES)[creep.memory.sourceIndex];
-
-                // try to harvest energy, if the source is not in range
-                if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                    // move towards the source
-                    creep.travelTo(source);
-                }
-            }
-            // if not in target room
-            else {
-                // find exit to target room
-                var exit = creep.room.findExitTo(creep.memory.target);
-                // move to exit
-                creep.travelTo(creep.pos.findClosestByPath(exit));
-                //creep.travelTo(RoomPosition(25,25,creep.memory.target));                
-            }
+        } else {
+            creep.say("confused")
         }
     }
 };
+
+module.exports = longDistanceHarvester;

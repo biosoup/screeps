@@ -1,48 +1,72 @@
+var Tasks = require("creep-tasks");
+
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    work: function(creep) {
-        // if creep is bringing energy to a structure but has no energy left
-        if (creep.memory.working == true && creep.carry.energy == 0) {
-            // switch state
-            creep.memory.working = false;
-        }
-        // if creep is harvesting energy but is full
-        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
-            // switch state
-            creep.memory.working = true;
-        }
+    newTask: function (creep) {
+        if (creep.carry.energy > 0) {
+            //do the actual job
 
-        // if creep is supposed to transfer energy to a structure
-        if (creep.memory.working == true) {
-            // find closest spawn, extension or tower which is not full
+            //find core base structures
             var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                // the second argument for findClosestByPath is an object which takes
-                // a property called filter which can be a function
-                // we use the arrow operator to define it
-                filter: (s) => (s.structureType == STRUCTURE_SPAWN
-                             || s.structureType == STRUCTURE_EXTENSION
-                             //|| s.structureType == STRUCTURE_TOWER
-                               )
-                             && s.energy < s.energyCapacity
+                filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
+                        s.structureType == STRUCTURE_EXTENSION
+                        //|| s.structureType == STRUCTURE_TOWER
+                    ) &&
+                    s.energy < s.energyCapacity
             });
 
+            //find towers
+            if (structure == undefined) {
+                structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    filter: (s) => (s.structureType == STRUCTURE_TOWER) &&
+                        s.energy < s.energyCapacity
+                });
+            }
+
+            //no structures, dump energy into storage
             if (structure == undefined) {
                 structure = creep.room.storage;
             }
 
-            // if we found one
             if (structure != undefined) {
-                // try to transfer energy, if it is not in range
-                if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    // move towards it
-                    creep.travelTo(structure);
+                //if structure found, do work
+                creep.task = Tasks.transfer(structure);
+            } else {
+                //if no structure as a destination, go wait near spawn
+                var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    filter: (s) => (s.structureType == STRUCTURE_SPAWN)
+                });
+
+                creep.task = Tasks.goTo(structure);
+            }
+        } else {
+            let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: s => s.structureType == STRUCTURE_CONTAINER &&
+                    s.store[RESOURCE_ENERGY]
+            });
+
+            //console.log(creep)
+
+            if (container == undefined) {
+                // Harvest from an empty source if there is one, else pick any source
+                /* let sources = creep.room.find(FIND_SOURCES);
+                let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
+                if (unattendedSource) {
+                    unattendedSource = creep.pos.findClosestByPath(unattendedSource);
+                    console.log(unattendedSource)
+                    creep.task = Tasks.harvest(unattendedSource);
+                } else { */
+                let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+                if (source !== undefined && source !== null) {
+                    console.log(creep+" "+source)
+                    creep.task = Tasks.harvest(source);
                 }
+                //}
+            } else {
+                creep.task = Tasks.withdraw(container);
             }
         }
-        // if creep is supposed to harvest energy from source
-        else {
-            creep.getEnergy(false, true);
-        }
+
     }
 };
