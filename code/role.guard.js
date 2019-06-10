@@ -28,15 +28,11 @@ module.exports = {
                 structure = creep.pos.findInRange(FIND_STRUCTURES, 3, {
                     filter: s => s.structureType == STRUCTURE_WALL ||
                         s.structureType == STRUCTURE_RAMPART
-                })[0];
-            }
-
-            if (structure == null) {
-                structure = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
-                    filter: function (object) {
-                        return object.structureType == STRUCTURE_CONTROLLER;
-                    }
                 });
+
+                structure = structure.sort(function (a, b) {
+                    return +a.hits - +b.hits
+                })[0];
             }
 
             if (!hostile && structure) {

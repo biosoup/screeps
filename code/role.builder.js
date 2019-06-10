@@ -48,19 +48,19 @@ module.exports = {
                 var container;
                 //look for storage
                 if (creep.room.storage !== undefined) {
-                    if (creep.room.storage.store[RESOURCE_ENERGY] > 500) {
+                    if (creep.room.storage.store[RESOURCE_ENERGY] > 100) {
                         container = creep.room.storage;
                     } else {
                         //if storage is empty find container
                         container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                             filter: s => s.structureType == STRUCTURE_CONTAINER &&
-                                s.store[RESOURCE_ENERGY] > 500
+                                s.store[RESOURCE_ENERGY] > 100
                         });
                     }
                 }
 
                 //add a withraw task
-                if (container != undefined) {
+                if (container !== undefined && container != null) {
                     creep.task = Tasks.withdraw(container);
                 } else {
                     // Harvest from an empty source if there is one, else pick any source

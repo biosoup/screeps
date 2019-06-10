@@ -9,6 +9,7 @@ let miner = require('role.miner')
 let lorry = require('role.lorry')
 let guard = require('role.guard')
 let spawnAttendant = require('role.spawnAttendant')
+let mineralHarvester = require('role.mineralHarvester')
 
 
 Creep.prototype.runRole =
@@ -32,6 +33,8 @@ Creep.prototype.runRole =
             guard.newTask(this)
         } else if (this.memory.role == 'spawnAttendant') {
             spawnAttendant.newTask(this)
+        } else if (this.memory.role == 'mineralHarvester') {
+            mineralHarvester.newTask(this)
         } else {
             console.log("error")
         }

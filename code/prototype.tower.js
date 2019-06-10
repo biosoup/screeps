@@ -4,7 +4,7 @@ StructureTower.prototype.defend =
         this.attack(hostiles);
         //var username = hostiles[0].owner.username;
         //Game.notify(`User ${username} spotted in room ${myRoomName}`);
-        console.log(this.room.name + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+        //console.log(this.room.name + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
     };
 
 StructureTower.prototype.healCreeps =

@@ -10,10 +10,12 @@ module.exports = upgrader = {
 
         } else {
             //first link nearby
-            var container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
+            var container;
+            
+            /* container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
                 filter: s => s.structureType == STRUCTURE_LINK &&
                     s.energy > 400
-            });
+            }); */
 
             //then use storage if there is anything in it
             if (container == undefined || _.isEmpty(container) && creep.room.storage.store[RESOURCE_ENERGY] > 500) {
@@ -25,19 +27,19 @@ module.exports = upgrader = {
             if (container == undefined || _.isEmpty(container)) {
                 container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: s => s.structureType == STRUCTURE_CONTAINER &&
-                        s.store[RESOURCE_ENERGY]
+                        s.store[RESOURCE_ENERGY] > 500
                 });
             }
 
             //add a withraw task
-            if (container !== undefined && container !== null) {
+            if (container !== undefined && container != null) {
                 creep.task = Tasks.withdraw(container);
                 //console.log(JSON.stringify(container) + " 1")
             } else {
                 // find closest source
                 let source = creep.pos.findClosestByPath(FIND_SOURCES);
                 if (source !== undefined && source != null) {
-                    console.log(creep + " " + source)
+                    //console.log(creep + " " + source)
                     creep.task = Tasks.harvest(source);
                     creep.say("harvesting")
                     return;

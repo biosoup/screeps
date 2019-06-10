@@ -1,3 +1,5 @@
+// version 0.2
+
 const stats = require('stats');
 require("creep-tasks");
 var Traveler = require('Traveler');
@@ -80,31 +82,58 @@ module.exports.loop = function () {
 
             //one upgrader
             //make sure it is big enough - up to 15 work parts
-            spawns.memory.minCreeps.upgrader = 2;
+            //spawns.memory.minCreeps.upgrader = 2;
 
             //ROOM SPECIFIC SPAWNING
             if (spawns.room.name == 'W28N14') {
-                spawns.memory.minCreeps.claimers = 2
-                spawns.memory.minCreeps.LongDistanceHarvester = 4
-                spawns.memory.minCreeps.guard = 0
-                spawns.memory.booted = true;
+                var hostiles = spawns.room.find(FIND_HOSTILE_CREEPS);
+                if (hostiles.length > 1) {
+                    spawns.memory.minCreeps.claimers = 0
+                    spawns.memory.minCreeps.LongDistanceHarvester = 0
+                    spawns.memory.minCreeps.guard = 2
+                    spawns.memory.booted = true;
 
-                spawns.memory.minLongDistanceHarvesters = {}
-                spawns.memory.minLongDistanceHarvesters.W28N13 = 2 //2
-                spawns.memory.minLongDistanceHarvesters.W27N14 = 2 //2
-                spawns.memory.minLongDistanceHarvesters.W28N15 = 0
-                spawns.memory.minLongDistanceBuilders = {}
-                spawns.memory.minLongDistanceBuilders.W28N13 = 0
-                spawns.memory.minLongDistanceBuilders.W27N14 = 0
-                spawns.memory.minGuards = {}
-                spawns.memory.minGuards.W28N15 = 0
-                spawns.memory.claimer = {};
-                spawns.memory.claimer.W28N13 = 1;
-                spawns.memory.claimer.W27N14 = 1;
-                spawns.memory.claimer.W28N15 = 0;
+                    spawns.memory.minGuards = {}
+                    spawns.memory.minGuards.W27N14 = 2
+
+                    spawns.memory.minLongDistanceHarvesters = {}
+                    spawns.memory.minLongDistanceBuilders = {}
+                    spawns.memory.claimer = {};
+                    console.log("Base defense spawning protocol!!"+hostiles.length)
+                } else {
+                    spawns.memory.minCreeps.upgrader = 1;
+                    spawns.memory.minCreeps.mineralHarvester = 0;
+
+                    spawns.memory.minCreeps.claimers = 0
+                    spawns.memory.minCreeps.LongDistanceHarvester = 8
+                    spawns.memory.minCreeps.guard = 3
+                    spawns.memory.booted = true;
+
+                    spawns.memory.minLongDistanceHarvesters = {}
+                    spawns.memory.minLongDistanceHarvesters.W28N13 = 2 //2
+                    spawns.memory.minLongDistanceHarvesters.W27N14 = 2 //2
+                    spawns.memory.minLongDistanceHarvesters.W28N15 = 2
+                    spawns.memory.minLongDistanceHarvesters.W27N15 = 2
+                    
+                    spawns.memory.minLongDistanceBuilders = {}
+                    spawns.memory.minLongDistanceBuilders.W28N13 = 0
+                    spawns.memory.minLongDistanceBuilders.W27N14 = 0
+                    
+                    spawns.memory.minGuards = {}
+                    spawns.memory.minGuards.W27N14 = 1
+                    spawns.memory.minGuards.W27N15 = 1
+                    spawns.memory.minGuards.W28N13 = 1
+                    
+                    spawns.memory.claimer = {};
+                    spawns.memory.claimer.W28N13 = 1;
+                    spawns.memory.claimer.W27N14 = 1;
+                    spawns.memory.claimer.W27N15 = 1;
+                }
             }
 
             if (spawns.room.name == "W29N14") {
+                spawns.memory.minCreeps.upgrader = 1;
+
                 spawns.memory.minCreeps.claimers = 1
                 spawns.memory.minCreeps.LongDistanceHarvester = 3
                 spawns.memory.minCreeps.guard = 0
@@ -116,7 +145,7 @@ module.exports.loop = function () {
                 spawns.memory.minLongDistanceBuilders = {}
                 spawns.memory.minLongDistanceBuilders.W29N13 = 1
                 spawns.memory.minGuards = {}
-                spawns.memory.minGuards.W29N14 = 0
+                spawns.memory.minGuards.W29N13 = 1
                 spawns.memory.claimer = {};
                 spawns.memory.claimer.W29N13 = 1;
             }

@@ -1,4 +1,4 @@
-var listOfRoles = ['harvester', 'builder', 'upgrader', 'miner', 'lorry', 'claimer', 'spawnAttendant'];
+var listOfRoles = ['harvester', 'builder', 'upgrader', 'miner', 'lorry', 'claimer', 'spawnAttendant', 'mineralHarvester'];
 
 // create a new function for StructureSpawn
 StructureSpawn.prototype.spawnCreepsIfNecessary =
@@ -99,6 +99,10 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                             });
                         }
 
+                        var terminal = source.room.find(FIND_STRUCTURES, {
+                            filter: s => s.structureType == STRUCTURE_TERMINAL
+                        });
+
 
                         if (role == 'lorry' && containers.length > 0) {
                             //spawn lorry, but only when there are containers for miners
@@ -108,7 +112,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                             name = this.createLorry(maxEnergy, role);
                             spawningWhat = 'spawnAttendant';
 
-                        } else if (role != 'claimer' && role != 'miner') {
+                        } else if (role != 'claimer' && role != 'miner' && role != 'mineralHarvester' ) {
                             name = this.createCustomCreep(maxEnergy, role, targetRoom);
                             spawningWhat = "c-" + role;
 
@@ -116,6 +120,9 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                             ////spawn miner, but only when there are containers for miners
                             name = this.createCustomCreep(maxEnergy, role, targetRoom);
                             spawningWhat = "miner-c";
+                        } else if (role == 'mineralHarvester' && terminal != undefined) {
+                            name = this.createCustomCreep(maxEnergy, role, targetRoom);
+                            spawningWhat = "mineralHarvester-c";
                         }
                         break;
 
