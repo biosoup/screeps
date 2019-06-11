@@ -10,6 +10,8 @@ let lorry = require('role.lorry')
 let guard = require('role.guard')
 let spawnAttendant = require('role.spawnAttendant')
 let mineralHarvester = require('role.mineralHarvester')
+let longDistanceMiner = require('role.longDistanceMiner')
+let longDistanceLorry = require('role.longDistanceLorry')
 
 
 Creep.prototype.runRole =
@@ -35,6 +37,10 @@ Creep.prototype.runRole =
             spawnAttendant.newTask(this)
         } else if (this.memory.role == 'mineralHarvester') {
             mineralHarvester.newTask(this)
+        } else if (this.memory.role == 'longDistanceMiner') {
+            longDistanceMiner.newTask(this)
+        } else if (this.memory.role == 'longDistanceLorry') {
+            longDistanceLorry.newTask(this)
         } else {
             console.log("error")
         }

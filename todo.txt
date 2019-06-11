@@ -2,12 +2,14 @@
 
 
 PRIORITIES
-* tasks
+* miner <> link
+* inner room link transfers
+* terminal sell code
+* terminal multiroom energy help
 
 * mutliroom navigation overhaul
-* screep WORKER role
+
 * scout role
-* tower logic
 ------
 
 

@@ -47,7 +47,7 @@ module.exports.loop = function () {
     }
 
     //run every 25 ticks and only when we have spare bucket CPU
-    if ((Game.time % 10) == 0 && Game.cpu.bucket > 5000) {
+    if ((Game.time % 5) == 0 && Game.cpu.bucket > 5000) {
 
         var allspawns = _.filter(Game.spawns, s => s.structureType == STRUCTURE_SPAWN);
         // check for each spawn the numbers are set
@@ -80,74 +80,93 @@ module.exports.loop = function () {
                 spawns.memory.minCreeps.builder = 1;
             }
 
-            //one upgrader
+            //upgraders
             //make sure it is big enough - up to 15 work parts
-            //spawns.memory.minCreeps.upgrader = 2;
-
-            //ROOM SPECIFIC SPAWNING
-            if (spawns.room.name == 'W28N14') {
-                var hostiles = spawns.room.find(FIND_HOSTILE_CREEPS);
-                if (hostiles.length > 1) {
-                    spawns.memory.minCreeps.claimers = 0
-                    spawns.memory.minCreeps.LongDistanceHarvester = 0
-                    spawns.memory.minCreeps.guard = 2
-                    spawns.memory.booted = true;
-
-                    spawns.memory.minGuards = {}
-                    spawns.memory.minGuards.W27N14 = 2
-
-                    spawns.memory.minLongDistanceHarvesters = {}
-                    spawns.memory.minLongDistanceBuilders = {}
-                    spawns.memory.claimer = {};
-                    console.log("Base defense spawning protocol!!"+hostiles.length)
+            if (spawns.room.storage !== undefined) {
+                if(spawns.room.storage.store[RESOURCE_ENERGY] > 200000) {
+                    spawns.memory.minCreeps.upgrader = 2;
                 } else {
                     spawns.memory.minCreeps.upgrader = 1;
-                    spawns.memory.minCreeps.mineralHarvester = 0;
-
-                    spawns.memory.minCreeps.claimers = 0
-                    spawns.memory.minCreeps.LongDistanceHarvester = 8
-                    spawns.memory.minCreeps.guard = 3
-                    spawns.memory.booted = true;
-
-                    spawns.memory.minLongDistanceHarvesters = {}
-                    spawns.memory.minLongDistanceHarvesters.W28N13 = 2 //2
-                    spawns.memory.minLongDistanceHarvesters.W27N14 = 2 //2
-                    spawns.memory.minLongDistanceHarvesters.W28N15 = 2
-                    spawns.memory.minLongDistanceHarvesters.W27N15 = 2
-                    
-                    spawns.memory.minLongDistanceBuilders = {}
-                    spawns.memory.minLongDistanceBuilders.W28N13 = 0
-                    spawns.memory.minLongDistanceBuilders.W27N14 = 0
-                    
-                    spawns.memory.minGuards = {}
-                    spawns.memory.minGuards.W27N14 = 1
-                    spawns.memory.minGuards.W27N15 = 1
-                    spawns.memory.minGuards.W28N13 = 1
-                    
-                    spawns.memory.claimer = {};
-                    spawns.memory.claimer.W28N13 = 1;
-                    spawns.memory.claimer.W27N14 = 1;
-                    spawns.memory.claimer.W27N15 = 1;
                 }
             }
 
-            if (spawns.room.name == "W29N14") {
-                spawns.memory.minCreeps.upgrader = 1;
+            //ROOM SPECIFIC SPAWNING
+            if (spawns.room.name == 'W28N14') {
+                spawns.memory.minCreeps.mineralHarvester = 0;
 
-                spawns.memory.minCreeps.claimers = 1
-                spawns.memory.minCreeps.LongDistanceHarvester = 3
-                spawns.memory.minCreeps.guard = 0
+                spawns.memory.minCreeps.claimers = 3
+                spawns.memory.booted = true;
+
+                spawns.memory.minLongDistanceMiners = {}
+                spawns.memory.minLongDistanceMiners.W28N13 = 2 //2
+                spawns.memory.minLongDistanceMiners.W28N15 = 0 //1
+                spawns.memory.minLongDistanceMiners.W27N15 = 1 //1
+                spawns.memory.minLongDistanceMiners.W27N14 = 0 //1
+
+                spawns.memory.minLongDistanceLorries = {}
+                spawns.memory.minLongDistanceLorries.W28N13 = 2 //1
+                spawns.memory.minLongDistanceLorries.W28N15 = 0 //1
+                spawns.memory.minLongDistanceLorries.W27N15 = 1 //1
+                spawns.memory.minLongDistanceLorries.W27N14 = 0 //1
+
+                spawns.memory.minLongDistanceHarvesters = {}
+                spawns.memory.minLongDistanceHarvesters.W28N13 = 0 //2
+                spawns.memory.minLongDistanceHarvesters.W27N14 = 0 //2 */
+                
+
+                spawns.memory.minLongDistanceBuilders = {}
+                spawns.memory.minLongDistanceBuilders.W28N13 = 1
+                spawns.memory.minLongDistanceBuilders.W27N14 = 1
+                spawns.memory.minLongDistanceBuilders.W28N15 = 1 //1
+                spawns.memory.minLongDistanceBuilders.W27N15 = 1 //1
+
+                spawns.memory.minGuards = {}
+                spawns.memory.minGuards.W27N14 = 0
+                spawns.memory.minGuards.W27N15 = 0
+                spawns.memory.minGuards.W28N13 = 0
+
+                spawns.memory.claimer = {};
+                spawns.memory.claimer.W28N13 = 1;
+                spawns.memory.claimer.W27N14 = 1;
+                spawns.memory.claimer.W27N15 = 1;
+                spawns.memory.claimer.W28N15 = 1;
+
+            }
+
+            if (spawns.room.name == "W29N14") {
+                spawns.memory.minCreeps.mineralHarvester = 0;
+
+                spawns.memory.minCreeps.claimers = 0
                 spawns.memory.booted = true;
 
                 spawns.memory.minLongDistanceHarvesters = {}
                 spawns.memory.minLongDistanceHarvesters.W29N13 = 1
                 spawns.memory.minLongDistanceHarvesters.W29N15 = 2
+
                 spawns.memory.minLongDistanceBuilders = {}
                 spawns.memory.minLongDistanceBuilders.W29N13 = 1
+
                 spawns.memory.minGuards = {}
                 spawns.memory.minGuards.W29N13 = 1
+
                 spawns.memory.claimer = {};
-                spawns.memory.claimer.W29N13 = 1;
+                spawns.memory.claimer.W29N13 = 0;
+            }
+
+            var hostiles = spawns.room.find(FIND_HOSTILE_CREEPS);
+            if (hostiles.length > 1) {
+                spawns.memory.minCreeps.claimers = 0
+                spawns.memory.minCreeps.LongDistanceHarvester = 0
+                spawns.memory.minCreeps.guard = 2
+                spawns.memory.booted = true;
+
+                spawns.memory.minGuards = {}
+                spawns.memory.minGuards.W27N14 = 2
+
+                spawns.memory.minLongDistanceHarvesters = {}
+                spawns.memory.minLongDistanceBuilders = {}
+                spawns.memory.claimer = {};
+                console.log("Base defense spawning protocol!!" + hostiles.length)
             }
             //console.log(Game.time+" Room " + spawns.room.name + " initialized!")
         }
