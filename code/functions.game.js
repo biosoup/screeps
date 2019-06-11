@@ -907,6 +907,10 @@ global.listCreeps = function (displayRole) {
     var roleTable = [];
     var total = [];
 
+    myRooms = Game.rooms
+
+    // ISSUES - my creeps do not have "homeroom" set up
+
     //Prepare header row
     for (var r in myRooms) {
         returnstring = returnstring.concat("<th>" + Game.rooms[r].name + "  </th>");

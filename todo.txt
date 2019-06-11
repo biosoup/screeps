@@ -1,13 +1,11 @@
 /** TODO or TO BE DONE
-
+token: 99f7c6d7-209f-48ce-bdf0-57ff39d125bf
 
 PRIORITIES
 * miner <> link
 * inner room link transfers
 * terminal sell code
 * terminal multiroom energy help
-
-* mutliroom navigation overhaul
 
 * scout role
 ------
@@ -45,47 +43,20 @@ PRIORITIES
 - better console conrol
     - on room level?
 
-- longdistanceharvester
-    - logic for source selection
-
 - tower logic
-    - better energy conience
+    - emergency supply
+    - emergency protocol
 
 - spawner logic 
-    - better spawning process -> multiwork creep
     - spawn que with prioritization
     - compute expected ROI of worker
-    - output into console buld of current creep
-    
-- lorry logic
-    - do not supply tower?
-    - prioritization!
-    
-- better pathfingin
-    - https://docs.screeps.com/api/#Creep.travelTo
-    - https://www.reddit.com/r/screeps/comments/6yr4em/how_to_cache_paths/
-    
-- multiwork creep
-    - internal prioritization of tasks -> room level !
-    - big as possible
-    - spawned number based on number of outstading tasks
-        - always keep
-            - 1x harvester
-            - 1x upgrader    
-        - 1x builder for each 2 construction sites
-        - 1x repairer, when tower not repairing
-        - ?x miner (1 per source)
-        - ?x lorry (1 per miner)
-    - change roles based on task list
-    - task focused (no change in middle of work, work till empty)
-    - better pathing (target in memory, separate logic for movement)
-    - recycling
+    - output into console build of current creep
     
 - distatntWorkers
     - distantMiner
         - ROI tracking
-        - source selection based on flags
     - distantBuilder
+    - distantLorry
 
 - defense / attack creeps
     - flag based attack waves

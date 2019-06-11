@@ -40,7 +40,7 @@ module.exports = upgrader = {
                 let source = creep.pos.findClosestByPath(FIND_SOURCES);
                 if (source !== undefined && source != null) {
                     //console.log(creep + " " + source)
-                    creep.task = Tasks.harvest(source);
+                    //creep.task = Tasks.harvest(source);
                     creep.say("harvesting")
                     return;
                 }

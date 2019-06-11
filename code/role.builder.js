@@ -23,7 +23,7 @@ module.exports = {
                     //Find the closest damaged Structure
                     var targets = creep.room.find(FIND_STRUCTURES, {
                         filter: (s) =>
-                            ((s.hits / s.hitsMax) < 1) &&
+                            (s.hits < s.hitsMax) &&
                             s.structureType != STRUCTURE_CONTROLLER &&
                             s.structureType != STRUCTURE_EXTENSION &&
                             s.structureType != STRUCTURE_TOWER &&
@@ -38,8 +38,11 @@ module.exports = {
 
                         if (target) {
                             creep.task = Tasks.repair(target);
+                            creep.say("repairing")
+                        } else {
+                            creep.say("nothing to do")
                         }
-                        creep.say("nothing to do")
+
                     }
                 }
 
@@ -57,6 +60,11 @@ module.exports = {
                                 s.store[RESOURCE_ENERGY] > 100
                         });
                     }
+                } else {
+                    container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                        filter: s => s.structureType == STRUCTURE_CONTAINER &&
+                            s.store[RESOURCE_ENERGY] > 100
+                    });
                 }
 
                 //add a withraw task

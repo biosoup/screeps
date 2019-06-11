@@ -60,7 +60,7 @@ let longDistanceHarvester = {
                     } 
                 } else {
                     if (sources !== undefined) {
-                        //console.log(creep + " " + sources[0])
+                        console.log(creep + " " + sources[0])
                         creep.task = Tasks.harvest(sources[0]);
                     }
                 }

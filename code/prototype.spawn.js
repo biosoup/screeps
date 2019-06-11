@@ -212,6 +212,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
 
             var debug = 0;
 
+            /* OLD
             // print name to console if spawning was a success
             if (name != undefined && _.isString(name) || debug == 1) {
                 //console.log(this.name + " in " + this.room.name + " spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
@@ -225,10 +226,11 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                 for (var roomName in numberOfGuards) {
                     //console.log("Guard" + roomName + ": " + numberOfGuards[roomName]);
                 }
-            }
+            } */
 
             if (spawningWhat != '' && name != undefined) {
-                console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
+                // added visuals, no longer needed
+                //console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
             }
 
             //kontrola spotreby CPU
@@ -309,7 +311,7 @@ StructureSpawn.prototype.createGuard =
 
 StructureSpawn.prototype.createClaimer =
     function (target) {
-        return this.createCreep([CLAIM, MOVE, MOVE, MOVE], 'claimer-' + target + "-" + Game.time, {
+        return this.createCreep([CLAIM, CLAIM, MOVE, MOVE, MOVE], 'claimer-' + target + "-" + Game.time, {
             role: 'claimer',
             target: target
         });
@@ -364,8 +366,8 @@ StructureSpawn.prototype.createLorry =
     function (energy, role = 'lorry', home, target) {
         // create a body with twice as many CARRY as MOVE parts
         var numberOfParts = Math.floor(energy / 150);
-        // make sure the creep is not too big (more than 20 parts)
-        numberOfParts = Math.min(numberOfParts, Math.floor(20 / 3));
+        // make sure the creep is not too big (more than 25 parts)
+        numberOfParts = Math.min(numberOfParts, Math.floor(25 / 3));
         var body = [];
         for (var i = 0; i < numberOfParts * 2; i++) {
             body.push(CARRY);

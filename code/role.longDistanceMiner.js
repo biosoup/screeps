@@ -11,42 +11,61 @@ module.exports = {
             let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
             if (unattendedSource !== undefined && unattendedSource != null) {
                 var source = creep.pos.findClosestByPath(unattendedSource);
+                
             }
+
+            if (source == null) {
+                var source = sources[0];
+            }
+
+            //console.log(creep+" "+source)
 
             if (source != null) {
                 // find container next to source
                 var container = source.pos.findInRange(FIND_STRUCTURES, 1, {
                     filter: s => s.structureType == STRUCTURE_CONTAINER
                 })[0];
-            } else {
-                creep.say("missing source")
-            }
 
-            if (typeof container !== 'undefined') {
+                if (typeof container !== 'undefined') {
+                    // if creep is on top of the container
+                    if (creep.pos.isEqualTo(container.pos)) {
+                        //if container needs repairs
+                        if ((container.hits / container.hitsMax) < 0.7 && creep.carry.energy > 0) {
+                            creep.task = Tasks.repair(container)
+                            creep.say("repairing")
+                        } else {
+                            //if there is a free space in container
+                            if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
+                                // harvest source
+                                creep.task = Tasks.harvest(source);
+                                creep.say("harvesting")
+                            } else {
+                                creep.say("nothing to do")
+                            }
+                        }
 
-                // if creep is on top of the container
-                if (creep.pos.isEqualTo(container.pos)) {
 
-                    //if there is a free space in container
-                    if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
-                        // harvest source
+                    } else {
+                        // if creep is not on top of the container
+                        creep.travelTo(container);
+                    }
+
+                } else {
+                    creep.say("missing container")
+                    if (creep.carry.energy < creep.carryCapacity) {
+                        //console.log(creep+" "+source+" "+creep.room.name)
                         creep.task = Tasks.harvest(source);
                     } else {
-                        creep.say("nothing to do")
+                        //go build stuff?
                     }
-                } else {
-                    // if creep is not on top of the container
-                    creep.travelTo(container);
                 }
 
             } else {
-                creep.say("missing container")
-                if (creep.carry.energy < creep.carryCapacity) {
-                    creep.task = Tasks.harvest(source);
-                } else {
-                    //go build stuff?
-                }
+                creep.say("missing source")
+                console.log(Game.time +" Smth wrong with: "+creep+" "+source+" "+creep.room.name) //+" "+JSON.stringify(sources)
             }
+
+
         } else {
             creep.say("confused")
         }

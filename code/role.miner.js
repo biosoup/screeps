@@ -15,6 +15,10 @@ module.exports = {
             creep.say("missing source")
         }
 
+        if (source == undefined || source == null) {
+            console.log(creep+" "+source)
+        }
+
         if (typeof container !== 'undefined') {
 
             // if creep is on top of the container
@@ -23,6 +27,7 @@ module.exports = {
                 //if there is a free space in container
                 if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
                     // harvest source
+                    //console.log(creep+" "+source);
                     creep.task = Tasks.harvest(source);
 
                 } else {

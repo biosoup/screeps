@@ -1,8 +1,15 @@
 // version 0.2
 
+//system imports
 const stats = require('stats');
 require("creep-tasks");
 var Traveler = require('Traveler');
+
+//can now use room.structure for everything
+require('prototype.Room.structures');
+
+//to be implemented into my code - mainly Terminal code
+require('functions.game');
 
 
 // import modules
@@ -83,7 +90,7 @@ module.exports.loop = function () {
             //upgraders
             //make sure it is big enough - up to 15 work parts
             if (spawns.room.storage !== undefined) {
-                if(spawns.room.storage.store[RESOURCE_ENERGY] > 200000) {
+                if (spawns.room.storage.store[RESOURCE_ENERGY] > 200000) {
                     spawns.memory.minCreeps.upgrader = 2;
                 } else {
                     spawns.memory.minCreeps.upgrader = 1;
@@ -99,20 +106,20 @@ module.exports.loop = function () {
 
                 spawns.memory.minLongDistanceMiners = {}
                 spawns.memory.minLongDistanceMiners.W28N13 = 2 //2
-                spawns.memory.minLongDistanceMiners.W28N15 = 0 //1
+                spawns.memory.minLongDistanceMiners.W28N15 = 1 //1
                 spawns.memory.minLongDistanceMiners.W27N15 = 1 //1
-                spawns.memory.minLongDistanceMiners.W27N14 = 0 //1
+                spawns.memory.minLongDistanceMiners.W27N14 = 1 //1
 
                 spawns.memory.minLongDistanceLorries = {}
-                spawns.memory.minLongDistanceLorries.W28N13 = 2 //1
-                spawns.memory.minLongDistanceLorries.W28N15 = 0 //1
-                spawns.memory.minLongDistanceLorries.W27N15 = 1 //1
-                spawns.memory.minLongDistanceLorries.W27N14 = 0 //1
+                spawns.memory.minLongDistanceLorries.W28N13 = 1 //1
+                spawns.memory.minLongDistanceLorries.W28N15 = 2 //1
+                spawns.memory.minLongDistanceLorries.W27N15 = 2 //1
+                spawns.memory.minLongDistanceLorries.W27N14 = 2 //1
 
                 spawns.memory.minLongDistanceHarvesters = {}
                 spawns.memory.minLongDistanceHarvesters.W28N13 = 0 //2
                 spawns.memory.minLongDistanceHarvesters.W27N14 = 0 //2 */
-                
+
 
                 spawns.memory.minLongDistanceBuilders = {}
                 spawns.memory.minLongDistanceBuilders.W28N13 = 1
@@ -139,18 +146,24 @@ module.exports.loop = function () {
                 spawns.memory.minCreeps.claimers = 0
                 spawns.memory.booted = true;
 
+                spawns.memory.minLongDistanceMiners = {}
+                spawns.memory.minLongDistanceMiners.W29N13 = 1 //2
+
+                spawns.memory.minLongDistanceLorries = {}
+                spawns.memory.minLongDistanceLorries.W29N13 = 1 //1
+
                 spawns.memory.minLongDistanceHarvesters = {}
-                spawns.memory.minLongDistanceHarvesters.W29N13 = 1
+                spawns.memory.minLongDistanceHarvesters.W29N13 = 0
                 spawns.memory.minLongDistanceHarvesters.W29N15 = 2
 
                 spawns.memory.minLongDistanceBuilders = {}
                 spawns.memory.minLongDistanceBuilders.W29N13 = 1
 
                 spawns.memory.minGuards = {}
-                spawns.memory.minGuards.W29N13 = 1
+                spawns.memory.minGuards.W29N13 = 0
 
                 spawns.memory.claimer = {};
-                spawns.memory.claimer.W29N13 = 0;
+                spawns.memory.claimer.W29N13 = 1;
             }
 
             var hostiles = spawns.room.find(FIND_HOSTILE_CREEPS);
@@ -171,8 +184,28 @@ module.exports.loop = function () {
             //console.log(Game.time+" Room " + spawns.room.name + " initialized!")
         }
 
-        // for each spawn
-        for (var spawnName in Game.spawns) {
+
+    }
+
+    // for each spawn
+    for (var spawnName in Game.spawns) {
+
+        //if spawning just add visuals
+        if (Game.spawns[spawnName].spawning) {
+            var spawningCreep = Game.creeps[Game.spawns[spawnName].spawning.name];
+            var Percentage = (((Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime) / Game.spawns[spawnName].spawning.needTime) * 100).toFixed(2);
+            var symbol = '\uD83D\uDEA7';
+            Game.spawns[spawnName].room.visual.text(
+                symbol + spawningCreep.memory.role + ' ' + Percentage + '%',
+                Game.spawns[spawnName].pos.x - 1,
+                Game.spawns[spawnName].pos.y - 5, {
+                    size: '0.7',
+                    align: 'left',
+                    opacity: 0.5,
+                    'backgroundColor': '#040404',
+                    color: 'white'
+                });
+        } else {
             // run spawn logic
             Game.spawns[spawnName].spawnCreepsIfNecessary();
         }
@@ -211,7 +244,8 @@ module.exports.loop = function () {
         Game.spawns[spawnName].memory.energy.containerStorage = containerStorage;
         Game.spawns[spawnName].memory.energy.containerCount = containers.length;
 
-        stats.addSimpleStat(spawnName + ' energy-container', containerStorage);
+        stats.addSimpleStat(Game.spawns[spawnName].room.name + ' energy-container', containerStorage);
+        //console.log(Game.spawns[spawnName].room.name + ' energy-container')
     }
 
 
