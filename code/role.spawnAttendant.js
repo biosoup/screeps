@@ -30,7 +30,8 @@ module.exports = {
                     filter: (s) => (s.structureType == STRUCTURE_SPAWN)
                 });
 
-                creep.task = Tasks.goTo(structure);
+                // FIXME
+                //creep.task = Tasks.goTo(structure);
             }
 
 

@@ -41,6 +41,7 @@ module.exports = {
                             creep.say("repairing")
                         } else {
                             creep.say("nothing to do")
+                            creep.task = Tasks.upgrade(creep.room.controller);
                         }
 
                     }

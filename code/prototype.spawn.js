@@ -39,8 +39,10 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                 // if there is no miner and not enough energy in Storage left
                 else {
                     // create a harvester because it can work on its own
-                    name = this.createCustomCreep(room.energyAvailable, 'harvester');
-                    spawningWhat = 'harvester';
+                    if (room.energyAvailable >= 300) {
+                        name = this.createCustomCreep(room.energyAvailable, 'harvester');
+                        spawningWhat = 'harvester';
+                    }
                 }
             }
             // if no backup creep is required
@@ -230,7 +232,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
 
             if (spawningWhat != '' && name != undefined) {
                 // added visuals, no longer needed
-                //console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
+                console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
             }
 
             //kontrola spotreby CPU

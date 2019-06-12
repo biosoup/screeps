@@ -33,12 +33,16 @@ module.exports = {
                 //if structure found, do work
                 creep.task = Tasks.transfer(structure);
             } else {
-                //if no structure as a destination, go wait near spawn
-                var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                    filter: (s) => (s.structureType == STRUCTURE_SPAWN)
-                });
-
-                creep.task = Tasks.goTo(structure);
+                //if no structure as a destination, go build
+                var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                if (closestConstructionSite !== undefined && closestConstructionSite != null) {
+                    //go build
+                    creep.task = Tasks.build(closestConstructionSite);
+                    creep.say("building");
+                } else {
+                    creep.say("nothing to do")
+                    creep.task = Tasks.upgrade(creep.room.controller);
+                }
             }
         } else {
             let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
@@ -59,7 +63,7 @@ module.exports = {
                 } else { */
                 let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
                 if (source !== undefined && source !== null) {
-                    console.log(creep+" "+source)
+                    //console.log(creep + " " + source)
                     creep.task = Tasks.harvest(source);
                 }
                 //}
