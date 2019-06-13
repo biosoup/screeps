@@ -3,8 +3,6 @@ var listOfRoles = ['harvester', 'builder', 'upgrader', 'miner', 'lorry', 'claime
 // create a new function for StructureSpawn
 StructureSpawn.prototype.spawnCreepsIfNecessary =
     function () {
-        const startCpu = Game.cpu.getUsed();
-
         /** @type {Room} */
         var room = this.room;
 
@@ -63,7 +61,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                         });
 
                         // if there is a container next to the source
-                        if (containers.length > 0) {
+                        if (containers.length > 0 && room.energyAvailable >= 350) {
                             // spawn a miner
                             name = this.createMiner(source.id, maxEnergy, room.name, room.name);
                             spawningWhat = 'miner';
@@ -110,7 +108,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                             //spawn lorry, but only when there are containers for miners
                             name = this.createLorry(maxEnergy, role, room.name);
                             spawningWhat = 'lorry2';
-                        } else if (role == 'spawnAttendant') {
+                        } else if (role == 'spawnAttendant' && room.storage != undefined) {
                             name = this.createLorry(maxEnergy, role, room.name);
                             spawningWhat = 'spawnAttendant';
 
@@ -118,7 +116,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                             name = this.createCustomCreep(maxEnergy, role, targetRoom);
                             spawningWhat = "c-" + role;
 
-                        } else if (role == 'miner' && containers.length > 0) {
+                        } else if (role == 'miner' && containers.length > 0 && room.energyAvailable >= 350) {
                             ////spawn miner, but only when there are containers for miners
                             name = this.createCustomCreep(maxEnergy, role, targetRoom);
                             spawningWhat = "miner-c";
@@ -232,12 +230,8 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
 
             if (spawningWhat != '' && name != undefined) {
                 // added visuals, no longer needed
-                console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
+                //console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
             }
-
-            //kontrola spotreby CPU
-            const elapsed = Game.cpu.getUsed() - startCpu;
-            //console.log('Spawning has used '+elapsed+' CPU time');
         }
     };
 
@@ -385,3 +379,152 @@ StructureSpawn.prototype.createLorry =
             target: target
         });
     };
+
+StructureSpawn.prototype.creepSpawnCounts =
+    function (spawns) {
+        //put minCreeps in memory
+        minCreeps = {};
+        //define all the roles and amount
+        var numberOfCreeps = {};
+        spawns.memory.minCreeps = minCreeps;
+
+        //FOR EACH ROOM AUTOMATIC SETUP
+
+        //miner for number of sources
+        var numberOfSources = (spawns.room.find(FIND_SOURCES)).length;
+        var creepsInRoom = spawns.room.find(FIND_MY_CREEPS);
+        var numberOfConstructionSites = spawns.room.find(FIND_CONSTRUCTION_SITES);
+        var towers = spawns.room.find(FIND_MY_STRUCTURES, {
+            filter: (s) => (s.structureType == STRUCTURE_TOWER) &&
+                s.energy < s.energyCapacity
+        });
+
+        var evolve = numberOfCreeps['miner'] = _.sum(creepsInRoom, (c) => c.memory.role == 'miner');
+        spawns.memory.minCreeps.miner = numberOfSources;
+        spawns.memory.minCreeps.lorry = numberOfSources;
+        spawns.memory.minCreeps.harvester = 1 - evolve; //numberOfSources - evolve;
+
+        //service creeps
+        if (spawns.room.storage != undefined) {
+            if (spawns.room.storage.store[RESOURCE_ENERGY] > 5000) {
+                spawns.memory.minCreeps.spawnAttendant = 1;
+            } else if (spawns.room.storage.store[RESOURCE_ENERGY] > 300000) {
+                spawns.memory.minCreeps.spawnAttendant = 2;
+            }
+        }
+
+        //create builder when construction is needed
+        if (numberOfConstructionSites.length > 0) {
+            spawns.memory.minCreeps.builder = 1;
+        }
+
+        if (towers.length == 0 || towers == null) {
+            spawns.memory.minCreeps.builder = 1;
+        }
+       
+
+        //upgraders
+        //make sure it is big enough - up to 15 work parts
+        if (spawns.room.storage !== undefined) {
+            if (spawns.room.storage.store[RESOURCE_ENERGY] > 200000) {
+                spawns.memory.minCreeps.upgrader = 2;
+            } else {
+                spawns.memory.minCreeps.upgrader = 1;
+            }
+        }
+
+        //ROOM SPECIFIC SPAWNING
+        if (spawns.room.name == 'W28N14') {
+            spawns.memory.minCreeps.mineralHarvester = 0;
+            spawns.memory.minCreeps.lorry = 1;
+
+            spawns.memory.minCreeps.claimers = 4
+            spawns.memory.booted = true;
+
+            spawns.memory.minLongDistanceMiners = {}
+            spawns.memory.minLongDistanceMiners.W28N13 = 2 //2
+            spawns.memory.minLongDistanceMiners.W28N15 = 1 //1
+            spawns.memory.minLongDistanceMiners.W27N15 = 1 //1
+            spawns.memory.minLongDistanceMiners.W27N14 = 1 //1
+
+            spawns.memory.minLongDistanceLorries = {}
+            spawns.memory.minLongDistanceLorries.W28N13 = 2 //1
+            spawns.memory.minLongDistanceLorries.W28N15 = 1 //1
+            spawns.memory.minLongDistanceLorries.W27N15 = 1 //1
+            spawns.memory.minLongDistanceLorries.W27N14 = 1 //1
+
+            spawns.memory.minLongDistanceHarvesters = {}
+            spawns.memory.minLongDistanceHarvesters.W28N13 = 0 //2
+            spawns.memory.minLongDistanceHarvesters.W27N14 = 0 //2 */
+
+
+            spawns.memory.minLongDistanceBuilders = {}
+            spawns.memory.minLongDistanceBuilders.W28N13 = 1
+            spawns.memory.minLongDistanceBuilders.W27N14 = 1
+            spawns.memory.minLongDistanceBuilders.W28N15 = 1 //1
+            spawns.memory.minLongDistanceBuilders.W27N15 = 1 //1
+
+            spawns.memory.minGuards = {}
+            spawns.memory.minGuards.W27N14 = 1
+            spawns.memory.minGuards.W27N15 = 1
+
+            spawns.memory.claimer = {};
+            spawns.memory.claimer.W28N13 = 1;
+            spawns.memory.claimer.W27N14 = 1;
+            spawns.memory.claimer.W27N15 = 1;
+            spawns.memory.claimer.W28N15 = 1;
+
+        }
+
+        if (spawns.room.name == "W29N14") {
+            spawns.memory.minCreeps.mineralHarvester = 0;
+
+            spawns.memory.minCreeps.claimers = 1
+            spawns.memory.booted = true;
+
+            spawns.memory.minLongDistanceMiners = {}
+            spawns.memory.minLongDistanceMiners.W29N13 = 1 //2
+
+            spawns.memory.minLongDistanceLorries = {}
+            spawns.memory.minLongDistanceLorries.W29N13 = 1 //1
+
+            spawns.memory.minLongDistanceHarvesters = {}
+            spawns.memory.minLongDistanceHarvesters.W31N14 = 1
+            spawns.memory.minLongDistanceHarvesters.W29N15 = 2
+
+            spawns.memory.minLongDistanceBuilders = {}
+            spawns.memory.minLongDistanceBuilders.W29N13 = 1
+            spawns.memory.minLongDistanceBuilders.W32N13 = 0
+
+            spawns.memory.minGuards = {}
+            spawns.memory.minGuards.W29N13 = 0
+            spawns.memory.minGuards.W32N13 = 1
+
+            spawns.memory.claimer = {};
+            spawns.memory.claimer.W29N13 = 1;
+            spawns.memory.claimer.W32N13 = 0;
+        }
+
+        if (spawns.room.name == "W32N13") {
+            spawns.memory.minCreeps.upgrader = 3;
+            spawns.memory.minCreeps.builder = 1;
+            spawns.memory.booted = true;
+        }
+
+        var hostiles = spawns.room.find(FIND_HOSTILE_CREEPS);
+        if (hostiles.length > 1) {
+            spawns.memory.minCreeps.claimers = 0
+            spawns.memory.minCreeps.LongDistanceHarvester = 0
+            spawns.memory.minCreeps.guard = 2
+            spawns.memory.booted = true;
+
+            spawns.memory.minGuards = {}
+            spawns.memory.minGuards.W27N14 = 2
+
+            spawns.memory.minLongDistanceHarvesters = {}
+            spawns.memory.minLongDistanceBuilders = {}
+            spawns.memory.claimer = {};
+            console.log("Base defense spawning protocol!!" + hostiles.length)
+        }
+        //console.log(Game.time+" Room " + spawns.room.name + " initialized!")
+    }

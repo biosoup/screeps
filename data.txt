@@ -1,0 +1,562 @@
+
+[14:28:23][shard3]CPU Debug
+
+
+Start: 0.4778429999999787
+Start Tower Code: 0.6211029999999766
+Start Spawn visualisation Code: 1.750723999999991
+Start Spawn visualisation Code: 1.8165259999999819
+Start Spawn visualisation Code: 1.8404029999999807
+Start Tasks Code: 1.8508209999999963
+Start Creep run Code: 6.315611999999987
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 6.332543999999984
+Start Creepguard-W27N15-7659980 run Code: 6.581258999999989
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 6.86881600000001
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 7.127207999999996
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 8.096135000000004
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 8.345991999999967
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 8.590956000000006
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 8.597571999999985
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 8.838093999999984
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 8.843684999999994
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 10.635320000000007
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 10.644904999999994
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 10.902209
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 10.910048999999987
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 11.161992999999967
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 11.399785000000008
+Start Creepguard-W32N13-7660540 run Code: 11.63692499999999
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 11.643595999999974
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 12.27963299999999
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 12.287742000000009
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 12.525548999999984
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 12.778755999999987
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 13.013013
+Start Creepclaimer-W29N13-7660910 run Code: 13.249108999999976
+Start Creepclaimer-W28N15-7660940 run Code: 13.51309599999999
+Start Creepclaimer-W27N14-7660960 run Code: 13.735795999999993
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 13.954546999999991
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 14.187215000000009
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 14.442101999999977
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 14.674608000000006
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 14.906356999999986
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 15.14900799999998
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 15.155297999999988
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 15.408521000000007
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 15.640316999999982
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 15.871102000000008
+Start Creepclaimer-W27N15-7661210 run Code: 16.09835799999999
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 16.321654999999993
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 16.55188899999999
+Start Creepclaimer-W28N13-7661280 run Code: 16.783406999999983
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 17.003994000000006
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 17.243292999999994
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 17.47427000000002
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 17.50843500000002
+Start stats Code: 17.538307000000003
+Finish: 18.41844900000001
+[14:28:26][shard3]CPU Debug
+
+
+Start: 0.2728840000000048
+Start Tower Code: 0.38768799999999715
+Start Spawn visualisation Code: 1.7551970000000097
+Start Spawn visualisation Code: 1.7950409999999977
+Start Spawn visualisation Code: 1.8085810000000038
+Start Tasks Code: 1.8118619999999908
+Start Creep run Code: 4.379626999999999
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 4.388092999999998
+Start Creepguard-W27N15-7659980 run Code: 4.624825999999985
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 4.861803000000009
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 5.095196999999985
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 5.601415000000003
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 5.831353999999976
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 6.054765000000003
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 6.060581000000013
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 6.288047000000006
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 6.2933749999999975
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 6.542190999999974
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 6.545688999999982
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 6.77057099999999
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 6.774430999999993
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 6.994709
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 7.2151700000000005
+Start Creepguard-W32N13-7660540 run Code: 7.428268000000003
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 7.431623999999999
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 7.649717999999979
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 7.652909999999991
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 7.869786000000005
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 8.091230999999993
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 8.309908000000007
+Start Creepclaimer-W29N13-7660910 run Code: 8.526972999999998
+Start Creepclaimer-W28N15-7660940 run Code: 8.745257999999978
+Start Creepclaimer-W27N14-7660960 run Code: 8.965843000000007
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 9.183928999999978
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 9.400971999999996
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 9.623199999999997
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 9.842724999999973
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 10.059037999999987
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 10.274659999999983
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 10.278052000000002
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 10.29475499999998
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 10.515847000000008
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 10.733757999999995
+Start Creepclaimer-W27N15-7661210 run Code: 10.951520000000016
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 11.165062000000006
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 11.382630999999975
+Start Creepclaimer-W28N13-7661280 run Code: 11.60079300000001
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 11.811751999999984
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 12.03054800000001
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 12.247487000000007
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 12.262320999999986
+Start stats Code: 12.279809999999998
+Finish: 12.848027000000002
+[14:28:29][shard3]CPU Debug
+
+
+Start: 0.4435580000000243
+Start Tower Code: 0.6762270000000115
+Start Spawn visualisation Code: 2.1732530000000168
+Start Spawn visualisation Code: 2.2359580000000108
+Start Spawn visualisation Code: 2.2596130000000016
+Start Tasks Code: 2.2652630000000045
+Start Creep run Code: 5.4255950000000155
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 5.441206000000022
+Start Creepguard-W27N15-7659980 run Code: 5.694411000000002
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 5.942157000000009
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 6.186066000000011
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 6.729353000000003
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 6.969234999999998
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 7.206205000000011
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 7.212286000000006
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 7.448660000000018
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 7.454295000000002
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 7.707117000000039
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 7.712724000000037
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 7.944176000000027
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 7.949171000000007
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 8.177147999999988
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 8.405215000000027
+Start Creepguard-W32N13-7660540 run Code: 8.642482000000001
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 8.648323000000005
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 8.882097000000016
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 8.887497000000025
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 9.115925000000004
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 9.351515000000006
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 9.58116400000003
+Start Creepclaimer-W29N13-7660910 run Code: 9.811761000000018
+Start Creepclaimer-W28N15-7660940 run Code: 10.049031000000014
+Start Creepclaimer-W27N14-7660960 run Code: 10.268988000000007
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 10.485873999999995
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 10.713036000000017
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 10.947490000000016
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 11.174973000000023
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 11.580980000000011
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 11.905682000000013
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 11.913377999999994
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 11.945805000000007
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 12.179545000000019
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 12.204259000000008
+Start Creepclaimer-W27N15-7661210 run Code: 12.433299000000005
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 12.65579900000003
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 12.886699000000021
+Start Creepclaimer-W28N13-7661280 run Code: 13.118240000000014
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 13.336034000000012
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 13.566874000000013
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 13.795965000000024
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 13.824426000000017
+Start stats Code: 13.851718000000034
+Finish: 14.527772000000027
+[14:28:32][shard3]CPU Debug
+
+
+Start: 1.4974189999999794
+Start Tower Code: 1.6107739999999922
+Start Spawn visualisation Code: 2.177509999999984
+Start Spawn visualisation Code: 2.2196919999999807
+Start Spawn visualisation Code: 2.2364209999999787
+Start Tasks Code: 2.2399239999999736
+Start Creep run Code: 5.414694999999995
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 5.424724999999995
+Start Creepguard-W27N15-7659980 run Code: 5.679958999999968
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 5.925903000000005
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 6.164269999999988
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 6.728142999999989
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 6.968475999999981
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 7.199501999999995
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 7.205324999999988
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 7.439096999999975
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 7.44438999999997
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 7.722097999999988
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 7.72601499999999
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 7.96276899999998
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 7.96656999999999
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 8.459150999999991
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 8.68459599999997
+Start Creepguard-W32N13-7660540 run Code: 8.905632999999995
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 8.909470999999996
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 9.133807999999988
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 9.13742099999999
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 9.356792999999982
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 9.582695999999999
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 9.803087999999974
+Start Creepclaimer-W29N13-7660910 run Code: 10.024486999999993
+Start Creepclaimer-W28N15-7660940 run Code: 10.245783999999986
+Start Creepclaimer-W27N14-7660960 run Code: 10.471045999999973
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 10.690874999999977
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 10.913471999999985
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 11.138894999999962
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 11.372964999999994
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 11.670727999999968
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 11.92281699999998
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 11.926385999999951
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 11.945047999999957
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 12.171413000000001
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 12.186976999999985
+Start Creepclaimer-W27N15-7661210 run Code: 12.408639999999963
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 12.623977999999994
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 12.843884999999972
+Start Creepclaimer-W28N13-7661280 run Code: 13.065544999999958
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 13.277588000000009
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 13.500674999999973
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 13.782640999999984
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 13.817333999999988
+Start stats Code: 13.84057900000002
+Finish: 14.418275000000023
+[14:28:35][shard3]CPU Debug
+
+
+Start: 0.43994099999997616
+Start Tower Code: 0.5904699999999821
+Start Spawn visualisation Code: 2.0435870000000023
+Start Spawn visualisation Code: 2.112652999999966
+Start Spawn visualisation Code: 2.147376999999949
+Start Tasks Code: 2.153404999999964
+Start Creep run Code: 6.302602999999976
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 6.3176559999999995
+Start Creepguard-W27N15-7659980 run Code: 6.60946100000001
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 6.874324000000001
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 7.13523600000002
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 7.73683699999998
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 8.002133000000015
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 8.244614000000013
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 8.253919999999994
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 8.509994000000006
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 8.772531000000015
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 9.027433999999971
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 9.033692999999971
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 9.272527000000025
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 9.278955999999994
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 9.81202300000001
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 10.055300999999986
+Start Creepguard-W32N13-7660540 run Code: 10.284717
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 10.29126599999995
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 10.525425000000041
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 10.531843000000038
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 10.76228500000002
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 11.002877000000012
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 11.237172999999984
+Start Creepclaimer-W29N13-7660910 run Code: 11.569852999999966
+Start Creepclaimer-W28N15-7660940 run Code: 11.822091
+Start Creepclaimer-W27N14-7660960 run Code: 12.048343999999986
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 12.268827999999985
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 12.501327000000003
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 12.742443999999978
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 12.975955999999996
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 13.283313000000021
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 13.565330000000017
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 13.571551
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 13.601699999999994
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 13.846000000000004
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 13.87272999999999
+Start Creepclaimer-W27N15-7661210 run Code: 14.107826999999986
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 15.760658000000035
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 16.01731699999999
+Start Creepclaimer-W28N13-7661280 run Code: 16.26962900000001
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 16.491326000000015
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 16.742643999999984
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 18.34533700000003
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 18.410881000000018
+Start stats Code: 18.450050000000033
+Finish: 19.10803900000002
+[14:28:38][shard3]CPU Debug
+
+
+Start: 0.30776700000001256
+Start Tower Code: 0.4250940000000014
+Start Spawn Code: 0.9754240000000323
+Start Spawn visualisation Code: 2.1029589999999985
+Start Spawn visualisation Code: 2.149499999999989
+Start Spawn visualisation Code: 2.163996999999995
+Start Tasks Code: 2.174673999999982
+Start Creep run Code: 5.773787000000027
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 5.782460000000015
+Start Creepguard-W27N15-7659980 run Code: 6.036641999999972
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 6.278550999999993
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 6.515442000000007
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 7.06079699999998
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 7.30934000000002
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 7.545252000000005
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 7.55109699999997
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 7.784203000000048
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 8.022594000000026
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 8.26774499999999
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 8.28427099999999
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 8.506526000000008
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 8.511719999999968
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 9.002794000000051
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 9.274080000000026
+Start Creepguard-W32N13-7660540 run Code: 9.494644999999991
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 9.498689000000013
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 9.722257000000013
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 9.725732999999991
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 9.943978999999956
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 10.167945000000032
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 10.387871000000018
+Start Creepclaimer-W29N13-7660910 run Code: 10.741321000000028
+Start Creepclaimer-W28N15-7660940 run Code: 10.964922000000001
+Start Creepclaimer-W27N14-7660960 run Code: 11.189090999999962
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 11.40892500000001
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 11.627546999999993
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 11.850211000000002
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 12.067993000000001
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 12.35066599999999
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 12.77915900000005
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 12.783470000000023
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 12.829981000000032
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 13.098780000000033
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 13.12875200000002
+Start Creepclaimer-W27N15-7661210 run Code: 13.364739999999983
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 13.59180299999997
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 13.81242599999996
+Start Creepclaimer-W28N13-7661280 run Code: 14.061224000000038
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 14.272902000000045
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 14.498914000000013
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 14.71828899999997
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 14.762407999999994
+Start stats Code: 14.809919999999977
+Finish: 15.25231100000002
+[14:28:41][shard3]CPU Debug
+
+
+Start: 0.2828890000000115
+Start Tower Code: 0.37797199999999975
+Start Spawn visualisation Code: 0.8897799999999734
+Start Spawn visualisation Code: 0.925959999999975
+Start Spawn visualisation Code: 0.9389769999999658
+Start Tasks Code: 0.942026999999996
+Start Creep run Code: 3.331058999999982
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 3.339461999999969
+Start Creepguard-W27N15-7659980 run Code: 3.572260999999969
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 3.801503999999966
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 4.0304459999999835
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 4.529787999999996
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 4.758208999999965
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 4.98174199999994
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 4.986721999999986
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 5.211940000000027
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 5.4351689999999735
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 5.668558999999959
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 5.672179999999969
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 5.891918999999973
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 5.895238999999947
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 6.368241000000012
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 8.951669999999979
+Start Creepguard-W32N13-7660540 run Code: 9.18138799999997
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 9.187787000000014
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 9.42763599999995
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 9.434627999999975
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 9.65666699999997
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 9.892008000000033
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 10.115875000000017
+Start Creepclaimer-W29N13-7660910 run Code: 10.337692000000004
+Start Creepclaimer-W28N15-7660940 run Code: 10.568874999999991
+Start Creepclaimer-W27N14-7660960 run Code: 10.78236899999996
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 10.993880999999988
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 11.491632999999979
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 11.719750999999974
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 11.93988399999995
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 12.21660700000001
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 12.459156000000007
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 12.462964
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 12.48707300000001
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 12.71292699999998
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 12.728955999999982
+Start Creepclaimer-W27N15-7661210 run Code: 12.949635
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 13.164433999999972
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 13.385362999999984
+Start Creepclaimer-W28N13-7661280 run Code: 13.615700000000004
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 13.828198999999984
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 14.049592999999959
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 14.067463999999973
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 14.088347999999996
+Start stats Code: 14.10670799999997
+Finish: 14.51714899999996
+[14:28:44][shard3]CPU Debug
+
+
+Start: 0.3664660000000026
+Start Tower Code: 0.5039409999999975
+Start Spawn visualisation Code: 1.1218439999999532
+Start Spawn visualisation Code: 1.1622479999999769
+Start Spawn visualisation Code: 1.1758749999999623
+Start Tasks Code: 1.1789430000000038
+Start Creep run Code: 3.795161999999948
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 3.8048929999999928
+Start Creepguard-W27N15-7659980 run Code: 4.064462999999989
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 4.306737999999939
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 4.542629999999974
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 5.10812999999996
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 5.342397999999946
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 5.57122899999996
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 5.576169999999934
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 5.948293999999976
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 6.177937999999983
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 6.207332000000008
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 6.211266999999964
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 6.43397299999998
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 6.438428999999985
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 6.921813999999927
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 7.146248000000014
+Start Creepguard-W32N13-7660540 run Code: 7.3671019999999885
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 7.371004999999968
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 7.59324399999997
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 7.596879000000001
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 7.81418199999996
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 8.05301099999997
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 8.285795000000007
+Start Creepclaimer-W29N13-7660910 run Code: 8.565878999999995
+Start Creepclaimer-W28N15-7660940 run Code: 8.799480999999957
+Start Creepclaimer-W27N14-7660960 run Code: 9.023665999999992
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 9.242686999999933
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 9.719585999999993
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 9.944497999999953
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 10.164107999999942
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 10.438177999999937
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 10.687542000000008
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 10.691021999999975
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 10.710060999999996
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 10.93383399999999
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 10.949182000000008
+Start Creepclaimer-W27N15-7661210 run Code: 11.170001999999954
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 11.383117999999968
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 11.602102999999943
+Start Creepclaimer-W28N13-7661280 run Code: 11.824302999999986
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 12.036293999999998
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 12.257870999999966
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 12.477242999999987
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 12.50747899999999
+Start stats Code: 12.528358999999966
+Finish: 12.945183999999983
+[14:28:46][shard3]CPU Debug
+
+
+Start: 0.3135770000000093
+Start Tower Code: 0.41599500000000944
+Start Spawn visualisation Code: 0.9110750000000394
+Start Spawn visualisation Code: 0.9493280000000368
+Start Spawn visualisation Code: 0.9631400000000099
+Start Tasks Code: 0.9673410000000331
+Start Creep run Code: 3.4575740000000224
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 3.4651440000000093
+Start Creepguard-W27N15-7659980 run Code: 3.7008480000000077
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 3.932645999999977
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 4.160936000000049
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 4.671609000000046
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 4.900328000000002
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 5.125592999999981
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 5.130835999999988
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 5.351777000000027
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 5.5749830000000316
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 5.806077000000016
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 5.809860000000015
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 6.028818999999999
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 6.033953999999994
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 6.524297000000047
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 6.745556000000022
+Start Creepguard-W32N13-7660540 run Code: 6.968912000000046
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 6.9728770000000395
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 7.193643000000009
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 7.202011000000027
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 7.422689999999989
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 7.67051900000007
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 7.904800000000023
+Start Creepclaimer-W29N13-7660910 run Code: 8.131932000000006
+Start Creepclaimer-W28N15-7660940 run Code: 8.357771000000014
+Start Creepclaimer-W27N14-7660960 run Code: 8.570787999999993
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 8.785102000000052
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 9.25875000000002
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 9.48433
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 9.703848999999991
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 10.004069000000015
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 10.272221000000059
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 10.275702000000024
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 10.294884000000025
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 10.516413999999997
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 10.532114000000036
+Start Creepclaimer-W27N15-7661210 run Code: 10.749696000000029
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 10.963823999999988
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 11.185010000000034
+Start Creepclaimer-W28N13-7661280 run Code: 11.40565300000003
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 11.617987000000028
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 11.839616000000035
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 12.058403999999996
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 12.078715999999986
+Start stats Code: 12.095426999999972
+Finish: 12.481992999999989
+[14:28:49][shard3]CPU Debug
+
+
+Start: 0.3780350000000112
+Start Tower Code: 0.461148000000037
+Start Spawn visualisation Code: 2.133728000000019
+Start Spawn visualisation Code: 2.1724810000000048
+Start Spawn visualisation Code: 2.187808000000018
+Start Tasks Code: 2.1912100000000123
+Start Creep run Code: 5.0290430000000015
+Start CreeplongDistanceHarvester-W31N14-7659980 run Code: 5.038187999999991
+Start Creepguard-W27N15-7659980 run Code: 5.275461000000064
+Start Creepminer-Spawn3-W32N13-7659990 run Code: 5.509586000000013
+Start Creepupgrader-c-Spawn1-W28N14-7660050 run Code: 5.743371000000025
+Start Creeplorry-Spawn2-undefined-7660090 run Code: 6.244818000000009
+Start CreeplongDistanceMiner-Spawn1-W27N14-7660150 run Code: 6.476324000000034
+Start Creeplorry-Spawn3-undefined-7660160 run Code: 6.702735000000018
+Start CreeplongDistanceLorry-Spawn2-W29N13-7660170 run Code: 6.706884000000059
+Start CreeplongDistanceMiner-Spawn1-W27N15-7660200 run Code: 6.930599000000029
+Start Creepbuilder-c-Spawn2-W29N13-7660250 run Code: 7.154133999999999
+Start Creeplorry-Spawn3-undefined-7660280 run Code: 7.18323300000003
+Start CreeplongDistanceLorry-Spawn1-W28N15-7660300 run Code: 7.187115000000006
+Start Creepminer-Spawn3-W32N13-7660360 run Code: 7.410949000000016
+Start Creepupgrader-c-Spawn1-W28N14-7660380 run Code: 7.416365999999982
+Start Creeplorry-Spawn1-undefined-7660480 run Code: 7.893692000000044
+Start Creepbuilder-c-Spawn3-W32N13-7660500 run Code: 8.119812000000024
+Start Creepguard-W32N13-7660540 run Code: 8.406888000000038
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660630 run Code: 8.410992000000022
+Start CreeplongDistanceMiner-Spawn1-W28N15-7660710 run Code: 8.674633000000028
+Start Creepupgrader-c-Spawn3-W32N13-7660730 run Code: 8.678295999999989
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660760 run Code: 8.69667099999998
+Start CreeplongDistanceMiner-Spawn1-W28N13-7660810 run Code: 8.920694000000026
+Start CreeplongDistanceLorry-Spawn1-W28N13-7660860 run Code: 9.140220000000056
+Start Creepclaimer-W29N13-7660910 run Code: 9.367042000000026
+Start Creepclaimer-W28N15-7660940 run Code: 9.58409800000004
+Start Creepclaimer-W27N14-7660960 run Code: 9.806439000000012
+Start Creepupgrader-c-Spawn3-W32N13-7660970 run Code: 10.02573300000006
+Start Creepupgrader-c-Spawn2-W29N14-7660970 run Code: 10.498635000000036
+Start CreeplongDistanceLorry-Spawn1-W27N14-7660990 run Code: 10.724778000000015
+Start CreepspawnAttendant-Spawn1-undefined-7661070 run Code: 10.945084000000008
+Start CreepspawnAttendant-Spawn2-undefined-7661070 run Code: 11.196635000000072
+Start CreepspawnAttendant-Spawn3-undefined-7661090 run Code: 11.565282000000025
+Start Creepminer-Spawn1-W28N14-7661130 run Code: 11.56995500000005
+Start Creepminer-Spawn2-W29N14-7661140 run Code: 11.589965000000063
+Start Creepminer-Spawn1-W28N14-7661170 run Code: 11.818304000000012
+Start Creepminer-Spawn2-W29N14-7661180 run Code: 11.834371000000033
+Start Creepclaimer-W27N15-7661210 run Code: 12.055211000000043
+Start Creeplorry-Spawn2-undefined-7661220 run Code: 12.304157000000032
+Start Creepupgrader-c-Spawn3-W32N13-7661250 run Code: 12.669580000000053
+Start Creepclaimer-W28N13-7661280 run Code: 12.895722000000035
+Start CreeplongDistanceMiner-Spawn2-W29N13-7661300 run Code: 13.225555000000043
+Start CreeplongDistanceLorry-Spawn1-W27N15-7661310 run Code: 13.451030000000003
+Start Creepbuilder-c-Spawn1-W28N14-7661390 run Code: 13.674262999999996
+Start CreeplongDistanceHarvester-W29N15-7661390 run Code: 13.692435999999987
+Start stats Code: 13.710672999999986
+Finish: 14.12292100000002

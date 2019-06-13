@@ -11,12 +11,33 @@ module.exports = {
         } else {
             // if creep need energy, get him refilled
             if (creep.carry.energy > 0) {
+                //find critical repair sites
+                var closestRepairSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) =>
+                        ((s.hits / s.hitsMax) < 0.5) &&
+                        s.structureType != STRUCTURE_CONTROLLER &&
+                        s.structureType != STRUCTURE_EXTENSION &&
+                        s.structureType != STRUCTURE_TOWER &&
+                        s.structureType != STRUCTURE_WALL &&
+                        s.structureType != STRUCTURE_RAMPART &&
+                        s.structureType != STRUCTURE_SPAWN
+                });
+
+
                 //find construction sites
                 var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-                if (closestConstructionSite !== undefined && closestConstructionSite != null) {
+
+
+                if (closestRepairSite !== undefined && closestRepairSite != null) {
+                    //go reapir
+                    creep.task = Tasks.repair(closestRepairSite);
+                    creep.say("repairing")
+
+                } else if (closestConstructionSite !== undefined && closestConstructionSite != null) {
                     //go build
                     creep.task = Tasks.build(closestConstructionSite);
                     creep.say("building");
+
                 } else {
                     //if nothing is to be built, do something useful
 
@@ -35,15 +56,13 @@ module.exports = {
                         target = targets.sort(function (a, b) {
                             return +a.hits - +b.hits
                         })[0];
-
                         if (target) {
                             creep.task = Tasks.repair(target);
                             creep.say("repairing")
-                        } else {
-                            creep.say("nothing to do")
-                            creep.task = Tasks.upgrade(creep.room.controller);
                         }
-
+                    } else {
+                        creep.say("nothing to do")
+                        creep.task = Tasks.upgrade(creep.room.controller);
                     }
                 }
 
