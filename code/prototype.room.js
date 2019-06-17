@@ -369,7 +369,7 @@ Room.prototype.creepSpawnRun =
 
         //room interests
         let roomInterests = {}
-        if (spawnRoom == "W28N14") {
+        if (spawnRoom.name == "W28N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
             roomInterests.W28N13 = [0, 2, 2, 1, 1, 0]
             roomInterests.W28N15 = [0, 1, 2, 1, 1, 0]
@@ -377,14 +377,14 @@ Room.prototype.creepSpawnRun =
             roomInterests.W27N14 = [0, 1, 1, 1, 1, 1]
         }
 
-        if (spawnRoom == "W29N14") {
+        if (spawnRoom.name == "W29N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
             roomInterests.W29N13 = [0, 1, 1, 1, 1, 0]
             roomInterests.W31N14 = [1, 0, 0, 0, 0, 0]
             roomInterests.W29N15 = [1, 0, 0, 0, 0, 0]
         }
 
-        if (spawnRoom == "W32N13") {
+        if (spawnRoom.name == "W32N13") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
             roomInterests.W32N14 = [1, 0, 0, 0, 0, 0]
             roomInterests.W32N12 = [1, 0, 0, 0, 0, 0]
@@ -392,14 +392,15 @@ Room.prototype.creepSpawnRun =
         }
 
         for (let interest in roomInterests) {
-            minimumSpawnOf.longDistanceHarvester += interest[0];
-            minimumSpawnOf.longDistanceMiner += interest[1];
-            minimumSpawnOf.longDistanceLorry += interest[2];
-            minimumSpawnOf.longDistanceBuilder += interest[3];
-            minimumSpawnOf.claimer += interest[4];
-            minimumSpawnOf.guard += interest[5];
+            minimumSpawnOf.longDistanceHarvester += roomInterests[interest][0];
+            minimumSpawnOf.longDistanceMiner += roomInterests[interest][1];
+            minimumSpawnOf.longDistanceLorry += roomInterests[interest][2];
+            minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
+            minimumSpawnOf.claimer += roomInterests[interest][4];
+            minimumSpawnOf.guard += roomInterests[interest][5];
         }
 
+        //console.log(JSON.stringify(minimumSpawnOf.longDistanceHarvester))
 
         /* let myFlags = _.filter(Game.flags, {
             memory: {
@@ -479,6 +480,7 @@ Room.prototype.creepSpawnRun =
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_CONSTRUCTION_SITES);
         var constructionOfRampartsAndWalls = 0;
+
         // Builder
         if (constructionSites.length == 0) {
             minimumSpawnOf.builder = 0;
@@ -498,6 +500,7 @@ Room.prototype.creepSpawnRun =
         if (minimumSpawnOf.builder > Math.ceil(numberOfSources * 1.5)) {
             minimumSpawnOf.builder = Math.ceil(numberOfSources * 1.5);
         }
+
         // Upgrader
         if (spawnRoom.controller.level == 8) {
             minimumSpawnOf.upgrader = 0;
@@ -505,14 +508,17 @@ Room.prototype.creepSpawnRun =
                 minimumSpawnOf.upgrader = 1;
             }
         } else {
-            minimumSpawnOf["upgrader"] = numberOfSources;
+            //minimumSpawnOf["upgrader"] = numberOfSources;
+            minimumSpawnOf["upgrader"] = 1;
         }
+
         //Wall Repairer
         /* if (spawnRoom.memory.roomSecure == true && constructionOfRampartsAndWalls == 0) {
             minimumSpawnOf["wallRepairer"] = 0;
         } else {
             minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
         } */
+
         // spawnAttendant
         if (spawnRoom.memory.terminalTransfer != undefined) {
             //ongoing terminal transfer
@@ -527,6 +533,7 @@ Room.prototype.creepSpawnRun =
             } */
             minimumSpawnOf["spawnAttendant"] = 1;
         }
+
         // lorry, Harvester & Repairer
         minimumSpawnOf["miner"] = numberOfSources;
         minimumSpawnOf["lorry"] = minimumSpawnOf.miner;
@@ -534,11 +541,13 @@ Room.prototype.creepSpawnRun =
         //minimumSpawnOf["repairer"] = Math.ceil(numberOfSources * 0.5);
 
         /** Rest **/
+
         // Miner
         minimumSpawnOf["mineralHarvester"] = numberOfExploitableMineralSources;
         if (spawnRoom.storage == undefined || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]) == null || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]).mineralAmount == 0 || spawnRoom.storage != undefined) {
             minimumSpawnOf.mineralHarvester = 0;
         }
+
         // Scientist
         /* if (spawnRoom.memory.labOrder != undefined) {
             var info = spawnRoom.memory.labOrder.split(":");
@@ -546,6 +555,7 @@ Room.prototype.creepSpawnRun =
                 minimumSpawnOf.scientist = 1;
             }
         } */
+
         // Adjustments in case of hostile presence
         var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
 
@@ -566,6 +576,7 @@ Room.prototype.creepSpawnRun =
             minimumSpawnOf.demolisher = 0;
             //minimumSpawnOf.wallRepairer *= 2;
         }
+
         // Measuring number of active creeps
         let counter = _.countBy(allMyCreeps, "memory.role");
         let roleList = (Object.getOwnPropertyNames(minimumSpawnOf));
@@ -596,6 +607,9 @@ Room.prototype.creepSpawnRun =
         }
         let spawnList = this.getSpawnList(spawnRoom, minimumSpawnOf, numberOf);
         let spawnEntry = 0;
+
+        //console.log(JSON.stringify(spawnList)+" *** "+spawnList.length)
+
         if (spawnList != null && spawnList.length > 0) {
             for (var s in spawnRoom.memory.roomArray.spawns) {
                 // Iterate through spawns
@@ -637,38 +651,40 @@ Room.prototype.creepSpawnRun =
                         }
                     } else if (spawnList[spawnEntry] == "claimer") {
                         for (var roomName in roomInterests) {
-                            inRooms[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'claimer' && c.memory.target == roomName)
-                            toSpawn = roomName[5];
+                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'claimer' && c.memory.target == roomName)
+                            var toSpawn = roomInterests[roomName][4];
 
-                            if (inRooms[roomName] < toSpawn) {
+                            if (inRooms < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                             }
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceHarvester") {
                         // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
-                            inRooms[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceHarvester' && c.memory.target == roomName)
-                            toSpawn = roomName[0];
+                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceHarvester' && c.memory.target == roomName)
+                            var toSpawn = roomInterests[roomName][0];
 
-                            if (inRooms[roomName] < toSpawn) {
+                            if (inRooms < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                             }
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceMiner") {
                         // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
-                            inRooms[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceMiner' && c.memory.target == roomName)
-                            toSpawn = roomName[1];
+                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceMiner' && c.memory.target == roomName)
+                            var toSpawn = roomInterests[roomName][1];
 
-                            if (inRooms[roomName] < toSpawn) {
+                            console.log(spawnList[spawnEntry] + " " + inRooms + " " + toSpawn)
+
+                            if (inRooms < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                             }
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceLorry") {
                         // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
-                            inRooms[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.target == roomName)
-                            toSpawn = roomName[2];
+                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.target == roomName)
+                            var toSpawn = roomInterests[roomName][2];
 
                             if (inRooms[roomName] < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
@@ -677,20 +693,20 @@ Room.prototype.creepSpawnRun =
                     } else if (spawnList[spawnEntry] == "longDistanceBuilder") {
                         // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
-                            inRooms[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'builder' && c.memory.target == roomName)
-                            toSpawn = roomName[3];
+                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'builder' && c.memory.target == roomName)
+                            var toSpawn = roomInterests[roomName][3];
 
-                            if (inRooms[roomName] < toSpawn) {
+                            if (inRooms < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, "builder", spawnRoom.name, roomName);
                             }
                         }
                     } else if (spawnList[spawnEntry] == "guard") {
                         // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
-                            inRooms[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
-                            toSpawn = roomName[0];
+                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
+                            var toSpawn = roomInterests[roomName][5];
 
-                            if (inRooms[roomName] < toSpawn) {
+                            if (inRooms < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                             }
                         }

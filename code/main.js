@@ -67,12 +67,14 @@ module.exports.loop = function () {
         } else if (hostiles == null) {
             //if there are no hostiles....
             tower.healCreeps();
-            tower.repairStructures();
+            if ((Game.time % 7) == 0 && Game.cpu.bucket > 5000) {
+                tower.repairStructures();
+            }
         }
     }
 
     //run every 25 ticks and only when we have spare bucket CPU
-    if ((Game.time % 10) == 0 && Game.cpu.bucket > 5000) {
+    if ((Game.time % 5) == 0 && Game.cpu.bucket > 5000) {
         if (CPUdebug == true) {
             CPUdebugString = CPUdebugString.concat("<br>Start Spawn Code: " + Game.cpu.getUsed())
         }
