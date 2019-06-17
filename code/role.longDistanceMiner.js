@@ -11,7 +11,7 @@ module.exports = {
             let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
             if (unattendedSource !== undefined && unattendedSource != null) {
                 var source = creep.pos.findClosestByPath(unattendedSource);
-                
+
             }
 
             if (source == null) {
@@ -57,12 +57,18 @@ module.exports = {
                         creep.task = Tasks.harvest(source);
                     } else {
                         //go build stuff?
+                        var buildSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                        if (buildSite != undefined && buildSite != null) {
+                            creep.task = Tasks.build(buildSite);
+                            creep.say("building")
+                        }
+                        
                     }
                 }
 
             } else {
                 creep.say("missing source")
-                console.log(Game.time +" Smth wrong with: "+creep+" "+source+" "+creep.room.name) //+" "+JSON.stringify(sources)
+                console.log(Game.time + " Smth wrong with: " + creep + " " + source + " " + creep.room.name) //+" "+JSON.stringify(sources)
             }
 
 

@@ -61,8 +61,36 @@ module.exports = {
                             creep.say("repairing")
                         }
                     } else {
-                        creep.say("nothing to do")
-                        creep.task = Tasks.upgrade(creep.room.controller);
+                        //add code to repair walls to 1mil hits
+                        if (creep.room.storage != undefined) {
+                            if (creep.room.storage.store[RESOURCE_ENERGY] > 300000) {
+                                var targets = creep.room.find(FIND_STRUCTURES, {
+                                    filter: (s) =>
+                                        (s.hits < 1000000) && s.structureType == STRUCTURE_WALL
+                                });
+
+                                if (target !== undefined) {
+                                    target = targets.sort(function (a, b) {
+                                        return +a.hits - +b.hits
+                                    })[0];
+                                    if (target) {
+                                        creep.task = Tasks.repair(target);
+                                        creep.say("repairing")
+                                    }
+                                } else {
+                                    creep.say("nothing to do")
+                                    creep.task = Tasks.upgrade(creep.room.controller);
+                                }
+                            } else {
+                                creep.say("nothing to do")
+                                creep.task = Tasks.upgrade(creep.room.controller);
+                            }
+                        } else {
+                            creep.say("nothing to do")
+                            creep.task = Tasks.upgrade(creep.room.controller);
+                        }
+
+
                     }
                 }
 

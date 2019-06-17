@@ -11,13 +11,8 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
         //if spawn is not working
         if (this.spawning == null) {
             // find all creeps in room
-            /** @type {Array.<Creep>} */
             var creepsInRoom = room.find(FIND_MY_CREEPS);
 
-            // count the number of creeps alive for each role in this room
-            // _.sum will count the number of properties in Game.creeps filtered by the
-            //  arrow function, which checks for the creep being a specific role
-            /** @type {Object.<string, number>} */
             var numberOfCreeps = {};
             for (var role of listOfRoles) {
                 numberOfCreeps[role] = _.sum(creepsInRoom, (c) => c.memory.role == role);
@@ -25,14 +20,16 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
             var maxEnergy = room.energyCapacityAvailable;
             var name = undefined;
 
+            // *** BASIC ROOM SETUP ***
+
             // if no harvesters are left AND either no miners or no lorries are left
             //  create a backup creep
             if (numberOfCreeps['harvester'] == 0 && numberOfCreeps['spawnAttendant'] == 0) {
                 // if there are still miners or enough energy in Storage left
                 if (numberOfCreeps['miner'] > 0 || (room.storage != undefined && room.storage.store[RESOURCE_ENERGY] >= 150 + 550)) {
-                    // create a lorry
+                    // create a spawnAttendant
                     name = this.createLorry(room.energyAvailable, 'spawnAttendant', room.name);
-                    spawningWhat = 'lorry1';
+                    spawningWhat = 'spawnAttendant';
                 }
                 // if there is no miner and not enough energy in Storage left
                 else {
@@ -42,64 +39,74 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                         spawningWhat = 'harvester';
                     }
                 }
-            }
-            // if no backup creep is required
-            else {
+            } else {
+                // if no backup creep is required
+
                 // check if all sources have miners
-                var sources = room.find(FIND_SOURCES);
+                var sources = Game.rooms[room.name].memory.roomArray.sources
 
                 // iterate over all sources
                 for (var source of sources) {
+                    source = Game.getObjectById(source);
 
                     // if the source has no miner
                     if (!_.some(creepsInRoom, c => c.memory.role == 'miner' && c.memory.sourceId == source.id)) {
 
                         // check whether or not the source has a container
-                        /** @type {Array.StructureContainer} */
                         var containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
                             filter: s => s.structureType == STRUCTURE_CONTAINER
                         });
 
                         // if there is a container next to the source
-                        if (containers.length > 0 && room.energyAvailable >= 350) {
+                        if (containers.length > 0 && room.energyAvailable >= 350) {
                             // spawn a miner
                             name = this.createMiner(source.id, maxEnergy, room.name, room.name);
                             spawningWhat = 'miner';
                             break;
+                        } else {
+                            // check whether or not the source has a link
+                            var containers = source.pos.findInRange(FIND_STRUCTURES, 2, {
+                                filter: s => s.structureType == STRUCTURE_LINK
+                            });
+
+                            // if there is a container next to the source
+                            if (containers.length > 0 && room.energyAvailable >= 350) {
+                                // spawn a miner
+                                name = this.createMiner(source.id, maxEnergy, room.name, room.name);
+                                spawningWhat = 'miner';
+                                break;
+                            }
                         }
                     }
                 }
             }
 
+            // *** ADVANCED ROOM SETUP ***
+
             // if none of the above caused a spawn command check for other roles
             if (name == undefined) {
 
+                // go though roles in order they are at the top of this code
                 for (var role of listOfRoles) {
+
                     // check for claim order
                     var numberOfClaimers = {};
                     var targetRoom = room.name;
 
-                    if (role == 'claimer' && this.memory.minCreeps.claimers > 0) {
-                        for (var roomName in this.memory.claimer) {
-                            numberOfClaimers[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'claimer' && c.memory.target == roomName)
+                    if (numberOfCreeps[role] < this.memory.minCreeps[role]) {
+                        // if no claim order was found, check other roles
 
-                            if (numberOfClaimers[roomName] < this.memory.claimer[roomName]) {
-                                name = this.createClaimer(roomName);
-                                spawningWhat = 'claimer';
-                            }
-                        }
-                    }
+                        var sources = Game.rooms[room.name].memory.roomArray.sources
 
-                    // if no claim order was found, check other roles
-                    else if (numberOfCreeps[role] < this.memory.minCreeps[role]) {
-                        var sources = room.find(FIND_SOURCES);
                         for (var source of sources) {
+                            source = Game.getObjectById(source);
+
                             var containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
                                 filter: s => s.structureType == STRUCTURE_CONTAINER
                             });
                         }
 
-                        var terminal = source.room.find(FIND_STRUCTURES, {
+                        var terminal = room.find(FIND_STRUCTURES, {
                             filter: s => s.structureType == STRUCTURE_TERMINAL
                         });
 
@@ -108,6 +115,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                             //spawn lorry, but only when there are containers for miners
                             name = this.createLorry(maxEnergy, role, room.name);
                             spawningWhat = 'lorry2';
+
                         } else if (role == 'spawnAttendant' && room.storage != undefined) {
                             name = this.createLorry(maxEnergy, role, room.name);
                             spawningWhat = 'spawnAttendant';
@@ -120,12 +128,23 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
                             ////spawn miner, but only when there are containers for miners
                             name = this.createCustomCreep(maxEnergy, role, targetRoom);
                             spawningWhat = "miner-c";
-                        } else if (role == 'mineralHarvester' && terminal != undefined) {
+
+                        } else if (role == 'mineralHarvester' && terminal != undefined && terminal != null) {
                             name = this.createCustomCreep(maxEnergy, role, targetRoom);
                             spawningWhat = "mineralHarvester-c";
+
                         }
                         break;
 
+                    } else if (role == 'claimer' && this.memory.minCreeps.claimers > 0) {
+                        for (var roomName in this.memory.claimer) {
+                            numberOfClaimers[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'claimer' && c.memory.target == roomName)
+
+                            if (numberOfClaimers[roomName] < this.memory.claimer[roomName]) {
+                                name = this.createClaimer(roomName);
+                                spawningWhat = 'claimer';
+                            }
+                        }
                     }
                 }
             }
@@ -230,38 +249,75 @@ StructureSpawn.prototype.spawnCreepsIfNecessary =
 
             if (spawningWhat != '' && name != undefined) {
                 // added visuals, no longer needed
-                //console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
+                console.log(this.name + " at " + Game.time + " wants: " + spawningWhat + " resulting in:" + name)
             }
+        }
+    };
+
+StructureSpawn.prototype.getBodyInfo =
+    function (roleName, energy) {
+        var bodyInfo = {};
+        bodyInfo.role = roleName;
+
+        let rcl = this.room.controller.level;
+        if (buildingPlans[roleName] == undefined) {
+            console.log("No building plans for " + roleName + " found!");
+        } else if (buildingPlans[roleName][rcl - 1].minEnergy > energy && rcl > 1) {
+            if (buildingPlans[roleName][rcl - 2].minEnergy > energy) {
+                return null;
+            } else {
+                return buildingPlans[roleName][rcl - 2].body;
+            }
+        } else {
+            return buildingPlans[roleName][rcl - 1].body;
         }
     };
 
 // create a new function for StructureSpawn
 StructureSpawn.prototype.createCustomCreep =
-    function (energy, roleName, target) {
-        // create a balanced body as big as possible with the given energy
-        var numberOfParts = Math.floor(energy / 200);
+    function (energy, roleName, home = this.room, target = "", sourceId) {
 
-        var targetRoom = target;
-        // make sure the creep is not too big (more than 45 parts)
-        numberOfParts = Math.min(numberOfParts, Math.floor(45 / 3));
-        var body = [];
-        for (var i = 0; i < numberOfParts; i++) {
-            body.push(WORK);
-        }
-        for (var i = 0; i < numberOfParts; i++) {
-            body.push(CARRY);
-        }
-        for (var i = 0; i < numberOfParts; i++) {
-            body.push(MOVE);
-        }
+        let body = this.getBodyInfo(roleName, this.room.energyCapacityAvailable);
+        let name = roleName + "-" + home + "-" + target + "-" + Game.time;
 
-        // create creep with the created body and the given role
-        return this.createCreep(body, roleName + "-c-" + this.name + "-" + targetRoom + "-" + Game.time, {
-            role: roleName,
-            working: false,
-            targetW: false,
-            target: targetRoom
+        var testIfCanSpawn = this.spawnCreep(body, name, {
+            dryRun: true
         });
+
+        if (body != null && testIfCanSpawn == OK) {
+            return this.createCreep(body, name, {
+                role: roleName,
+                sourceId: sourceId,
+                home: home,
+                target: target
+            });
+        }
+
+        // *******
+        /* 
+                // create a balanced body as big as possible with the given energy
+                var numberOfParts = Math.floor(energy / 200);
+
+                var targetRoom = target;
+                // make sure the creep is not too big (more than 45 parts)
+                numberOfParts = Math.min(numberOfParts, Math.floor(45 / 3));
+                var body = [];
+                for (var i = 0; i < numberOfParts; i++) {
+                    body.push(WORK);
+                }
+                for (var i = 0; i < numberOfParts; i++) {
+                    body.push(CARRY);
+                }
+                for (var i = 0; i < numberOfParts; i++) {
+                    body.push(MOVE);
+                }
+
+                // create creep with the created body and the given role
+                return this.createCreep(body, roleName + "-c-" + this.name + "-" + targetRoom + "-" + Game.time, {
+                    role: roleName,
+                    home: home,
+                    target: targetRoom
+                }); */
     };
 
 
@@ -335,11 +391,13 @@ StructureSpawn.prototype.createMiner =
                 body.push(WORK);
             }
         } else {
-            if (energy > 860) {
-                energy = 850
+            if (energy > 960) {
+                energy = 950
             }
-            var numberOfParts = Math.floor((energy - 200 - 50) / 100);
+            var numberOfParts = Math.floor((energy - 200 - 150) / 100);
             var body = [];
+            body.push(MOVE)
+            body.push(MOVE)
             body.push(MOVE)
             body.push(CARRY)
             body.push(CARRY)
@@ -380,6 +438,8 @@ StructureSpawn.prototype.createLorry =
         });
     };
 
+
+
 StructureSpawn.prototype.creepSpawnCounts =
     function (spawns) {
         //put minCreeps in memory
@@ -408,9 +468,12 @@ StructureSpawn.prototype.creepSpawnCounts =
         if (spawns.room.storage != undefined) {
             if (spawns.room.storage.store[RESOURCE_ENERGY] > 5000) {
                 spawns.memory.minCreeps.spawnAttendant = 1;
-            } else if (spawns.room.storage.store[RESOURCE_ENERGY] > 300000) {
-                spawns.memory.minCreeps.spawnAttendant = 2;
             }
+
+            //if enough energy, add a builder to repair walls
+            /* if (spawns.room.storage.store[RESOURCE_ENERGY] > 300000) {
+                spawns.memory.minCreeps.builder = 1;
+            } */
         }
 
         //create builder when construction is needed
@@ -421,7 +484,7 @@ StructureSpawn.prototype.creepSpawnCounts =
         if (towers.length == 0 || towers == null) {
             spawns.memory.minCreeps.builder = 1;
         }
-       
+
 
         //upgraders
         //make sure it is big enough - up to 15 work parts
@@ -435,7 +498,9 @@ StructureSpawn.prototype.creepSpawnCounts =
 
         //ROOM SPECIFIC SPAWNING
         if (spawns.room.name == 'W28N14') {
+            //add check for any minerals left in room
             spawns.memory.minCreeps.mineralHarvester = 0;
+
             spawns.memory.minCreeps.lorry = 1;
 
             spawns.memory.minCreeps.claimers = 4
@@ -449,7 +514,7 @@ StructureSpawn.prototype.creepSpawnCounts =
 
             spawns.memory.minLongDistanceLorries = {}
             spawns.memory.minLongDistanceLorries.W28N13 = 2 //1
-            spawns.memory.minLongDistanceLorries.W28N15 = 1 //1
+            spawns.memory.minLongDistanceLorries.W28N15 = 2 //1
             spawns.memory.minLongDistanceLorries.W27N15 = 1 //1
             spawns.memory.minLongDistanceLorries.W27N14 = 1 //1
 
@@ -498,7 +563,7 @@ StructureSpawn.prototype.creepSpawnCounts =
 
             spawns.memory.minGuards = {}
             spawns.memory.minGuards.W29N13 = 0
-            spawns.memory.minGuards.W32N13 = 1
+            spawns.memory.minGuards.W32N13 = 0
 
             spawns.memory.claimer = {};
             spawns.memory.claimer.W29N13 = 1;
@@ -506,25 +571,43 @@ StructureSpawn.prototype.creepSpawnCounts =
         }
 
         if (spawns.room.name == "W32N13") {
-            spawns.memory.minCreeps.upgrader = 3;
-            spawns.memory.minCreeps.builder = 1;
-            spawns.memory.booted = true;
-        }
-
-        var hostiles = spawns.room.find(FIND_HOSTILE_CREEPS);
-        if (hostiles.length > 1) {
             spawns.memory.minCreeps.claimers = 0
-            spawns.memory.minCreeps.LongDistanceHarvester = 0
+            spawns.memory.minCreeps.LongDistanceHarvester = 2
             spawns.memory.minCreeps.guard = 2
             spawns.memory.booted = true;
 
             spawns.memory.minGuards = {}
-            spawns.memory.minGuards.W27N14 = 2
+            spawns.memory.minGuards.W32N14 = 1
+            spawns.memory.minGuards.W32N12 = 1
+
+
+            spawns.memory.minLongDistanceHarvesters = {}
+            spawns.memory.minLongDistanceHarvesters.W32N14 = 1
+            spawns.memory.minLongDistanceHarvesters.W32N12 = 1
+            spawns.memory.minLongDistanceHarvesters.W33N13 = 2
+
+
+            spawns.memory.minLongDistanceHarvesters = {}
+            spawns.memory.minLongDistanceBuilders = {}
+            spawns.memory.claimer = {};
+        }
+
+        /*
+        //NOT WORKING !!!
+        var hostiles = spawns.room.find(FIND_HOSTILE_CREEPS);
+         if (hostiles.length > 1) {
+            spawns.memory.minCreeps.claimers = 0
+            spawns.memory.minCreeps.LongDistanceHarvester = 0
+            spawns.memory.minCreeps.guard = 0
+            spawns.memory.booted = true;
+
+            spawns.memory.minGuards = {}
+            spawns.memory.minGuards.W27N14 = 0
 
             spawns.memory.minLongDistanceHarvesters = {}
             spawns.memory.minLongDistanceBuilders = {}
             spawns.memory.claimer = {};
             console.log("Base defense spawning protocol!!" + hostiles.length)
-        }
+        } */
         //console.log(Game.time+" Room " + spawns.room.name + " initialized!")
     }

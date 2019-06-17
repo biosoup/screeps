@@ -12,19 +12,19 @@ module.exports = upgrader = {
             //first link nearby
             var container;
             
-            /* container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
+            container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
                 filter: s => s.structureType == STRUCTURE_LINK &&
-                    s.energy > 400
-            }); */
+                    s.energy > 100
+            })[0];
 
             //then use storage if there is anything in it
-            if (container == undefined || _.isEmpty(container) && creep.room.storage.store[RESOURCE_ENERGY] > 500) {
+            if (container == undefined || container == null && creep.room.storage.store[RESOURCE_ENERGY] > 500) {
                 container = creep.room.storage;
             }
 
 
             //then closest container
-            if (container == undefined || _.isEmpty(container)) {
+            if (container == undefined || container == null) {
                 container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: s => s.structureType == STRUCTURE_CONTAINER &&
                         s.store[RESOURCE_ENERGY] > 100

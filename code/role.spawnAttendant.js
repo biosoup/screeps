@@ -43,6 +43,20 @@ module.exports = {
             });
 
             if (container == undefined) {
+                var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
+                    filter: s => s.structureType == STRUCTURE_LINK
+                })[0];
+
+                if (link !== undefined && link != null) {
+                    //console.log(link)
+                    if (link.energy > 200) {
+                        //the link is full
+                        container = link;
+                    }
+                }
+            }
+
+            if (container == undefined) {
                 //if storage is empty find container
                 container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: s => s.structureType == STRUCTURE_CONTAINER &&

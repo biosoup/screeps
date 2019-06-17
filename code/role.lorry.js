@@ -19,12 +19,27 @@ module.exports = {
             //add a withraw task
             if (container != undefined) {
                 creep.task = Tasks.withdraw(container);
+            } else if (creep.room.storage != undefined) {
+                //find a link nerby the container
+                var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
+                    filter: s => s.structureType == STRUCTURE_LINK
+                })[0];
+
+                if (link !== undefined && link != null) {
+                    //console.log(link)
+                    if (link.energy == link.energyCapacity) {
+                        //the link is full
+                        creep.task = Tasks.withdraw(link);
+                    }
+                } else {
+                    creep.say("no ene source")
+                }
             } else {
-                creep.say("no energy source")
+                creep.say("no to do")
             }
             
         } else {
-            //find towers to get their energy
+            //find towers to give them their energy
             towers = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                 // the second argument for findClosestByPath is an object which takes
                 // a property called filter which can be a function

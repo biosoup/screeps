@@ -881,7 +881,7 @@ global.roomCallback = function (roomName) {
         }
     }
 
-    //Find flags for stationaryRemoteHarvesters, stationaryHarvesters
+    //Find flags for stationarylongDistanceHarvesters, miners
     let flags = room.find(FIND_FLAGS, {filter: (f) => f.memory.function == "haulEnergy" || f.memory.function == "narrowSource" || f.memory.function == "remoteController"});
     for (let f in flags) {
         let top = flags[f].pos.y - 1;

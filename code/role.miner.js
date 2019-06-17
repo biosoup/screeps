@@ -16,37 +16,44 @@ module.exports = {
         }
 
         if (source == undefined || source == null) {
-            console.log(creep+" "+source)
+            console.log(creep + " " + source)
         }
 
+        //creep has container
         if (typeof container !== 'undefined') {
 
             // if creep is on top of the container
             if (creep.pos.isEqualTo(container.pos)) {
 
-                //if there is a free space in container
-                if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
-                    // harvest source
-                    //console.log(creep+" "+source);
-                    creep.task = Tasks.harvest(source);
-
-                } else {
+                //creep is full
+                if (creep.carry.energy == creep.carryCapacity) {
                     //look for a link
-                    var link = source.pos.findInRange(FIND_STRUCTURES, 1, {
+                    var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
                         filter: s => s.structureType == STRUCTURE_LINK
                     })[0];
 
                     if (link !== undefined && link != null) {
+                        //console.log(link)
                         if (link.energy < link.energyCapacity) {
                             //there is a space in the link
                             creep.task = Tasks.transfer(link);
-                        } else {
-                            //free time!
-                            creep.say("nothing to do")
-
-                            // TBD - maybe check RCL level and add the link / or container?
+                        } else if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
+                             // harvest source
+                            creep.task = Tasks.harvest(source);
+                        }
+                    } else {
+                        if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
+                            // harvest source
+                            creep.task = Tasks.harvest(source);
                         }
                     }
+                } else if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
+                    //container has free space
+
+                    // harvest source
+                    creep.task = Tasks.harvest(source);
+                } else {
+                    creep.say("full")
                 }
             } else {
                 // if creep is not on top of the container
