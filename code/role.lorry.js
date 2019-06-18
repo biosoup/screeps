@@ -4,7 +4,11 @@ module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
     newTask: function (creep) {
-        if (creep.carry.energy <= 0) {
+        //console.log(creep.name+" "+creep.carry.energy)
+
+        if (creep.carry.energy == 0) {
+            
+
             // find closest container
             var containers = creep.room.find(FIND_STRUCTURES, {
                 filter: s => s.structureType == STRUCTURE_CONTAINER &&
@@ -15,6 +19,7 @@ module.exports = {
             var container = containers.sort(function (a, b) {
                 return b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]
             })[0];
+            
 
             //add a withraw task
             if (container != undefined) {
@@ -24,18 +29,22 @@ module.exports = {
                 var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
                     filter: s => s.structureType == STRUCTURE_LINK
                 })[0];
-
+                
                 if (link !== undefined && link != null) {
                     //console.log(link)
                     if (link.energy == link.energyCapacity) {
                         //the link is full
                         creep.task = Tasks.withdraw(link);
-                    }
+                        creep.say("using link")
+                    } /* else {
+                        creep.task = Tasks.withdraw(creep.room.storage);
+                        creep.say("using container")
+                    } */
                 } else {
                     creep.say("no ene source")
                 }
             } else {
-                creep.say("no to do")
+                creep.say("noth to do")
             }
             
         } else {
@@ -49,7 +58,7 @@ module.exports = {
             });
 
             //if energy is missing in main structures
-            if (creep.room.energyAvailable < 1000) {
+            if (creep.room.energyAvailable < (creep.room.energyCapacityAvailable/2)) {
                 //find spawn and extension to refill
                 structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||

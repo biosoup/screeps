@@ -40,6 +40,10 @@ module.exports = {
                                 creep.task = Tasks.harvest(source);
                                 creep.say("harvesting")
                             } else {
+                                if ((container.hits / container.hitsMax) < 0.7 && container.store[RESOURCE_ENERGY] == container.storeCapacity) {
+                                    creep.task = Tasks.withdraw(container);
+                                }
+                                
                                 creep.say("nothing to do")
                             }
                         }

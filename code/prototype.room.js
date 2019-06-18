@@ -532,13 +532,17 @@ Room.prototype.creepSpawnRun =
                 }
             } */
             minimumSpawnOf["spawnAttendant"] = 1;
+        } else if (spawnRoom.storage != undefined) {
+            minimumSpawnOf["spawnAttendant"] = 1;
         }
 
         // lorry, Harvester & Repairer
         minimumSpawnOf["miner"] = numberOfSources;
-        minimumSpawnOf["lorry"] = minimumSpawnOf.miner;
-        minimumSpawnOf["harvester"] = numberOfSources - minimumSpawnOf.miner;
+        minimumSpawnOf["lorry"] = minimumSpawnOf.miner- _.sum(allMyCreeps, (c) => c.memory.role == 'spawnAttendant' && c.memory.home == spawnRoom.name)
+        minimumSpawnOf["harvester"] = numberOfSources - _.sum(allMyCreeps, (c) => c.memory.role == 'miner' && c.memory.home == spawnRoom.name)
         //minimumSpawnOf["repairer"] = Math.ceil(numberOfSources * 0.5);
+
+        //console.log(spawnRoom.name+" "+minimumSpawnOf["harvester"])
 
         /** Rest **/
 
@@ -669,29 +673,24 @@ Room.prototype.creepSpawnRun =
                             }
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceMiner") {
-                        // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
                             var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceMiner' && c.memory.target == roomName)
                             var toSpawn = roomInterests[roomName][1];
-
-                            console.log(spawnList[spawnEntry] + " " + inRooms + " " + toSpawn)
 
                             if (inRooms < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                             }
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceLorry") {
-                        // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
                             var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.target == roomName)
                             var toSpawn = roomInterests[roomName][2];
 
-                            if (inRooms[roomName] < toSpawn) {
+                            if (inRooms < toSpawn) {
                                 name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                             }
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceBuilder") {
-                        // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
                             var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'builder' && c.memory.target == roomName)
                             var toSpawn = roomInterests[roomName][3];
@@ -701,7 +700,6 @@ Room.prototype.creepSpawnRun =
                             }
                         }
                     } else if (spawnList[spawnEntry] == "guard") {
-                        // count the number of long distance harvesters globally
                         for (var roomName in roomInterests) {
                             var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
                             var toSpawn = roomInterests[roomName][5];
@@ -752,7 +750,7 @@ Room.prototype.getSpawnList =
             },
             miner: {
                 name: "miner",
-                prio: 8,
+                prio: 11,
                 energyRole: true,
                 min: minimumSpawnOf.miner,
                 max: numberOf.miner,
@@ -760,7 +758,7 @@ Room.prototype.getSpawnList =
             },
             builder: {
                 name: "builder",
-                prio: 140,
+                prio: 90,
                 energyRole: false,
                 min: minimumSpawnOf.builder,
                 max: numberOf.builder,
@@ -792,7 +790,7 @@ Room.prototype.getSpawnList =
             },
             upgrader: {
                 name: "upgrader",
-                prio: 160,
+                prio: 110,
                 energyRole: false,
                 min: minimumSpawnOf.upgrader,
                 max: numberOf.upgrader,
@@ -800,7 +798,7 @@ Room.prototype.getSpawnList =
             },
             spawnAttendant: {
                 name: "spawnAttendant",
-                prio: 150,
+                prio: 15,
                 energyRole: false,
                 min: minimumSpawnOf.spawnAttendant,
                 max: numberOf.spawnAttendant,
@@ -824,7 +822,7 @@ Room.prototype.getSpawnList =
             },
             longDistanceHarvester: {
                 name: "longDistanceHarvester",
-                prio: 130,
+                prio: 100,
                 energyRole: true,
                 min: minimumSpawnOf.longDistanceHarvester,
                 max: numberOf.longDistanceHarvester,
@@ -832,7 +830,7 @@ Room.prototype.getSpawnList =
             },
             longDistanceMiner: {
                 name: "longDistanceMiner",
-                prio: 110,
+                prio: 120,
                 energyRole: true,
                 min: minimumSpawnOf.longDistanceMiner,
                 max: numberOf.longDistanceMiner,
@@ -840,7 +838,7 @@ Room.prototype.getSpawnList =
             },
             claimer: {
                 name: "claimer",
-                prio: 40,
+                prio: 140,
                 energyRole: false,
                 min: minimumSpawnOf.claimer,
                 max: numberOf.claimer,
@@ -848,7 +846,7 @@ Room.prototype.getSpawnList =
             },
             bigClaimer: {
                 name: "bigClaimer",
-                prio: 60,
+                prio: 160,
                 energyRole: false,
                 min: minimumSpawnOf.bigClaimer,
                 max: numberOf.bigClaimer,
@@ -872,7 +870,7 @@ Room.prototype.getSpawnList =
             },
             longDistanceLorry: {
                 name: "longDistanceLorry",
-                prio: 120,
+                prio: 130,
                 energyRole: true,
                 min: minimumSpawnOf.longDistanceLorry,
                 max: numberOf.longDistanceLorry,
@@ -880,7 +878,7 @@ Room.prototype.getSpawnList =
             },
             longDistanceLorry: {
                 name: "longDistanceBuilder",
-                prio: 120,
+                prio: 140,
                 energyRole: true,
                 min: minimumSpawnOf.longDistanceBuilder,
                 max: numberOf.longDistanceBuilder,

@@ -49,7 +49,7 @@ module.exports = {
 
                 if (link !== undefined && link != null) {
                     //console.log(link)
-                    if (link.energy > 200) {
+                    if (link.energy > 0) {
                         //the link is full
                         container = link;
                     }

@@ -47,8 +47,27 @@ module.exports = {
         } else {
             let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: s => s.structureType == STRUCTURE_CONTAINER &&
-                    s.store[RESOURCE_ENERGY]
+                    s.store[RESOURCE_ENERGY] > 100
             });
+
+            if (container == undefined) {
+                if (creep.room.storage != undefined) {
+                    container = creep.room.storage;
+                }
+            }
+
+            if (container == undefined) {
+                //find a link nerby the container
+                var link = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: s => s.structureType == STRUCTURE_LINK &&
+                    s.energy > 100
+                })[0];
+
+                if(link != undefined && link != null) {
+                    container = link
+                }
+            }
+
 
             //console.log(creep)
 

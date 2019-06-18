@@ -52,7 +52,7 @@ module.exports = {
                             s.structureType != STRUCTURE_SPAWN
                     });
 
-                    if (target !== undefined) {
+                    if (targets !== undefined) {
                         target = targets.sort(function (a, b) {
                             return +a.hits - +b.hits
                         })[0];

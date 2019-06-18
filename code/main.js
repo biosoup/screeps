@@ -119,7 +119,6 @@ module.exports.loop = function () {
     }
     //go through rooms
     for (let roomName in Game.rooms) {
-        //run every 25 ticks and only when we have spare bucket CPU
         if ((Game.time % 57) == 0 && Game.cpu.bucket > 5000) {
             //refresh room data
             Game.rooms[roomName].refreshData(roomName)
