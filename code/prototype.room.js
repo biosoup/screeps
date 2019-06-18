@@ -6,20 +6,6 @@
 
 */
 
-// add a task tracking and prioritization system
-
-Room.prototype.task =
-    function (roomName, target, workType) {
-        //all room task are stored in memory as nested objects
-
-    };
-
-Room.prototype.taskMultiRoom =
-    function (roomNameSource, roomNameTarget, target, workType) {
-        //distant tasks
-
-    };
-
 // find best routes between spawn bunker and resources
 // OR find best routes between spawn and room borders
 Room.prototype.roads =
@@ -371,24 +357,24 @@ Room.prototype.creepSpawnRun =
         let roomInterests = {}
         if (spawnRoom.name == "W28N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W28N13 = [0, 2, 2, 1, 1, 0]
-            roomInterests.W28N15 = [0, 1, 2, 1, 1, 0]
-            roomInterests.W27N15 = [0, 1, 1, 1, 1, 1]
-            roomInterests.W27N14 = [0, 1, 1, 1, 1, 1]
+            roomInterests.W28N13 = [0, 2, 2, 0, 1, 0]
+            roomInterests.W28N15 = [0, 1, 2, 0, 1, 0]
+            roomInterests.W27N15 = [0, 1, 1, 0, 1, 1]
+            roomInterests.W27N14 = [0, 1, 1, 0, 1, 0]
         }
 
         if (spawnRoom.name == "W29N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W29N13 = [0, 1, 1, 1, 1, 0]
-            roomInterests.W31N14 = [1, 0, 0, 0, 0, 0]
-            roomInterests.W29N15 = [1, 0, 0, 0, 0, 0]
+            roomInterests.W29N13 = [0, 1, 1, 0, 1, 0]
+            roomInterests.W31N14 = [2, 0, 0, 0, 0, 0]
+            roomInterests.W29N15 = [2, 0, 0, 0, 0, 0]
         }
 
         if (spawnRoom.name == "W32N13") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
             roomInterests.W32N14 = [1, 0, 0, 0, 0, 0]
             roomInterests.W32N12 = [1, 0, 0, 0, 0, 0]
-            roomInterests.W33N13 = [2, 0, 0, 0, 0, 0]
+            roomInterests.W33N13 = [2, 0, 0, 1, 1, 0]
         }
 
         for (let interest in roomInterests) {
@@ -502,15 +488,18 @@ Room.prototype.creepSpawnRun =
         }
 
         // Upgrader
-        if (spawnRoom.controller.level == 8) {
+        /* if (spawnRoom.controller.level == 8) {
             minimumSpawnOf.upgrader = 0;
             if (spawnRoom.storage.store[RESOURCE_ENERGY] > 200000) {
                 minimumSpawnOf.upgrader = 1;
             }
-        } else {
-            //minimumSpawnOf["upgrader"] = numberOfSources;
+        } else if (spawnRoom.controller.level > 4 && spawnRoom.storage.store[RESOURCE_ENERGY] > 5000) {
             minimumSpawnOf["upgrader"] = 1;
-        }
+        } else if (spawnRoom.energyAvailable > (spawnRoom.energyCapacityAvailable * 0.7)) {
+            minimumSpawnOf["upgrader"] = 1;
+        } */
+
+        minimumSpawnOf["upgrader"] = 1;
 
         //Wall Repairer
         /* if (spawnRoom.memory.roomSecure == true && constructionOfRampartsAndWalls == 0) {
@@ -520,26 +509,39 @@ Room.prototype.creepSpawnRun =
         } */
 
         // spawnAttendant
-        if (spawnRoom.memory.terminalTransfer != undefined) {
+        /* if (spawnRoom.memory.terminalTransfer != undefined) {
             //ongoing terminal transfer
             minimumSpawnOf["spawnAttendant"] = 1;
         } else if (spawnRoom.terminal != undefined && spawnRoom.storage != undefined) {
-            /* for (var rs in RESOURCES_ALL) {
+            for (var rs in RESOURCES_ALL) {
                 if ((checkTerminalLimits(spawnRoom, RESOURCES_ALL[rs]).amount < 0 && spawnRoom.storage.store[RESOURCES_ALL[rs]] > 0) ||
                     checkTerminalLimits(spawnRoom, RESOURCES_ALL[rs]).amount > 0) {
                     minimumSpawnOf["spawnAttendant"] = 1;
                     break;
                 }
-            } */
-            minimumSpawnOf["spawnAttendant"] = 1;
-        } else if (spawnRoom.storage != undefined) {
-            minimumSpawnOf["spawnAttendant"] = 1;
+            }
+        } */
+
+        if (spawnRoom.storage != undefined) {
+                minimumSpawnOf["spawnAttendant"] = 1;
+                if(spawnRoom.storage.store[RESOURCE_ENERGY] > 50000) {
+                    minimumSpawnOf["spawnAttendant"] = 2;
+                }
         }
+
+        var numberOfMiners = _.sum(allMyCreeps, (c) => c.memory.role == 'miner' && c.memory.home == spawnRoom.name)
+        var numberOfSA = _.sum(allMyCreeps, (c) => c.memory.role == 'spawnAttendant' && c.memory.home == spawnRoom.name)
+        var numberOfLorries = _.sum(allMyCreeps, (c) => c.memory.role == 'lorry' && c.memory.home == spawnRoom.name)
 
         // lorry, Harvester & Repairer
         minimumSpawnOf["miner"] = numberOfSources;
-        minimumSpawnOf["lorry"] = minimumSpawnOf.miner- _.sum(allMyCreeps, (c) => c.memory.role == 'spawnAttendant' && c.memory.home == spawnRoom.name)
-        minimumSpawnOf["harvester"] = numberOfSources - _.sum(allMyCreeps, (c) => c.memory.role == 'miner' && c.memory.home == spawnRoom.name)
+        
+        minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
+        if (minimumSpawnOf["lorry"] == 0) {
+            minimumSpawnOf["lorry"] = 1;
+        }
+
+        minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners/2) - numberOfLorries - numberOfSA
         //minimumSpawnOf["repairer"] = Math.ceil(numberOfSources * 0.5);
 
         //console.log(spawnRoom.name+" "+minimumSpawnOf["harvester"])
@@ -565,9 +567,9 @@ Room.prototype.creepSpawnRun =
 
         if (hostiles.length > 0) {
             if (spawnRoom.memory.roomArray.towers.length > 0) {
-                minimumSpawnOf.guard = spawnRoom.memory.hostiles.length - 1;
+                minimumSpawnOf.guard = hostiles.length - 1;
             } else {
-                minimumSpawnOf.guard = spawnRoom.memory.hostiles.length;
+                minimumSpawnOf.guard = hostiles.length;
             }
             minimumSpawnOf.upgrader = 0;
             minimumSpawnOf.builder = 0;
@@ -682,6 +684,7 @@ Room.prototype.creepSpawnRun =
                             }
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceLorry") {
+                        //console.log(spawnList[spawnEntry]+" "+spawnRoom.name+" "+JSON.stringify(roomInterests))
                         for (var roomName in roomInterests) {
                             var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.target == roomName)
                             var toSpawn = roomInterests[roomName][2];
@@ -716,7 +719,7 @@ Room.prototype.creepSpawnRun =
                     if (!(name < 0) && name != undefined) {
                         testSpawn.memory.lastSpawn = spawnList[spawnEntry];
                         if (LOG_SPAWN == true) {
-                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " (" + spawnList[spawnEntry] + ") in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ")</font>");
+                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " (" + spawnList[spawnEntry] + ") in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + "</font>");
                         }
                         spawnEntry++;
                     }
@@ -758,7 +761,7 @@ Room.prototype.getSpawnList =
             },
             builder: {
                 name: "builder",
-                prio: 90,
+                prio: 60,
                 energyRole: false,
                 min: minimumSpawnOf.builder,
                 max: numberOf.builder,
@@ -790,7 +793,7 @@ Room.prototype.getSpawnList =
             },
             upgrader: {
                 name: "upgrader",
-                prio: 110,
+                prio: 80,
                 energyRole: false,
                 min: minimumSpawnOf.upgrader,
                 max: numberOf.upgrader,
@@ -876,7 +879,7 @@ Room.prototype.getSpawnList =
                 max: numberOf.longDistanceLorry,
                 minEnergy: buildingPlans.longDistanceLorry[rcl - 1].minEnergy
             },
-            longDistanceLorry: {
+            longDistanceBuilder: {
                 name: "longDistanceBuilder",
                 prio: 140,
                 energyRole: true,
@@ -956,7 +959,7 @@ Room.prototype.getSpawnList =
                     containerEnergy += container[e].store[RESOURCE_ENERGY];
                 }
                 if (containerEnergy > 200000) {
-                    spawnList.push("upgrader");
+                    //spawnList.push("upgrader");
                 }
             }
 

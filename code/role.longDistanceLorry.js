@@ -30,7 +30,22 @@ module.exports = {
 
 
         } else {
-            if (creep.carry.energy < creep.carryCapacity && creep.memory.target != undefined && creep.room.name == creep.memory.target) {
+
+            if (creep.carry.energy > 0 && creep.memory.target != undefined && creep.room.name == creep.memory.target) {
+                //Find the closest damaged Structure
+                var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) =>
+                        (s.hits < s.hitsMax) &&
+                        s.structureType == STRUCTURE_ROAD
+                });
+
+                if (target !== undefined && target != null) {
+                    creep.task = Tasks.repair(target);
+                    creep.say("repairing")
+                } else {
+                    creep.task = Tasks.goToRoom(creep.memory.home)
+                }
+            } else if (creep.carry.energy < creep.carryCapacity && creep.memory.target != undefined && creep.room.name == creep.memory.target) {
                 //creep is in target room and have a free space
 
                 // find closest container
@@ -48,7 +63,7 @@ module.exports = {
                 if (container != undefined) {
                     creep.task = Tasks.withdraw(container);
                 } else {
-                    creep.say("no energy source")
+                    creep.say("no ene source")
                 }
             } else if (creep.carry.energy == creep.carryCapacity && creep.memory.target != undefined && creep.room.name == creep.memory.target) {
                 //creep is full - go to home room

@@ -139,6 +139,7 @@ module.exports.loop = function () {
     // ************ NEW TASK SYSTEM ************
     for (let creep in Game.creeps) {
         //if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" work Code: " + Game.cpu.getUsed())}
+        //console.log(Game.creeps[creep])
 
         //if creep is idle, give him work
         if (Game.creeps[creep].isIdle) {
@@ -166,6 +167,8 @@ module.exports.loop = function () {
         CPUdebugString = CPUdebugString.concat("<br>Start stats Code: " + Game.cpu.getUsed())
     }
     //other stats
+    var containerStats = {};
+    var spawnBusy = {};
     for (var spawnName in Game.spawns) {
         var containers = Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
             filter: {
@@ -180,9 +183,16 @@ module.exports.loop = function () {
         Game.spawns[spawnName].memory.energy.containerStorage = containerStorage;
         Game.spawns[spawnName].memory.energy.containerCount = containers.length;
 
-        stats.addSimpleStat(Game.spawns[spawnName].room.name + '-energy-container', containerStorage);
-        //console.log(Game.spawns[spawnName].room.name + ' energy-container')
+        if(Game.spawns[spawnName].spawning) {
+            spawnBusy[Game.spawns[spawnName].room.name] = Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime;
+        } else {
+            spawnBusy[Game.spawns[spawnName].room.name] = 0;
+        }
+
+        containerStats[Game.spawns[spawnName].room.name] = containerStorage;
     }
+    stats.addStat('energy-container',{},containerStats)
+    stats.addStat('spawn-busy',{},spawnBusy)
 
     //check for hostiles in any room
     var countHostiles = 0;

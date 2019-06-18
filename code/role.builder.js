@@ -6,7 +6,7 @@ module.exports = {
     newTask: function (creep) {
 
         // if target is defined and creep is not in target room
-        if (creep.memory.target != undefined && creep.room.name != creep.memory.target) {
+        if (creep.memory.target != undefined && creep.memory.target != null && creep.memory.target != "" && creep.room.name != creep.memory.target) {
             creep.task = Tasks.goToRoom(creep.memory.target)
         } else {
             // if creep need energy, get him refilled

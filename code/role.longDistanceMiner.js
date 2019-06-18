@@ -30,7 +30,7 @@ module.exports = {
                     // if creep is on top of the container
                     if (creep.pos.isEqualTo(container.pos)) {
                         //if container needs repairs
-                        if ((container.hits / container.hitsMax) < 0.7 && creep.carry.energy > 0) {
+                        if (container.hits < container.hitsMax && creep.carry.energy > 0) {
                             creep.task = Tasks.repair(container)
                             creep.say("repairing")
                         } else {
@@ -40,7 +40,7 @@ module.exports = {
                                 creep.task = Tasks.harvest(source);
                                 creep.say("harvesting")
                             } else {
-                                if ((container.hits / container.hitsMax) < 0.7 && container.store[RESOURCE_ENERGY] == container.storeCapacity) {
+                                if (container.hits < container.hitsMax && container.store[RESOURCE_ENERGY] == container.storeCapacity) {
                                     creep.task = Tasks.withdraw(container);
                                 }
                                 

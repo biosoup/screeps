@@ -12,10 +12,10 @@ module.exports = upgrader = {
             //first link nearby
             var container;
             
-            container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
+            /* container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
                 filter: s => s.structureType == STRUCTURE_LINK &&
                     s.energy > 100
-            })[0];
+            })[0]; */
 
             //then use storage if there is anything in it
             if (container == undefined || container == null && creep.room.storage.store[RESOURCE_ENERGY] > 500) {
