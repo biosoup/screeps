@@ -29,12 +29,13 @@ module.exports = {
                 structure = creep.room.storage;
             }
 
-            if (structure != undefined) {
+            var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+
+            if (structure != undefined && closestConstructionSite == undefined) {
                 //if structure found, do work
                 creep.task = Tasks.transfer(structure);
             } else {
                 //if no structure as a destination, go build
-                var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
                 if (closestConstructionSite !== undefined && closestConstructionSite != null) {
                     //go build
                     creep.task = Tasks.build(closestConstructionSite);

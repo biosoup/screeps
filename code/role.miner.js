@@ -25,8 +25,10 @@ module.exports = {
             // if creep is on top of the container
             if (creep.pos.isEqualTo(container.pos)) {
 
-                //creep is full
-                if (creep.carry.energy == creep.carryCapacity) {
+                if (container.hits < container.hitsMax && creep.carry.energy > 0) {
+                    creep.task = Tasks.repair(container)
+                    creep.say("repairing")
+                } else if (creep.carry.energy == creep.carryCapacity) {
                     //look for a link
                     var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
                         filter: s => s.structureType == STRUCTURE_LINK
@@ -38,7 +40,7 @@ module.exports = {
                             //there is a space in the link
                             creep.task = Tasks.transfer(link);
                         } else if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
-                             // harvest source
+                            // harvest source
                             creep.task = Tasks.harvest(source);
                         }
                     } else {
@@ -65,18 +67,25 @@ module.exports = {
             if (creep.carry.energy < creep.carryCapacity) {
                 creep.task = Tasks.harvest(source);
             } else {
-                creep.say("using link")
-                var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
-                    filter: s => s.structureType == STRUCTURE_LINK
-                })[0];
-                if (link !== undefined) {
-                    if (link.energy < link.energyCapacity) {
-                        //there is a space in the link
-                        creep.task = Tasks.transfer(link);
-                    }
+                var buildSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                if (buildSite != undefined && buildSite != null) {
+                    creep.task = Tasks.build(buildSite);
+                    creep.say("building")
                 } else {
-                    creep.say("no link")
+                    creep.say("using link")
+                    var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
+                        filter: s => s.structureType == STRUCTURE_LINK
+                    })[0];
+                    if (link !== undefined) {
+                        if (link.energy < link.energyCapacity) {
+                            //there is a space in the link
+                            creep.task = Tasks.transfer(link);
+                        }
+                    } else {
+                        creep.say("no link")
+                    }
                 }
+
             }
         }
     }

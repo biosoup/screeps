@@ -184,9 +184,9 @@ module.exports.loop = function () {
         Game.spawns[spawnName].memory.energy.containerCount = containers.length;
 
         if(Game.spawns[spawnName].spawning) {
-            spawnBusy[Game.spawns[spawnName].room.name] = Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime;
+            spawnBusy[Game.spawns[spawnName].name] = Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime;
         } else {
-            spawnBusy[Game.spawns[spawnName].room.name] = 0;
+            spawnBusy[Game.spawns[spawnName].name]= 0;
         }
 
         containerStats[Game.spawns[spawnName].room.name] = containerStorage;

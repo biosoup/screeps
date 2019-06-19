@@ -20,9 +20,10 @@ StructureSpawn.prototype.getBodyInfo =
 // create a new function for StructureSpawn
 StructureSpawn.prototype.createCustomCreep =
     function (energy, roleName, home = this.room, target, sourceId) {
-
+        let targetName = ""
         let body = this.getBodyInfo(roleName, this.room.energyCapacityAvailable);
-        let name = roleName + "-" + home + "-" + target + "-" + Game.time;
+        if(target != undefined) {targetName = target}
+        let name = roleName + "-" + home + "-" + targetName + "-" + Game.time;
 
         var testIfCanSpawn = this.spawnCreep(body, name, {
             dryRun: true

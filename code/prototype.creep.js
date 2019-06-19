@@ -42,7 +42,7 @@ Creep.prototype.runRole =
         } else if (this.memory.role == 'longDistanceLorry') {
             longDistanceLorry.newTask(this)
         } else {
-            console.log("error")
+            console.log("error "+this.memory.role+" "+this.room.name)
         }
     };
 

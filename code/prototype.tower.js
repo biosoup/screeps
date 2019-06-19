@@ -29,7 +29,7 @@ StructureTower.prototype.repairStructures =
         //work only when there is max spawn energy && roomEnergy == roomEnergyCapacity
 
 
-        if (this.energy > 700) {
+        /* if (this.energy > 700) {
             //Find the closest damaged Structure
             var targets = this.room.find(FIND_STRUCTURES, {
                 filter: (s) =>
@@ -45,13 +45,13 @@ StructureTower.prototype.repairStructures =
             target = targets.sort(function (a, b) {
                 return +a.hits - +b.hits
             })[0];
-            //console.log(JSON.stringify(targets))
 
             if (target) {
                 this.repair(target);
                 //console.log(target+" "+this.room.name+" "+ this.repair(target))
             }
-        } else if (this.energy > 200) {
+        } else  */
+        if (this.energy > 200) {
             //Find the closest damaged Structure
             var targets = this.room.find(FIND_STRUCTURES, {
                 filter: (s) =>
@@ -59,7 +59,6 @@ StructureTower.prototype.repairStructures =
                     s.structureType != STRUCTURE_CONTROLLER &&
                     s.structureType != STRUCTURE_EXTENSION &&
                     s.structureType != STRUCTURE_TOWER &&
-                    s.structureType != STRUCTURE_WALL &&
                     s.structureType != STRUCTURE_SPAWN
             });
 

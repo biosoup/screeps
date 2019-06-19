@@ -2,8 +2,6 @@
 token: 99f7c6d7-209f-48ce-bdf0-57ff39d125bf
 
 PRIORITIES
-* miner <> link
-* inner room link transfers
 * terminal sell code
 * terminal multiroom energy help
 
@@ -23,6 +21,7 @@ PRIORITIES
 - stats !!
     - process execution time
     - enemies present
+        - add owner stats
     - number of buildings and their progress
     - number of each spawn type
     - defenses statistics
@@ -48,9 +47,7 @@ PRIORITIES
     - emergency protocol
 
 - spawner logic 
-    - spawn que with prioritization
     - compute expected ROI of worker
-    - output into console build of current creep
     
 - distatntWorkers
     - distantMiner

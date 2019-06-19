@@ -306,6 +306,8 @@ Room.prototype.creepSpawnRun =
                 if (testSpawn != null && testSpawn.spawning == null && testSpawn.memory.spawnRole != "x") {
                     globalSpawningStatus++;
                 }
+                //if multiple spawns are in room, and one of them is spawning, wait for next round
+
             }
         }
 
@@ -357,10 +359,10 @@ Room.prototype.creepSpawnRun =
         let roomInterests = {}
         if (spawnRoom.name == "W28N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W28N13 = [0, 2, 2, 0, 1, 0]
-            roomInterests.W28N15 = [0, 1, 2, 0, 1, 0]
-            roomInterests.W27N15 = [0, 1, 1, 0, 1, 1]
-            roomInterests.W27N14 = [0, 1, 1, 0, 1, 0]
+            roomInterests.W28N13 = [0, 2, 1, 1, 1, 0]
+            roomInterests.W28N15 = [0, 1, 2, 1, 1, 0]
+            roomInterests.W27N15 = [0, 1, 1, 1, 1, 1]
+            roomInterests.W27N14 = [0, 1, 1, 1, 1, 1]
         }
 
         if (spawnRoom.name == "W29N14") {
@@ -372,21 +374,74 @@ Room.prototype.creepSpawnRun =
 
         if (spawnRoom.name == "W32N13") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W32N14 = [1, 0, 0, 0, 0, 0]
-            roomInterests.W32N12 = [1, 0, 0, 0, 0, 0]
-            roomInterests.W33N13 = [2, 0, 0, 1, 1, 0]
+            roomInterests.W32N14 = [0, 1, 1, 1, 1, 0]
+            roomInterests.W33N14 = [2, 0, 0, 0, 0, 0]
+            roomInterests.W32N12 = [0, 1, 1, 1, 1, 0]
+            roomInterests.W31N12 = [2, 0, 0, 0, 0, 0]
+            roomInterests.W33N13 = [0, 2, 2, 1, 1, 1]
         }
+
+        let longDistanceHarvester = {}
+        let longDistanceMiner = {}
+        let longDistanceLorry = {}
+        let longDistanceBuilder = {}
+        let claimer = {}
+        let guard = {}
 
         for (let interest in roomInterests) {
-            minimumSpawnOf.longDistanceHarvester += roomInterests[interest][0];
-            minimumSpawnOf.longDistanceMiner += roomInterests[interest][1];
-            minimumSpawnOf.longDistanceLorry += roomInterests[interest][2];
-            minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
-            minimumSpawnOf.claimer += roomInterests[interest][4];
-            minimumSpawnOf.guard += roomInterests[interest][5];
+            if (roomInterests[interest][0] > 0) {
+                var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceHarvester' && c.memory.target == interest)
+                var toSpawn = roomInterests[interest][0];
+                if (inRooms < toSpawn) {
+                    minimumSpawnOf.longDistanceHarvester += roomInterests[interest][0];
+                    longDistanceHarvester[interest] = roomInterests[interest][0]
+                }
+            }
+            if (roomInterests[interest][1] > 0) {
+                var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceMiner' && c.memory.target == interest)
+                var toSpawn = roomInterests[interest][1];
+                //console.log(spawnRoom.name+" "+interest+" "+inRooms+" "+toSpawn)
+                if (inRooms < toSpawn) {
+                    minimumSpawnOf.longDistanceMiner +=roomInterests[interest][1];
+                    longDistanceMiner[interest] = roomInterests[interest][1]
+                }
+            }
+            if (roomInterests[interest][2] > 0) {
+                var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.target == interest)
+                var toSpawn = roomInterests[interest][2];
+                if (inRooms < toSpawn) {
+                    minimumSpawnOf.longDistanceLorry += roomInterests[interest][2];
+                    longDistanceLorry[interest] = roomInterests[interest][2]
+                }
+            }
+            if (roomInterests[interest][3] > 0) {
+                var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'builder' && c.memory.target == interest)
+                var toSpawn = roomInterests[interest][3];
+                
+                if (inRooms < toSpawn) {
+                    minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
+                    longDistanceBuilder[interest] = roomInterests[interest][3]
+                }
+            }
+            if (roomInterests[interest][4] > 0) {
+                var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'claimer' && c.memory.target == interest)
+                var toSpawn = roomInterests[interest][4];
+                if (inRooms < toSpawn) {
+                    minimumSpawnOf.claimer += roomInterests[interest][4];
+                    claimer[interest] = roomInterests[interest][4]
+                }
+            }
+            if (roomInterests[interest][5] > 0) {
+                var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == interest)
+                var toSpawn = roomInterests[interest][5];
+                if (inRooms < toSpawn) {
+                    minimumSpawnOf.guard += roomInterests[interest][5];
+                    guard[interest] = roomInterests[interest][5]
+                }
+            }
         }
 
-        //console.log(JSON.stringify(minimumSpawnOf.longDistanceHarvester))
+        //console.log(JSON.stringify(longDistanceMiner))
 
         /* let myFlags = _.filter(Game.flags, {
             memory: {
@@ -524,9 +579,9 @@ Room.prototype.creepSpawnRun =
 
         if (spawnRoom.storage != undefined) {
                 minimumSpawnOf["spawnAttendant"] = 1;
-                if(spawnRoom.storage.store[RESOURCE_ENERGY] > 50000) {
+                /* if(spawnRoom.storage.store[RESOURCE_ENERGY] > 50000) {
                     minimumSpawnOf["spawnAttendant"] = 2;
-                }
+                } */
         }
 
         var numberOfMiners = _.sum(allMyCreeps, (c) => c.memory.role == 'miner' && c.memory.home == spawnRoom.name)
@@ -542,7 +597,7 @@ Room.prototype.creepSpawnRun =
         }
 
         minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners/2) - numberOfLorries - numberOfSA
-        //minimumSpawnOf["repairer"] = Math.ceil(numberOfSources * 0.5);
+        minimumSpawnOf["builder"] = Math.ceil(numberOfSources * 0.5);
 
         //console.log(spawnRoom.name+" "+minimumSpawnOf["harvester"])
 
@@ -550,10 +605,11 @@ Room.prototype.creepSpawnRun =
 
         // Miner
         minimumSpawnOf["mineralHarvester"] = numberOfExploitableMineralSources;
-        if (spawnRoom.storage == undefined || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]) == null || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]).mineralAmount == 0 || spawnRoom.storage != undefined) {
+        if (spawnRoom.storage == undefined || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]) == null || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]).mineralAmount == 0) {
             minimumSpawnOf.mineralHarvester = 0;
         }
-
+        //console.log("mineralHarvester "+spawnRoom.name+"–"+minimumSpawnOf["mineralHarvester"]+"–"+numberOfExploitableMineralSources)
+        
         // Scientist
         /* if (spawnRoom.memory.labOrder != undefined) {
             var info = spawnRoom.memory.labOrder.split(":");
@@ -614,7 +670,7 @@ Room.prototype.creepSpawnRun =
         let spawnList = this.getSpawnList(spawnRoom, minimumSpawnOf, numberOf);
         let spawnEntry = 0;
 
-        //console.log(JSON.stringify(spawnList)+" *** "+spawnList.length)
+        //console.log(spawnRoom.name+" "+JSON.stringify(spawnList)+" *** ticks needed: "+neededTicksToSpawn)
 
         if (spawnList != null && spawnList.length > 0) {
             for (var s in spawnRoom.memory.roomArray.spawns) {
@@ -656,70 +712,37 @@ Room.prototype.creepSpawnRun =
                             }
                         }
                     } else if (spawnList[spawnEntry] == "claimer") {
-                        for (var roomName in roomInterests) {
-                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'claimer' && c.memory.target == roomName)
-                            var toSpawn = roomInterests[roomName][4];
-
-                            if (inRooms < toSpawn) {
-                                name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
-                            }
+                        for (var roomName in claimer) {
+                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceHarvester") {
-                        // count the number of long distance harvesters globally
-                        for (var roomName in roomInterests) {
-                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceHarvester' && c.memory.target == roomName)
-                            var toSpawn = roomInterests[roomName][0];
-
-                            if (inRooms < toSpawn) {
-                                name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
-                            }
+                        for (var roomName in longDistanceHarvester) {
+                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceMiner") {
-                        for (var roomName in roomInterests) {
-                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceMiner' && c.memory.target == roomName)
-                            var toSpawn = roomInterests[roomName][1];
-
-                            if (inRooms < toSpawn) {
-                                name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
-                            }
+                        for (var roomName in longDistanceMiner) {
+                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceLorry") {
-                        //console.log(spawnList[spawnEntry]+" "+spawnRoom.name+" "+JSON.stringify(roomInterests))
-                        for (var roomName in roomInterests) {
-                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.target == roomName)
-                            var toSpawn = roomInterests[roomName][2];
-
-                            if (inRooms < toSpawn) {
-                                name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
-                            }
+                        for (var roomName in longDistanceLorry) {
+                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceBuilder") {
-                        for (var roomName in roomInterests) {
-                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'builder' && c.memory.target == roomName)
-                            var toSpawn = roomInterests[roomName][3];
-
-                            if (inRooms < toSpawn) {
-                                name = testSpawn.createCustomCreep(energy, "builder", spawnRoom.name, roomName);
-                            }
+                        for (var roomName in longDistanceBuilder) {
+                            name = testSpawn.createCustomCreep(energy, "builder", spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "guard") {
-                        for (var roomName in roomInterests) {
-                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
-                            var toSpawn = roomInterests[roomName][5];
-
-                            if (inRooms < toSpawn) {
-                                name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
-                            }
+                        for (var roomName in guard) {
+                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else {
                         name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name);
-
                     }
                     testSpawn.memory.lastSpawnAttempt = spawnList[spawnEntry];
                     if (!(name < 0) && name != undefined) {
                         testSpawn.memory.lastSpawn = spawnList[spawnEntry];
                         if (LOG_SPAWN == true) {
-                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " (" + spawnList[spawnEntry] + ") in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + "</font>");
+                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + "</font>");
                         }
                         spawnEntry++;
                     }
@@ -841,7 +864,7 @@ Room.prototype.getSpawnList =
             },
             claimer: {
                 name: "claimer",
-                prio: 140,
+                prio: 190,
                 energyRole: false,
                 min: minimumSpawnOf.claimer,
                 max: numberOf.claimer,
@@ -959,7 +982,7 @@ Room.prototype.getSpawnList =
                     containerEnergy += container[e].store[RESOURCE_ENERGY];
                 }
                 if (containerEnergy > 200000) {
-                    //spawnList.push("upgrader");
+                    spawnList.push("upgrader");
                 }
             }
 
