@@ -1,49 +1,56 @@
-CPU@Start: 0.6626480000000186 / Tick: 7811462 / Bucket: 10000
-CPU@Initialization: 0.1357229999999845 / Tick: 7811462 / Bucket: 10000
-CPU DebugStart: 16.972264000000024Start Tower Code: 17.355640000000022Start Spawn visualisation Code: 20.186789000000005Start Spawn visualisation Code:
-20.390102000000013Start Spawn visualisation Code: 20.506969000000026Start Spawn visualisation Code: 20.547213000000028Start Rooms Code: 20.57470500000002
-3Start Tasks Code: 20.58251900000002Start Creep run Code: 30.341598000000005Start stats Code: 41.136753Finish: 43.073758
+calls time avg function
+5999 1280.6 0.213 Creep.run
+2419 538.7 0.223 Creep.travelTo
+2221 460.0 0.207 Creep.move
+2317 451.2 0.195 Creep.runRole
+1301 263.0 0.202 Creep.harvest
+7537 224.1 0.030 Room.find
+2293 189.6 0.083 RoomPosition.findClosestByPath
+2000 118.0 0.059 RoomPosition.findInRange
+456 97.7 0.214 Creep.reserveController
+401 90.4 0.225 Creep.upgradeController
+148 31.6 0.213 Creep.repair
+120 31.5 0.263 Creep.transfer
+16058 30.9 0.002 RoomPosition.inRangeTo
+101 24.2 0.240 Creep.build
+205 21.7 0.106 RoomPosition.availableNeighbors
+95 21.3 0.224 Room.creepSpawnRun
+5005 17.8 0.004 RoomPosition.getRangeTo
+1640 15.4 0.009 RoomPosition.isPassible
+4193 13.4 0.003 RoomPosition.isNearTo
+874 12.0 0.014 Creep.say
+457 11.5 0.025 Room.linksRun
+1444 10.2 0.007 RoomPosition.lookFor
+38 9.6 0.253 Creep.withdraw
+3592 9.0 0.003 RoomPosition.isEqualTo
+3921 6.0 0.002 RoomPosition.toJSON
+Avg: 23.30 Total: 2283.32 Ticks: 98
 
-CPU DebugStart: 0.34526400000001445Start Tower Code: 0.46597200000002204Start Spawn visualisation Code: 2.3813450000000103Start Spawn visualisation
-Code: 2.4222280000000183Start Spawn visualisation Code: 2.436635000000024Start Spawn visualisation Code: 2.4487960000000157Start Rooms Code: 2.4611240000
-000123Start Tasks Code: 3.251928000000021Start Creep run Code: 6.605816000000004Start stats Code: 14.606206000000014Finish: 15.350295000000017
 
-CPU DebugStart: 0.545094000000006Start Tower Code: 0.760659000000004Start Spawn visualisation Code: 2.8564350000000047Start Spawn visualisation Code:
-2.9093540000000075Start Spawn visualisation Code: 2.929612999999989Start Spawn visualisation Code: 2.9458270000000084Start Rooms Code: 2.9610930000000053
-Start Tasks Code: 2.965672000000012Start Creep run Code: 8.390059000000008Start stats Code: 16.359642000000008Finish: 16.872173999999973
-
-CPU DebugStart: 0.5104140000000257Start Tower Code: 0.7396439999999984Start Spawn Code: 2.9156039999999734Start Spawn visualisation Code: 4.0253319999999
-92Start Spawn visualisation Code: 4.068982000000005Start Spawn visualisation Code: 4.085667999999998Start Spawn visualisation Code: 4.100159000000019Star
-t Rooms Code: 4.115165999999988Start Tasks Code: 4.1203029999999785Start Creep run Code: 8.537494999999979Start stats Code: 16.901035999999976Finish:
-17.379444999999976
-
-CPU DebugStart: 0.539320000000032Start Tower Code: 0.7115410000000111Start Spawn visualisation Code: 2.8300009999999816Start Spawn visualisation Code:
-2.8470219999999813Start Spawn visualisation Code: 2.896289999999965Start Spawn visualisation Code: 2.9007589999999936Start Rooms Code: 2.927855999999963S
-tart Tasks Code: 3.114058Start Creep run Code: 7.179994999999963Start stats Code: 18.23283200000003Finish: 19.14049700000004
-
-CPU DebugStart: 1.2336200000000304Start Tower Code: 1.4088899999999853Start Spawn visualisation Code: 3.882045000000005Start Spawn visualisation Code:
-3.888922999999977Start Spawn visualisation Code: 3.9346649999999954Start Spawn visualisation Code: 3.93750799999998Start Rooms Code: 3.9528909999999655St
-art Tasks Code: 3.9563029999999912Start Creep run Code: 8.799159999999972Start stats Code: 18.4024Finish: 19.173238000000026
-
-CPU DebugStart: 0.5702180000000112Start Tower Code: 0.7578649999999811Start Spawn visualisation Code: 7.076689000000044Start Spawn visualisation Code:
-7.103818000000047Start Spawn visualisation Code: 7.176267999999993Start Spawn visualisation Code: 7.180795000000046Start Rooms Code: 7.20923300000004Star
-t Tasks Code: 7.214422000000013Start Creep run Code: 11.096239000000025Start stats Code: 19.859582999999986Finish: 20.74841299999997
-
-CPU DebugStart: 0.5466470000000072Start Tower Code: 0.7417330000000106Start Spawn visualisation Code: 2.753405999999984Start Spawn visualisation Code:
-2.7643209999999954Start Spawn visualisation Code: 2.8173510000000306Start Spawn visualisation Code: 2.8223760000000198Start Rooms Code: 2.846645000000023
-6Start Tasks Code: 3.0552390000000287Start Creep run Code: 7.344212000000027Start stats Code: 19.755134000000055Finish: 20.623050000000035
-Spawn1 is spawning creep: upgrader-W28N14--7811470 in room W28N14. (CPU used: 1.7798850000000357) on tick 7811470
-Spawn3 is spawning creep: longDistanceHarvester-W32N13-W33N13-7811470 in room W32N13. (CPU used: 0.9691119999999955) on tick 7811470
-
-CPU DebugStart: 0.37785800000000336Start Tower Code: 0.5119680000000244Start Spawn Code: 2.3280879999999797Start Spawn visualisation Code: 5.160042000000
-033Start Spawn visualisation Code: 5.1635780000000295Start Spawn visualisation Code: 5.183892000000014Start Spawn visualisation Code: 5.18634000000003Sta
-rt Rooms Code: 5.20172500000001Start Tasks Code: 5.204791999999998Start Creep run Code: 8.177750000000003Start stats Code: 16.51579700000002Finish:
-17.051825000000008
-
-CPU DebugStart: 0.41843500000004497Start Tower Code: 0.5618060000000469Start Spawn visualisation Code: 2.3560280000000375Start Spawn visualisation Code:
-2.3946869999999763Start Spawn visualisation Code: 2.4096339999999827Start Spawn visualisation Code: 2.423073000000045Start Rooms Code: 2.4339250000000447
-Start Tasks Code: 2.4371790000000146Start Creep run Code: 5.340064999999981Start stats Code: 13.823995000000082Finish: 14.241964000000053
-
-CPU DebugStart: 0.340930999999955Start Tower Code: 0.5127559999999676Start Spawn visualisation Code: 2.522299999999973Start Spawn visualisation Code:
-2.5796519999998964Start Spawn visualisation Code: 2.60077299999989Start Spawn visualisation Code: 2.6185959999999113Start Rooms Code: 2.635520999999926St
-art Tasks Code: 2.836414999999988Start Creep run Code: 7.632896999999957Start stats Code: 17.281200000000013Finish: 18.064633999999955
+calls        time        avg        function                                                                                                  
+    5767        1181.4        0.205        Creep.run
+    2408        429.7        0.178        Creep.runRole
+    1971        420.0        0.213        Creep.travelTo
+    1818        377.5        0.208        Creep.move
+    1289        275.7        0.214        Creep.harvest
+    6492        197.6        0.030        Room.find
+    2693        196.5        0.073        RoomPosition.findClosestByPath
+    619        131.1        0.212        Creep.reserveController
+    2046        110.5        0.054        RoomPosition.findInRange
+    386        91.6        0.237        Creep.upgradeController
+    146        31.1        0.213        Creep.repair
+    117        29.8        0.254        Creep.transfer
+    15256        28.1        0.002        RoomPosition.inRangeTo
+    101        24.2        0.239        Creep.build
+    94        15.7        0.167        Room.creepSpawnRun
+    4424        12.1        0.003        RoomPosition.getRangeTo
+    4162        11.4        0.003        RoomPosition.isNearTo
+    443        11.4        0.026        Room.linksRun
+    1356        10.8        0.008        RoomPosition.lookFor
+    189        10.8        0.057        RoomPosition.availableNeighbors
+    32        8.0        0.251        Creep.withdraw
+    923        8.0        0.009        Creep.say
+    3408        7.8        0.002        RoomPosition.isEqualTo
+    3902        7.1        0.002        RoomPosition.toJSON
+    1059        5.8        0.005        Room.lookForAt
+    Avg: 20.60    Total: 2018.33    Ticks: 98

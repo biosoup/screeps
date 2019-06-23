@@ -10,6 +10,7 @@ if (CPUdebug == true) {
 }
 
 //system imports
+const profiler = require('screeps-profiler');
 const stats = require('stats');
 require("creep-tasks");
 var Traveler = require('Traveler');
@@ -23,8 +24,13 @@ require('prototype.creep');
 require('prototype.tower');
 require('prototype.spawn');
 require('prototype.room');
+var market = require('module.market');
+
+// PROFILER
+//profiler.enable();
 
 module.exports.loop = function () {
+    //profiler.wrap(function () {
     stats.reset()
 
     let cpu = Game.cpu.getUsed();
@@ -51,26 +57,9 @@ module.exports.loop = function () {
         CPUdebugString = CPUdebugString.concat("<br>Start: " + Game.cpu.getUsed())
     }
 
-    // find all towers
-    var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
-
-    if (CPUdebug == true) {
-        CPUdebugString = CPUdebugString.concat("<br>Start Tower Code: " + Game.cpu.getUsed())
-    }
-    // for each tower
-    for (var tower of towers) {
-        //find hostiles
-        var hostiles = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-
-        if (hostiles != null) {
-            tower.defend(hostiles);
-        } else if (hostiles == null) {
-            //if there are no hostiles....
-            tower.healCreeps();
-            if ((Game.time % 7) == 0 && Game.cpu.bucket > 5000) {
-                tower.repairStructures();
-            }
-        }
+    //Fill myRooms
+    for (let m in myroomlist) {
+        myRooms[myroomlist[m].name] = myroomlist[m];
     }
 
     //run every 25 ticks and only when we have spare bucket CPU
@@ -92,10 +81,10 @@ module.exports.loop = function () {
     }
 
     // for each spawn
+    if (CPUdebug == true) {
+        CPUdebugString = CPUdebugString.concat("<br>Start Spawn visualisation Code: " + Game.cpu.getUsed())
+    }
     for (var spawnName in Game.spawns) {
-        if (CPUdebug == true) {
-            CPUdebugString = CPUdebugString.concat("<br>Start Spawn visualisation Code: " + Game.cpu.getUsed())
-        }
         //if spawning just add visuals
         if (Game.spawns[spawnName].spawning) {
             var spawningCreep = Game.creeps[Game.spawns[spawnName].spawning.name];
@@ -128,8 +117,44 @@ module.exports.loop = function () {
         if ((Game.time % 3) == 0 && Game.cpu.bucket > 5000) {
             Game.rooms[roomName].linksRun(roomName)
         }
-    }
 
+        // find all towers
+        var towers = Game.rooms[roomName].memory.roomArray.towers
+        if (towers != undefined && towers != null && towers != "") {
+            //find hostiles in the room
+            var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
+            if (hostiles.length > 0) {
+                for (var tower of towers) {
+                    tower = Game.getObjectById(tower);
+                    // all towers attack
+                    tower.healCreeps();       
+                    tower.attack(hostiles[0]);
+                }
+            }
+
+            if (hostiles == "") {
+                //no hostiles, one tower to repair
+                var tower = Game.getObjectById(towers[0]);
+                tower.repairStructures();
+            }
+        }
+
+        // default resource limits
+        market.resourceLimits(roomName);
+        // market buy and auto sell
+        market.marketCode(CPUdebug);
+        // balance resources
+        market.resourceBalance(CPUdebug);
+        // terminal transfers
+        market.terminalCode(roomName,CPUdebug);
+
+        //market.productionCode(roomName);
+
+        //market.labCode(roomName);
+
+
+
+    }
 
 
 
@@ -167,51 +192,55 @@ module.exports.loop = function () {
         CPUdebugString = CPUdebugString.concat("<br>Start stats Code: " + Game.cpu.getUsed())
     }
     //other stats
-    var containerStats = {};
-    var spawnBusy = {};
-    for (var spawnName in Game.spawns) {
-        var containers = Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
-            filter: {
-                structureType: STRUCTURE_CONTAINER
+    //var elapsedInSeconds = ((new Date()).getTime() - Memory.stats.lastTS) / 1000
+    if ((Game.time % 10) == 0 && Game.cpu.bucket > 5000) {
+        var containerStats = {};
+        var spawnBusy = {};
+        for (var spawnName in Game.spawns) {
+            var containers = Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
+                filter: {
+                    structureType: STRUCTURE_CONTAINER
+                }
+            });
+            var containerStorage = 0;
+            for (var container of containers) {
+                containerStorage = containerStorage + container.store[RESOURCE_ENERGY];
             }
-        });
-        var containerStorage = 0;
-        for (var container of containers) {
-            containerStorage = containerStorage + container.store[RESOURCE_ENERGY];
-        }
-        Game.spawns[spawnName].memory.energy = {};
-        Game.spawns[spawnName].memory.energy.containerStorage = containerStorage;
-        Game.spawns[spawnName].memory.energy.containerCount = containers.length;
+            Game.spawns[spawnName].memory.energy = {};
+            Game.spawns[spawnName].memory.energy.containerStorage = containerStorage;
+            Game.spawns[spawnName].memory.energy.containerCount = containers.length;
 
-        if(Game.spawns[spawnName].spawning) {
-            spawnBusy[Game.spawns[spawnName].name] = Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime;
-        } else {
-            spawnBusy[Game.spawns[spawnName].name]= 0;
-        }
+            if (Game.spawns[spawnName].spawning) {
+                spawnBusy[Game.spawns[spawnName].name] = Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime;
+            } else {
+                spawnBusy[Game.spawns[spawnName].name] = 0;
+            }
 
-        containerStats[Game.spawns[spawnName].room.name] = containerStorage;
+            containerStats[Game.spawns[spawnName].room.name] = containerStorage;
+        }
+        stats.addStat('energy-container', {}, containerStats)
+        stats.addStat('spawn-busy', {}, spawnBusy)
+
+        //check for hostiles in any room
+        var countHostiles = 0;
+        for (let roomName in Game.rooms) {
+            var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
+            if (hostiles.length > 0) {
+                //console.log(roomName + " found hostiles: " + hostiles.length)
+                countHostiles = countHostiles + hostiles.length
+            }
+        }
+        stats.addSimpleStat('hostiles', countHostiles);
+
+
+        stats.addSimpleStat('creep-population', Object.keys(Game.creeps).length);
+
+        stats.commit();
     }
-    stats.addStat('energy-container',{},containerStats)
-    stats.addStat('spawn-busy',{},spawnBusy)
-
-    //check for hostiles in any room
-    var countHostiles = 0;
-    for (let roomName in Game.rooms) {
-        var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
-        if (hostiles.length > 0) {
-            //console.log(roomName + " found hostiles: " + hostiles.length)
-            countHostiles = countHostiles + hostiles.length
-        }
-    }
-    stats.addSimpleStat('hostiles', countHostiles);
-
-
-    stats.addSimpleStat('creep-population', Object.keys(Game.creeps).length);
-
-    stats.commit();
 
     if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Finish: " + Game.cpu.getUsed());
         console.log(CPUdebugString);
     }
+    //});
 };

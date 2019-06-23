@@ -1,8 +1,6 @@
-playerUsername = "biosoup";
-
-/* global.getMasterSpawn = function (roomName) {
+global.getMasterSpawn = function (roomName) {
     return Game.rooms[roomName].memory.masterSpawn;
-}; */
+};
 
 global.terminalTransfer = function (transferResource, transferAmount, targetRoomName, transferFlag) {
     // transfer resources to remote room from whatever room(s) is cheapest
@@ -58,8 +56,7 @@ global.terminalTransfer = function (transferResource, transferAmount, targetRoom
 
                 if (roomResourceTotal > transferAmount) {
                     roomArray["totalCost"] = Game.market.calcTransactionCost(transferAmount, Game.rooms[r].name, targetRoomName);
-                }
-                else {
+                } else {
                     roomArray["totalCost"] = Game.market.calcTransactionCost(roomResourceTotal, Game.rooms[r].name, targetRoomName);
                 }
                 roomArray["cost"] = Game.market.calcTransactionCost(100, roomArray.name, targetRoomName);
@@ -79,33 +76,28 @@ global.terminalTransfer = function (transferResource, transferAmount, targetRoom
 
     if (roomCandidates.length == 0) {
         return "No rooms with " + transferResource + " found.";
-    }
-    else if (resourceTotal < transferAmount) {
+    } else if (resourceTotal < transferAmount) {
         return "Not enough " + transferResource + " found.";
-    }
-    else {
+    } else {
         // There are rooms holding enough of the transfer resource
-        var candidatesByCost = _.sortBy(roomCandidates,"cost");
+        var candidatesByCost = _.sortBy(roomCandidates, "cost");
 
         for (var c in candidatesByCost) {
             if (Game.rooms[candidatesByCost[c].name].memory.terminalTransfer == undefined) {
                 if (candidatesByCost[c].volume > transferAmount) {
                     if (transferFlag == false) {
                         console.log("Terminal Transfer Preview for room " + candidatesByCost[c].name + " // " + targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer // Total Energy Cost: " + candidatesByCost[c].totalCost);
-                    }
-                    else if (transferFlag == true) {
+                    } else if (transferFlag == true) {
                         Game.rooms[candidatesByCost[c].name].memory.terminalTransfer = targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer";
                         //console.log(transferAmount + " " + transferResource + " scheduled from room " + candidatesByCost[c].name + " to room " + targetRoomName + " for " + candidatesByCost[c].totalCost + " energy.");
                     }
                     totalVolume += transferAmount;
                     totalCost += candidatesByCost[c].totalCost;
                     break;
-                }
-                else {
+                } else {
                     if (transferFlag == false) {
                         console.log("Terminal Transfer Preview for room " + candidatesByCost[c].name + " // " + targetRoomName + ":" + candidatesByCost[c].volume + ":" + transferResource + ":TerminalTransfer // Total Energy Cost: " + candidatesByCost[c].totalCost);
-                    }
-                    else if (transferFlag == true) {
+                    } else if (transferFlag == true) {
                         Game.rooms[candidatesByCost[c].name].memory.terminalTransfer = targetRoomName + ":" + candidatesByCost[c].volume + ":" + transferResource + ":TerminalTransfer";
                         //console.log(candidatesByCost[c].volume + " " + transferResource + " scheduled from room " + candidatesByCost[c].name + " to room " + targetRoomName + " for " + candidatesByCost[c].totalCost + " energy.");
                     }
@@ -143,16 +135,13 @@ global.terminalTransferX = function (transferResource, transferAmount, sourceRoo
     var totalCost = 0;
     if (sourceRoom.storage == undefined || sourceRoom.terminal == undefined || (sourceRoom.storage.store[transferResource] + sourceRoom.terminal.store[transferResource]) < transferAmount) {
         return "Error scheduling terminal transfer job.";
-    }
-    else {
+    } else {
         if (transferFlag == false) {
             console.log("Terminal Transfer Preview for room " + sourceRoom.name + " // " + targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer // Total Energy Cost: " + Game.market.calcTransactionCost(transferAmount, sourceRoomName, targetRoomName));
-        }
-        else if (transferFlag == true) {
+        } else if (transferFlag == true) {
             sourceRoom.memory.terminalTransfer = targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer";
             //console.log(transferAmount + " " + transferResource + " scheduled from room " + sourceRoomName + " to room " + targetRoomName + " for " + Game.market.calcTransactionCost(transferAmount, sourceRoomName, targetRoomName) + " energy.");
-        }
-        else {
+        } else {
             return "Transfer Flag missing.";
         }
 
@@ -162,7 +151,7 @@ global.terminalTransferX = function (transferResource, transferAmount, sourceRoo
         return "OK";
     }
 };
-/* 
+
 global.listStorages = function (displayResource) {
     var returnstring = "<table><tr><th>Resource  </th>";
     var resourceTable = [];
@@ -180,7 +169,9 @@ global.listStorages = function (displayResource) {
         }
     }
     returnstring = returnstring.concat("</tr>");
-    resourceTable = _.sortBy(resourceTable, function (res) {return res.length;});
+    resourceTable = _.sortBy(resourceTable, function (res) {
+        return res.length;
+    });
     for (res in resourceTable) {
         if (arguments.length == 0 || displayResource == resourceTable[res]) {
             returnstring = returnstring.concat("<tr></tr><td>" + resourceTable[res] + "  </td>");
@@ -192,25 +183,21 @@ global.listStorages = function (displayResource) {
                     var color;
                     if (Game.rooms[r].storage.store[resourceTable[res]] == undefined) {
                         amount = 0;
-                    }
-                    else {
+                    } else {
                         amount = Game.rooms[r].storage.store[resourceTable[res]];
                     }
                     if (amount < Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage) {
                         color = "#ff3333";
-                    }
-                    else if (amount > Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage) {
-                        color ="#00ff00"
-                    }
-                    else {
+                    } else if (amount > Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage) {
+                        color = "#00ff00"
+                    } else {
                         color = "#aaffff";
                     }
                     returnstring = returnstring.concat("<td><font color='" + color + "'>" + prettyInt(amount) + "  </font></td>");
 
                     if (total[c] == undefined) {
                         total[c] = amount;
-                    }
-                    else {
+                    } else {
                         total[c] += amount;
                     }
                 }
@@ -240,7 +227,7 @@ global.prettyInt = function (int) {
     numbers -= rest;
 
     while (numbers > 0) {
-        returnString += string.substr(rest,3);
+        returnString += string.substr(rest, 3);
         if (numbers > 3) {
             returnString += "'";
         }
@@ -258,17 +245,15 @@ global.listLimits = function (limitType, displayResource) {
     var resourceTable = [];
     if (limitType == "market") {
         limitType = "minMarket"
-    }
-    else if (limitType == "production") {
+    } else if (limitType == "production") {
         limitType = "minProduction"
-    }
-    else if (limitType == "terminal") {
+    } else if (limitType == "terminal") {
         limitType = "minTerminal"
-    }
-    else if (limitType == "storage") {
+    } else if (limitType == "storage") {
         limitType = "maxStorage"
+    } else {
+        return "Invalid limit type."
     }
-    else {return "Invalid limit type."}
 
     //Prepare header row
     for (var r in myRooms) {
@@ -282,10 +267,12 @@ global.listLimits = function (limitType, displayResource) {
         }
     }
     returnstring = returnstring.concat("</tr>");
-    resourceTable = _.sortBy(resourceTable, function (res) {return res.length;});
+    resourceTable = _.sortBy(resourceTable, function (res) {
+        return res.length;
+    });
     for (res in resourceTable) {
         if (arguments.length == 1 || displayResource == resourceTable[res]) {
-            var tempstring ="<tr><td>" + resourceTable[res] + "  </td>";
+            var tempstring = "<tr><td>" + resourceTable[res] + "  </td>";
             var tempsum = 0;
             for (var r in myRooms) {
                 if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
@@ -302,7 +289,7 @@ global.listLimits = function (limitType, displayResource) {
     return returnstring;
 };
 
-global.setLimit = function(roomName, type, resource, limit) {
+global.setLimit = function (roomName, type, resource, limit) {
     if (arguments.length == 0) {
         return "setLimit (roomName, limitType, resource, limit) - Known limit types: \"market\", \"storage\", \"production\", \"terminal\"";
     }
@@ -313,8 +300,7 @@ global.setLimit = function(roomName, type, resource, limit) {
         for (var t in myRooms) {
             roomNames.push(myRooms[t].name);
         }
-    }
-    else {
+    } else {
         roomNames.push(roomName);
     }
 
@@ -322,8 +308,7 @@ global.setLimit = function(roomName, type, resource, limit) {
         for (var t in RESOURCES_ALL) {
             resources.push(RESOURCES_ALL[t]);
         }
-    }
-    else {
+    } else {
         resources.push(resource);
     }
 
@@ -355,6 +340,7 @@ global.setLimit = function(roomName, type, resource, limit) {
     }
     return "OK";
 };
+
 global.checkTerminalLimits = function (room, resource) {
     // Check if terminal has exactly what it needs. If everything is as it should be true is returned.
     // If material is missing or too much is in terminal, an array will be returned with the following format:
@@ -372,29 +358,31 @@ global.checkTerminalLimits = function (room, resource) {
     var roomLimits = room.memory.resourceLimits;
     if (roomLimits[resource] != undefined && room.terminal.store[resource] != undefined) {
         delta.amount = room.terminal.store[resource] - roomLimits[resource].minTerminal;
-    }
-    else if (room.terminal.store[resource] == undefined) {
+    } else if (room.terminal.store[resource] == undefined) {
         delta.amount = roomLimits[resource].minTerminal;
-    }
-    else {
+    } else {
         delta.amount = 0
     }
 
+    //console.log(JSON.stringify(roomLimits)+" "+delta.amount)
+    
     //Check market selling orders to add minerals to terminal
     if (Object.keys(Game.market.orders).length > 0) {
         //Look through orders to determine whether additional material is needed in terminal
 
-        var relevantOrders = _.filter(Game.market.orders,function (order) {
-            if (order.resourceType == resource && order.roomName == room.name && order.type == ORDER_SELL) {return true}
-            else {return false}
+        var relevantOrders = _.filter(Game.market.orders, function (order) {
+            if (order.resourceType == resource && order.roomName == room.name && order.type == ORDER_SELL) {
+                return true
+            } else {
+                return false
+            }
         });
 
         if (relevantOrders.length > 0) {
             for (let o in relevantOrders) {
                 if (relevantOrders[o].remainingAmount > TERMINALMARKETSTORE) {
                     uplift += TERMINALMARKETSTORE;
-                }
-                else {
+                } else {
                     uplift += relevantOrders[o].remainingAmount;
                 }
             }
@@ -421,7 +409,7 @@ global.checkTerminalLimits = function (room, resource) {
     return delta;
 };
 
-global.checkStorageLimits = function(room, resource) {
+global.checkStorageLimits = function (room, resource) {
     // Check if storage has exactly what it needs. Return delta to maxStorage
     // If everything is as it should be 0 is returned.
     // If material is missing a negative amount will be returned
@@ -433,13 +421,12 @@ global.checkStorageLimits = function(room, resource) {
     terminalDelta = checkTerminalLimits(room, resource);
     if (room.storage.store[resource] != undefined) {
         return (terminalDelta.amount + room.storage.store[resource] - room.memory.resourceLimits[resource].maxStorage)
-    }
-    else {
+    } else {
         return (terminalDelta.amount - room.memory.resourceLimits[resource].maxStorage);
     }
 };
 
-global.whatIsLackingFor = function(room, amount, resource) {
+global.whatIsLackingFor = function (room, amount, resource) {
     //Return object [resource, amount] with lowest-tier resource missing in room for target resource
     var returnArray = {};
     returnArray.resource = resource;
@@ -453,8 +440,7 @@ global.whatIsLackingFor = function(room, amount, resource) {
     if (targetResourceDescription.tier == 0) {
         //Tier 0 resource
         return returnArray;
-    }
-    else {
+    } else {
         // Begin drill-down
         var OKcount = 0;
         do {
@@ -467,12 +453,10 @@ global.whatIsLackingFor = function(room, amount, resource) {
                     returnArray.resource = components[c];
                     if (room.storage.store[components[c]] != undefined) {
                         returnArray.amount = amount - room.storage.store[components[c]];
-                    }
-                    else {
+                    } else {
                         returnArray.amount = amount;
                     }
-                }
-                else {
+                } else {
                     OKcount++;
                 }
             }
@@ -482,7 +466,7 @@ global.whatIsLackingFor = function(room, amount, resource) {
         return returnArray;
     }
 };
- */
+
 global.buy = function (orderID, amount) {
     if (arguments.length == 0) {
         return "buy (orderID, amount)";
@@ -521,8 +505,7 @@ global.sell = function (orderID, amount, roomName) {
     if (Game.rooms[roomName].memory.terminalTransfer == undefined) {
         Game.rooms[roomName].memory.terminalTransfer = order.id + ":" + amount + ":" + order.resourceType + ":MarketOrder";
         return "Selling transfer scheduled.";
-    }
-    else {
+    } else {
         return "Ongoing terminal transfer found. Try later.";
     }
 };
@@ -533,7 +516,10 @@ global.sellBulk = function (amount, resource) {
         return "sellBulk (amount, resource)";
     }
     let amountBuffer = amount;
-    let orders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: resource});
+    let orders = Game.market.getAllOrders({
+        type: ORDER_BUY,
+        resourceType: resource
+    });
     if (orders.length > 0) {
 
 
@@ -547,18 +533,16 @@ global.sellBulk = function (amount, resource) {
                 let sellAmount;
                 if (orders[orderIndex].amount > amount) {
                     sellAmount = amount;
-                }
-                else {
+                } else {
                     sellAmount = orders[orderIndex].amount;
                 }
 
                 if (sellAmount <= 0) {
                     break;
-                }
-                else {
+                } else {
                     sell(orders[orderIndex].id, sellAmount, r);
                 }
-                amount-= sellAmount;
+                amount -= sellAmount;
                 orderIndex++;
             }
         }
@@ -575,7 +559,10 @@ global.sellHigh = function (amount, resource) {
         return "sellHigh (amount, resource)";
     }
     let amountBuffer = amount;
-    let orders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: resource});
+    let orders = Game.market.getAllOrders({
+        type: ORDER_BUY,
+        resourceType: resource
+    });
     if (orders.length > 0) {
 
         orders = _.sortBy(orders, "amount");
@@ -588,18 +575,16 @@ global.sellHigh = function (amount, resource) {
                 let sellAmount;
                 if (orders[orderIndex].amount > amount) {
                     sellAmount = amount;
-                }
-                else {
+                } else {
                     sellAmount = orders[orderIndex].amount;
                 }
 
                 if (sellAmount <= 0) {
                     break;
-                }
-                else {
+                } else {
                     sell(orders[orderIndex].id, sellAmount, r);
                 }
-                amount-= sellAmount;
+                amount -= sellAmount;
                 orderIndex++;
             }
         }
@@ -619,8 +604,7 @@ global.sellOrder = function (amount, resource, roomName, price) {
         if (Game.market.createOrder(ORDER_SELL, resource, price, amount, roomName) == OK) {
             return "Sell order created!";
         }
-    }
-    else {
+    } else {
         return "Room " + roomName + " is not able to sell this resource.";
     }
 };
@@ -634,7 +618,7 @@ global.buyOrder = function (amount, resource, roomName, price) {
     }
 };
 
-/* 
+
 global.produce = function (roomName, amount, resource) {
     if (arguments.length == 0) {
         return "produce (roomName, amount, resource)";
@@ -654,8 +638,7 @@ global.addBoostLab = function (roomName, labID) {
         var room = Game.rooms[roomName];
         if (room.memory.boostLabs == undefined) {
             boostLabList = [];
-        }
-        else {
+        } else {
             boostLabList = room.memory.boostLabs;
         }
         boostLabList.push(labID);
@@ -696,8 +679,7 @@ global.addBoost = function (roomName, role, mineralType, volume) {
     var room = Game.rooms[roomName];
     if (room.memory.boostList == undefined) {
         boostList = [];
-    }
-    else {
+    } else {
         boostList = room.memory.boostList;
     }
 
@@ -727,8 +709,7 @@ global.listBoost = function (roomName) {
         for (let u in myRooms) {
             roomList.push(u);
         }
-    }
-    else {
+    } else {
         roomList.push(roomName)
     }
     var returnstring = "";
@@ -758,13 +739,13 @@ global.listBoost = function (roomName) {
     }
     return returnstring;
 };
- */
+
 global.activeTerminals = function () {
     let entries = 0;
-    let returnString ="";
+    let returnString = "";
     for (r in myRooms) {
         if (myRooms[r].memory.terminalTransfer != undefined) {
-            entries ++;
+            entries++;
             var info = myRooms[r].memory.terminalTransfer.split(":");
             let targetRoom = info[0];
             let amount = parseInt(info[1]);
@@ -772,8 +753,7 @@ global.activeTerminals = function () {
             let comment = info[3];
             if (comment == "MarketOrder") {
                 returnString = returnString.concat(myRooms[r].name + ": " + "Sending " + amount + " " + resource + " to room " + targetRoom + "<br>");
-            }
-            else {
+            } else {
                 returnString = returnString.concat(myRooms[r].name + ": " + "Sending " + amount + " " + resource + " to room " + targetRoom + "<br>");
             }
         }
@@ -785,13 +765,13 @@ global.activeTerminals = function () {
 
     return returnString;
 };
-/* 
+
 global.activeLabs = function () {
     let entries = 0;
-    let returnString ="";
+    let returnString = "";
     for (r in myRooms) {
         if (myRooms[r].memory.labOrder != undefined) {
-            entries ++;
+            entries++;
             var info = myRooms[r].memory.labOrder.split(":");
             let amount = parseInt(info[0]);
             let resource1 = info[1];
@@ -808,7 +788,7 @@ global.activeLabs = function () {
 };
 
 
-moveReusePath = function(express) {
+/* moveReusePath = function(express) {
     if (express == true && Game.cpu.bucket > 99) {
         return 5;
     }
@@ -827,9 +807,9 @@ isHostile = function (creep) {
     else {
         return false;
     }
-};
+}; */
 
-String.prototype.hashCode = function(){
+String.prototype.hashCode = function () {
     let hash = 0;
     if (this.length == 0) {
         return hash;
@@ -843,7 +823,7 @@ String.prototype.hashCode = function(){
     return hash;
 };
 
-global.deleteFlowPath = function () {
+/* global.deleteFlowPath = function () {
     delete Memory.flowPath;
     return "OK";
 };
@@ -899,8 +879,8 @@ global.roomCallback = function (roomName) {
     }
     room.costMatrix = room.costMatrix || costs;
     return room.costMatrix;
-};
-*/
+}; */
+
 
 global.listCreeps = function (displayRole) {
     var returnstring = "<table><tr><th>Role  </th>";
@@ -914,7 +894,9 @@ global.listCreeps = function (displayRole) {
     //Prepare header row
     for (var r in myRooms) {
         returnstring = returnstring.concat("<th>" + Game.rooms[r].name + "  </th>");
-        let roomCreeps = _.filter(Game.creeps, function (c) { return c.memory.homeroom == myRooms[r].name; });
+        let roomCreeps = _.filter(Game.creeps, function (c) {
+            return c.memory.homeroom == myRooms[r].name;
+        });
         for (let c in roomCreeps) {
             if (roleTable.indexOf(roomCreeps[c].memory.role) == -1) {
                 roleTable.push(roomCreeps[c].memory.role);
@@ -930,13 +912,14 @@ global.listCreeps = function (displayRole) {
             for (var r in myRooms) {
                 c++;
                 let amount;
-                let roleCreeps = _.filter(Game.creeps, function (c) { return (c.memory.role == roleTable[role] && c.memory.homeroom == myRooms[r].name);});
+                let roleCreeps = _.filter(Game.creeps, function (c) {
+                    return (c.memory.role == roleTable[role] && c.memory.homeroom == myRooms[r].name);
+                });
                 amount = roleCreeps.length;
                 returnstring = returnstring.concat("<td>" + prettyInt(amount) + "  </td>");
                 if (total[c] == undefined) {
                     total[c] = amount;
-                }
-                else {
+                } else {
                     total[c] += amount;
                 }
             }

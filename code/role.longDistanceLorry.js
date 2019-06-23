@@ -49,8 +49,8 @@ module.exports = {
                 } else {
                     creep.say("no ene source")
                 }
-            } else if (creep.carry.energy > 0 && creep.memory.target != undefined && creep.room.name == creep.memory.target) {
-                //creep is at least half full - go to home room
+            } else if (creep.carry.energy == creep.carryCapacity && creep.memory.target != undefined && creep.room.name == creep.memory.target) {
+                //creep is full - go to home room
                 creep.task = Tasks.goToRoom(creep.memory.home)
             } else {
                 //creep is in wrong state?? - go home

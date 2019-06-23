@@ -1,19 +1,20 @@
 {
     "creeps": {
-        "lorry-W32N13--7838125": {
-            "role": "lorry",
+        "longDistanceHarvester-W32N13-W31N12-7884225": {
+            "role": "longDistanceHarvester",
             "home": "W32N13",
+            "target": "W31N12",
             "task": {
-                "name": "withdraw",
+                "name": "harvest",
                 "_creep": {
-                    "name": "lorry-W32N13--7838125"
+                    "name": "longDistanceHarvester-W32N13-W31N12-7884225"
                 },
                 "_target": {
-                    "ref": "5d09d215ab6f8a31fa8bf275",
+                    "ref": "5bbcab439099fc012e6332fa",
                     "_pos": {
-                        "x": 24,
-                        "y": 14,
-                        "roomName": "W32N13"
+                        "x": 14,
+                        "y": 36,
+                        "roomName": "W31N12"
                     }
                 },
                 "_parent": null,
@@ -27,368 +28,166 @@
                     }
                 },
                 "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
+                    "quiet": true
                 },
-                "tick": 7839615
+                "tick": 7885771
             },
             "_trav": {
-                "state": [34, 15, 0, 0, 24, 14, "W32N13"],
-                "path": "888887666"
+                "state": [12, 36, 0, 10, 14, 36, "W31N12"],
+                "path": "2"
             }
         },
-        "upgrader-W29N14--7838235": {
+        "spawnAttendant-W28N14--7884300": {
+            "role": "spawnAttendant",
+            "home": "W28N14",
+            "task": null,
+            "_trav": {
+                "state": [20, 39, 0, 1, 18, 38, "W28N14"],
+                "path": "7"
+            }
+        },
+        "guard-W28N14-W27N14-7884300": {
+            "role": "guard",
+            "home": "W28N14",
+            "target": "W27N14",
+            "task": null,
+            "_trav": {
+                "path": "4",
+                "state": [0, 34, 0, 0, 25, 25, "W27N14"]
+            }
+        },
+        "longDistanceLorry-W32N13-W32N12-7884315": {
+            "role": "longDistanceLorry",
+            "home": "W32N13",
+            "target": "W32N12",
+            "task": {
+                "name": "goToRoom",
+                "_creep": {
+                    "name": "longDistanceLorry-W32N13-W32N12-7884315"
+                },
+                "_target": {
+                    "ref": "",
+                    "_pos": {
+                        "x": 25,
+                        "y": 25,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 24,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885784
+            },
+            "_trav": {
+                "state": [21, 22, 0, 15, 25, 25, "W32N13"],
+                "path": "1111111111111111221112"
+            }
+        },
+        "guard-W28N14-W27N15-7884345": {
+            "role": "guard",
+            "home": "W28N14",
+            "target": "W27N15",
+            "task": null,
+            "_trav": {
+                "state": [1, 40, 0, 7, 18, 1, "W27N15"],
+                "path": "111122222112233222332322333443332222222211118811188811188777777776"
+            }
+        },
+        "spawnAttendant-W28N14--7884390": {
+            "role": "spawnAttendant",
+            "home": "W28N14",
+            "task": null,
+            "_trav": {
+                "state": [20, 39, 0, 0, 18, 38, "W28N14"],
+                "path": "8"
+            }
+        },
+        "upgrader-W28N14--7884390": {
             "role": "upgrader",
-            "home": "W29N14",
+            "home": "W28N14",
             "task": {
                 "name": "upgrade",
                 "_creep": {
-                    "name": "upgrader-W29N14--7838235"
+                    "name": "upgrader-W28N14--7884390"
                 },
                 "_target": {
-                    "ref": "5bbcab569099fc012e6334f0",
+                    "ref": "5bbcab629099fc012e63367b",
                     "_pos": {
-                        "x": 5,
-                        "y": 39,
+                        "x": 35,
+                        "y": 44,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 3,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885768
+            },
+            "_trav": {
+                "state": [31, 43, 0, 0, 35, 44, "W28N14"],
+                "path": "3"
+            }
+        },
+        "miner-W29N14--7884390": {
+            "role": "miner",
+            "sourceId": "5bbcab569099fc012e6334ee",
+            "home": "W29N14",
+            "_trav": {
+                "path": "7",
+                "state": [28, 7, 0, 0, 26, 7, "W29N14"]
+            },
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "miner-W29N14--7884390"
+                },
+                "_target": {
+                    "ref": "5bbcab569099fc012e6334ee",
+                    "_pos": {
+                        "x": 25,
+                        "y": 8,
                         "roomName": "W29N14"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
-                    "moveOptions": {
-                        "range": 3,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839563
-            },
-            "_trav": {
-                "state": [9, 39, 0, 0, 5, 39, "W29N14"],
-                "path": "6"
-            }
-        },
-        "upgrader-W32N13--7838290": {
-            "role": "upgrader",
-            "home": "W32N13",
-            "task": {
-                "name": "upgrade",
-                "_creep": {
-                    "name": "upgrader-W32N13--7838290"
-                },
-                "_target": {
-                    "ref": "5bbcab349099fc012e63316b",
-                    "_pos": {
-                        "x": 16,
-                        "y": 40,
-                        "roomName": "W32N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 3,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839527
-            },
-            "_trav": {
-                "state": [18, 44, 0, 0, 16, 40, "W32N13"],
-                "path": "8"
-            }
-        },
-        "miner-W28N14--7838360": {
-            "role": "miner",
-            "sourceId": "5bbcab629099fc012e633679",
-            "home": "W28N14",
-            "_trav": {
-                "path": "1",
-                "state": [10, 37, 0, 0, 11, 35, "W28N14"]
-            },
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "miner-W28N14--7838360"
-                },
-                "_target": {
-                    "ref": "5bbcab629099fc012e633679",
-                    "_pos": {
-                        "x": 12,
-                        "y": 35,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
                     "moveOptions": {}
                 },
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839624
+                "tick": 7885804
             }
         },
-        "miner-W28N14--7838410": {
-            "role": "miner",
-            "sourceId": "5bbcab629099fc012e63367a",
-            "home": "W28N14",
-            "_trav": {
-                "path": "7",
-                "state": [23, 38, 0, 0, 21, 38, "W28N14"]
-            },
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "miner-W28N14--7838410"
-                },
-                "_target": {
-                    "ref": "5bbcab629099fc012e63367a",
-                    "_pos": {
-                        "x": 20,
-                        "y": 37,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839625
-            }
-        },
-        "longDistanceHarvester-W32N13-W32N14-7838420": {
-            "role": "longDistanceHarvester",
+        "longDistanceLorry-W32N13-W32N14-7884405": {
+            "role": "longDistanceLorry",
             "home": "W32N13",
             "target": "W32N14",
             "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceHarvester-W32N13-W32N14-7838420"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W32N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839631
-            },
-            "_trav": {
-                "state": [16, 19, 0, 1, 25, 25, "W32N13"],
-                "path": "6665566655555555555556555555554"
-            }
-        },
-        "spawnAttendant-W28N14--7838460": {
-            "role": "spawnAttendant",
-            "home": "W28N14",
-            "task": {
                 "name": "transfer",
                 "_creep": {
-                    "name": "spawnAttendant-W28N14--7838460"
-                },
-                "_target": {
-                    "ref": "5d0635b1dee22633881380e8",
-                    "_pos": {
-                        "x": 26,
-                        "y": 40,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 7839637
-            },
-            "_trav": {
-                "state": [24, 41, 0, 0, 26, 40, "W28N14"],
-                "path": "3"
-            }
-        },
-        "longDistanceHarvester-W32N13-W33N13-7838520": {
-            "role": "longDistanceHarvester",
-            "home": "W32N13",
-            "target": "W33N13",
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "longDistanceHarvester-W32N13-W33N13-7838520"
-                },
-                "_target": {
-                    "ref": "5bbcab299099fc012e632fe0",
-                    "_pos": {
-                        "x": 34,
-                        "y": 23,
-                        "roomName": "W33N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839590
-            },
-            "_trav": {
-                "state": [35, 25, 0, 4, 34, 23, "W33N13"],
-                "path": "1"
-            }
-        },
-        "builder-W28N14--7838535": {
-            "role": "builder",
-            "home": "W28N14",
-            "task": {
-                "name": "repair",
-                "_creep": {
-                    "name": "builder-W28N14--7838535"
-                },
-                "_target": {
-                    "ref": "5cff3e69dc08850fcc9908d8",
-                    "_pos": {
-                        "x": 39,
-                        "y": 2,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 3,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839634
-            },
-            "_trav": {
-                "state": [42, 35, 0, 0, 39, 2, "W28N14"],
-                "path": "3333221111111111111111888888888111"
-            }
-        },
-        "lorry-W28N14--7838550": {
-            "role": "lorry",
-            "home": "W28N14",
-            "task": null,
-            "_trav": {
-                "state": [20, 40, 0, 0, 22, 41, "W28N14"],
-                "path": "3"
-            }
-        },
-        "miner-W32N13--7838605": {
-            "role": "miner",
-            "sourceId": "5bbcab349099fc012e63316a",
-            "home": "W32N13",
-            "_trav": {
-                "path": "6",
-                "state": [26, 12, 0, 0, 24, 14, "W32N13"]
-            },
-            "task": null
-        },
-        "longDistanceHarvester-W32N13-W33N13-7838655": {
-            "role": "longDistanceHarvester",
-            "home": "W32N13",
-            "target": "W33N13",
-            "task": null,
-            "_trav": {
-                "state": [23, 9, 0, 0, 22, 7, "W33N13"],
-                "path": "8"
-            }
-        },
-        "longDistanceLorry-W28N14-W27N15-7838705": {
-            "role": "longDistanceLorry",
-            "home": "W28N14",
-            "target": "W27N15",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceLorry-W28N14-W27N15-7838705"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W27N15"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839596
-            },
-            "_trav": {
-                "state": [48, 18, 0, 8, 25, 25, "W27N15"],
-                "path": "1888888888111111122222222244"
-            }
-        },
-        "longDistanceHarvester-W32N13-W32N12-7838740": {
-            "role": "longDistanceHarvester",
-            "home": "W32N13",
-            "target": "W32N12",
-            "task": {
-                "name": "transfer",
-                "_creep": {
-                    "name": "longDistanceHarvester-W32N13-W32N12-7838740"
+                    "name": "longDistanceLorry-W32N13-W32N14-7884405"
                 },
                 "_target": {
                     "ref": "5d069ec579164353283d8a9c",
@@ -412,100 +211,283 @@
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 7839637
+                "tick": 7885779
             },
             "_trav": {
-                "state": [26, 49, 0, 8, 34, 38, "W32N13"],
-                "path": "88812222223333"
+                "state": [33, 14, 0, 4, 34, 38, "W32N13"],
+                "path": "45555555555555556664444"
             }
         },
-        "longDistanceHarvester-W29N14-W29N15-7838765": {
-            "role": "longDistanceHarvester",
+        "miner-W29N14--7884450": {
+            "role": "miner",
+            "sourceId": "5bbcab569099fc012e6334ef",
             "home": "W29N14",
-            "target": "W29N15",
+            "_trav": {
+                "path": "7",
+                "state": [11, 34, 0, 0, 9, 34, "W29N14"]
+            },
             "task": {
-                "name": "goToRoom",
+                "name": "harvest",
                 "_creep": {
-                    "name": "longDistanceHarvester-W29N14-W29N15-7838765"
+                    "name": "miner-W29N14--7884450"
                 },
                 "_target": {
-                    "ref": "",
+                    "ref": "5bbcab569099fc012e6334ef",
                     "_pos": {
-                        "x": 25,
-                        "y": 25,
+                        "x": 8,
+                        "y": 35,
                         "roomName": "W29N14"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
+                    "moveOptions": {}
                 },
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839588
-            },
-            "_trav": {
-                "state": [19, 41, 0, 9, 25, 25, "W29N14"],
-                "path": "7777777666777777887666665555555555555444444"
+                "tick": 7885804
             }
         },
-        "longDistanceLorry-W28N14-W28N15-7838770": {
-            "role": "longDistanceLorry",
+        "longDistanceBuilder-W32N13-W33N13-7884495": {
+            "role": "longDistanceBuilder",
+            "home": "W32N13",
+            "target": "W33N13",
+            "task": null,
+            "_trav": {
+                "state": [33, 27, 0, 0, 23, 8, "W33N13"],
+                "path": "8888888881111111"
+            }
+        },
+        "longDistanceMiner-W28N14-W27N15-7884510": {
+            "role": "longDistanceMiner",
             "home": "W28N14",
-            "target": "W28N15",
+            "target": "W27N15",
             "task": {
-                "name": "goToRoom",
+                "name": "harvest",
                 "_creep": {
-                    "name": "longDistanceLorry-W28N14-W28N15-7838770"
+                    "name": "longDistanceMiner-W28N14-W27N15-7884510"
                 },
                 "_target": {
-                    "ref": "",
+                    "ref": "5bbcab6e9099fc012e6337f7",
                     "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W28N15"
+                        "x": 15,
+                        "y": 34,
+                        "roomName": "W27N15"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885804
+            },
+            "_trav": {
+                "state": [13, 34, 0, 0, 15, 35, "W27N15"],
+                "path": "4"
+            }
+        },
+        "longDistanceBuilder-W32N13-W32N12-7884510": {
+            "role": "longDistanceBuilder",
+            "home": "W32N13",
+            "target": "W32N12",
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "longDistanceBuilder-W32N13-W32N12-7884510"
+                },
+                "_target": {
+                    "ref": "5d0a3a42bc3c41285878c107",
+                    "_pos": {
+                        "x": 15,
+                        "y": 39,
+                        "roomName": "W32N12"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
                     "moveOptions": {
-                        "range": 24,
+                        "range": 1,
                         "stuckValue": 2,
                         "ignoreCreeps": true,
                         "maxOps": 20000
                     }
                 },
                 "data": {
-                    "quiet": true
+                    "quiet": true,
+                    "resourceType": "energy"
                 },
-                "tick": 7839581
+                "tick": 7885773
             },
             "_trav": {
-                "state": [39, 3, 0, 2, 25, 25, "W28N15"],
-                "path": "111"
+                "state": [21, 27, 0, 17, 15, 39, "W32N12"],
+                "path": "555555555566677"
             }
         },
-        "builder-W32N13--7838835": {
-            "role": "builder",
+        "longDistanceBuilder-W32N13-W32N14-7884525": {
+            "role": "longDistanceBuilder",
             "home": "W32N13",
+            "target": "W32N14",
+            "task": null,
+            "_trav": {
+                "state": [12, 27, 0, 0, 16, 16, "W32N14"],
+                "path": "22222111"
+            }
+        },
+        "longDistanceMiner-W28N14-W28N15-7884540": {
+            "role": "longDistanceMiner",
+            "home": "W28N14",
+            "target": "W28N15",
             "task": {
-                "name": "repair",
+                "name": "harvest",
                 "_creep": {
-                    "name": "builder-W32N13--7838835"
+                    "name": "longDistanceMiner-W28N14-W28N15-7884540"
                 },
                 "_target": {
-                    "ref": "5d01106d1a35fd098d81c4c5",
+                    "ref": "5bbcab629099fc012e633677",
                     "_pos": {
-                        "x": 29,
-                        "y": 10,
+                        "x": 33,
+                        "y": 17,
+                        "roomName": "W28N15"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885801
+            },
+            "_trav": {
+                "state": [35, 19, 0, 0, 34, 17, "W28N15"],
+                "path": "1"
+            }
+        },
+        "longDistanceMiner-W28N14-W28N13-7884555": {
+            "role": "longDistanceMiner",
+            "home": "W28N14",
+            "target": "W28N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W28N14-W28N13-7884555"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367d",
+                    "_pos": {
+                        "x": 21,
+                        "y": 11,
+                        "roomName": "W28N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885804
+            },
+            "_trav": {
+                "state": [20, 8, 1, 0, 20, 10, "W28N13"],
+                "path": "4"
+            }
+        },
+        "longDistanceMiner-W28N14-W28N13-7884570": {
+            "role": "longDistanceMiner",
+            "home": "W28N14",
+            "target": "W28N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W28N14-W28N13-7884570"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367e",
+                    "_pos": {
+                        "x": 24,
+                        "y": 15,
+                        "roomName": "W28N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885804
+            },
+            "_trav": {
+                "state": [26, 14, 0, 0, 25, 16, "W28N13"],
+                "path": "5"
+            }
+        },
+        "longDistanceLorry-W28N14-W27N14-7884585": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": "W27N14",
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "longDistanceLorry-W28N14-W27N14-7884585"
+                },
+                "_target": {
+                    "ref": "5cff24da5b0b7e667bffeb4f",
+                    "_pos": {
+                        "x": 38,
+                        "y": 21,
+                        "roomName": "W27N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 7885768
+            },
+            "_trav": {
+                "state": [33, 32, 0, 2, 38, 21, "W27N14"],
+                "path": "2222211111"
+            }
+        },
+        "longDistanceLorry-W32N13-W33N13-7884585": {
+            "role": "longDistanceLorry",
+            "home": "W32N13",
+            "target": "W33N13",
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "longDistanceLorry-W32N13-W33N13-7884585"
+                },
+                "_target": {
+                    "ref": "5d069ec579164353283d8a9c",
+                    "_pos": {
+                        "x": 34,
+                        "y": 38,
                         "roomName": "W32N13"
                     }
                 },
@@ -513,30 +495,31 @@
                 "options": {
                     "blind": false,
                     "moveOptions": {
-                        "range": 3,
+                        "range": 1,
                         "stuckValue": 2,
                         "ignoreCreeps": true,
                         "maxOps": 20000
                     }
                 },
                 "data": {
-                    "quiet": true
+                    "quiet": true,
+                    "resourceType": "energy"
                 },
-                "tick": 7839627
+                "tick": 7885790
             },
             "_trav": {
-                "state": [30, 34, 0, 1, 29, 10, "W32N13"],
-                "path": "222211111111111111188"
+                "state": [13, 44, 0, 1, 34, 38, "W32N13"],
+                "path": "33333443322222223333"
             }
         },
-        "longDistanceLorry-W28N14-W28N15-7838845": {
+        "longDistanceLorry-W28N14-W27N15-7884600": {
             "role": "longDistanceLorry",
             "home": "W28N14",
-            "target": "W28N15",
+            "target": "W27N15",
             "task": {
                 "name": "transfer",
                 "_creep": {
-                    "name": "longDistanceLorry-W28N14-W28N15-7838845"
+                    "name": "longDistanceLorry-W28N14-W27N15-7884600"
                 },
                 "_target": {
                     "ref": "5cec602e0582ee6f735e47fb",
@@ -552,30 +535,114 @@
                     "moveOptions": {
                         "range": 1,
                         "stuckValue": 2,
-                        "ignoreCreeps": false,
-                        "maxOps": 20000,
-                        "freshMatrix": true
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
                     }
                 },
                 "data": {
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 7839543
+                "tick": 7885788
             },
             "_trav": {
-                "state": [41, 32, 0, 2, 22, 41, "W28N14"],
-                "path": "888888888778887777776776666665555565655443333333334"
+                "state": [28, 17, 0, 3, 22, 41, "W28N14"],
+                "path": "555554444445555555666777776568"
             }
         },
-        "builder-W28N14-W27N14-7838850": {
-            "role": "builder",
+        "longDistanceLorry-W28N14-W28N15-7884675": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": "W28N15",
+            "task": {
+                "name": "goToRoom",
+                "_creep": {
+                    "name": "longDistanceLorry-W28N14-W28N15-7884675"
+                },
+                "_target": {
+                    "ref": "",
+                    "_pos": {
+                        "x": 25,
+                        "y": 25,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 24,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885801
+            },
+            "_trav": {
+                "state": [35, 21, 0, 0, 25, 25, "W28N14"],
+                "path": "55555666555555555555444444464"
+            }
+        },
+        "miner-W32N13--7884675": {
+            "role": "miner",
+            "sourceId": "5bbcab349099fc012e633169",
+            "home": "W32N13",
+            "_trav": {
+                "path": "1",
+                "state": [34, 17, 0, 0, 35, 15, "W32N13"]
+            },
+            "task": null
+        },
+        "longDistanceLorry-W28N14-W28N13-7884690": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": "W28N13",
+            "task": {
+                "name": "goToRoom",
+                "_creep": {
+                    "name": "longDistanceLorry-W28N14-W28N13-7884690"
+                },
+                "_target": {
+                    "ref": "",
+                    "_pos": {
+                        "x": 25,
+                        "y": 25,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 24,
+                        "stuckValue": 2,
+                        "ignoreCreeps": false,
+                        "maxOps": 20000,
+                        "freshMatrix": true
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885785
+            },
+            "_trav": {
+                "state": [20, 3, 0, 0, 25, 25, "W28N14"],
+                "path": "111"
+            }
+        },
+        "longDistanceBuilder-W28N14-W27N14-7884765": {
+            "role": "longDistanceBuilder",
             "home": "W28N14",
             "target": "W27N14",
             "task": {
                 "name": "repair",
                 "_creep": {
-                    "name": "builder-W28N14-W27N14-7838850"
+                    "name": "longDistanceBuilder-W28N14-W27N14-7884765"
                 },
                 "_target": {
                     "ref": "5d09eedefbe20b287474c66b",
@@ -598,35 +665,45 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839636
+                "tick": 7885776
             },
             "_trav": {
-                "state": [3, 28, 0, 0, 1, 34, "W27N14"],
-                "path": "665"
+                "state": [14, 30, 0, 0, 1, 34, "W27N14"],
+                "path": "77778877777665"
             }
         },
-        "longDistanceHarvester-W29N14-W29N15-7838870": {
-            "role": "longDistanceHarvester",
-            "home": "W29N14",
-            "target": "W29N15",
+        "longDistanceBuilder-W28N14-W27N15-7884780": {
+            "role": "longDistanceBuilder",
+            "home": "W28N14",
+            "target": "W27N15",
+            "task": null,
+            "_trav": {
+                "state": [11, 31, 0, 0, 15, 35, "W27N15"],
+                "path": "4"
+            }
+        },
+        "longDistanceBuilder-W28N14-W28N15-7884795": {
+            "role": "longDistanceBuilder",
+            "home": "W28N14",
+            "target": "W28N15",
             "task": {
-                "name": "harvest",
+                "name": "repair",
                 "_creep": {
-                    "name": "longDistanceHarvester-W29N14-W29N15-7838870"
+                    "name": "longDistanceBuilder-W28N14-W28N15-7884795"
                 },
                 "_target": {
-                    "ref": "5bbcab569099fc012e6334eb",
+                    "ref": "5d00b7d507c3247e9d22eb0a",
                     "_pos": {
-                        "x": 42,
+                        "x": 48,
                         "y": 33,
-                        "roomName": "W29N15"
+                        "roomName": "W28N15"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
                     "moveOptions": {
-                        "range": 1,
+                        "range": 3,
                         "stuckValue": 2,
                         "ignoreCreeps": true,
                         "maxOps": 20000
@@ -635,127 +712,31 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839590
+                "tick": 7885798
             },
             "_trav": {
-                "state": [42, 35, 0, 11, 42, 33, "W29N15"],
-                "path": "2"
+                "state": [40, 48, 0, 0, 48, 33, "W28N15"],
+                "path": "3222222211111"
             }
         },
-        "builder-W32N13-W33N13-7838910": {
-            "role": "builder",
-            "home": "W32N13",
-            "target": "W33N13",
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "builder-W32N13-W33N13-7838910"
-                },
-                "_target": {
-                    "ref": "5bbcab299099fc012e632fe0",
-                    "_pos": {
-                        "x": 34,
-                        "y": 23,
-                        "roomName": "W33N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839620
-            },
-            "_trav": {
-                "state": [35, 25, 1, 0, 34, 23, "W33N13"],
-                "path": "1"
-            }
-        },
-        "longDistanceLorry-W28N14-W28N13-7838935": {
-            "role": "longDistanceLorry",
+        "longDistanceBuilder-W28N14-W28N13-7884810": {
+            "role": "longDistanceBuilder",
             "home": "W28N14",
             "target": "W28N13",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceLorry-W28N14-W28N13-7838935"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839629
-            },
+            "task": null,
             "_trav": {
-                "state": [20, 2, 0, 1, 25, 25, "W28N14"],
-                "path": "12"
+                "state": [22, 9, 0, 0, 26, 11, "W28N13"],
+                "path": "3"
             }
         },
-        "miner-W29N14--7838970": {
-            "role": "miner",
-            "sourceId": "5bbcab569099fc012e6334ef",
-            "home": "W29N14",
-            "_trav": {
-                "path": "7",
-                "state": [11, 34, 0, 0, 9, 34, "W29N14"]
-            },
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "miner-W29N14--7838970"
-                },
-                "_target": {
-                    "ref": "5bbcab569099fc012e6334ef",
-                    "_pos": {
-                        "x": 8,
-                        "y": 35,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839637
-            }
-        },
-        "guard-W32N13-W33N13-7838985": {
+        "guard-W32N13-W33N13-7884825": {
             "role": "guard",
             "home": "W32N13",
             "target": "W33N13",
             "task": {
                 "name": "goToRoom",
                 "_creep": {
-                    "name": "guard-W32N13-W33N13-7838985"
+                    "name": "guard-W32N13-W33N13-7884825"
                 },
                 "_target": {
                     "ref": "",
@@ -778,25 +759,20 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839637
+                "tick": 7885804
             },
             "_trav": {
                 "path": "",
-                "state": [0, 43, 0, 17, 25, 25, "W33N13"]
+                "state": [0, 44, 0, 2, 25, 25, "W33N13"]
             }
         },
-        "miner-W29N14--7839020": {
-            "role": "miner",
-            "sourceId": "5bbcab569099fc012e6334ee",
+        "lorry-W29N14--7884900": {
+            "role": "lorry",
             "home": "W29N14",
-            "_trav": {
-                "path": "7",
-                "state": [28, 7, 0, 0, 26, 7, "W29N14"]
-            },
             "task": {
-                "name": "repair",
+                "name": "withdraw",
                 "_creep": {
-                    "name": "miner-W29N14--7839020"
+                    "name": "lorry-W29N14--7884900"
                 },
                 "_target": {
                     "ref": "5d09d3b6b43d0171dddf2ec2",
@@ -809,22 +785,101 @@
                 "_parent": null,
                 "options": {
                     "blind": false,
-                    "moveOptions": {}
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": false,
+                        "maxOps": 20000,
+                        "freshMatrix": true
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 7885776
+            },
+            "_trav": {
+                "state": [30, 14, 0, 0, 26, 7, "W29N14"],
+                "path": "111111877"
+            }
+        },
+        "upgrader-W32N13--7884930": {
+            "role": "upgrader",
+            "home": "W32N13",
+            "task": {
+                "name": "upgrade",
+                "_creep": {
+                    "name": "upgrader-W32N13--7884930"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316b",
+                    "_pos": {
+                        "x": 16,
+                        "y": 40,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 3,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
                 },
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839630
+                "tick": 7885735
+            },
+            "_trav": {
+                "state": [18, 44, 0, 0, 16, 40, "W32N13"],
+                "path": "8"
             }
         },
-        "longDistanceMiner-W32N13-W33N13-7839040": {
+        "longDistanceMiner-W32N13-W33N13-7885020": {
             "role": "longDistanceMiner",
             "home": "W32N13",
             "target": "W33N13",
             "task": {
                 "name": "harvest",
                 "_creep": {
-                    "name": "longDistanceMiner-W32N13-W33N13-7839040"
+                    "name": "longDistanceMiner-W32N13-W33N13-7885020"
+                },
+                "_target": {
+                    "ref": "5bbcab299099fc012e632fe0",
+                    "_pos": {
+                        "x": 34,
+                        "y": 23,
+                        "roomName": "W33N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885804
+            },
+            "_trav": {
+                "state": [35, 26, 0, 0, 35, 24, "W33N13"],
+                "path": "1"
+            }
+        },
+        "longDistanceMiner-W32N13-W33N13-7885050": {
+            "role": "longDistanceMiner",
+            "home": "W32N13",
+            "target": "W33N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W32N13-W33N13-7885050"
                 },
                 "_target": {
                     "ref": "5bbcab299099fc012e632fdf",
@@ -842,290 +897,40 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839637
+                "tick": 7885804
             },
             "_trav": {
                 "state": [24, 10, 0, 0, 23, 8, "W33N13"],
                 "path": "1"
             }
         },
-        "lorry-W29N14--7839070": {
-            "role": "lorry",
-            "home": "W29N14",
-            "task": {
-                "name": "withdraw",
-                "_creep": {
-                    "name": "lorry-W29N14--7839070"
-                },
-                "_target": {
-                    "ref": "5d09d445308228440a38d8f9",
-                    "_pos": {
-                        "x": 9,
-                        "y": 34,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 7839636
-            },
-            "_trav": {
-                "state": [13, 36, 0, 0, 9, 34, "W29N14"],
-                "path": "887"
-            }
-        },
-        "longDistanceMiner-W32N13-W33N13-7839070": {
-            "role": "longDistanceMiner",
+        "spawnAttendant-W32N13--7885080": {
+            "role": "spawnAttendant",
             "home": "W32N13",
-            "target": "W33N13",
             "task": null,
             "_trav": {
-                "state": [24, 10, 0, 0, 23, 8, "W33N13"],
-                "path": "1"
-            }
-        },
-        "longDistanceLorry-W32N13-W33N13-7839100": {
-            "role": "longDistanceLorry",
-            "home": "W32N13",
-            "target": "W33N13",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceLorry-W32N13-W33N13-7839100"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W32N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2,
-                        "ignoreCreeps": false,
-                        "maxOps": 20000,
-                        "freshMatrix": true
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839622
-            },
-            "_trav": {
-                "state": [35, 18, 0, 1, 25, 25, "W32N13"],
-                "path": "333333333322232"
-            }
-        },
-        "builder-W29N14--7839150": {
-            "role": "builder",
-            "home": "W29N14",
-            "task": {
-                "name": "repair",
-                "_creep": {
-                    "name": "builder-W29N14--7839150"
-                },
-                "_target": {
-                    "ref": "5cf3cb1eff1e577e659106b9",
-                    "_pos": {
-                        "x": 12,
-                        "y": 37,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 3,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839630
-            },
-            "_trav": {
-                "state": [24, 23, 0, 0, 12, 37, "W29N14"],
-                "path": "6666677666666"
-            }
-        },
-        "longDistanceLorry-W32N13-W33N13-7839180": {
-            "role": "longDistanceLorry",
-            "home": "W32N13",
-            "target": "W33N13",
-            "task": null,
-            "_trav": {
-                "state": [25, 9, 0, 0, 23, 8, "W33N13"],
+                "state": [34, 37, 0, 0, 34, 35, "W32N13"],
                 "path": "8"
             }
         },
-        "longDistanceMiner-W28N14-W27N14-7839210": {
-            "role": "longDistanceMiner",
-            "home": "W28N14",
-            "target": "W27N14",
-            "task": {
-                "name": "repair",
-                "_creep": {
-                    "name": "longDistanceMiner-W28N14-W27N14-7839210"
-                },
-                "_target": {
-                    "ref": "5cff24da5b0b7e667bffeb4f",
-                    "_pos": {
-                        "x": 38,
-                        "y": 21,
-                        "roomName": "W27N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839633
-            },
-            "_trav": {
-                "state": [38, 23, 0, 0, 38, 21, "W27N14"],
-                "path": "1"
-            }
-        },
-        "miner-W32N13--7839265": {
+        "miner-W28N14--7885140": {
             "role": "miner",
-            "sourceId": "5bbcab349099fc012e633169",
-            "home": "W32N13",
+            "sourceId": "5bbcab629099fc012e633679",
+            "home": "W28N14",
             "_trav": {
-                "path": "1",
-                "state": [34, 17, 0, 0, 35, 15, "W32N13"]
+                "state": [10, 37, 0, 0, 11, 35, "W28N14"],
+                "path": "1"
             },
             "task": {
                 "name": "harvest",
                 "_creep": {
-                    "name": "miner-W32N13--7839265"
+                    "name": "miner-W28N14--7885140"
                 },
                 "_target": {
-                    "ref": "5bbcab349099fc012e633169",
+                    "ref": "5bbcab629099fc012e633679",
                     "_pos": {
-                        "x": 35,
-                        "y": 14,
-                        "roomName": "W32N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839637
-            }
-        },
-        "longDistanceHarvester-W29N14-W31N14-7839295": {
-            "role": "longDistanceHarvester",
-            "home": "W29N14",
-            "target": "W31N14",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceHarvester-W29N14-W31N14-7839295"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839551
-            },
-            "_trav": {
-                "state": [28, 21, 0, 3, 25, 25, "W29N14"],
-                "path": "3333333333333333333332"
-            }
-        },
-        "guard-W28N14-W27N15-7839315": {
-            "role": "guard",
-            "home": "W28N14",
-            "target": "W27N15",
-            "task": {
-                "name": "attack",
-                "_creep": {
-                    "name": "guard-W28N14-W27N15-7839315"
-                },
-                "_target": {
-                    "ref": "5ce86e01157b5e14888fc189",
-                    "_pos": {
-                        "x": 7,
-                        "y": 24,
-                        "roomName": "W27N15"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839624
-            },
-            "_trav": {
-                "state": [7, 26, 0, 10, 18, 1, "W27N15"],
-                "path": "224422332322333443332222222221118881188811188777777776"
-            }
-        },
-        "upgrader-W28N14--7839315": {
-            "role": "upgrader",
-            "home": "W28N14",
-            "task": {
-                "name": "upgrade",
-                "_creep": {
-                    "name": "upgrader-W28N14--7839315"
-                },
-                "_target": {
-                    "ref": "5bbcab629099fc012e63367b",
-                    "_pos": {
-                        "x": 35,
-                        "y": 44,
+                        "x": 12,
+                        "y": 35,
                         "roomName": "W28N14"
                     }
                 },
@@ -1137,84 +942,28 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839599
+                "tick": 7885804
+            }
+        },
+        "miner-W28N14--7885155": {
+            "role": "miner",
+            "sourceId": "5bbcab629099fc012e63367a",
+            "home": "W28N14",
+            "_trav": {
+                "path": "8",
+                "state": [23, 39, 1, 0, 21, 38, "W28N14"]
             },
-            "_trav": {
-                "state": [31, 43, 0, 0, 35, 44, "W28N14"],
-                "path": "3"
-            }
-        },
-        "spawnAttendant-W28N14--7839370": {
-            "role": "spawnAttendant",
-            "home": "W28N14",
-            "task": null,
-            "_trav": {
-                "state": [24, 41, 0, 0, 26, 39, "W28N14"],
-                "path": "2"
-            }
-        },
-        "spawnAttendant-W29N14--7839395": {
-            "role": "spawnAttendant",
-            "home": "W29N14",
-            "task": {
-                "name": "withdraw",
-                "_creep": {
-                    "name": "spawnAttendant-W29N14--7839395"
-                },
-                "_target": {
-                    "ref": "5cf416cd14bd7a42a8e6224f",
-                    "_pos": {
-                        "x": 13,
-                        "y": 38,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 7839635
-            },
-            "_trav": {
-                "state": [16, 38, 0, 0, 13, 38, "W29N14"],
-                "path": "78"
-            }
-        },
-        "guard-W28N14-W27N14-7839460": {
-            "role": "guard",
-            "home": "W28N14",
-            "target": "W27N14",
-            "task": null,
-            "_trav": {
-                "path": "4",
-                "state": [0, 33, 0, 0, 25, 25, "W27N14"]
-            }
-        },
-        "longDistanceMiner-W28N14-W27N15-7839465": {
-            "role": "longDistanceMiner",
-            "home": "W28N14",
-            "target": "W27N15",
             "task": {
                 "name": "harvest",
                 "_creep": {
-                    "name": "longDistanceMiner-W28N14-W27N15-7839465"
+                    "name": "miner-W28N14--7885155"
                 },
                 "_target": {
-                    "ref": "5bbcab6e9099fc012e6337f7",
+                    "ref": "5bbcab629099fc012e63367a",
                     "_pos": {
-                        "x": 15,
-                        "y": 34,
-                        "roomName": "W27N15"
+                        "x": 20,
+                        "y": 37,
+                        "roomName": "W28N14"
                     }
                 },
                 "_parent": null,
@@ -1225,20 +974,49 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839637
-            },
-            "_trav": {
-                "state": [13, 33, 0, 1, 15, 35, "W27N15"],
-                "path": "4"
+                "tick": 7885804
             }
         },
-        "spawnAttendant-W32N13--7839480": {
-            "role": "spawnAttendant",
+        "longDistanceMiner-W32N13-W32N14-7885155": {
+            "role": "longDistanceMiner",
             "home": "W32N13",
+            "target": "W32N14",
             "task": {
-                "name": "withdraw",
+                "name": "harvest",
                 "_creep": {
-                    "name": "spawnAttendant-W32N13--7839480"
+                    "name": "longDistanceMiner-W32N13-W32N14-7885155"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e633166",
+                    "_pos": {
+                        "x": 15,
+                        "y": 16,
+                        "roomName": "W32N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885804
+            },
+            "_trav": {
+                "state": [17, 18, 0, 1, 16, 16, "W32N14"],
+                "path": "1"
+            }
+        },
+        "longDistanceLorry-W32N13-W33N13-7885185": {
+            "role": "longDistanceLorry",
+            "home": "W32N13",
+            "target": "W33N13",
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "longDistanceLorry-W32N13-W33N13-7885185"
                 },
                 "_target": {
                     "ref": "5d069ec579164353283d8a9c",
@@ -1262,126 +1040,120 @@
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 7839632
+                "tick": 7885778
             },
             "_trav": {
-                "state": [30, 39, 0, 0, 34, 38, "W32N13"],
-                "path": "333"
+                "state": [26, 42, 0, 0, 34, 38, "W32N13"],
+                "path": "2223333"
             }
         },
-        "longDistanceMiner-W28N14-W28N15-7839495": {
-            "role": "longDistanceMiner",
+        "claimer-W28N14-W27N15-7885200": {
+            "role": "claimer",
             "home": "W28N14",
-            "target": "W28N15",
+            "target": "W27N15",
             "task": {
-                "name": "repair",
+                "name": "reserve",
                 "_creep": {
-                    "name": "longDistanceMiner-W28N14-W28N15-7839495"
+                    "name": "claimer-W28N14-W27N15-7885200"
                 },
                 "_target": {
-                    "ref": "5cff237a63738f09b78089bb",
+                    "ref": "5bbcab6e9099fc012e6337f6",
                     "_pos": {
-                        "x": 34,
-                        "y": 17,
-                        "roomName": "W28N15"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839628
-            },
-            "_trav": {
-                "state": [35, 19, 0, 0, 34, 17, "W28N15"],
-                "path": "1"
-            }
-        },
-        "longDistanceMiner-W28N14-W28N13-7839515": {
-            "role": "longDistanceMiner",
-            "home": "W28N14",
-            "target": "W28N13",
-            "task": {
-                "name": "repair",
-                "_creep": {
-                    "name": "longDistanceMiner-W28N14-W28N13-7839515"
-                },
-                "_target": {
-                    "ref": "5cfed38c15b6e542a338d399",
-                    "_pos": {
-                        "x": 20,
-                        "y": 10,
-                        "roomName": "W28N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839632
-            },
-            "_trav": {
-                "state": [20, 8, 0, 0, 20, 10, "W28N13"],
-                "path": "4"
-            }
-        },
-        "longDistanceHarvester-W29N14-W31N14-7839525": {
-            "role": "longDistanceHarvester",
-            "home": "W29N14",
-            "target": "W31N14",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceHarvester-W29N14-W31N14-7839525"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W31N14"
+                        "x": 40,
+                        "y": 30,
+                        "roomName": "W27N15"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
                     "moveOptions": {
-                        "range": 24,
+                        "range": 1,
                         "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
+                        "ignoreCreeps": false,
+                        "maxOps": 20000,
+                        "freshMatrix": true
                     }
                 },
                 "data": {
                     "quiet": true
                 },
-                "tick": 7839525
+                "tick": 7885269
             },
             "_trav": {
-                "path": "7777777777777777777777777777778877777777777777777",
-                "state": [49, 42, 0, 2, 25, 25, "W31N14"]
+                "state": [42, 31, 0, 3, 40, 30, "W27N15"],
+                "path": "7"
             }
         },
-        "spawnAttendant-W32N13--7839555": {
+        "spawnAttendant-W29N14--7885200": {
             "role": "spawnAttendant",
+            "home": "W29N14",
+            "task": null,
+            "_trav": {
+                "state": [12, 33, 0, 0, 14, 32, "W29N14"],
+                "path": "2"
+            }
+        },
+        "longDistanceMiner-W28N14-W27N14-7885215": {
+            "role": "longDistanceMiner",
+            "home": "W28N14",
+            "target": "W27N14",
+            "task": null,
+            "_trav": {
+                "state": [38, 23, 0, 0, 38, 21, "W27N14"],
+                "path": "1"
+            }
+        },
+        "claimer-W28N14-W28N13-7885215": {
+            "role": "claimer",
+            "home": "W28N14",
+            "target": "W28N13",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W28N14-W28N13-7885215"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367f",
+                    "_pos": {
+                        "x": 7,
+                        "y": 24,
+                        "roomName": "W28N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": false,
+                        "maxOps": 20000,
+                        "freshMatrix": true
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885237
+            },
+            "_trav": {
+                "state": [8, 22, 0, 2, 7, 24, "W28N13"],
+                "path": "5"
+            }
+        },
+        "lorry-W32N13--7885275": {
+            "role": "lorry",
             "home": "W32N13",
             "task": {
                 "name": "transfer",
                 "_creep": {
-                    "name": "spawnAttendant-W32N13--7839555"
+                    "name": "lorry-W32N13--7885275"
                 },
                 "_target": {
-                    "ref": "5d075819c9a3621121bba00a",
+                    "ref": "5d069ec579164353283d8a9c",
                     "_pos": {
-                        "x": 29,
+                        "x": 34,
                         "y": 38,
                         "roomName": "W32N13"
                     }
@@ -1400,101 +1172,136 @@
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 7839632
+                "tick": 7885780
             },
             "_trav": {
-                "state": [31, 39, 0, 0, 29, 38, "W32N13"],
+                "state": [34, 30, 0, 0, 34, 38, "W32N13"],
+                "path": "6664444"
+            }
+        },
+        "lorry-W28N14--7885305": {
+            "role": "lorry",
+            "home": "W28N14",
+            "task": null,
+            "_trav": {
+                "state": [21, 39, 0, 0, 22, 41, "W28N14"],
+                "path": "5"
+            }
+        },
+        "upgrader-W29N14--7885320": {
+            "role": "upgrader",
+            "home": "W29N14",
+            "task": {
+                "name": "upgrade",
+                "_creep": {
+                    "name": "upgrader-W29N14--7885320"
+                },
+                "_target": {
+                    "ref": "5bbcab569099fc012e6334f0",
+                    "_pos": {
+                        "x": 5,
+                        "y": 39,
+                        "roomName": "W29N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 3,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885766
+            },
+            "_trav": {
+                "state": [9, 39, 0, 0, 5, 39, "W29N14"],
+                "path": "6"
+            }
+        },
+        "longDistanceMiner-W32N13-W32N12-7885365": {
+            "role": "longDistanceMiner",
+            "home": "W32N13",
+            "target": "W32N12",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W32N13-W32N12-7885365"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316e",
+                    "_pos": {
+                        "x": 15,
+                        "y": 38,
+                        "roomName": "W32N12"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885804
+            },
+            "_trav": {
+                "state": [17, 40, 0, 0, 15, 39, "W32N12"],
                 "path": "7"
             }
         },
-        "longDistanceMiner-W28N14-W28N13-7839590": {
-            "role": "longDistanceMiner",
+        "upgrader-W28N14--7885380": {
+            "role": "upgrader",
             "home": "W28N14",
-            "target": "W28N13",
-            "task": null,
+            "task": {
+                "name": "upgrade",
+                "_creep": {
+                    "name": "upgrader-W28N14--7885380"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367b",
+                    "_pos": {
+                        "x": 35,
+                        "y": 44,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885786
+            },
             "_trav": {
-                "state": [21, 9, 0, 0, 25, 16, "W28N13"],
-                "path": "333445555"
+                "state": [31, 43, 0, 0, 35, 44, "W28N14"],
+                "path": "2"
             }
         },
-        "longDistanceMiner-W29N14-W29N13-7839625": {
-            "role": "longDistanceMiner",
-            "home": "W29N14",
-            "target": "W29N13",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceMiner-W29N14-W29N13-7839625"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W29N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839625
-            },
-            "_trav": {}
-        },
-        "longDistanceLorry-W28N14-W27N14-7839630": {
-            "role": "longDistanceLorry",
-            "home": "W28N14",
-            "target": "W27N14",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceLorry-W28N14-W27N14-7839630"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W27N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 7839630
-            },
-            "_trav": {}
-        },
-        "lorry-W32N13--7839630": {
-            "role": "lorry",
+        "claimer-W32N13-W33N13-7885395": {
+            "role": "claimer",
             "home": "W32N13",
+            "target": "W33N13",
             "task": {
-                "name": "withdraw",
+                "name": "reserve",
                 "_creep": {
-                    "name": "lorry-W32N13--7839630"
+                    "name": "claimer-W32N13-W33N13-7885395"
                 },
                 "_target": {
-                    "ref": "5d09d215ab6f8a31fa8bf275",
+                    "ref": "5bbcab299099fc012e632fe1",
                     "_pos": {
-                        "x": 24,
-                        "y": 14,
-                        "roomName": "W32N13"
+                        "x": 7,
+                        "y": 29,
+                        "roomName": "W33N13"
                     }
                 },
                 "_parent": null,
@@ -1502,19 +1309,361 @@
                     "blind": false,
                     "moveOptions": {
                         "range": 1,
-                        "stuckValue": 2
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885444
+            },
+            "_trav": {
+                "state": [9, 28, 0, 1, 7, 29, "W33N13"],
+                "path": "7"
+            }
+        },
+        "upgrader-W29N14--7885425": {
+            "role": "upgrader",
+            "home": "W29N14",
+            "task": {
+                "name": "upgrade",
+                "_creep": {
+                    "name": "upgrader-W29N14--7885425"
+                },
+                "_target": {
+                    "ref": "5bbcab569099fc012e6334f0",
+                    "_pos": {
+                        "x": 5,
+                        "y": 39,
+                        "roomName": "W29N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 3,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885796
+            },
+            "_trav": {
+                "state": [9, 39, 0, 0, 5, 39, "W29N14"],
+                "path": "6"
+            }
+        },
+        "claimer-W32N13-W32N12-7885425": {
+            "role": "claimer",
+            "home": "W32N13",
+            "target": "W32N12",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W32N13-W32N12-7885425"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316d",
+                    "_pos": {
+                        "x": 13,
+                        "y": 7,
+                        "roomName": "W32N12"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885451
+            },
+            "_trav": {
+                "state": [15, 6, 0, 0, 13, 7, "W32N12"],
+                "path": "7"
+            }
+        },
+        "claimer-W32N13-W32N14-7885485": {
+            "role": "claimer",
+            "home": "W32N13",
+            "target": "W32N14",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W32N13-W32N14-7885485"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e633167",
+                    "_pos": {
+                        "x": 17,
+                        "y": 38,
+                        "roomName": "W32N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885545
+            },
+            "_trav": {
+                "state": [17, 40, 0, 0, 17, 38, "W32N14"],
+                "path": "2"
+            }
+        },
+        "upgrader-W32N13--7885590": {
+            "role": "upgrader",
+            "home": "W32N13",
+            "task": {
+                "name": "upgrade",
+                "_creep": {
+                    "name": "upgrader-W32N13--7885590"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316b",
+                    "_pos": {
+                        "x": 16,
+                        "y": 40,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 3,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885680
+            },
+            "_trav": {
+                "state": [18, 44, 0, 0, 16, 40, "W32N13"],
+                "path": "8"
+            }
+        },
+        "claimer-W28N14-W27N14-7885605": {
+            "role": "claimer",
+            "home": "W28N14",
+            "target": "W27N14",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W28N14-W27N14-7885605"
+                },
+                "_target": {
+                    "ref": "5bbcab6e9099fc012e6337f9",
+                    "_pos": {
+                        "x": 22,
+                        "y": 14,
+                        "roomName": "W27N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885645
+            },
+            "_trav": {
+                "state": [24, 14, 0, 1, 22, 14, "W27N14"],
+                "path": "8"
+            }
+        },
+        "longDistanceMiner-W29N14-W29N13-7885635": {
+            "role": "longDistanceMiner",
+            "home": "W29N14",
+            "target": "W29N13",
+            "task": null,
+            "_trav": {
+                "state": [11, 41, 0, 4, 5, 23, "W29N13"],
+                "path": "81118888881111112"
+            }
+        },
+        "longDistanceLorry-W29N14-W29N13-7885665": {
+            "role": "longDistanceLorry",
+            "home": "W29N14",
+            "target": "W29N13",
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "longDistanceLorry-W29N14-W29N13-7885665"
+                },
+                "_target": {
+                    "ref": "5d0748ce001e5f10d3711de2",
+                    "_pos": {
+                        "x": 5,
+                        "y": 23,
+                        "roomName": "W29N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
                     }
                 },
                 "data": {
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 7839630
+                "tick": 7885757
             },
-            "_trav": {}
+            "_trav": {
+                "state": [17, 45, 0, 2, 5, 23, "W29N13"],
+                "path": "77888881118888881111112"
+            }
+        },
+        "miner-W32N13--7885680": {
+            "role": "miner",
+            "sourceId": "5bbcab349099fc012e63316a",
+            "home": "W32N13",
+            "_trav": {
+                "path": "6",
+                "state": [26, 12, 0, 1, 24, 14, "W32N13"]
+            },
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "miner-W32N13--7885680"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316a",
+                    "_pos": {
+                        "x": 25,
+                        "y": 15,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885804
+            }
+        },
+        "claimer-W28N14-W28N15-7885710": {
+            "role": "claimer",
+            "home": "W28N14",
+            "target": "W28N15",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W28N14-W28N15-7885710"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e633676",
+                    "_pos": {
+                        "x": 28,
+                        "y": 13,
+                        "roomName": "W28N15"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 7885767
+            },
+            "_trav": {
+                "state": [27, 15, 0, 0, 28, 13, "W28N15"],
+                "path": "1"
+            }
+        },
+        "longDistanceBuilder-W29N14-W29N13-7885755": {
+            "role": "longDistanceBuilder",
+            "home": "W29N14",
+            "target": "W29N13",
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "longDistanceBuilder-W29N14-W29N13-7885755"
+                },
+                "_target": {
+                    "ref": "5d0748ce001e5f10d3711de2",
+                    "_pos": {
+                        "x": 5,
+                        "y": 23,
+                        "roomName": "W29N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 7885777
+            },
+            "_trav": {
+                "state": [25, 12, 0, 4, 5, 23, "W29N13"],
+                "path": "44455555555555566655555565666666677888881118888881111112"
+            }
         }
     },
-    "stats": "text/graphite\n7839637\n1560937803953\nshard3.energy-container.W28N14 123\nshard3.energy-container.W29N14 1506\nshard3.energy-container.W32N13 3678\nshard3.spawn-busy.Spawn1 7\nshard3.spawn-busy.Spawn2 12\nshard3.spawn-busy.Spawn3 7\nshard3.spawn-busy.Spawn4 0\nshard3.hostiles.value 1\nshard3.creep-population.value 49\nshard3.time.tick 7839637\nshard3.time.timestamp 1560937803953\nshard3.time.duration undefined\nshard3.gcl.level 3\nshard3.gcl.progress 7472683.356908423\nshard3.gcl.progressTotal 8688578.522146657\nshard3.gcl.progressPercent 86.0058217562402\nshard3.market.credits 0\nshard3.room.W28N14.room.level 7\nshard3.room.W28N14.room.progress 1941415\nshard3.room.W28N14.room.progressTotal 10935000\nshard3.room.W28N14.room.progressPercent 17.75413808870599\nshard3.room.W28N14.room.energyAvailable 4950\nshard3.room.W28N14.room.energyCapacityAvailable 5600\nshard3.room.W28N14.controller.level 7\nshard3.room.W28N14.controller.progress 1941415\nshard3.room.W28N14.controller.progressTotal 10935000\nshard3.room.W28N14.controller.progressPercent 17.75413808870599\nshard3.room.W28N14.storage.energy 258559\nshard3.room.W28N14.storage.L 25200\nshard3.room.W28N14.terminal.energy 0\nshard3.room.W29N14.room.level 6\nshard3.room.W29N14.room.progress 2707789\nshard3.room.W29N14.room.progressTotal 3645000\nshard3.room.W29N14.room.progressPercent 74.28776406035665\nshard3.room.W29N14.room.energyAvailable 1652\nshard3.room.W29N14.room.energyCapacityAvailable 2300\nshard3.room.W29N14.controller.level 6\nshard3.room.W29N14.controller.progress 2707789\nshard3.room.W29N14.controller.progressTotal 3645000\nshard3.room.W29N14.controller.progressPercent 74.28776406035665\nshard3.room.W29N14.storage.energy 27827\nshard3.room.W29N14.storage.Z 2200\nshard3.room.W29N14.terminal.energy 0\nshard3.room.W32N13.room.level 5\nshard3.room.W32N13.room.progress 270911\nshard3.room.W32N13.room.progressTotal 1215000\nshard3.room.W32N13.room.progressPercent 22.297201646090535\nshard3.room.W32N13.room.energyAvailable 850\nshard3.room.W32N13.room.energyCapacityAvailable 1800\nshard3.room.W32N13.controller.level 5\nshard3.room.W32N13.controller.progress 270911\nshard3.room.W32N13.controller.progressTotal 1215000\nshard3.room.W32N13.controller.progressPercent 22.297201646090535\nshard3.room.W32N13.storage.energy 153206\nshard3.heap.total_heap_size 55484416\nshard3.heap.total_heap_size_executable 4194304\nshard3.heap.total_physical_size 44242664\nshard3.heap.total_available_size 564723120\nshard3.heap.used_heap_size 32087544\nshard3.heap.heap_size_limit 608174080\nshard3.heap.malloced_memory 8192\nshard3.heap.peak_malloced_memory 7651688\nshard3.heap.does_zap_garbage 0\nshard3.heap.externally_allocated_size 38795626\nshard3.cpu.bucket 10000\nshard3.cpu.used 12.078037999999651\nshard3.cpu.limit 20\nshard3.cpu.start 0.06311100000311853\nshard3.cpu.percent 60.390189999998256\nshard3.stats.count 20\nshard3.stats.size 2811\nshard3.stats.cpu 0.21883299999899464\n",
+    "stats": "text/graphite\n7885800\n1561065445177\nshard3.energy-container.W28N14 63\nshard3.energy-container.W29N14 2528\nshard3.energy-container.W32N13 2622\nshard3.spawn-busy.Spawn1 0\nshard3.spawn-busy.Spawn2 0\nshard3.spawn-busy.Spawn3 0\nshard3.spawn-busy.Spawn4 0\nshard3.hostiles.value 0\nshard3.creep-population.value 57\nshard3.time.tick 7885800\nshard3.time.timestamp 1561065445177\nshard3.time.duration undefined\nshard3.gcl.level 4\nshard3.gcl.progress 162611.83476176485\nshard3.gcl.progressTotal 13891007.860237733\nshard3.gcl.progressPercent 1.1706266125385512\nshard3.market.credits 0\nshard3.room.W28N14.room.level 7\nshard3.room.W28N14.room.progress 2622475\nshard3.room.W28N14.room.progressTotal 10935000\nshard3.room.W28N14.room.progressPercent 23.98239597622314\nshard3.room.W28N14.room.energyAvailable 5600\nshard3.room.W28N14.room.energyCapacityAvailable 5600\nshard3.room.W28N14.controller.level 7\nshard3.room.W28N14.controller.progress 2622475\nshard3.room.W28N14.controller.progressTotal 10935000\nshard3.room.W28N14.controller.progressPercent 23.98239597622314\nshard3.room.W28N14.storage.energy 204710\nshard3.room.W28N14.storage.L 58200\nshard3.room.W28N14.terminal.energy 0\nshard3.room.W29N14.room.level 6\nshard3.room.W29N14.room.progress 3152359\nshard3.room.W29N14.room.progressTotal 3645000\nshard3.room.W29N14.room.progressPercent 86.4844718792867\nshard3.room.W29N14.room.energyAvailable 2300\nshard3.room.W29N14.room.energyCapacityAvailable 2300\nshard3.room.W29N14.controller.level 6\nshard3.room.W29N14.controller.progress 3152359\nshard3.room.W29N14.controller.progressTotal 3645000\nshard3.room.W29N14.controller.progressPercent 86.4844718792867\nshard3.room.W29N14.storage.energy 313677\nshard3.room.W29N14.storage.Z 28200\nshard3.room.W29N14.terminal.energy 0\nshard3.room.W32N13.room.level 5\nshard3.room.W32N13.room.progress 523788\nshard3.room.W32N13.room.progressTotal 1215000\nshard3.room.W32N13.room.progressPercent 43.11012345679012\nshard3.room.W32N13.room.energyAvailable 1800\nshard3.room.W32N13.room.energyCapacityAvailable 1800\nshard3.room.W32N13.controller.level 5\nshard3.room.W32N13.controller.progress 523788\nshard3.room.W32N13.controller.progressTotal 1215000\nshard3.room.W32N13.controller.progressPercent 43.11012345679012\nshard3.room.W32N13.storage.energy 604876\nshard3.heap.total_heap_size 73834496\nshard3.heap.total_heap_size_executable 3670016\nshard3.heap.total_physical_size 69900048\nshard3.heap.total_available_size 548763160\nshard3.heap.used_heap_size 39347840\nshard3.heap.heap_size_limit 608174080\nshard3.heap.malloced_memory 8192\nshard3.heap.peak_malloced_memory 8067952\nshard3.heap.does_zap_garbage 0\nshard3.heap.externally_allocated_size 38847112\nshard3.cpu.bucket 9970\nshard3.cpu.used 16.503179000000273\nshard3.cpu.limit 20\nshard3.cpu.start 0.028040000000146392\nshard3.cpu.percent 82.51589500000136\nshard3.stats.count 20\nshard3.stats.size 2811\nshard3.stats.cpu 0.3997060000001511\n",
     "rooms": {
         "W27N14": {
             "tasks": {},
@@ -1611,18 +1760,284 @@
                 "containers": ["5d09d5f639a2533368bf777d", "5d09d5f835873a443b015d8b"],
                 "powerSpawns": [],
                 "spawns": ["5ce7151e5d4ced1390ae86ca", "5d08c45d41e42d4426e89e45"],
-                "extensions": ["5ce7c0f059cf5f59d6438b51", "5ce7d9c1a1dd052ccdc82261", "5ce8065075e46f1d8a622400", "5ce8976c396a7f7297d65e11", "5ce898cbd5710f06935b6845", "5ceb0dce9348e91d6b5fa8e2", "5ceb3a5af6b5ca1b4709c513", "5ceb4ea200e7851d97bab7f8", "5ceb530b90f26e72a8f0f35d", "5ceb5e34e863751b558cb813", "5ceb6224be9ade41492a9fc6", "5cebae55e15b7d148e90f932", "5cebb2711910b872b478d1c4", "5ceeefc1d14b1f357ec63efa", "5ceef683686f5c3591f06a60", "5ceefcac8e8ea6354741711f", "5cef008babb24d180871bd98", "5cef041cf6dc946f83d29854", "5cef06c588ae43416e13b1bd", "5cf455bd7533fd09b6153505", "5cf457661a35fd098d7c6957", "5cf45850ff1e577e65914205", "5cf45908ec08c40fb7a1ceea", "5cf459ea1fe8da31ef4d3ac3", "5cf45b4bdcb6240fe183444d", "5cf45bdcac644b09c5ef83d0", "5cf45d35d4811b7e713d28a0", "5cf45d9dc423a831c52edca8", "5cf45ead07c3247e9d1da958", "5cf45f34fa12b467658d39c6", "5cf55863c0d974664ad016e8", "5cf558b0ac644b09c5efdc30", "5cf559a9dc08850fcc94bb75", "5cf559aec0d974664ad01770", "5cf55c72fa12b467658da2dc", "5cf560b7804fd942aed64d10", "5d036d5bb43d0171dddc7868", "5d036fd0fb328d10d9df0b93", "5d0370f439a2533368bce8d4", "5d037258f149a971a0d33746", "5d0635b1dee22633881380e8", "5d0636290c39a428613b655c", "5d0636be41e42d4426e78f5c", "5d06374e17b33153233aa951", "5d0638106cea8e71b60e8a36", "5d0638a2f4868943ff7a712f", "5d063944d7ec9a71aa65844a", "5d063c8e6cea8e71b60e8c42", "5d0654e5d7ec9a71aa659015", "5d0681aa79164353283d7e9a"],
+                "extensions": ["5ce7c0f059cf5f59d6438b51", "5ce7d9c1a1dd052ccdc82261", "5ce8065075e46f1d8a622400", "5ce8976c396a7f7297d65e11", "5ce898cbd5710f06935b6845", "5ceb0dce9348e91d6b5fa8e2", "5ceb3a5af6b5ca1b4709c513", "5ceb530b90f26e72a8f0f35d", "5ceb6224be9ade41492a9fc6", "5cebae55e15b7d148e90f932", "5cebb2711910b872b478d1c4", "5ceeefc1d14b1f357ec63efa", "5ceef683686f5c3591f06a60", "5ceefcac8e8ea6354741711f", "5cef008babb24d180871bd98", "5cef041cf6dc946f83d29854", "5cef06c588ae43416e13b1bd", "5cf455bd7533fd09b6153505", "5cf457661a35fd098d7c6957", "5cf45850ff1e577e65914205", "5cf45908ec08c40fb7a1ceea", "5cf459ea1fe8da31ef4d3ac3", "5cf45b4bdcb6240fe183444d", "5cf45bdcac644b09c5ef83d0", "5cf45d35d4811b7e713d28a0", "5cf45d9dc423a831c52edca8", "5cf45ead07c3247e9d1da958", "5cf45f34fa12b467658d39c6", "5cf55863c0d974664ad016e8", "5cf558b0ac644b09c5efdc30", "5cf559a9dc08850fcc94bb75", "5cf559aec0d974664ad01770", "5cf55c72fa12b467658da2dc", "5cf560b7804fd942aed64d10", "5d036d5bb43d0171dddc7868", "5d036fd0fb328d10d9df0b93", "5d0370f439a2533368bce8d4", "5d037258f149a971a0d33746", "5d0635b1dee22633881380e8", "5d0636290c39a428613b655c", "5d0636be41e42d4426e78f5c", "5d06374e17b33153233aa951", "5d0638106cea8e71b60e8a36", "5d0638a2f4868943ff7a712f", "5d063944d7ec9a71aa65844a", "5d063c8e6cea8e71b60e8c42", "5d0654e5d7ec9a71aa659015", "5d0681aa79164353283d7e9a", "5d0a1065fb328d10d9e153b5", "5d0a1177c9a3621121bc9608"],
                 "links": ["5ceef7e0d1936f6f4667e079", "5ceefaa5abb24d180871bb9c", "5cf4e0b1dc08850fcc9486c7"],
                 "labs": ["5d039533f25684287ddacc11", "5d03b0ba90528371b51a2a10", "5d03cb6c7588385df8fb9934", "5d06516a06f42a71bf96aa4f", "5d0668e9102f1010d1dbc35d", "5d067f50459317530ebc5ccc"],
                 "extractors": ["5cf4e5411952b4429d16c84d"],
-                "ramparts": ["5cea399a90f26e72a8f0963d", "5cea39cf00f503414fc8a1f1", "5cea39d31910b872b47851f6", "5ced521e179b8c3588fa1f65", "5cef977e711a1a3560cf9899", "5cefa84718ebb86f3c828619", "5cefd69a903b5f232f5e3249", "5cf559b9dee9d942d51297bd", "5cfb92ac5b0b7e667bfe62a1"],
+                "ramparts": ["5cea39cf00f503414fc8a1f1", "5cea39d31910b872b47851f6", "5ced521e179b8c3588fa1f65", "5cef977e711a1a3560cf9899", "5cefa84718ebb86f3c828619", "5cefd69a903b5f232f5e3249", "5cf559b9dee9d942d51297bd", "5cfb92ac5b0b7e667bfe62a1"],
                 "nukers": [],
                 "observers": [],
                 "towers": ["5ce975bb6aaf8d72a22df7bb", "5cf8c19ec9e33142c83cdaff", "5d06352339a2533368bdfcef"],
                 "lairs": []
             },
             "masterSpawn": "5ce7151e5d4ced1390ae86ca",
-            "linksEmpty": ["[LINK_ID]"]
+            "linksEmpty": ["[LINK_ID]"],
+            "resourceLimits": {
+                "energy": {
+                    "minTerminal": 0,
+                    "maxStorage": 400000,
+                    "minMarket": 900000,
+                    "minProduction": 1000000
+                },
+                "power": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "H": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "U": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "K": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "L": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 500000,
+                    "minProduction": 600000
+                },
+                "Z": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "X": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "G": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "OH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZK": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UL": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XUH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XUHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XKH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XKHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XLH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XLHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XZH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XZHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XGH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XGHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ops": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                }
+            }
         },
         "W29N13": {
             "tasks": {},
@@ -1703,7 +2118,273 @@
                 "lairs": []
             },
             "masterSpawn": "5ceff62cae7b66405a932c72",
-            "linksEmpty": ["[LINK_ID]"]
+            "linksEmpty": ["[LINK_ID]"],
+            "resourceLimits": {
+                "energy": {
+                    "minTerminal": 0,
+                    "maxStorage": 400000,
+                    "minMarket": 900000,
+                    "minProduction": 1000000
+                },
+                "power": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "H": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "U": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "K": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "L": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "Z": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 500000,
+                    "minProduction": 600000
+                },
+                "X": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "G": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "OH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZK": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UL": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XUH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XUHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XKH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XKHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XLH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XLHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XZH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XZHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XGH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XGHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ops": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                }
+            }
         },
         "W27N15": {
             "roomArray": {
@@ -1784,7 +2465,7 @@
                 "containers": ["5d09cff43edbdf532d3f6250", "5d09d215ab6f8a31fa8bf275"],
                 "powerSpawns": [],
                 "spawns": ["5d0104bf31b2a87e93fdbb0c"],
-                "extensions": ["5d0133e27533fd09b61a8c0a", "5d015635fa12b46765929526", "5d016726877f9609b3198a94", "5d0176afec08c40fb7a773cf", "5d0185b84055d70fae3c5405", "5d03066df149a971a0d30a7c", "5d031dfd459317530ebaf882", "5d0334ccac87dd5deefae4aa", "5d0345163edbdf532d3ca51d", "5d0356caa5512f287c023c7d", "5d0627c735873a443bffd57d", "5d063877c2ac64535960d447", "5d0684fb986dd6111290f3cd", "5d06a00aeb73245dbd32ab7e", "5d06a6f77f9d5e442fc9ee35", "5d06ac91b2e0d3444eee2987", "5d06b17ff4868943ff7aa24b", "5d06b95c308228440a378b4d", "5d06bc2d06f42a71bf96d6ba", "5d06c2eac4e054334754232a", "5d075819c9a3621121bba00a", "5d076115459317530ebcba25", "5d076b6fe9c52710f59ebf9a", "5d076d8afb328d10d9e06497", "5d07717bf25684287ddc18d9", "5d07759df4868943ff7af352", "5d077d186cea8e71b60f1298", "5d0782b0308228440a37de75", "5d078899308228440a37e0e6", "5d078f31b43d0171ddde3190"],
+                "extensions": ["5d0133e27533fd09b61a8c0a", "5d015635fa12b46765929526", "5d016726877f9609b3198a94", "5d0176afec08c40fb7a773cf", "5d0185b84055d70fae3c5405", "5d03066df149a971a0d30a7c", "5d0334ccac87dd5deefae4aa", "5d0345163edbdf532d3ca51d", "5d0356caa5512f287c023c7d", "5d0627c735873a443bffd57d", "5d063877c2ac64535960d447", "5d0684fb986dd6111290f3cd", "5d06a00aeb73245dbd32ab7e", "5d06a6f77f9d5e442fc9ee35", "5d06ac91b2e0d3444eee2987", "5d06b17ff4868943ff7aa24b", "5d06b95c308228440a378b4d", "5d06bc2d06f42a71bf96d6ba", "5d06c2eac4e054334754232a", "5d075819c9a3621121bba00a", "5d076115459317530ebcba25", "5d076d8afb328d10d9e06497", "5d07717bf25684287ddc18d9", "5d07759df4868943ff7af352", "5d077d186cea8e71b60f1298", "5d0782b0308228440a37de75", "5d078899308228440a37e0e6", "5d0a11c3c2ac6453596273cd", "5d0a12eb0765293387daddff", "5d0a14177588385df8fe0dd1"],
                 "links": ["5d07569bb43d0171ddde1965", "5d076a78dee226338813fd1d"],
                 "labs": [],
                 "extractors": [],
@@ -1795,7 +2476,273 @@
                 "lairs": []
             },
             "masterSpawn": "5d0104bf31b2a87e93fdbb0c",
-            "linksEmpty": ["[LINK_ID]"]
+            "linksEmpty": ["[LINK_ID]"],
+            "resourceLimits": {
+                "energy": {
+                    "minTerminal": 0,
+                    "maxStorage": 400000,
+                    "minMarket": 900000,
+                    "minProduction": 1000000
+                },
+                "power": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "H": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 500000,
+                    "minProduction": 600000
+                },
+                "U": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "K": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "L": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "Z": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "X": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "G": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "OH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZK": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UL": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GH": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GO": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "UHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "KHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "LHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ZHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "GHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XUH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XUHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XKH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XKHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XLH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XLHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XZH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XZHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XGH2O": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "XGHO2": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                },
+                "ops": {
+                    "minTerminal": 0,
+                    "maxStorage": 6000,
+                    "minMarket": 900000,
+                    "minProduction": 0
+                }
+            }
         },
         "W30N14": {
             "roomArray": {
@@ -1940,40 +2887,236 @@
                 "towers": [],
                 "lairs": []
             }
+        },
+        "W33N14": {
+            "roomArray": {
+                "sources": ["5bbcab289099fc012e632fdd"],
+                "minerals": ["5bbcb1bd40062e4259e932a8"],
+                "containers": [],
+                "powerSpawns": [],
+                "spawns": [],
+                "extensions": [],
+                "links": [],
+                "labs": [],
+                "extractors": [],
+                "ramparts": [],
+                "nukers": [],
+                "observers": [],
+                "towers": [],
+                "lairs": []
+            }
+        },
+        "W33N12": {
+            "roomArray": {
+                "sources": ["5bbcab299099fc012e632fe3", "5bbcab299099fc012e632fe5"],
+                "minerals": ["5bbcb1be40062e4259e932aa"],
+                "containers": [],
+                "powerSpawns": [],
+                "spawns": [],
+                "extensions": [],
+                "links": [],
+                "labs": [],
+                "extractors": [],
+                "ramparts": [],
+                "nukers": [],
+                "observers": [],
+                "towers": [],
+                "lairs": []
+            }
         }
     },
     "spawns": {
         "Spawn1": {
             "energy": {
-                "containerStorage": 123,
+                "containerStorage": 63,
                 "containerCount": 2
             },
-            "lastSpawnAttempt": "longDistanceLorry",
-            "lastSpawn": "longDistanceLorry"
+            "lastSpawnAttempt": "claimer",
+            "lastSpawn": "claimer"
         },
         "Spawn2": {
             "energy": {
-                "containerStorage": 1506,
-                "containerCount": 2
-            },
-            "lastSpawnAttempt": "longDistanceMiner",
-            "lastSpawn": "longDistanceMiner"
-        },
-        "Spawn3": {
-            "energy": {
-                "containerStorage": 3678,
-                "containerCount": 2
-            },
-            "lastSpawnAttempt": "lorry",
-            "lastSpawn": "lorry"
-        },
-        "Spawn4": {
-            "energy": {
-                "containerStorage": 123,
+                "containerStorage": 2528,
                 "containerCount": 2
             },
             "lastSpawnAttempt": "longDistanceBuilder",
             "lastSpawn": "longDistanceBuilder"
+        },
+        "Spawn3": {
+            "energy": {
+                "containerStorage": 2622,
+                "containerCount": 2
+            },
+            "lastSpawnAttempt": "miner",
+            "lastSpawn": "miner"
+        },
+        "Spawn4": {
+            "energy": {
+                "containerStorage": 63,
+                "containerCount": 2
+            },
+            "lastSpawnAttempt": "upgrader",
+            "lastSpawn": "upgrader"
         }
+    },
+    "profiler": {
+        "map": {
+            "RoomPosition.toJSON": {
+                "time": 7.224378000005032,
+                "calls": 3939
+            },
+            "Room.find": {
+                "time": 197.56630799997828,
+                "calls": 6492
+            },
+            "RoomPosition.inRangeTo": {
+                "time": 28.12639700004395,
+                "calls": 15256
+            },
+            "RoomPosition.findInRange": {
+                "time": 110.50084099999204,
+                "calls": 2046
+            },
+            "RoomPosition.isEqualTo": {
+                "time": 7.846257000034527,
+                "calls": 3408
+            },
+            "Creep.runRole": {
+                "time": 429.69636699999353,
+                "calls": 2408
+            },
+            "RoomPosition.isNearTo": {
+                "time": 11.400135000006472,
+                "calls": 4162
+            },
+            "RoomPosition.findClosestByPath": {
+                "time": 196.5429549999918,
+                "calls": 2693
+            },
+            "Creep.say": {
+                "time": 7.962255000016171,
+                "calls": 923
+            },
+            "RoomPosition.findClosestByRange": {
+                "time": 2.701323000000002,
+                "calls": 250
+            },
+            "Creep.getActiveBodyparts": {
+                "time": 4.020457000000931,
+                "calls": 1308
+            },
+            "RoomPosition.getRangeTo": {
+                "time": 12.083823999992205,
+                "calls": 4424
+            },
+            "Creep.move": {
+                "time": 377.5004590000377,
+                "calls": 1818
+            },
+            "Creep.travelTo": {
+                "time": 420.0372070000174,
+                "calls": 1971
+            },
+            "Creep.run": {
+                "time": 1181.3784610000173,
+                "calls": 5767
+            },
+            "Room.lookForAt": {
+                "time": 5.769928999998513,
+                "calls": 1059
+            },
+            "RoomPosition.lookFor": {
+                "time": 10.817576999985818,
+                "calls": 1356
+            },
+            "Creep.upgradeController": {
+                "time": 91.60014700001949,
+                "calls": 386
+            },
+            "Creep.harvest": {
+                "time": 275.7405069999986,
+                "calls": 1289
+            },
+            "RoomPosition.getDirectionTo": {
+                "time": 4.560129000016474,
+                "calls": 1888
+            },
+            "RoomPosition.isPassible": {
+                "time": 5.167405999990649,
+                "calls": 1512
+            },
+            "RoomPosition.availableNeighbors": {
+                "time": 10.774943999994377,
+                "calls": 189
+            },
+            "Creep.build": {
+                "time": 24.160543000003173,
+                "calls": 101
+            },
+            "Creep.reserveController": {
+                "time": 131.11969899999502,
+                "calls": 619
+            },
+            "Creep.repair": {
+                "time": 31.121145000004958,
+                "calls": 146
+            },
+            "Room.linksRun": {
+                "time": 11.385665000001197,
+                "calls": 443
+            },
+            "Creep.transfer": {
+                "time": 29.77596399999868,
+                "calls": 117
+            },
+            "Room.creepSpawnRun": {
+                "time": 15.70856499999826,
+                "calls": 94
+            },
+            "Room.getSpawnList": {
+                "time": 1.4471890000011172,
+                "calls": 18
+            },
+            "Creep.withdraw": {
+                "time": 8.025695000004106,
+                "calls": 32
+            },
+            "Spawn.getBodyInfo": {
+                "time": 0.007849999999962165,
+                "calls": 1
+            },
+            "Spawn.spawnCreep": {
+                "time": 0.028453999999328516,
+                "calls": 1
+            },
+            "Spawn.canCreateCreep": {
+                "time": 0.016677999999956228,
+                "calls": 1
+            },
+            "Spawn.createCreep": {
+                "time": 0.297975000000406,
+                "calls": 1
+            },
+            "Spawn.createCustomCreep": {
+                "time": 0.3726219999998648,
+                "calls": 1
+            },
+            "Creep.toString": {
+                "time": 0.06445699999767385,
+                "calls": 57
+            },
+            "Room.refreshData": {
+                "time": 0.9599760000010065,
+                "calls": 13
+            },
+            "Game.getObjectById": {
+                "time": 0.6713460000002271,
+                "calls": 473
+            }
+        },
+        "totalTime": 2018.3259950000001,
+        "enabledTick": 7880993,
+        "disableTick": 7881092,
+        "type": "profile"
     }
 }

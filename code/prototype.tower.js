@@ -22,14 +22,27 @@ StructureTower.prototype.healCreeps =
 
 StructureTower.prototype.repairStructures =
     function () {
-        //...repair Buildings! :) But ONLY until HALF the energy of the tower is gone.
-        //Because we don't want to be exposed if something shows up at our door :)
-        var roomEnergyCapacity = this.room.energyCapacityAvailable;
-        var roomEnergy = this.room.energyAvailable;
-        //work only when there is max spawn energy && roomEnergy == roomEnergyCapacity
+        var target = {};
 
+        if (this.energy > 200) {
+            //Find the closest damaged Structure
+            var targets = this.room.find(FIND_STRUCTURES, {
+                filter: (s) =>
+                    (s.hits < 500) &&
+                    s.structureType != STRUCTURE_CONTROLLER
+            });
 
-        /* if (this.energy > 700) {
+            if (targets.length > 0) {
+                target = _.min(targets, 'hits')[0]
+            }
+
+            if (target) {
+                this.repair(target);
+                //console.log(target + " " + target.hits + " " + this.room.name + " " + this.repair(target))
+            }
+        }
+
+        if (this.energy > 700) {
             //Find the closest damaged Structure
             var targets = this.room.find(FIND_STRUCTURES, {
                 filter: (s) =>
@@ -39,35 +52,17 @@ StructureTower.prototype.repairStructures =
                     s.structureType != STRUCTURE_TOWER &&
                     s.structureType != STRUCTURE_WALL &&
                     s.structureType != STRUCTURE_RAMPART &&
+                    s.structureType != STRUCTURE_EXTRACTOR &&
                     s.structureType != STRUCTURE_SPAWN
             });
 
-            target = targets.sort(function (a, b) {
-                return +a.hits - +b.hits
-            })[0];
-
-            if (target) {
-                this.repair(target);
-                //console.log(target+" "+this.room.name+" "+ this.repair(target))
+            if (targets.length > 0) {
+                target = _.min(targets, 'hits')
             }
-        } else  */
-        if (this.energy > 200) {
-            //Find the closest damaged Structure
-            var targets = this.room.find(FIND_STRUCTURES, {
-                filter: (s) =>
-                    (s.hits < 1000) &&
-                    s.structureType != STRUCTURE_CONTROLLER &&
-                    s.structureType != STRUCTURE_EXTENSION &&
-                    s.structureType != STRUCTURE_TOWER &&
-                    s.structureType != STRUCTURE_SPAWN
-            });
-
-            target = targets.sort(function (a, b) {
-                return +a.hits - +b.hits
-            })[0];
-
+            
             if (target) {
-                this.repair(target);
+                var result = this.repair(target);
+                //console.log(target + " " + target.hits + " " + this.room.name + " " + result)
             }
         }
     };

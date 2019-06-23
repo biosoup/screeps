@@ -22,12 +22,21 @@ StructureSpawn.prototype.createCustomCreep =
     function (energy, roleName, home = this.room, target, sourceId) {
         let targetName = ""
         let body = this.getBodyInfo(roleName, this.room.energyCapacityAvailable);
-        if(target != undefined) {targetName = target}
+
+        if (target != undefined) {
+            targetName = target
+        }
+
+        if (roleName == "miniharvester") {
+            roleName = "harvester";
+        }
+
         let name = roleName + "-" + home + "-" + targetName + "-" + Game.time;
 
         var testIfCanSpawn = this.spawnCreep(body, name, {
             dryRun: true
         });
+        //console.log(testIfCanSpawn)
 
         if (body != null && testIfCanSpawn == OK) {
             return this.createCreep(body, name, {
