@@ -58,5 +58,9 @@ module.exports = {
             }
         }
 
+    },
+
+    newTask2: function (creep) {
+        
     }
 };

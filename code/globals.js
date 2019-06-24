@@ -778,42 +778,42 @@ buildingPlans = {
     guard: [{
             //Level 1 (max 300)
             minEnergy: 260,
-            body: [MOVE, MOVE, ATTACK, ATTACK]
+            body: [MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK]
         },
         {
             //Level 2 (max 550)
-            minEnergy: 520,
-            body: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK]
+            minEnergy: 390,
+            body: [MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK]
         },
         {
             //Level 3 (max 800)
-            minEnergy: 790,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK]
+            minEnergy: 800,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK]
         },
         {
             //Level 4 (max 1300)
-            minEnergy: 1300,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK]
+            minEnergy: 800,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK]
         },
         {
-            //Level 5 (max 1800)
-            minEnergy: 1300,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK]
+            //Level 5 (max 1750)
+            minEnergy: 800,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK]
         },
         {
             //Level 6 (max 2300)
-            minEnergy: 1300,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK]
+            minEnergy: 800,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK]
         },
         {
             //Level 7 (max 5600)
-            minEnergy: 1300,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK]
+            minEnergy: 800,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK]
         },
         {
             //Level 8 (max 12900)
-            minEnergy: 1300,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK]
+            minEnergy: 800,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK]
         }
     ],
 

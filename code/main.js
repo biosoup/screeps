@@ -108,7 +108,7 @@ module.exports.loop = function () {
     }
     //go through rooms
     for (let roomName in Game.rooms) {
-        if ((Game.time % 57) == 0 && Game.cpu.bucket > 5000) {
+        if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > 5000) {
             //refresh room data
             Game.rooms[roomName].refreshData(roomName)
         }
@@ -116,6 +116,8 @@ module.exports.loop = function () {
         //run link balancing
         if ((Game.time % 3) == 0 && Game.cpu.bucket > 5000) {
             Game.rooms[roomName].linksRun(roomName)
+
+            Game.rooms[roomName].refreshContainerSources(roomName)
         }
 
         // find all towers

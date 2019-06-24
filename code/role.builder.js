@@ -44,7 +44,7 @@ module.exports = {
                     //Find the closest damaged Structure
                     var targets = creep.room.find(FIND_STRUCTURES, {
                         filter: (s) =>
-                            (s.hits < s.hitsMax) &&
+                            (s.hits / s.hitsMax) < 0.9 &&
                             s.structureType != STRUCTURE_CONTROLLER &&
                             s.structureType != STRUCTURE_EXTENSION &&
                             s.structureType != STRUCTURE_TOWER &&

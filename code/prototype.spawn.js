@@ -46,4 +46,4 @@ StructureSpawn.prototype.createCustomCreep =
                 target: target
             });
         }
-    };
+    }; 

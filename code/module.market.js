@@ -127,17 +127,21 @@ module.exports = {
                                     });
                                     orders = _.sortBy(orders, "price");
                                     for (var o = 0; o < orders.length; o++) {
-                                        var orderResource = orders[o].resourceType;
-                                        var orderRoomName = orders[o].roomName;
-                                        var orderAmount;
-                                        if (surplusMinerals > orders[o].amount) {
-                                            orderAmount = orders[o].amount;
+                                        if (orders[o].price > 0.01) {
+                                            var orderResource = orders[o].resourceType;
+                                            var orderRoomName = orders[o].roomName;
+                                            var orderAmount;
+                                            if (surplusMinerals > orders[o].amount) {
+                                                orderAmount = orders[o].amount;
+                                            } else {
+                                                orderAmount = surplusMinerals;
+                                            }
+                                            var orderCosts = global.terminalTransfer(orderResource, orderAmount, orderRoomName, "cost");
+                                            if (orderAmount >= 500 && orderCosts <= Game.rooms[r].storage.store[RESOURCE_ENERGY] - 10000) {
+                                                Game.rooms[r].memory.terminalTransfer = orders[o].id + ":" + orderAmount + ":" + orderResource + ":MarketOrder";
+                                            }
                                         } else {
-                                            orderAmount = surplusMinerals;
-                                        }
-                                        var orderCosts = global.terminalTransfer(orderResource, orderAmount, orderRoomName, "cost");
-                                        if (orderAmount >= 500 && orderCosts <= Game.rooms[r].storage.store[RESOURCE_ENERGY] - 10000) {
-                                            Game.rooms[r].memory.terminalTransfer = orders[o].id + ":" + orderAmount + ":" + orderResource + ":MarketOrder";
+                                            console.log("too cheap deal: "+orders[o].resourceType+" "+orders[o].roomName)
                                         }
                                     }
                                 }

@@ -21,14 +21,113 @@ Room.prototype.bunker =
         //add task for it to be built
     };
 
+Room.prototype.refreshContainerSources =
+    function (r) {
+        r = Game.rooms[r];
+        //get home room storage
+        if (r.storage != undefined) {
+            //get rooms with longDistanceMiners in it
+            var allMinerCreeps = _.filter(Game.creeps, (c) => c.memory.home == r.name && c.memory.role == "longDistanceMiner");
+            var inRooms = _.map(allMinerCreeps, "memory.target")
+
+            //get continers in those rooms
+            var containerList = [];
+            for (let roomName of inRooms) {
+                var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
+                    filter: s => s.structureType == STRUCTURE_CONTAINER
+                });
+                containerList = [...containerList, ...roomContainers]
+            }
+
+            storagePosition = r.storage.pos;
+
+            //if the memory space is not there
+            if (r.memory.containerSources === undefined) {
+                r.memory.containerSources = {};
+            }
+
+            //if refersh time, empty all continer data
+            if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > 5000) {
+                r.memory.containerSources = {};
+            }
+
+            //get info about containers
+            for (let container of containerList) {
+                if (container != undefined && container != null) {
+                    if (r.memory.containerSources[container.id] != undefined) {
+                        if ((r.memory.containerSources[container.id].time + 30) < Game.time) {
+                            //if the container ID exists, just update it
+                            r.memory.containerSources[container.id].pos = container.pos
+                            r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
+                            r.memory.containerSources[container.id].time = Game.time
+                        }
+                    } else {
+                        //if it does not exists, create it and calculate distance
+                        r.memory.containerSources[container.id] = {}
+                        r.memory.containerSources[container.id].pos = container.pos
+                        r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
+                        r.memory.containerSources[container.id].time = Game.time
+
+                        let distance = PathFinder.search(
+                            storagePosition, container.pos, {
+                                // We need to set the defaults costs higher so that we
+                                // can set the road cost lower in `roomCallback`
+                                plainCost: 2,
+                                swampCost: 10,
+
+                                roomCallback: function (roomName) {
+                                    let room = Game.rooms[roomName];
+                                    // In this example `room` will always exist, but since 
+                                    // PathFinder supports searches which span multiple rooms 
+                                    // you should be careful!
+                                    if (!room) return;
+                                    let costs = new PathFinder.CostMatrix;
+                                    room.find(FIND_STRUCTURES).forEach(function (struct) {
+                                        if (struct.structureType === STRUCTURE_ROAD) {
+                                            // Favor roads over plain tiles
+                                            costs.set(struct.pos.x, struct.pos.y, 1);
+                                        } else if (struct.structureType !== STRUCTURE_CONTAINER &&
+                                            (struct.structureType !== STRUCTURE_RAMPART ||
+                                                !struct.my)) {
+                                            // Can't walk through non-walkable buildings
+                                            costs.set(struct.pos.x, struct.pos.y, 0xff);
+                                        }
+                                    });
+                                    return costs;
+                                },
+                            }
+                        );
+                        if (distance[4] != true) {
+                            r.memory.containerSources[container.id].distance = distance.path.length
+                        } else {
+                            r.memory.containerSources[container.id].distance = false
+                        }
+                    }
+                }
+            }
+            //console.log(r.name + " " + JSON.stringify(r.memory.containerSources));
+
+            /*  
+            W28N14 {"5cfed049c4be3409e53dab3d":{"pos":{"x":15,"y":35,"roomName":"W27N15"},"energy":2000,"time":8004585,"distance":82},"5cff24da5b0b7e667bffeb4f":{"pos":{"x":38,"y":21,"roomName":"W27N14"},"energy":1610,"time":8004585,"distance":75},"5cff237a63738f09b78089bb":{"pos":{"x":34,"y":17,"roomName":"W28N15"},"energy":1470,"time":8004585,"distance":81},"5cfed38c15b6e542a338d399":{"pos":{"x":20,"y":10,"roomName":"W28N13"},"energy":1207,"time":8004585,"distance":19},"5cfeeb0fff1e577e6595b3d4":{"pos":{"x":25,"y":16,"roomName":"W28N13"},"energy":1756,"time":8004585,"distance":28}}
+            W29N14 {"5d0748ce001e5f10d3711de2":{"pos":{"x":5,"y":23,"roomName":"W29N13"},"energy":1950,"time":8004585,"distance":36}}
+            W32N13 {"5d09fae741a69b286384a8fd":{"pos":{"x":23,"y":8,"roomName":"W33N13"},"energy":0,"time":8004585,"distance":70},"5d0a00100c39a428613cc024":{"pos":{"x":35,"y":24,"roomName":"W33N13"},"energy":2000,"time":8004585,"distance":54}} 
+            */
+        } else {
+            return -1;
+        }
+    };
+
 Room.prototype.refreshData =
     function (r) {
         let roomCreeps = Game.rooms[r].find(FIND_MY_CREEPS);
+        var refresh = false;
 
         //  Refresher
         if (Game.rooms[r].controller != undefined && Game.rooms[r].controller.owner != undefined && Game.rooms[r].controller.owner.username == playerUsername && Game.rooms[r].memory.roomArray == undefined) {
             Game.rooms[r].memory.roomArray = {};
         } else if (Game.rooms[r].memory.roomArray == undefined && Game.rooms[r].controller != undefined && roomCreeps > 0) {
+            Game.rooms[r].memory.roomArray = {};
+        } else if (refresh == true) {
             Game.rooms[r].memory.roomArray = {};
         }
 
@@ -374,7 +473,7 @@ Room.prototype.creepSpawnRun =
 
         if (spawnRoom.name == "W32N13") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W32N14 = [0, 1, 1, 1, 1, 0]
+            roomInterests.W32N14 = [0, 1, 1, 1, 1, 1]
             roomInterests.W33N14 = [0, 0, 0, 0, 0, 0]
             roomInterests.W32N12 = [0, 1, 1, 1, 1, 1]
             roomInterests.W31N12 = [0, 0, 0, 0, 0, 0]
@@ -611,10 +710,10 @@ Room.prototype.creepSpawnRun =
         let name = undefined;
         let rcl = spawnRoom.controller.level;
 
-        //limit creep sizes
-        if (rcl >= 6) {
-            rcl = 6
-        }
+        /*         //limit creep sizes
+                if (rcl >= 6) {
+                    rcl = 6
+                } */
 
         //Check whether spawn trying to spawn too many creeps
         let missingBodyParts = 0;
@@ -704,7 +803,7 @@ Room.prototype.creepSpawnRun =
                     if (!(name < 0) && name != undefined) {
                         testSpawn.memory.lastSpawn = spawnList[spawnEntry];
                         if (LOG_SPAWN == true) {
-                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
+                            //console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
                         }
                         spawnEntry++;
                     }
@@ -719,10 +818,6 @@ Room.prototype.creepSpawnRun =
 Room.prototype.getSpawnList =
     function (spawnRoom, minimumSpawnOf, numberOf) {
         let rcl = spawnRoom.controller.level;
-        //limit creep sizes
-        if (rcl >= 6) {
-            rcl = 6
-        }
 
         let tableImportance = {
             harvester: {
@@ -919,7 +1014,7 @@ Room.prototype.getSpawnList =
             }
         };
 
-        if (numberOf.harvester + numberOf.lorry == 0) {
+        if ((numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant) == 0) {
             // Set up miniHarvester to spawn && spawnRoom.energyAvailable < buildingPlans.harvester.minEnergy
             tableImportance.miniharvester.min = 1;
         }
