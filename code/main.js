@@ -10,7 +10,7 @@ if (CPUdebug == true) {
 }
 
 //system imports
-const profiler = require('screeps-profiler');
+//const profiler = require('screeps-profiler');
 const stats = require('stats');
 require("creep-tasks");
 var Traveler = require('Traveler');
@@ -129,8 +129,13 @@ module.exports.loop = function () {
                 for (var tower of towers) {
                     tower = Game.getObjectById(tower);
                     // all towers attack
-                    tower.healCreeps();       
                     tower.attack(hostiles[0]);
+                    //tower.healCreeps();       
+                }
+            } else {
+                for (var tower of towers) {
+                    tower = Game.getObjectById(tower);
+                    tower.healCreeps();       
                 }
             }
 
@@ -185,7 +190,11 @@ module.exports.loop = function () {
         //if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" run Code: " + Game.cpu.getUsed())}
 
         //console.log(creep)
-        Game.creeps[creep].run();
+        try {
+            Game.creeps[creep].run();}
+        catch (err) {
+            Game.creeps[creep].say("MAIN ERR!!")
+        }
     }
 
 
@@ -195,7 +204,7 @@ module.exports.loop = function () {
     }
     //other stats
     //var elapsedInSeconds = ((new Date()).getTime() - Memory.stats.lastTS) / 1000
-    if ((Game.time % 10) == 0 && Game.cpu.bucket > 5000) {
+    if ((Game.time % 10) == 0 && Game.cpu.bucket > 100) {
         var containerStats = {};
         var spawnBusy = {};
         for (var spawnName in Game.spawns) {

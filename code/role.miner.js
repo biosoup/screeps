@@ -55,7 +55,11 @@ module.exports = {
                     // harvest source
                     creep.task = Tasks.harvest(source);
                 } else {
-                    creep.say("full")
+                    creep.say("full container")
+                    if (creep.carry.energy < creep.carryCapacity) {
+                        // harvest source
+                        creep.task = Tasks.harvest(source);
+                    }
                 }
             } else {
                 // if creep is not on top of the container

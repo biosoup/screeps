@@ -44,7 +44,7 @@ Creep.prototype.runRole =
         } else if (this.memory.role == 'longDistanceMiner') {
             longDistanceMiner.newTask(this)
         } else if (this.memory.role == 'longDistanceLorry') {
-            longDistanceLorry.newTask(this)
+            longDistanceLorry.newTask2(this)
         } else if (this.memory.role == 'longDistanceBuilder') {
             longDistanceBuilder.newTask(this)
         } else {

@@ -33,10 +33,12 @@ Room.prototype.refreshContainerSources =
             //get continers in those rooms
             var containerList = [];
             for (let roomName of inRooms) {
-                var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                    filter: s => s.structureType == STRUCTURE_CONTAINER
-                });
-                containerList = [...containerList, ...roomContainers]
+                if (roomName != undefined && roomName != null) {
+                    var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
+                        filter: s => s.structureType == STRUCTURE_CONTAINER
+                    });
+                    containerList = [...containerList, ...roomContainers]
+                }
             }
 
             storagePosition = r.storage.pos;
@@ -57,13 +59,16 @@ Room.prototype.refreshContainerSources =
                     if (r.memory.containerSources[container.id] != undefined) {
                         if ((r.memory.containerSources[container.id].time + 30) < Game.time) {
                             //if the container ID exists, just update it
+                            r.memory.containerSources[container.id].id = container.id
                             r.memory.containerSources[container.id].pos = container.pos
                             r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
                             r.memory.containerSources[container.id].time = Game.time
+                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY]/(r.memory.containerSources[container.id].distance*2)
                         }
                     } else {
                         //if it does not exists, create it and calculate distance
                         r.memory.containerSources[container.id] = {}
+                        r.memory.containerSources[container.id].id = container.id
                         r.memory.containerSources[container.id].pos = container.pos
                         r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
                         r.memory.containerSources[container.id].time = Game.time
@@ -99,8 +104,10 @@ Room.prototype.refreshContainerSources =
                         );
                         if (distance[4] != true) {
                             r.memory.containerSources[container.id].distance = distance.path.length
+                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY]/(r.memory.containerSources[container.id].distance*2)
                         } else {
                             r.memory.containerSources[container.id].distance = false
+                            r.memory.containerSources[container.id].ed = 0
                         }
                     }
                 }
@@ -458,10 +465,10 @@ Room.prototype.creepSpawnRun =
         let roomInterests = {}
         if (spawnRoom.name == "W28N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W28N13 = [0, 2, 1, 1, 1, 0]
-            roomInterests.W28N15 = [0, 1, 1, 1, 1, 0]
-            roomInterests.W27N15 = [0, 1, 1, 1, 1, 1]
-            roomInterests.W27N14 = [0, 1, 1, 1, 1, 1]
+            roomInterests.W28N13 = [0, 2, 5, 1, 1, 0]
+            roomInterests.W28N15 = [0, 1, 0, 1, 1, 0]
+            roomInterests.W27N15 = [0, 1, 0, 1, 1, 1]
+            roomInterests.W27N14 = [0, 1, 0, 1, 1, 1]
         }
 
         if (spawnRoom.name == "W29N14") {
@@ -473,11 +480,11 @@ Room.prototype.creepSpawnRun =
 
         if (spawnRoom.name == "W32N13") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W32N14 = [0, 1, 1, 1, 1, 1]
+            roomInterests.W32N14 = [0, 1, 4, 1, 1, 1]
             roomInterests.W33N14 = [0, 0, 0, 0, 0, 0]
-            roomInterests.W32N12 = [0, 1, 1, 1, 1, 1]
+            roomInterests.W32N12 = [0, 1, 0, 1, 1, 1]
             roomInterests.W31N12 = [0, 0, 0, 0, 0, 0]
-            roomInterests.W33N13 = [0, 2, 2, 1, 1, 1]
+            roomInterests.W33N13 = [0, 2, 0, 1, 1, 1]
             roomInterests.W33N12 = [0, 0, 0, 0, 0, 0]
         }
 
@@ -533,11 +540,7 @@ Room.prototype.creepSpawnRun =
                 //console.log(interest+" "+inRooms+" "+roomInterests[interest][1]+" "+minimumSpawnOf.longDistanceMiner)
             }
             if (roomInterests[interest][2] > 0) {
-                var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.target == interest)
                 minimumSpawnOf.longDistanceLorry += roomInterests[interest][2];
-                if (inRooms < roomInterests[interest][2]) {
-                    longDistanceLorry[interest] = roomInterests[interest][2]
-                }
             }
             if (roomInterests[interest][3] > 0) {
                 var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceBuilder' && c.memory.target == interest)
@@ -555,7 +558,7 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        //console.log(spawnRoom.name+" "+JSON.stringify(longDistanceMiner)+" "+minimumSpawnOf.longDistanceMiner)
+        //console.log(spawnRoom.name+" "+JSON.stringify(longDistanceMiner)+" "+minimumSpawnOf.longDistanceLorry)
 
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_CONSTRUCTION_SITES);
@@ -587,7 +590,7 @@ Room.prototype.creepSpawnRun =
         // Upgrader
         minimumSpawnOf["upgrader"] = 1;
         if (spawnRoom.storage != undefined) {
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 200000 && spawnRoom.controller.level < 8) {
+            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 800000 && spawnRoom.controller.level < 8) {
                 minimumSpawnOf.upgrader = 2;
             }
         }
@@ -784,10 +787,6 @@ Room.prototype.creepSpawnRun =
                         for (var roomName in longDistanceMiner) {
                             name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
-                    } else if (spawnList[spawnEntry] == "longDistanceLorry") {
-                        for (var roomName in longDistanceLorry) {
-                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
-                        }
                     } else if (spawnList[spawnEntry] == "longDistanceBuilder") {
                         for (var roomName in longDistanceBuilder) {
                             name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
@@ -803,7 +802,7 @@ Room.prototype.creepSpawnRun =
                     if (!(name < 0) && name != undefined) {
                         testSpawn.memory.lastSpawn = spawnList[spawnEntry];
                         if (LOG_SPAWN == true) {
-                            //console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
+                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
                         }
                         spawnEntry++;
                     }
@@ -1043,7 +1042,7 @@ Room.prototype.getSpawnList =
                 for (let e in container) {
                     containerEnergy += container[e].store[RESOURCE_ENERGY];
                 }
-                if (containerEnergy > 200000) {
+                if (containerEnergy >800000) {
                     //spawnList.push("upgrader");
                 }
             }
