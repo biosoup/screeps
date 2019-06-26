@@ -34,7 +34,7 @@ module.exports = {
                         filter: s => s.structureType == STRUCTURE_LINK
                     })[0];
 
-                    if (link !== undefined && link != null) {
+                    if (link != undefined && link != null) {
                         //console.log(link)
                         if (link.energy < link.energyCapacity) {
                             //there is a space in the link
@@ -80,7 +80,7 @@ module.exports = {
                     var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
                         filter: s => s.structureType == STRUCTURE_LINK
                     })[0];
-                    if (link !== undefined) {
+                    if (link != undefined) {
                         if (link.energy < link.energyCapacity) {
                             //there is a space in the link
                             creep.task = Tasks.transfer(link);

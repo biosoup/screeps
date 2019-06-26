@@ -100,17 +100,21 @@ module.exports = {
                     creep.memory.target = validTarget;
                     container = Game.getObjectById(validTarget.id)
                     if (container != null) {
-                        if (container.store[RESOURCE_ENERGY] >= creep.carryCapacity) {
+                        if (validTarget.energy >= creep.carryCapacity) {
                             //go work the target
                             creep.task = Tasks.withdraw(container);
                             creep.say("target found!")
+
+                            //substract current request
+                            r.memory.containerSources[validTarget.id].energy = r.memory.containerSources[validTarget.id].energy-creep.carryCapacity
+                            validTarget.energy = validTarget.energy-creep.carryCapacity
 
                             if (creep.carryCapacity > container.store[RESOURCE_ENERGY]) {
                                 var carry = container.store[RESOURCE_ENERGY]
                             } else {
                                 var carry = creep.carryCapacity
                             }
-                            console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] + " in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
+                            console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] + "("+validTarget.energy+") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
                         }
                     } else {
                         console.log(creep.name + " ERRRRR!!!  target not valid " + JSON.stringify(validTarget) + " " + JSON.stringify(validContainers) + " " + JSON.stringify(allContainers) + " " + JSON.stringify(containerTargets))

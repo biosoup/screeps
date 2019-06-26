@@ -47,7 +47,7 @@ module.exports = {
                     filter: s => s.structureType == STRUCTURE_LINK
                 })[0];
 
-                if (link !== undefined && link != null) {
+                if (link != undefined && link != null) {
                     //console.log(link)
                     if (link.energy > 0) {
                         //the link is full

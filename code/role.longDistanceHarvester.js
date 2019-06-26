@@ -51,7 +51,7 @@ let longDistanceHarvester = {
                 let sources = creep.room.find(FIND_SOURCES);
                 let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
 
-                if (unattendedSource !== undefined && unattendedSource != null) {
+                if (unattendedSource != undefined && unattendedSource != null) {
 
                     unattendedSource = creep.pos.findClosestByPath(unattendedSource);
                     if (unattendedSource !== null) {
@@ -59,7 +59,7 @@ let longDistanceHarvester = {
                         creep.task = Tasks.harvest(unattendedSource);
                     } 
                 } else {
-                    if (sources !== undefined) {
+                    if (sources != undefined) {
                         console.log(creep + " " + sources[0])
                         creep.task = Tasks.harvest(sources[0]);
                     }

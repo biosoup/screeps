@@ -9,7 +9,7 @@ module.exports = {
         } else if (creep.memory.target != undefined && creep.room.name == creep.memory.target) {
             let sources = creep.room.find(FIND_SOURCES);
             let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
-            if (unattendedSource !== undefined && unattendedSource != null) {
+            if (unattendedSource != undefined && unattendedSource != null) {
                 var source = creep.pos.findClosestByPath(unattendedSource);
 
             }

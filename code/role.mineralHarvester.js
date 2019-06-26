@@ -26,7 +26,7 @@ module.exports = {
             let source = creep.pos.findClosestByPath(FIND_MINERALS, {filter: (s) => s.mineralAmount > 0});
 
             //console.log(creep)
-            if (source !== undefined && source !== null) {
+            if (source != undefined && source !== null) {
                 //console.log(creep+" "+source)
                 creep.task = Tasks.harvest(source);
             }

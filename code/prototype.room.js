@@ -34,10 +34,12 @@ Room.prototype.refreshContainerSources =
             var containerList = [];
             for (let roomName of inRooms) {
                 if (roomName != undefined && roomName != null) {
-                    var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                        filter: s => s.structureType == STRUCTURE_CONTAINER
-                    });
-                    containerList = [...containerList, ...roomContainers]
+                    if (Game.rooms[roomName] != undefined) {
+                        var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
+                            filter: s => s.structureType == STRUCTURE_CONTAINER
+                        });
+                        containerList = [...containerList, ...roomContainers]
+                    }
                 }
             }
 
@@ -63,7 +65,7 @@ Room.prototype.refreshContainerSources =
                             r.memory.containerSources[container.id].pos = container.pos
                             r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
                             r.memory.containerSources[container.id].time = Game.time
-                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY]/(r.memory.containerSources[container.id].distance*2)
+                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY] / (r.memory.containerSources[container.id].distance * 2)
                         }
                     } else {
                         //if it does not exists, create it and calculate distance
@@ -104,7 +106,7 @@ Room.prototype.refreshContainerSources =
                         );
                         if (distance[4] != true) {
                             r.memory.containerSources[container.id].distance = distance.path.length
-                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY]/(r.memory.containerSources[container.id].distance*2)
+                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY] / (r.memory.containerSources[container.id].distance * 2)
                         } else {
                             r.memory.containerSources[container.id].distance = false
                             r.memory.containerSources[container.id].ed = 0
@@ -465,27 +467,25 @@ Room.prototype.creepSpawnRun =
         let roomInterests = {}
         if (spawnRoom.name == "W28N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W28N13 = [0, 2, 5, 1, 1, 0]
-            roomInterests.W28N15 = [0, 1, 0, 1, 1, 0]
+            //lorries = total count
+            //builders & guard = boolean
+            roomInterests.W28N13 = [0, 2, 6, 1, 1, 1]
+            roomInterests.W28N15 = [0, 1, 0, 1, 1, 1]
             roomInterests.W27N15 = [0, 1, 0, 1, 1, 1]
             roomInterests.W27N14 = [0, 1, 0, 1, 1, 1]
         }
 
         if (spawnRoom.name == "W29N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W29N13 = [0, 1, 1, 1, 1, 0]
+            roomInterests.W29N13 = [0, 1, 1, 1, 1, 1]
             roomInterests.W31N14 = [0, 0, 0, 0, 0, 0]
-            roomInterests.W29N15 = [0, 0, 0, 0, 0, 0]
         }
 
         if (spawnRoom.name == "W32N13") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W32N14 = [0, 1, 4, 1, 1, 1]
-            roomInterests.W33N14 = [0, 0, 0, 0, 0, 0]
+            roomInterests.W32N14 = [0, 1, 5, 1, 1, 1]
             roomInterests.W32N12 = [0, 1, 0, 1, 1, 1]
-            roomInterests.W31N12 = [0, 0, 0, 0, 0, 0]
             roomInterests.W33N13 = [0, 2, 0, 1, 1, 1]
-            roomInterests.W33N12 = [0, 0, 0, 0, 0, 0]
         }
 
         let longDistanceHarvester = {}
@@ -544,21 +544,50 @@ Room.prototype.creepSpawnRun =
             }
             if (roomInterests[interest][3] > 0) {
                 var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceBuilder' && c.memory.target == interest)
-                minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
-                if (inRooms < roomInterests[interest][3]) {
-                    longDistanceBuilder[interest] = roomInterests[interest][3]
+                //if construction or repairs are needed, launch a builder
+                if (Game.rooms[interest] != undefined) {
+                    var numOfConstrustions = Game.rooms[interest].find(FIND_CONSTRUCTION_SITES)
+                    var numOfRepairsites = Game.rooms[interest].find(FIND_STRUCTURES, {
+                        filter: (s) =>
+                            ((s.hits / s.hitsMax) < 0.5) &&
+                            s.structureType != STRUCTURE_CONTROLLER &&
+                            s.structureType != STRUCTURE_EXTENSION &&
+                            s.structureType != STRUCTURE_TOWER &&
+                            s.structureType != STRUCTURE_WALL &&
+                            s.structureType != STRUCTURE_RAMPART &&
+                            s.structureType != STRUCTURE_SPAWN
+                    });
+                    if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
+                        roomInterests[interest][3] = 1
+                    } else {
+                        roomInterests[interest][3] = 0
+                    }
+
+                    minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
+                    if (inRooms < roomInterests[interest][3]) {
+                        longDistanceBuilder[interest] = roomInterests[interest][3]
+                    }
                 }
             }
             if (roomInterests[interest][5] > 0) {
                 var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == interest)
-                minimumSpawnOf.guard += roomInterests[interest][5];
-                if (inRooms < roomInterests[interest][5]) {
-                    guard[interest] = roomInterests[interest][5]
+                if (Game.rooms[interest] != undefined) {
+                    //if hostiles present, spawn a task force!
+                    var numHostiles = Game.rooms[interest].find(FIND_HOSTILE_CREEPS)
+                    if (numHostiles.length > 1) {
+                        roomInterests[interest][5] = numHostiles.length;
+                    } else {
+                        roomInterests[interest][5] = 0
+                    }
+                    minimumSpawnOf.guard += roomInterests[interest][5];
+                    if (inRooms < roomInterests[interest][5]) {
+                        guard[interest] = roomInterests[interest][5]
+                    }
                 }
             }
         }
 
-        //console.log(spawnRoom.name+" "+JSON.stringify(longDistanceMiner)+" "+minimumSpawnOf.longDistanceLorry)
+        //console.log(spawnRoom.name+" "+JSON.stringify(guard)+" "+minimumSpawnOf.guard)
 
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_CONSTRUCTION_SITES);
@@ -605,8 +634,8 @@ Room.prototype.creepSpawnRun =
         // spawnAttendant
         if (spawnRoom.storage != undefined) {
             minimumSpawnOf["spawnAttendant"] = 1;
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000 && spawnRoom.controller.level >= 7) {
-                minimumSpawnOf["spawnAttendant"] = 2;
+            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000 && spawnRoom.energyAvailable == 0) {
+                minimumSpawnOf["spawnAttendant"] += 1;
             }
         }
 
@@ -617,8 +646,10 @@ Room.prototype.creepSpawnRun =
         // lorry, Harvester & Repairer
         minimumSpawnOf["miner"] = numberOfSources;
 
-        minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
-        if (minimumSpawnOf["lorry"] == 0) {
+        //minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
+        if (_.size(spawnRoom.memory.roomArray.minerals.links) >= 3) {
+            minimumSpawnOf["lorry"] = 0;
+        } else {
             minimumSpawnOf["lorry"] = 1;
         }
 
@@ -941,7 +972,7 @@ Room.prototype.getSpawnList =
             },
             guard: {
                 name: "guard",
-                prio: 30,
+                prio: 11,
                 energyRole: false,
                 min: minimumSpawnOf.guard,
                 max: numberOf.guard,
@@ -1042,7 +1073,7 @@ Room.prototype.getSpawnList =
                 for (let e in container) {
                     containerEnergy += container[e].store[RESOURCE_ENERGY];
                 }
-                if (containerEnergy >800000) {
+                if (containerEnergy > 800000) {
                     //spawnList.push("upgrader");
                 }
             }

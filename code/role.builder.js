@@ -28,12 +28,12 @@ module.exports = {
                 var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 
 
-                if (closestRepairSite !== undefined && closestRepairSite != null) {
+                if (closestRepairSite != undefined && closestRepairSite != null) {
                     //go reapir
                     creep.task = Tasks.repair(closestRepairSite);
                     creep.say("repairing")
 
-                } else if (closestConstructionSite !== undefined && closestConstructionSite != null) {
+                } else if (closestConstructionSite != undefined && closestConstructionSite != null) {
                     //go build
                     creep.task = Tasks.build(closestConstructionSite);
                     creep.say("building");
@@ -52,13 +52,16 @@ module.exports = {
                             s.structureType != STRUCTURE_SPAWN
                     });
 
-                    if (targets !== undefined) {
+                    if (targets != undefined && targets != null && targets != "") {
                         target = targets.sort(function (a, b) {
                             return +a.hits - +b.hits
                         })[0];
                         if (target) {
                             creep.task = Tasks.repair(target);
                             creep.say("repairing")
+                        } else {
+                            console.log(JSON.stringify(targets))
+                            creep.say("confused")
                         }
                     } else {
                         //add code to repair walls to 1mil hits
@@ -69,7 +72,7 @@ module.exports = {
                                         (s.hits < 1000000) && s.structureType == STRUCTURE_WALL
                                 });
 
-                                if (target !== undefined) {
+                                if (targets != undefined && targets != null && targets != "") {
                                     target = targets.sort(function (a, b) {
                                         return +a.hits - +b.hits
                                     })[0];
@@ -98,7 +101,7 @@ module.exports = {
             } else {
                 var container;
                 //look for storage
-                if (creep.room.storage !== undefined) {
+                if (creep.room.storage != undefined) {
                     if (creep.room.storage.store[RESOURCE_ENERGY] > 100) {
                         container = creep.room.storage;
                     } else {
@@ -116,18 +119,18 @@ module.exports = {
                 }
 
                 //add a withraw task
-                if (container !== undefined && container != null) {
+                if (container != undefined && container != null) {
                     creep.task = Tasks.withdraw(container);
                 } else {
                     // Harvest from an empty source if there is one, else pick any source
                     /* let sources = creep.room.find(FIND_SOURCES);
                     let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
-                    if (unattendedSource !== undefined && unattendedSource != null) {
+                    if (unattendedSource != undefined && unattendedSource != null) {
                         unattendedSource = creep.pos.findClosestByPath(unattendedSource);
                         creep.task = Tasks.harvest(unattendedSource);
                     } else { */
                     let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                    if (source !== undefined && source != null) {
+                    if (source != undefined && source != null) {
                         //console.log(creep + " " + source)
                         creep.task = Tasks.harvest(source);
                     }

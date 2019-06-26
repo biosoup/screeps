@@ -127,7 +127,7 @@ module.exports = {
                                     });
                                     orders = _.sortBy(orders, "price");
                                     for (var o = 0; o < orders.length; o++) {
-                                        if (orders[o].price > 0.01) {
+                                        //if (orders[o].price > 0.01) {
                                             var orderResource = orders[o].resourceType;
                                             var orderRoomName = orders[o].roomName;
                                             var orderAmount;
@@ -140,9 +140,9 @@ module.exports = {
                                             if (orderAmount >= 500 && orderCosts <= Game.rooms[r].storage.store[RESOURCE_ENERGY] - 10000) {
                                                 Game.rooms[r].memory.terminalTransfer = orders[o].id + ":" + orderAmount + ":" + orderResource + ":MarketOrder";
                                             }
-                                        } else {
+                                        /* } else {
                                             console.log("too cheap deal: "+orders[o].resourceType+" "+orders[o].roomName)
-                                        }
+                                        } */
                                     }
                                 }
                             }

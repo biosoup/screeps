@@ -32,13 +32,13 @@ module.exports = upgrader = {
             }
 
             //add a withraw task
-            if (container !== undefined && container != null) {
+            if (container != undefined && container != null) {
                 creep.task = Tasks.withdraw(container);
                 //console.log(JSON.stringify(container) + " 1")
             } else {
                 // find closest source
                 let source = creep.pos.findClosestByPath(FIND_SOURCES);
-                if (source !== undefined && source != null) {
+                if (source != undefined && source != null) {
                     //console.log(creep + " " + source)
                     //creep.task = Tasks.harvest(source);
                     creep.say("harvesting")

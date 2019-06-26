@@ -36,7 +36,7 @@ module.exports = {
                 creep.task = Tasks.transfer(structure);
             } else {
                 //if no structure as a destination, go build
-                if (closestConstructionSite !== undefined && closestConstructionSite != null) {
+                if (closestConstructionSite != undefined && closestConstructionSite != null) {
                     //go build
                     creep.task = Tasks.build(closestConstructionSite);
                     creep.say("building");
@@ -82,7 +82,7 @@ module.exports = {
                     creep.task = Tasks.harvest(unattendedSource);
                 } else { */
                 let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                if (source !== undefined && source !== null) {
+                if (source != undefined && source !== null) {
                     //console.log(creep + " " + source)
                     creep.task = Tasks.harvest(source);
                 }
