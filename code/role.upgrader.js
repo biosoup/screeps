@@ -11,7 +11,7 @@ module.exports = upgrader = {
         } else {
             //first link nearby
             var container;
-            
+
             container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
                 filter: s => s.structureType == STRUCTURE_LINK &&
                     s.energy > 100
@@ -45,6 +45,7 @@ module.exports = upgrader = {
                     return;
                 }
             }
+
         }
     }
 };

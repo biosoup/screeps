@@ -18,7 +18,7 @@ module.exports = {
             //sort from the fullest
             var container = containers.sort(function (a, b) {
                 return b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]
-            })[0];
+            });
             
 
             //add a withraw task

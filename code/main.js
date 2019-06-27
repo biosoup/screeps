@@ -10,11 +10,12 @@ if (CPUdebug == true) {
 }
 
 //system imports
+require('globals')
 //const profiler = require('screeps-profiler');
 const stats = require('stats');
 require("creep-tasks");
 var Traveler = require('Traveler');
-require('globals')
+
 
 //to be implemented into my code - mainly Terminal code
 require('functions.game');
@@ -63,7 +64,7 @@ module.exports.loop = function () {
     }
 
     //run every 25 ticks and only when we have spare bucket CPU
-    if ((Game.time % 5) == 0 && Game.cpu.bucket > 5000) {
+    if ((Game.time % DELAYSPAWNING) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
         if (CPUdebug == true) {
             CPUdebugString = CPUdebugString.concat("<br>Start Spawn Code: " + Game.cpu.getUsed())
         }
@@ -108,13 +109,13 @@ module.exports.loop = function () {
     }
     //go through rooms
     for (let roomName in Game.rooms) {
-        if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > 5000) {
+        if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
             //refresh room data
             Game.rooms[roomName].refreshData(roomName)
         }
 
         //run link balancing
-        if ((Game.time % 3) == 0 && Game.cpu.bucket > 5000) {
+        if ((Game.time % DELAYLINK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
             Game.rooms[roomName].linksRun(roomName)
 
             Game.rooms[roomName].refreshContainerSources(roomName)
@@ -155,9 +156,9 @@ module.exports.loop = function () {
         // terminal transfers
         market.terminalCode(roomName,CPUdebug);
 
-        //market.productionCode(roomName);
+        market.productionCode(roomName);
 
-        //market.labCode(roomName);
+        market.labCode(roomName);
 
 
 

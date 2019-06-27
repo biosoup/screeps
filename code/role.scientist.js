@@ -3,13 +3,8 @@ var Tasks = require("creep-tasks");
 module.exports = {
     newTask: function (creep) {
         if (creep.ticksToLive < 50 && _.sum(creep.carry) == 0) {
-            //Scientist will die soon and possibly drop precious material
-            let spawn = Game.getObjectById(creep.memory.spawn);
-            if (spawn.recycleCreep(creep) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(spawn, {
-                    reusePath: moveReusePath()
-                });
-            }
+            creep.say("dying")
+            creep.suicide()
         } else {
             if (creep.room.memory.labOrder != undefined && creep.room.memory.innerLabs != undefined) {
                 // Ongoing labOrder with defined innerLabs
@@ -44,27 +39,17 @@ module.exports = {
                                                 //not enough resources in storage
                                                 delete creep.room.memory.labOrder;
                                             } else if (creep.withdraw(creep.room.storage, innerLabs[lb].resource, creepPackage) == ERR_NOT_IN_RANGE) {
-                                                creep.moveTo(creep.room.storage, {
-                                                    reusePath: moveReusePath()
-                                                });
+                                                creep.travelTo(creep.room.storage);
                                             }
                                         } else {
-                                            if (creep.transfer(currentInnerLab, innerLabs[lb].resource) == ERR_NOT_IN_RANGE) {
-                                                creep.moveTo(currentInnerLab, {
-                                                    reusePath: moveReusePath()
-                                                });
-                                            }
+                                            creep.task = Tasks.transfer(currentInnerLab, innerLabs[lb].resource)
                                         }
                                     }
                                 } else {
                                     //Lab has to be emptied -> get rid of stuff in creep
                                     if (creep.storeAllBut() == true) {
                                         //Get minerals from storage
-                                        if (creep.withdraw(currentInnerLab, currentInnerLab.mineralType) == ERR_NOT_IN_RANGE) {
-                                            creep.moveTo(currentInnerLab, {
-                                                reusePath: moveReusePath()
-                                            });
-                                        }
+                                        creep.task = Tasks.withdraw(currentInnerLab, currentInnerLab.mineralType)
                                     }
                                 }
                                 break;
@@ -86,21 +71,13 @@ module.exports = {
                             lab = Game.getObjectById(creep.room.memory.roomArray.labs[c]);
                             if ((creep.room.memory.boostLabs == undefined || creep.room.memory.boostLabs.indexOf(lab.id) == -1) && lab.mineralAmount > 0 && lab.id != innerLabs[0].labID && lab.id != innerLabs[1].labID) {
                                 if (_.sum(creep.carry) < creep.carryCapacity) {
-                                    if (creep.withdraw(lab, lab.mineralType) == ERR_NOT_IN_RANGE) {
-                                        creep.moveTo(lab, {
-                                            reusePath: moveReusePath()
-                                        });
-                                    }
+                                    creep.task = Tasks.withdraw(lab, lab.mineralType)
                                 } else {
                                     creep.storeAllBut();
                                 }
                             } else if ((creep.room.memory.boostLabs == undefined || creep.room.memory.boostLabs.indexOf(lab.id) == -1) && lab.energy > 0) {
                                 if (_.sum(creep.carry) < creep.carryCapacity) {
-                                    if (creep.withdraw(lab, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                                        creep.moveTo(lab, {
-                                            reusePath: moveReusePath()
-                                        });
-                                    }
+                                    creep.task = Tasks.withdraw(lab, RESOURCE_ENERGY)
                                 } else {
                                     creep.storeAllBut();
                                 }
@@ -137,9 +114,7 @@ module.exports = {
                                 //creep not full
                                 for (let e in mineralsContainers[0].store) {
                                     if (e != "energy" && creep.withdraw(mineralsContainers[0], e) == ERR_NOT_IN_RANGE) {
-                                        creep.moveTo(mineralsContainers[0], {
-                                            reusePath: moveReusePath()
-                                        });
+                                        creep.travelTo(mineralsContainers[0]);
                                     }
                                 }
                             } else {
@@ -161,11 +136,7 @@ module.exports = {
                     lab = Game.getObjectById(creep.room.memory.roomArray.labs[c]);
                     if (lab.mineralAmount > 0) {
                         if (creep.storeAllBut() == true) {
-                            if (creep.withdraw(lab, lab.mineralType) == ERR_NOT_IN_RANGE) {
-                                creep.moveTo(lab, {
-                                    reusePath: moveReusePath()
-                                });
-                            }
+                            creep.task = Tasks.withdraw(lab, lab.mineralType)
                         }
                     } else {
                         emptylabs++;
@@ -174,7 +145,7 @@ module.exports = {
                 if (emptylabs == creep.room.memory.roomArray.labs.length) {
                     delete creep.memory.targetBuffer;
                     delete creep.memory.resourceBuffer;
-                    creep.roleEnergyTransporter();
+                    creep.say("nothing to do")
                 }
             }
         }

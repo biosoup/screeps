@@ -39,9 +39,9 @@ module.exports = {
                 });
 
                 //sort from the fullest
-                var container = containers.sort(function (a, b) {
+                var container = _.max(containers, function (a, b) {
                     return b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]
-                })[0];
+                });
 
                 //add a withraw task
                 if (container != undefined) {
@@ -87,12 +87,12 @@ module.exports = {
                 //check for duplicate targets
                 var validTarget;
                 for (var c in allMinerCreeps) {
-                    for (i = 0; i < _.size(validContainer); i++) { 
+                    for (i = 0; i < _.size(validContainer); i++) {
                         if (c.id != validContainer[i].id) {
                             validTarget = validContainer[i]
                             break;
                         }
-                      }
+                    }
                 }
 
                 if (validTarget != undefined && validTarget != null) {
@@ -106,23 +106,24 @@ module.exports = {
                             creep.say("target found!")
 
                             //substract current request
-                            r.memory.containerSources[validTarget.id].energy = r.memory.containerSources[validTarget.id].energy-creep.carryCapacity
-                            validTarget.energy = validTarget.energy-creep.carryCapacity
+                            r.memory.containerSources[validTarget.id].energy = r.memory.containerSources[validTarget.id].energy - creep.carryCapacity
+                            validTarget.energy = validTarget.energy - creep.carryCapacity
 
                             if (creep.carryCapacity > container.store[RESOURCE_ENERGY]) {
                                 var carry = container.store[RESOURCE_ENERGY]
                             } else {
                                 var carry = creep.carryCapacity
                             }
-                            console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] + "("+validTarget.energy+") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
+                            //console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] + "(" + validTarget.energy + ") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
                         }
                     } else {
-                        console.log(creep.name + " ERRRRR!!!  target not valid " + JSON.stringify(validTarget) + " " + JSON.stringify(validContainers) + " " + JSON.stringify(allContainers) + " " + JSON.stringify(containerTargets))
+                        console.log(creep.name + " ERRRRR!!!  target not valid " + JSON.stringify(validTarget) + " " + JSON.stringify(allContainers) + " " + JSON.stringify(containerTargets))
                     }
                 }
             } else {
-                if (creepPossibleDistance < 100) {
+                if (creepPossibleDistance < 50) {
                     creep.say("dying")
+                    creep.suicide()
                 } else {
                     creep.memory.target = {};
                     creep.say("no valid target")

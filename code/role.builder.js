@@ -53,9 +53,7 @@ module.exports = {
                     });
 
                     if (targets != undefined && targets != null && targets != "") {
-                        target = targets.sort(function (a, b) {
-                            return +a.hits - +b.hits
-                        })[0];
+                        target = _.min(targets, "hits");
                         if (target) {
                             creep.task = Tasks.repair(target);
                             creep.say("repairing")
@@ -73,9 +71,7 @@ module.exports = {
                                 });
 
                                 if (targets != undefined && targets != null && targets != "") {
-                                    target = targets.sort(function (a, b) {
-                                        return +a.hits - +b.hits
-                                    })[0];
+                                    target = _.min(targets, "hits");
                                     if (target) {
                                         creep.task = Tasks.repair(target);
                                         creep.say("repairing")

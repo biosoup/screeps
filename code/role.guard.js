@@ -29,10 +29,7 @@ module.exports = {
                     filter: s => s.structureType == STRUCTURE_WALL ||
                         s.structureType == STRUCTURE_RAMPART
                 });
-
-                structure = structure.sort(function (a, b) {
-                    return +a.hits - +b.hits
-                })[0];
+                structure = _.min(structure, "hits");
             }
 
             if (!hostile && structure) {

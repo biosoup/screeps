@@ -304,7 +304,7 @@ module.exports = {
                                 delete Game.rooms[r].memory.terminalTransfer;
                                 delete Game.rooms[r].memory.terminalEnergyCost;
                                 if (LOG_TERMINAL == true) {
-                                    console.log("<font color=#009bff type='highlight'>" + amount + " " + resource + " has been transferred to room " + targetRoom + " using " + energyCost + " energy: " + comment + "</font>");
+                                    console.log("<font color=#009bff type='highlight'>" + amount + " " + resource + " has been transferred to room " + targetRoom + " from "+Game.rooms[r].name+" using " + energyCost + " energy: " + comment + "</font>");
                                 }
                             } else {
                                 if (amount < 100) {
@@ -330,7 +330,7 @@ module.exports = {
                                     //Do the deal!
                                     if (parseInt(info[1]) <= AUTOSELL_PACKETSIZE && Game.market.deal(orderID, amount, Game.rooms[r].name) == OK) {
                                         if (LOG_MARKET == true) {
-                                            console.log("<font color=#33ffff type='highlight'>" + Game.rooms[r].name + ": " + amount + " " + resource + " has been sold to room " + order.roomName + " for " + (order.price * amount) + " credits, using " + energyCost + " energy.</font>");
+                                            console.log("<font color=#33ffff type='highlight'>" + Game.rooms[r].name + ": " + amount + " " + resource + " has been autosold to room " + order.roomName + " for " + (order.price * amount) + " credits, using " + energyCost + " energy.</font>");
                                         }
                                         delete Game.rooms[r].memory.terminalTransfer;
                                     } else if (Game.market.deal(orderID, amount, Game.rooms[r].name) == OK) {
@@ -412,6 +412,7 @@ module.exports = {
 
     labCode: function (r) {
         // Lab code
+        //Set orders from target
         if (Game.time % DELAYPRODUCTION == 0 && Game.cpu.bucket > CPU_THRESHOLD && Game.rooms[r].memory.labTarget != undefined && Game.rooms[r].memory.labOrder == undefined) {
             // Lab Queueing Code
             var labString = Game.rooms[r].memory.labTarget.split(":");

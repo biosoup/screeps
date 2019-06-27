@@ -700,12 +700,12 @@ Room.prototype.creepSpawnRun =
         }
 
         // Scientist
-        /* if (spawnRoom.memory.labOrder != undefined) {
+        if (spawnRoom.memory.labOrder != undefined) {
             var info = spawnRoom.memory.labOrder.split(":");
             if (info[3] == "prepare" || info[3] == "done") {
                 minimumSpawnOf.scientist = 1;
             }
-        } */
+        }
 
         // Adjustments in case of hostile presence
         var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
@@ -833,7 +833,7 @@ Room.prototype.creepSpawnRun =
                     if (!(name < 0) && name != undefined) {
                         testSpawn.memory.lastSpawn = spawnList[spawnEntry];
                         if (LOG_SPAWN == true) {
-                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
+                            //console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
                         }
                         spawnEntry++;
                     }
