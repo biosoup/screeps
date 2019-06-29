@@ -195,6 +195,8 @@ module.exports.loop = function () {
             Game.creeps[creep].run();}
         catch (err) {
             Game.creeps[creep].say("MAIN ERR!!")
+            console.log("MAIN ERR: "+creep)
+            
         }
     }
 

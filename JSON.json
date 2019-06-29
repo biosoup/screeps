@@ -1,461 +1,26 @@
 {
     "creeps": {
-        "longDistanceMiner-W28N14-W27N14-8068225": {
-            "role": "longDistanceMiner",
-            "home": "W28N14",
-            "target": "W27N14",
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "longDistanceMiner-W28N14-W27N14-8068225"
-                },
-                "_target": {
-                    "ref": "5bbcab6e9099fc012e6337fa",
-                    "_pos": {
-                        "x": 38,
-                        "y": 20,
-                        "roomName": "W27N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069741
-            },
-            "_trav": {
-                "state": [38, 23, 0, 0, 38, 21, "W27N14"],
-                "path": "1"
-            }
-        },
-        "longDistanceLorry-W28N14--8068250": {
-            "role": "longDistanceLorry",
-            "home": "W28N14",
-            "target": {
-                "id": "5cfed38c15b6e542a338d399",
-                "pos": {
-                    "x": 20,
-                    "y": 10,
-                    "roomName": "W28N13"
-                },
-                "energy": -560,
-                "time": 8069628,
-                "distance": 19,
-                "ed": 27.36842105263158
-            },
-            "task": null,
-            "_trav": {
-                "state": [23, 43, 0, 10, 22, 41, "W28N14"],
-                "path": "1"
-            }
-        },
-        "longDistanceLorry-W28N14--8068310": {
-            "role": "longDistanceLorry",
-            "home": "W28N14",
-            "target": {
-                "id": "5cfeeb0fff1e577e6595b3d4",
-                "pos": {
-                    "x": 25,
-                    "y": 16,
-                    "roomName": "W28N13"
-                },
-                "energy": -590,
-                "time": 8069694,
-                "distance": 28,
-                "ed": 18.035714285714285
-            },
-            "task": {
-                "name": "transfer",
-                "_creep": {
-                    "name": "longDistanceLorry-W28N14--8068310"
-                },
-                "_target": {
-                    "ref": "5cec602e0582ee6f735e47fb",
-                    "_pos": {
-                        "x": 22,
-                        "y": 41,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 8069737
-            },
-            "_trav": {
-                "state": [26, 11, 0, 7, 22, 41, "W28N14"],
-                "path": "88778811111122211111"
-            }
-        },
-        "longDistanceLorry-W28N14--8068330": {
-            "role": "longDistanceLorry",
-            "home": "W28N14",
-            "target": {
-                "id": "5cff237a63738f09b78089bb",
-                "pos": {
-                    "x": 34,
-                    "y": 17,
-                    "roomName": "W28N15"
-                },
-                "energy": 400,
-                "time": 8069595,
-                "distance": 81,
-                "ed": 12.345679012345679
-            },
-            "task": {
-                "name": "transfer",
-                "_creep": {
-                    "name": "longDistanceLorry-W28N14--8068330"
-                },
-                "_target": {
-                    "ref": "5cec602e0582ee6f735e47fb",
-                    "_pos": {
-                        "x": 22,
-                        "y": 41,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 8069697
-            },
-            "_trav": {
-                "state": [31, 13, 0, 6, 22, 41, "W28N14"],
-                "path": "6665555554444445555555666777776568"
-            }
-        },
-        "spawnAttendant-W29N14--8068385": {
-            "role": "spawnAttendant",
-            "home": "W29N14",
-            "task": null,
-            "_trav": {
-                "state": [10, 40, 0, 0, 8, 39, "W29N14"],
-                "path": "7"
-            }
-        },
-        "longDistanceLorry-W28N14--8068390": {
-            "role": "longDistanceLorry",
-            "home": "W28N14",
-            "target": {
-                "id": "5cff24da5b0b7e667bffeb4f",
-                "pos": {
-                    "x": 38,
-                    "y": 21,
-                    "roomName": "W27N14"
-                },
-                "energy": 120,
-                "time": 8069694,
-                "distance": 75,
-                "ed": 11.466666666666667
-            },
-            "task": {
-                "name": "withdraw",
-                "_creep": {
-                    "name": "longDistanceLorry-W28N14--8068390"
-                },
-                "_target": {
-                    "ref": "5cff24da5b0b7e667bffeb4f",
-                    "_pos": {
-                        "x": 38,
-                        "y": 21,
-                        "roomName": "W27N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": false,
-                        "maxOps": 20000,
-                        "freshMatrix": true
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 8069712
-            },
-            "_trav": {
-                "state": [48, 34, 0, 11, 38, 21, "W27N14"],
-                "path": "2211223333344333333333333333333443332222211111"
-            }
-        },
-        "longDistanceLorry-W28N14--8068445": {
-            "role": "longDistanceLorry",
-            "home": "W28N14",
-            "target": {
-                "id": "5cff24da5b0b7e667bffeb4f",
-                "pos": {
-                    "x": 38,
-                    "y": 21,
-                    "roomName": "W27N14"
-                },
-                "energy": -170,
-                "time": 8069661,
-                "distance": 75,
-                "ed": 9.533333333333333
-            },
-            "task": {
-                "name": "transfer",
-                "_creep": {
-                    "name": "longDistanceLorry-W28N14--8068445"
-                },
-                "_target": {
-                    "ref": "5cec602e0582ee6f735e47fb",
-                    "_pos": {
-                        "x": 22,
-                        "y": 41,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 8069737
-            },
-            "_trav": {
-                "state": [38, 26, 0, 6, 22, 41, "W28N14"],
-                "path": "56666677788777777777777777777887777766665567777776777777667777776568"
-            }
-        },
-        "transporter-W32N13--8068475": {
-            "role": "transporter",
-            "home": "W32N13",
-            "task": null,
-            "_trav": {
-                "path": "6",
-                "state": [36, 36, 0, 0, 34, 38, "W32N13"]
-            },
-            "_move": {
-                "dest": {
-                    "x": 36,
-                    "y": 39,
-                    "room": "W32N13"
-                },
-                "time": 8068615,
-                "path": "353854",
-                "room": "W32N13"
-            },
-            "resourceBuffer": "space",
-            "targetBuffer": "5d069ec579164353283d8a9c",
-            "roomBuffer": "W32N13"
-        },
-        "mineralHarvester-W29N14--8068560": {
+        "mineralHarvester-W28N14--8095919": {
             "role": "mineralHarvester",
-            "home": "W29N14",
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "mineralHarvester-W29N14--8068560"
-                },
-                "_target": {
-                    "ref": "5bbcb1d940062e4259e933ec",
-                    "_pos": {
-                        "x": 30,
-                        "y": 28,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069522
-            },
-            "_trav": {
-                "state": [30, 30, 0, 0, 30, 28, "W29N14"],
-                "path": "2"
-            }
-        },
-        "lorry-W32N13--8068615": {
-            "role": "lorry",
-            "home": "W32N13",
-            "task": {
-                "name": "withdraw",
-                "_creep": {
-                    "name": "lorry-W32N13--8068615"
-                },
-                "_target": {
-                    "ref": "5d09cff43edbdf532d3f6250",
-                    "_pos": {
-                        "x": 35,
-                        "y": 15,
-                        "roomName": "W32N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 8069740
-            },
-            "_trav": {
-                "state": [29, 35, 0, 1, 35, 15, "W32N13"],
-                "path": "2222211111111111111"
-            }
-        },
-        "longDistanceLorry-W29N14--8068655": {
-            "role": "longDistanceLorry",
-            "home": "W29N14",
-            "target": {
-                "id": "5d0748ce001e5f10d3711de2",
-                "pos": {
-                    "x": 5,
-                    "y": 23,
-                    "roomName": "W29N13"
-                },
-                "energy": -574,
-                "time": 8069595,
-                "distance": 36,
-                "ed": 14.25
-            },
-            "task": {
-                "name": "transfer",
-                "_creep": {
-                    "name": "longDistanceLorry-W29N14--8068655"
-                },
-                "_target": {
-                    "ref": "5cf416cd14bd7a42a8e6224f",
-                    "_pos": {
-                        "x": 13,
-                        "y": 38,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
-                },
-                "tick": 8069716
-            },
-            "_trav": {
-                "state": [12, 1, 0, 6, 13, 38, "W29N14"],
-                "path": "811111122228"
-            }
-        },
-        "miner-W28N14--8068665": {
-            "role": "miner",
-            "sourceId": "5bbcab629099fc012e633679",
             "home": "W28N14",
-            "_trav": {
-                "path": "1",
-                "state": [10, 37, 0, 0, 11, 35, "W28N14"]
-            },
             "task": {
                 "name": "harvest",
                 "_creep": {
-                    "name": "miner-W28N14--8068665"
+                    "name": "mineralHarvester-W28N14--8095919"
                 },
                 "_target": {
-                    "ref": "5bbcab629099fc012e633679",
+                    "ref": "5bbcb1e240062e4259e93458",
                     "_pos": {
-                        "x": 12,
-                        "y": 35,
+                        "x": 33,
+                        "y": 39,
                         "roomName": "W28N14"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069732
-            }
-        },
-        "upgrader-W32N13--8068700": {
-            "role": "upgrader",
-            "home": "W32N13",
-            "task": {
-                "name": "upgrade",
-                "_creep": {
-                    "name": "upgrader-W32N13--8068700"
-                },
-                "_target": {
-                    "ref": "5bbcab349099fc012e63316b",
-                    "_pos": {
-                        "x": 16,
-                        "y": 40,
-                        "roomName": "W32N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
                     "moveOptions": {
-                        "range": 3,
+                        "range": 1,
                         "stuckValue": 2,
                         "ignoreCreeps": true,
                         "maxOps": 20000
@@ -464,138 +29,29 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069655
+                "tick": 8097512
             },
             "_trav": {
-                "state": [18, 44, 0, 1, 16, 40, "W32N13"],
-                "path": "8"
+                "state": [25, 41, 0, 0, 33, 39, "W28N14"],
+                "path": "33212333"
             }
         },
-        "miner-W29N14--8068705": {
-            "role": "miner",
-            "sourceId": "5bbcab569099fc012e6334ee",
-            "home": "W29N14",
-            "_trav": {
-                "path": "7",
-                "state": [28, 7, 0, 0, 26, 7, "W29N14"]
-            },
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "miner-W29N14--8068705"
-                },
-                "_target": {
-                    "ref": "5bbcab569099fc012e6334ee",
-                    "_pos": {
-                        "x": 25,
-                        "y": 8,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069735
-            }
-        },
-        "miner-W28N14--8068715": {
-            "role": "miner",
-            "sourceId": "5bbcab629099fc012e63367a",
+        "lorry-W28N14--8095997": {
+            "role": "lorry",
             "home": "W28N14",
-            "_trav": {
-                "state": [23, 38, 0, 0, 21, 38, "W28N14"],
-                "path": "7"
-            },
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "miner-W28N14--8068715"
-                },
-                "_target": {
-                    "ref": "5bbcab629099fc012e63367a",
-                    "_pos": {
-                        "x": 20,
-                        "y": 37,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069732
-            }
-        },
-        "miner-W29N14--8068735": {
-            "role": "miner",
-            "sourceId": "5bbcab569099fc012e6334ef",
-            "home": "W29N14",
-            "_trav": {
-                "path": "7",
-                "state": [11, 34, 0, 0, 9, 34, "W29N14"]
-            },
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "miner-W29N14--8068735"
-                },
-                "_target": {
-                    "ref": "5bbcab569099fc012e6334ef",
-                    "_pos": {
-                        "x": 8,
-                        "y": 35,
-                        "roomName": "W29N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069737
-            }
-        },
-        "transporter-W29N14--8068760": {
-            "role": "transporter",
-            "home": "W29N14",
             "task": null,
             "_trav": {
-                "path": "5",
-                "state": [12, 37, 0, 0, 13, 39, "W29N14"]
-            },
-            "resourceBuffer": "space",
-            "targetBuffer": "5cf416cd14bd7a42a8e6224f",
-            "roomBuffer": "W29N14"
-        },
-        "longDistanceMiner-W32N13-W33N13-8068805": {
-            "role": "longDistanceMiner",
-            "home": "W32N13",
-            "target": "W33N13",
-            "task": null,
-            "_trav": {
-                "state": [35, 26, 0, 0, 35, 24, "W33N13"],
-                "path": "1"
+                "state": [20, 39, 0, 0, 22, 41, "W28N14"],
+                "path": "4"
             }
         },
-        "lorry-W29N14--8068855": {
+        "lorry-W29N14--8095997": {
             "role": "lorry",
             "home": "W29N14",
             "task": {
                 "name": "withdraw",
                 "_creep": {
-                    "name": "lorry-W29N14--8068855"
+                    "name": "lorry-W29N14--8095997"
                 },
                 "_target": {
                     "ref": "5d09d3b6b43d0171dddf2ec2",
@@ -619,67 +75,64 @@
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 8069734
+                "tick": 8097484
             },
             "_trav": {
-                "state": [15, 30, 0, 3, 26, 7, "W29N14"],
-                "path": "223322222222112221111111877"
+                "state": [30, 9, 0, 2, 26, 7, "W29N14"],
+                "path": "1877"
             }
         },
-        "lorry-W28N14--8068870": {
-            "role": "lorry",
+        "transporter-W32N13--8096036": {
+            "role": "transporter",
+            "home": "W32N13",
+            "task": null,
+            "_trav": {
+                "state": [35, 37, 0, 0, 36, 39, "W32N13"],
+                "path": "5"
+            },
+            "resourceBuffer": "space",
+            "targetBuffer": "5d069ec579164353283d8a9c",
+            "roomBuffer": "W32N13"
+        },
+        "longDistanceMiner-W28N14-W27N14-8096075": {
+            "role": "longDistanceMiner",
             "home": "W28N14",
+            "target": "W27N14",
             "task": {
-                "name": "withdraw",
+                "name": "harvest",
                 "_creep": {
-                    "name": "lorry-W28N14--8068870"
+                    "name": "longDistanceMiner-W28N14-W27N14-8096075"
                 },
                 "_target": {
-                    "ref": "5d09d5f639a2533368bf777d",
+                    "ref": "5bbcab6e9099fc012e6337fa",
                     "_pos": {
-                        "x": 11,
-                        "y": 35,
-                        "roomName": "W28N14"
+                        "x": 38,
+                        "y": 20,
+                        "roomName": "W27N14"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
+                    "moveOptions": {}
                 },
                 "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
+                    "quiet": true
                 },
-                "tick": 8069733
+                "tick": 8097514
             },
             "_trav": {
-                "state": [13, 39, 0, 1, 11, 35, "W28N14"],
-                "path": "7881"
+                "state": [38, 23, 0, 0, 38, 21, "W27N14"],
+                "path": "1"
             }
         },
-        "guard-W32N13-W32N12-8068885": {
-            "role": "guard",
-            "home": "W32N13",
-            "target": "W32N12",
-            "task": null,
-            "_trav": {
-                "state": [21, 34, 0, 0, 17, 40, "W32N12"],
-                "path": "556"
-            }
-        },
-        "upgrader-W29N14--8068935": {
+        "upgrader-W29N14--8096075": {
             "role": "upgrader",
             "home": "W29N14",
             "task": {
                 "name": "upgrade",
                 "_creep": {
-                    "name": "upgrader-W29N14--8068935"
+                    "name": "upgrader-W29N14--8096075"
                 },
                 "_target": {
                     "ref": "5bbcab569099fc012e6334f0",
@@ -697,21 +150,57 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069722
+                "tick": 8097497
             },
             "_trav": {
                 "state": [9, 40, 0, 0, 5, 39, "W29N14"],
                 "path": "7"
             }
         },
-        "longDistanceMiner-W29N14-W29N13-8068940": {
+        "mineralHarvester-W32N13--8096179": {
+            "role": "mineralHarvester",
+            "home": "W32N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "mineralHarvester-W32N13--8096179"
+                },
+                "_target": {
+                    "ref": "5bbcb1c740062e4259e93315",
+                    "_pos": {
+                        "x": 36,
+                        "y": 25,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097223
+            },
+            "_trav": {
+                "state": [34, 27, 0, 0, 36, 25, "W32N13"],
+                "path": "2"
+            }
+        },
+        "longDistanceMiner-W29N14-W29N13-8096192": {
             "role": "longDistanceMiner",
             "home": "W29N14",
             "target": "W29N13",
             "task": {
                 "name": "harvest",
                 "_creep": {
-                    "name": "longDistanceMiner-W29N14-W29N13-8068940"
+                    "name": "longDistanceMiner-W29N14-W29N13-8096192"
                 },
                 "_target": {
                     "ref": "5bbcab569099fc012e6334f3",
@@ -729,243 +218,39 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069741
+                "tick": 8097514
             },
             "_trav": {
-                "state": [5, 21, 0, 0, 5, 23, "W29N13"],
-                "path": "6"
+                "state": [4, 25, 0, 2, 5, 23, "W29N13"],
+                "path": "2"
             }
         },
-        "claimer-W29N14-W29N13-8069155": {
-            "role": "claimer",
+        "longDistanceLorry-W29N14--8096244": {
+            "role": "longDistanceLorry",
             "home": "W29N14",
-            "target": "W29N13",
-            "task": {
-                "name": "reserve",
-                "_creep": {
-                    "name": "claimer-W29N14-W29N13-8069155"
+            "target": {
+                "id": "5d0748ce001e5f10d3711de2",
+                "pos": {
+                    "x": 5,
+                    "y": 23,
+                    "roomName": "W29N13"
                 },
-                "_target": {
-                    "ref": "5bbcab569099fc012e6334f2",
-                    "_pos": {
-                        "x": 21,
-                        "y": 14,
-                        "roomName": "W29N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069184
+                "energy": -280,
+                "time": 8097470,
+                "distance": 36,
+                "ed": 18.333333333333332
             },
-            "_trav": {
-                "state": [19, 12, 0, 0, 21, 14, "W29N13"],
-                "path": "4"
-            }
-        },
-        "claimer-W28N14-W27N15-8069160": {
-            "role": "claimer",
-            "home": "W28N14",
-            "target": "W27N15",
             "task": {
-                "name": "reserve",
+                "name": "withdraw",
                 "_creep": {
-                    "name": "claimer-W28N14-W27N15-8069160"
+                    "name": "longDistanceLorry-W29N14--8096244"
                 },
                 "_target": {
-                    "ref": "5bbcab6e9099fc012e6337f6",
-                    "_pos": {
-                        "x": 40,
-                        "y": 30,
-                        "roomName": "W27N15"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069241
-            },
-            "_trav": {
-                "state": [42, 31, 0, 2, 40, 30, "W27N15"],
-                "path": "7"
-            }
-        },
-        "upgrader-W28N14--8069325": {
-            "role": "upgrader",
-            "home": "W28N14",
-            "task": {
-                "name": "upgrade",
-                "_creep": {
-                    "name": "upgrader-W28N14--8069325"
-                },
-                "_target": {
-                    "ref": "5bbcab629099fc012e63367b",
-                    "_pos": {
-                        "x": 35,
-                        "y": 44,
-                        "roomName": "W28N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069716
-            },
-            "_trav": {
-                "state": [31, 43, 0, 2, 35, 44, "W28N14"],
-                "path": "3"
-            }
-        },
-        "longDistanceBuilder-W28N14-W27N14-8069325": {
-            "role": "longDistanceBuilder",
-            "home": "W28N14",
-            "target": "W27N14",
-            "task": {
-                "name": "repair",
-                "_creep": {
-                    "name": "longDistanceBuilder-W28N14-W27N14-8069325"
-                },
-                "_target": {
-                    "ref": "5d09eb6939a2533368bf80a2",
-                    "_pos": {
-                        "x": 38,
-                        "y": 22,
-                        "roomName": "W27N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 3,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069737
-            },
-            "_trav": {
-                "state": [38, 27, 0, 1, 38, 22, "W27N14"],
-                "path": "11"
-            }
-        },
-        "longDistanceBuilder-W29N14-W29N13-8069325": {
-            "role": "longDistanceBuilder",
-            "home": "W29N14",
-            "target": "W29N13",
-            "task": {
-                "name": "repair",
-                "_creep": {
-                    "name": "longDistanceBuilder-W29N14-W29N13-8069325"
-                },
-                "_target": {
-                    "ref": "5d0cb592e814404404a0e430",
+                    "ref": "5d0748ce001e5f10d3711de2",
                     "_pos": {
                         "x": 5,
-                        "y": 20,
+                        "y": 23,
                         "roomName": "W29N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 3,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069733
-            },
-            "_trav": {
-                "state": [6, 16, 0, 1, 5, 20, "W29N13"],
-                "path": "6"
-            }
-        },
-        "claimer-W28N14-W27N14-8069380": {
-            "role": "claimer",
-            "home": "W28N14",
-            "target": "W27N14",
-            "task": {
-                "name": "reserve",
-                "_creep": {
-                    "name": "claimer-W28N14-W27N14-8069380"
-                },
-                "_target": {
-                    "ref": "5bbcab6e9099fc012e6337f9",
-                    "_pos": {
-                        "x": 22,
-                        "y": 14,
-                        "roomName": "W27N14"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 1,
-                        "stuckValue": 2,
-                        "ignoreCreeps": true,
-                        "maxOps": 20000
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069424
-            },
-            "_trav": {
-                "state": [24, 14, 0, 1, 22, 14, "W27N14"],
-                "path": "8"
-            }
-        },
-        "harvester-W32N13--8069420": {
-            "role": "harvester",
-            "home": "W32N13",
-            "task": {
-                "name": "transfer",
-                "_creep": {
-                    "name": "harvester-W32N13--8069420"
-                },
-                "_target": {
-                    "ref": "5d06a00aeb73245dbd32ab7e",
-                    "_pos": {
-                        "x": 25,
-                        "y": 37,
-                        "roomName": "W32N13"
                     }
                 },
                 "_parent": null,
@@ -982,60 +267,136 @@
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 8069741
+                "tick": 8097493
             },
             "_trav": {
-                "state": [27, 36, 0, 3, 25, 37, "W32N13"],
-                "path": "7"
+                "state": [11, 9, 0, 8, 5, 23, "W29N13"],
+                "path": "6666565655556"
             }
         },
-        "longDistanceMiner-W28N14-W28N15-8069440": {
-            "role": "longDistanceMiner",
+        "transporter-W29N14--8096296": {
+            "role": "transporter",
+            "home": "W29N14",
+            "task": null,
+            "resourceBuffer": "space",
+            "targetBuffer": "5cf416cd14bd7a42a8e6224f",
+            "roomBuffer": "W29N14"
+        },
+        "longDistanceBuilder-W28N14-W28N15-8096491": {
+            "role": "longDistanceBuilder",
             "home": "W28N14",
             "target": "W28N15",
             "task": {
-                "name": "harvest",
+                "name": "repair",
                 "_creep": {
-                    "name": "longDistanceMiner-W28N14-W28N15-8069440"
+                    "name": "longDistanceBuilder-W28N14-W28N15-8096491"
                 },
                 "_target": {
-                    "ref": "5bbcab629099fc012e633677",
+                    "ref": "5cff6c711b7359098e19d92d",
                     "_pos": {
-                        "x": 33,
-                        "y": 17,
+                        "x": 43,
+                        "y": 46,
                         "roomName": "W28N15"
                     }
                 },
                 "_parent": null,
                 "options": {
                     "blind": false,
+                    "moveOptions": {
+                        "range": 3,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8096580
+            },
+            "_trav": {
+                "state": [40, 0, 0, 2, 43, 46, "W28N15"],
+                "path": ""
+            }
+        },
+        "upgrader-W32N13--8096491": {
+            "role": "upgrader",
+            "home": "W32N13",
+            "task": {
+                "name": "upgrade",
+                "_creep": {
+                    "name": "upgrader-W32N13--8096491"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316b",
+                    "_pos": {
+                        "x": 16,
+                        "y": 40,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
                     "moveOptions": {}
                 },
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069741
+                "tick": 8097511
             },
             "_trav": {
-                "state": [35, 19, 0, 0, 34, 17, "W28N15"],
+                "state": [18, 44, 0, 0, 16, 40, "W32N13"],
+                "path": "8"
+            }
+        },
+        "longDistanceMiner-W32N13-W33N13-8096608": {
+            "role": "longDistanceMiner",
+            "home": "W32N13",
+            "target": "W33N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W32N13-W33N13-8096608"
+                },
+                "_target": {
+                    "ref": "5bbcab299099fc012e632fe0",
+                    "_pos": {
+                        "x": 34,
+                        "y": 23,
+                        "roomName": "W33N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [35, 26, 0, 0, 35, 24, "W33N13"],
                 "path": "1"
             }
         },
-        "longDistanceMiner-W28N14-W28N13-8069475": {
+        "longDistanceMiner-W32N13-W32N12-8096647": {
             "role": "longDistanceMiner",
-            "home": "W28N14",
-            "target": "W28N13",
+            "home": "W32N13",
+            "target": "W32N12",
             "task": {
                 "name": "harvest",
                 "_creep": {
-                    "name": "longDistanceMiner-W28N14-W28N13-8069475"
+                    "name": "longDistanceMiner-W32N13-W32N12-8096647"
                 },
                 "_target": {
-                    "ref": "5bbcab629099fc012e63367d",
+                    "ref": "5bbcab349099fc012e63316e",
                     "_pos": {
-                        "x": 21,
-                        "y": 11,
-                        "roomName": "W28N13"
+                        "x": 15,
+                        "y": 38,
+                        "roomName": "W32N12"
                     }
                 },
                 "_parent": null,
@@ -1046,46 +407,132 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069741
+                "tick": 8097514
             },
             "_trav": {
-                "state": [20, 8, 0, 0, 20, 10, "W28N13"],
+                "state": [17, 40, 0, 0, 15, 39, "W32N12"],
+                "path": "7"
+            }
+        },
+        "longDistanceMiner-W32N13-W32N14-8096686": {
+            "role": "longDistanceMiner",
+            "home": "W32N13",
+            "target": "W32N14",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W32N13-W32N14-8096686"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e633166",
+                    "_pos": {
+                        "x": 15,
+                        "y": 16,
+                        "roomName": "W32N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [17, 18, 0, 0, 16, 16, "W32N14"],
+                "path": "1"
+            }
+        },
+        "longDistanceLorry-W32N13--8096725": {
+            "role": "longDistanceLorry",
+            "home": "W32N13",
+            "target": {
+                "id": "5d0a00100c39a428613cc024",
+                "pos": {
+                    "x": 35,
+                    "y": 24,
+                    "roomName": "W33N13"
+                },
+                "energy": -130,
+                "time": 8097470,
+                "distance": 54,
+                "ed": 13.61111111111111
+            },
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "longDistanceLorry-W32N13--8096725"
+                },
+                "_target": {
+                    "ref": "5d0a00100c39a428613cc024",
+                    "_pos": {
+                        "x": 35,
+                        "y": 24,
+                        "roomName": "W33N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097481
+            },
+            "_trav": {
+                "state": [49, 40, 0, 2, 35, 24, "W33N13"],
+                "path": "788887788888881111"
+            }
+        },
+        "spawnAttendant-W28N14--8096764": {
+            "role": "spawnAttendant",
+            "home": "W28N14",
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "spawnAttendant-W28N14--8096764"
+                },
+                "_target": {
+                    "ref": "5d08c45d41e42d4426e89e45",
+                    "_pos": {
+                        "x": 24,
+                        "y": 42,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [22, 42, 0, 7, 24, 42, "W28N14"],
                 "path": "4"
             }
         },
-        "longDistanceMiner-W28N14-W28N13-8069510": {
-            "role": "longDistanceMiner",
-            "home": "W28N14",
-            "target": "W28N13",
-            "task": {
-                "name": "harvest",
-                "_creep": {
-                    "name": "longDistanceMiner-W28N14-W28N13-8069510"
-                },
-                "_target": {
-                    "ref": "5bbcab629099fc012e63367e",
-                    "_pos": {
-                        "x": 24,
-                        "y": 15,
-                        "roomName": "W28N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {}
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069741
-            },
-            "_trav": {
-                "state": [26, 14, 0, 0, 25, 16, "W28N13"],
-                "path": "5"
-            }
-        },
-        "miner-W32N13--8069520": {
+        "miner-W32N13--8096803": {
             "role": "miner",
             "sourceId": "5bbcab349099fc012e633169",
             "home": "W32N13",
@@ -1096,7 +543,7 @@
             "task": {
                 "name": "harvest",
                 "_creep": {
-                    "name": "miner-W32N13--8069520"
+                    "name": "miner-W32N13--8096803"
                 },
                 "_target": {
                     "ref": "5bbcab349099fc012e633169",
@@ -1114,14 +561,41 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069741
+                "tick": 8097514
             }
         },
-        "transporter-W28N14--8069545": {
-            "role": "transporter",
-            "home": "W28N14"
+        "upgrader-W28N14--8096829": {
+            "role": "upgrader",
+            "home": "W28N14",
+            "task": {
+                "name": "upgrade",
+                "_creep": {
+                    "name": "upgrader-W28N14--8096829"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367b",
+                    "_pos": {
+                        "x": 35,
+                        "y": 44,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097495
+            },
+            "_trav": {
+                "state": [31, 43, 0, 0, 35, 44, "W28N14"],
+                "path": "3"
+            }
         },
-        "miner-W32N13--8069590": {
+        "miner-W32N13--8096868": {
             "role": "miner",
             "sourceId": "5bbcab349099fc012e63316a",
             "home": "W32N13",
@@ -1129,30 +603,609 @@
                 "path": "6",
                 "state": [26, 12, 0, 0, 24, 14, "W32N13"]
             },
-            "task": null
-        },
-        "spawnAttendant-W28N14--8069625": {
-            "role": "spawnAttendant",
-            "home": "W28N14",
-            "task": null,
-            "_trav": {
-                "state": [24, 37, 0, 0, 26, 37, "W28N14"],
-                "path": "3"
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "miner-W32N13--8096868"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316a",
+                    "_pos": {
+                        "x": 25,
+                        "y": 15,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
             }
         },
-        "spawnAttendant-W32N13--8069645": {
+        "longDistanceBuilder-W29N14-W29N13-8096881": {
+            "role": "longDistanceBuilder",
+            "home": "W29N14",
+            "target": "W29N13",
+            "task": {
+                "name": "repair",
+                "_creep": {
+                    "name": "longDistanceBuilder-W29N14-W29N13-8096881"
+                },
+                "_target": {
+                    "ref": "5d0c3e2129c9cb5363ca330a",
+                    "_pos": {
+                        "x": 5,
+                        "y": 21,
+                        "roomName": "W29N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 3,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097510
+            },
+            "_trav": {
+                "state": [7, 13, 0, 0, 5, 21, "W29N13"],
+                "path": "56565"
+            }
+        },
+        "longDistanceMiner-W28N14-W28N15-8096907": {
+            "role": "longDistanceMiner",
+            "home": "W28N14",
+            "target": "W28N15",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W28N14-W28N15-8096907"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e633677",
+                    "_pos": {
+                        "x": 33,
+                        "y": 17,
+                        "roomName": "W28N15"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [35, 19, 0, 0, 34, 17, "W28N15"],
+                "path": "1"
+            }
+        },
+        "spawnAttendant-W32N13--8096933": {
             "role": "spawnAttendant",
             "home": "W32N13",
+            "task": null,
+            "_trav": {
+                "state": [23, 36, 0, 4, 23, 38, "W32N13"],
+                "path": "6"
+            }
+        },
+        "longDistanceMiner-W28N14-W28N13-8096946": {
+            "role": "longDistanceMiner",
+            "home": "W28N14",
+            "target": "W28N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W28N14-W28N13-8096946"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367d",
+                    "_pos": {
+                        "x": 21,
+                        "y": 11,
+                        "roomName": "W28N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [20, 8, 0, 0, 20, 10, "W28N13"],
+                "path": "4"
+            }
+        },
+        "longDistanceMiner-W28N14-W28N13-8096985": {
+            "role": "longDistanceMiner",
+            "home": "W28N14",
+            "target": "W28N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W28N14-W28N13-8096985"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367e",
+                    "_pos": {
+                        "x": 24,
+                        "y": 15,
+                        "roomName": "W28N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [26, 14, 0, 0, 25, 16, "W28N13"],
+                "path": "5"
+            }
+        },
+        "longDistanceLorry-W28N14--8096985": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": {
+                "id": "5cfed38c15b6e542a338d399",
+                "pos": {
+                    "x": 20,
+                    "y": 10,
+                    "roomName": "W28N13"
+                },
+                "energy": -490,
+                "time": 8097470,
+                "distance": 19,
+                "ed": 29.210526315789473
+            },
             "task": {
                 "name": "transfer",
                 "_creep": {
-                    "name": "spawnAttendant-W32N13--8069645"
+                    "name": "longDistanceLorry-W28N14--8096985"
                 },
                 "_target": {
-                    "ref": "5d0fd708ac87dd5deeffdf89",
+                    "ref": "5cec602e0582ee6f735e47fb",
                     "_pos": {
-                        "x": 33,
-                        "y": 40,
+                        "x": 22,
+                        "y": 41,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097499
+            },
+            "_trav": {
+                "state": [23, 43, 0, 1, 22, 41, "W28N14"],
+                "path": "1"
+            }
+        },
+        "longDistanceMiner-W32N13-W33N13-8096998": {
+            "role": "longDistanceMiner",
+            "home": "W32N13",
+            "target": "W33N13",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "longDistanceMiner-W32N13-W33N13-8096998"
+                },
+                "_target": {
+                    "ref": "5bbcab299099fc012e632fdf",
+                    "_pos": {
+                        "x": 22,
+                        "y": 7,
+                        "roomName": "W33N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [24, 10, 0, 0, 23, 8, "W33N13"],
+                "path": "1"
+            }
+        },
+        "longDistanceLorry-W28N14--8097024": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": {
+                "id": "5cff237a63738f09b78089bb",
+                "pos": {
+                    "x": 34,
+                    "y": 17,
+                    "roomName": "W28N15"
+                },
+                "energy": -510,
+                "time": 8097374,
+                "distance": 81,
+                "ed": 6.728395061728395
+            },
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "longDistanceLorry-W28N14--8097024"
+                },
+                "_target": {
+                    "ref": "5cec602e0582ee6f735e47fb",
+                    "_pos": {
+                        "x": 22,
+                        "y": 41,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097467
+            },
+            "_trav": {
+                "state": [28, 16, 0, 0, 22, 41, "W28N14"],
+                "path": "5555554444445555555666777776568"
+            }
+        },
+        "spawnAttendant-W29N14--8097037": {
+            "role": "spawnAttendant",
+            "home": "W29N14",
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "spawnAttendant-W29N14--8097037"
+                },
+                "_target": {
+                    "ref": "5d0e5835dd53e031fc019fae",
+                    "_pos": {
+                        "x": 14,
+                        "y": 39,
+                        "roomName": "W29N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097514
+            },
+            "_trav": {
+                "state": [14, 37, 0, 2, 14, 39, "W29N14"],
+                "path": "5"
+            }
+        },
+        "longDistanceLorry-W32N13--8097037": {
+            "role": "longDistanceLorry",
+            "home": "W32N13",
+            "target": {
+                "id": "5d0a3a42bc3c41285878c107",
+                "pos": {
+                    "x": 15,
+                    "y": 39,
+                    "roomName": "W32N12"
+                },
+                "energy": -40,
+                "time": 8097470,
+                "distance": 59,
+                "ed": 13.220338983050848
+            },
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "longDistanceLorry-W32N13--8097037"
+                },
+                "_target": {
+                    "ref": "5d0a3a42bc3c41285878c107",
+                    "_pos": {
+                        "x": 15,
+                        "y": 39,
+                        "roomName": "W32N12"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097485
+            },
+            "_trav": {
+                "state": [21, 15, 0, 5, 15, 39, "W32N12"],
+                "path": "555555555555555555555566677"
+            }
+        },
+        "longDistanceLorry-W28N14--8097063": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": {
+                "id": "5cff237a63738f09b78089bb",
+                "pos": {
+                    "x": 34,
+                    "y": 17,
+                    "roomName": "W28N15"
+                },
+                "energy": -190,
+                "time": 8097406,
+                "distance": 81,
+                "ed": 8.703703703703704
+            },
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "longDistanceLorry-W28N14--8097063"
+                },
+                "_target": {
+                    "ref": "5cec602e0582ee6f735e47fb",
+                    "_pos": {
+                        "x": 22,
+                        "y": 41,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097485
+            },
+            "_trav": {
+                "state": [38, 47, 0, 1, 22, 41, "W28N14"],
+                "path": "4645555666666666665555554444445555555666777776568"
+            }
+        },
+        "longDistanceLorry-W28N14--8097102": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": {
+                "id": "5cff24da5b0b7e667bffeb4f",
+                "pos": {
+                    "x": 38,
+                    "y": 21,
+                    "roomName": "W27N14"
+                },
+                "energy": -410,
+                "time": 8097374,
+                "distance": 75,
+                "ed": 7.933333333333334
+            },
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "longDistanceLorry-W28N14--8097102"
+                },
+                "_target": {
+                    "ref": "5cec602e0582ee6f735e47fb",
+                    "_pos": {
+                        "x": 22,
+                        "y": 41,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097451
+            },
+            "_trav": {
+                "state": [31, 38, 0, 2, 22, 41, "W28N14"],
+                "path": "777776568"
+            }
+        },
+        "longDistanceLorry-W32N13--8097115": {
+            "role": "longDistanceLorry",
+            "home": "W32N13",
+            "target": {
+                "id": "5d0a3a42bc3c41285878c107",
+                "pos": {
+                    "x": 15,
+                    "y": 39,
+                    "roomName": "W32N12"
+                },
+                "energy": 280,
+                "time": 8097502,
+                "distance": 59,
+                "ed": 15.932203389830509
+            },
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "longDistanceLorry-W32N13--8097115"
+                },
+                "_target": {
+                    "ref": "5d0a3a42bc3c41285878c107",
+                    "_pos": {
+                        "x": 15,
+                        "y": 39,
+                        "roomName": "W32N12"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097502
+            },
+            "_trav": {
+                "state": [22, 47, 0, 1, 15, 39, "W32N12"],
+                "path": "55455566555555555555555555555555555555566677"
+            }
+        },
+        "longDistanceLorry-W28N14--8097141": {
+            "role": "longDistanceLorry",
+            "home": "W28N14",
+            "target": {
+                "id": "5cff24da5b0b7e667bffeb4f",
+                "pos": {
+                    "x": 38,
+                    "y": 21,
+                    "roomName": "W27N14"
+                },
+                "energy": -690,
+                "time": 8097342,
+                "distance": 75,
+                "ed": 6.066666666666666
+            },
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "longDistanceLorry-W28N14--8097141"
+                },
+                "_target": {
+                    "ref": "5cec602e0582ee6f735e47fb",
+                    "_pos": {
+                        "x": 22,
+                        "y": 41,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097443
+            },
+            "_trav": {
+                "state": [27, 38, 0, 0, 22, 41, "W28N14"],
+                "path": "76568"
+            }
+        },
+        "longDistanceLorry-W32N13--8097193": {
+            "role": "longDistanceLorry",
+            "home": "W32N13",
+            "target": {
+                "id": "5d0a00100c39a428613cc024",
+                "pos": {
+                    "x": 35,
+                    "y": 24,
+                    "roomName": "W33N13"
+                },
+                "energy": 400,
+                "time": 8097406,
+                "distance": 54,
+                "ed": 18.51851851851852
+            },
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "longDistanceLorry-W32N13--8097193"
+                },
+                "_target": {
+                    "ref": "5d069ec579164353283d8a9c",
+                    "_pos": {
+                        "x": 34,
+                        "y": 38,
                         "roomName": "W32N13"
                     }
                 },
@@ -1170,39 +1223,315 @@
                     "quiet": true,
                     "resourceType": "energy"
                 },
-                "tick": 8069741
+                "tick": 8097487
             },
             "_trav": {
-                "state": [31, 36, 0, 0, 33, 40, "W32N13"],
-                "path": "3464"
+                "state": [9, 44, 0, 2, 34, 38, "W32N13"],
+                "path": "333333333443322222223322"
             }
         },
-        "longDistanceLorry-W28N14--8069685": {
+        "longDistanceLorry-W32N13--8097271": {
             "role": "longDistanceLorry",
-            "home": "W28N14",
+            "home": "W32N13",
             "target": {
-                "id": "5cff237a63738f09b78089bb",
+                "id": "5d0f3aef225947335b2831c0",
                 "pos": {
-                    "x": 34,
-                    "y": 17,
-                    "roomName": "W28N15"
+                    "x": 16,
+                    "y": 16,
+                    "roomName": "W32N14"
                 },
-                "energy": -80,
-                "time": 8069661,
-                "distance": 81,
-                "ed": 9.382716049382717
+                "energy": -390,
+                "time": 8097470,
+                "distance": 84,
+                "ed": 7.2023809523809526
             },
             "task": {
                 "name": "withdraw",
                 "_creep": {
-                    "name": "longDistanceLorry-W28N14--8069685"
+                    "name": "longDistanceLorry-W32N13--8097271"
                 },
                 "_target": {
-                    "ref": "5cff237a63738f09b78089bb",
+                    "ref": "5d0f3aef225947335b2831c0",
+                    "_pos": {
+                        "x": 16,
+                        "y": 16,
+                        "roomName": "W32N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097498
+            },
+            "_trav": {
+                "state": [34, 26, 0, 1, 16, 16, "W32N14"],
+                "path": "1111111111188888788887777777777788811121111111111111111111122222211111"
+            }
+        },
+        "miner-W28N14--8097349": {
+            "role": "miner",
+            "sourceId": "5bbcab629099fc012e633679",
+            "home": "W28N14",
+            "_trav": {
+                "path": "1",
+                "state": [10, 37, 0, 0, 11, 35, "W28N14"]
+            },
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "miner-W28N14--8097349"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e633679",
+                    "_pos": {
+                        "x": 12,
+                        "y": 35,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097497
+            }
+        },
+        "miner-W29N14--8097349": {
+            "role": "miner",
+            "sourceId": "5bbcab569099fc012e6334ee",
+            "home": "W29N14",
+            "_trav": {
+                "path": "7",
+                "state": [28, 7, 0, 0, 26, 7, "W29N14"]
+            },
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "miner-W29N14--8097349"
+                },
+                "_target": {
+                    "ref": "5bbcab569099fc012e6334ee",
+                    "_pos": {
+                        "x": 25,
+                        "y": 8,
+                        "roomName": "W29N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097514
+            }
+        },
+        "claimer-W32N13-W33N13-8097349": {
+            "role": "claimer",
+            "home": "W32N13",
+            "target": "W33N13",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W32N13-W33N13-8097349"
+                },
+                "_target": {
+                    "ref": "5bbcab299099fc012e632fe1",
+                    "_pos": {
+                        "x": 7,
+                        "y": 29,
+                        "roomName": "W33N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097397
+            },
+            "_trav": {
+                "state": [9, 28, 0, 0, 7, 29, "W33N13"],
+                "path": "7"
+            }
+        },
+        "claimer-W32N13-W32N12-8097362": {
+            "role": "claimer",
+            "home": "W32N13",
+            "target": "W32N12",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W32N13-W32N12-8097362"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e63316d",
+                    "_pos": {
+                        "x": 13,
+                        "y": 7,
+                        "roomName": "W32N12"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097392
+            },
+            "_trav": {
+                "state": [15, 5, 0, 0, 13, 7, "W32N12"],
+                "path": "6"
+            }
+        },
+        "lorry-W32N13--8097388": {
+            "role": "lorry",
+            "home": "W32N13",
+            "task": {
+                "name": "transfer",
+                "_creep": {
+                    "name": "lorry-W32N13--8097388"
+                },
+                "_target": {
+                    "ref": "5d02e7cf79164353283c0106",
                     "_pos": {
                         "x": 34,
-                        "y": 17,
-                        "roomName": "W28N15"
+                        "y": 35,
+                        "roomName": "W32N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097509
+            },
+            "_trav": {
+                "state": [34, 21, 0, 0, 34, 35, "W32N13"],
+                "path": "55555555566644"
+            }
+        },
+        "miner-W29N14--8097401": {
+            "role": "miner",
+            "sourceId": "5bbcab569099fc012e6334ef",
+            "home": "W29N14",
+            "_trav": {
+                "state": [11, 36, 0, 0, 9, 34, "W29N14"],
+                "path": "8"
+            },
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "miner-W29N14--8097401"
+                },
+                "_target": {
+                    "ref": "5bbcab569099fc012e6334ef",
+                    "_pos": {
+                        "x": 8,
+                        "y": 35,
+                        "roomName": "W29N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097510
+            }
+        },
+        "miner-W28N14--8097414": {
+            "role": "miner",
+            "sourceId": "5bbcab629099fc012e63367a",
+            "home": "W28N14",
+            "_trav": {
+                "path": "7",
+                "state": [23, 38, 0, 0, 21, 38, "W28N14"]
+            },
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "miner-W28N14--8097414"
+                },
+                "_target": {
+                    "ref": "5bbcab629099fc012e63367a",
+                    "_pos": {
+                        "x": 20,
+                        "y": 37,
+                        "roomName": "W28N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {}
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097497
+            }
+        },
+        "mineralHarvester-W28N14--8097427": {
+            "role": "mineralHarvester",
+            "home": "W28N14",
+            "task": {
+                "name": "harvest",
+                "_creep": {
+                    "name": "mineralHarvester-W28N14--8097427"
+                },
+                "_target": {
+                    "ref": "5bbcb1e240062e4259e93458",
+                    "_pos": {
+                        "x": 33,
+                        "y": 39,
+                        "roomName": "W28N14"
                     }
                 },
                 "_parent": null,
@@ -1214,28 +1543,64 @@
                     }
                 },
                 "data": {
-                    "quiet": true,
-                    "resourceType": "energy"
+                    "quiet": true
                 },
-                "tick": 8069685
+                "tick": 8097427
             },
             "_trav": {}
         },
-        "longDistanceMiner-W28N14-W27N15-8069700": {
-            "role": "longDistanceMiner",
+        "claimer-W32N13-W32N14-8097440": {
+            "role": "claimer",
+            "home": "W32N13",
+            "target": "W32N14",
+            "task": {
+                "name": "reserve",
+                "_creep": {
+                    "name": "claimer-W32N13-W32N14-8097440"
+                },
+                "_target": {
+                    "ref": "5bbcab349099fc012e633167",
+                    "_pos": {
+                        "x": 17,
+                        "y": 38,
+                        "roomName": "W32N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097500
+            },
+            "_trav": {
+                "state": [17, 40, 0, 1, 17, 38, "W32N14"],
+                "path": "2"
+            }
+        },
+        "claimer-W28N14-W27N14-8097479": {
+            "role": "claimer",
             "home": "W28N14",
-            "target": "W27N15",
+            "target": "W27N14",
             "task": {
                 "name": "goToRoom",
                 "_creep": {
-                    "name": "longDistanceMiner-W28N14-W27N15-8069700"
+                    "name": "claimer-W28N14-W27N14-8097479"
                 },
                 "_target": {
                     "ref": "",
                     "_pos": {
                         "x": 25,
                         "y": 25,
-                        "roomName": "W27N15"
+                        "roomName": "W27N14"
                     }
                 },
                 "_parent": null,
@@ -1251,60 +1616,28 @@
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069700
+                "tick": 8097479
             },
             "_trav": {
-                "path": "3222111111188888811111122222222222111122222222232",
-                "state": [30, 38, 0, 0, 25, 25, "W27N15"]
+                "path": "3243",
+                "state": [46, 35, 0, 0, 25, 25, "W27N14"]
             }
         },
-        "longDistanceMiner-W32N13-W33N13-8069710": {
-            "role": "longDistanceMiner",
-            "home": "W32N13",
-            "target": "W33N13",
-            "task": {
-                "name": "goToRoom",
-                "_creep": {
-                    "name": "longDistanceMiner-W32N13-W33N13-8069710"
-                },
-                "_target": {
-                    "ref": "",
-                    "_pos": {
-                        "x": 25,
-                        "y": 25,
-                        "roomName": "W33N13"
-                    }
-                },
-                "_parent": null,
-                "options": {
-                    "blind": false,
-                    "moveOptions": {
-                        "range": 24,
-                        "stuckValue": 2
-                    }
-                },
-                "data": {
-                    "quiet": true
-                },
-                "tick": 8069710
-            },
-            "_trav": {}
-        },
-        "longDistanceMiner-W28N14-W27N14-8069740": {
-            "role": "longDistanceMiner",
+        "claimer-W28N14-W28N15-8097492": {
+            "role": "claimer",
             "home": "W28N14",
-            "target": "W27N14",
+            "target": "W28N15",
             "task": {
                 "name": "goToRoom",
                 "_creep": {
-                    "name": "longDistanceMiner-W28N14-W27N14-8069740"
+                    "name": "claimer-W28N14-W28N15-8097492"
                 },
                 "_target": {
                     "ref": "",
                     "_pos": {
                         "x": 25,
                         "y": 25,
-                        "roomName": "W27N14"
+                        "roomName": "W28N15"
                     }
                 },
                 "_parent": null,
@@ -1312,26 +1645,118 @@
                     "blind": false,
                     "moveOptions": {
                         "range": 24,
-                        "stuckValue": 2
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
                     }
                 },
                 "data": {
                     "quiet": true
                 },
-                "tick": 8069740
+                "tick": 8097492
+            },
+            "_trav": {
+                "path": "11111118888881111112222222222211112",
+                "state": [34, 35, 0, 0, 25, 25, "W28N15"]
+            }
+        },
+        "claimer-W29N14-W29N13-8097492": {
+            "role": "claimer",
+            "home": "W29N14",
+            "target": "W29N13",
+            "task": {
+                "name": "goToRoom",
+                "_creep": {
+                    "name": "claimer-W29N14-W29N13-8097492"
+                },
+                "_target": {
+                    "ref": "",
+                    "_pos": {
+                        "x": 25,
+                        "y": 25,
+                        "roomName": "W29N13"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 24,
+                        "stuckValue": 2,
+                        "ignoreCreeps": true,
+                        "maxOps": 20000
+                    }
+                },
+                "data": {
+                    "quiet": true
+                },
+                "tick": 8097492
+            },
+            "_trav": {
+                "path": "5554",
+                "state": [11, 46, 0, 0, 25, 25, "W29N13"]
+            }
+        },
+        "lorry-W28N14--8097505": {
+            "role": "lorry",
+            "home": "W28N14"
+        },
+        "lorry-W29N14--8097505": {
+            "role": "lorry",
+            "home": "W29N14",
+            "task": {
+                "name": "withdraw",
+                "_creep": {
+                    "name": "lorry-W29N14--8097505"
+                },
+                "_target": {
+                    "ref": "5d09d3b6b43d0171dddf2ec2",
+                    "_pos": {
+                        "x": 26,
+                        "y": 7,
+                        "roomName": "W29N14"
+                    }
+                },
+                "_parent": null,
+                "options": {
+                    "blind": false,
+                    "moveOptions": {
+                        "range": 1,
+                        "stuckValue": 2
+                    }
+                },
+                "data": {
+                    "quiet": true,
+                    "resourceType": "energy"
+                },
+                "tick": 8097505
             },
             "_trav": {}
         }
     },
-    "stats": "text/graphite\n8069740\n1561570872549\nshard3.energy-container.W28N14 162\nshard3.energy-container.W29N14 1094\nshard3.energy-container.W32N13 286\nshard3.spawn-busy.Spawn1 0\nshard3.spawn-busy.Spawn2 0\nshard3.spawn-busy.Spawn3 30\nshard3.spawn-busy.Spawn4 55\nshard3.spawn-busy.Spawn5 0\nshard3.hostiles.value 0\nshard3.creep-population.value 42\nshard3.time.tick 8069740\nshard3.time.timestamp 1561570872549\nshard3.time.duration undefined\nshard3.gcl.level 4\nshard3.gcl.progress 7867985.834761765\nshard3.gcl.progressTotal 13891007.860237733\nshard3.gcl.progressPercent 56.640856544926834\nshard3.market.credits 848.192\nshard3.room.W28N14.room.level 7\nshard3.room.W28N14.room.progress 5984836\nshard3.room.W28N14.room.progressTotal 10935000\nshard3.room.W28N14.room.progressPercent 54.73101051668953\nshard3.room.W28N14.room.energyAvailable 5600\nshard3.room.W28N14.room.energyCapacityAvailable 5600\nshard3.room.W28N14.controller.level 7\nshard3.room.W28N14.controller.progress 5984836\nshard3.room.W28N14.controller.progressTotal 10935000\nshard3.room.W28N14.controller.progressPercent 54.73101051668953\nshard3.room.W28N14.storage.energy 445122\nshard3.room.W28N14.storage.O 1150\nshard3.room.W28N14.storage.L 55947\nshard3.room.W28N14.storage.Z 5610\nshard3.room.W28N14.terminal.energy 3210\nshard3.room.W28N14.terminal.O 17350\nshard3.room.W28N14.terminal.L 5000\nshard3.room.W28N14.terminal.Z 25390\nshard3.room.W29N14.room.level 7\nshard3.room.W29N14.room.progress 2102191\nshard3.room.W29N14.room.progressTotal 10935000\nshard3.room.W29N14.room.progressPercent 19.22442615454961\nshard3.room.W29N14.room.energyAvailable 5600\nshard3.room.W29N14.room.energyCapacityAvailable 5600\nshard3.room.W29N14.controller.level 7\nshard3.room.W29N14.controller.progress 2102191\nshard3.room.W29N14.controller.progressTotal 10935000\nshard3.room.W29N14.controller.progressPercent 19.22442615454961\nshard3.room.W29N14.storage.energy 242771\nshard3.room.W29N14.storage.O 16000\nshard3.room.W29N14.storage.L 26000\nshard3.room.W29N14.storage.Z 36000\nshard3.room.W29N14.terminal.energy 0\nshard3.room.W32N13.room.level 6\nshard3.room.W32N13.room.progress 1056969\nshard3.room.W32N13.room.progressTotal 3645000\nshard3.room.W32N13.room.progressPercent 28.997777777777777\nshard3.room.W32N13.room.energyAvailable 1158\nshard3.room.W32N13.room.energyCapacityAvailable 2300\nshard3.room.W32N13.controller.level 6\nshard3.room.W32N13.controller.progress 1056969\nshard3.room.W32N13.controller.progressTotal 3645000\nshard3.room.W32N13.controller.progressPercent 28.997777777777777\nshard3.room.W32N13.storage.energy 423272\nshard3.room.W32N13.storage.O 18800\nshard3.room.W32N13.storage.L 31000\nshard3.room.W32N13.storage.Z 31860\nshard3.room.W32N13.terminal.energy 0\nshard3.heap.total_heap_size 67543040\nshard3.heap.total_heap_size_executable 3670016\nshard3.heap.total_physical_size 66544688\nshard3.heap.total_available_size 547866328\nshard3.heap.used_heap_size 40204600\nshard3.heap.heap_size_limit 608174080\nshard3.heap.malloced_memory 8192\nshard3.heap.peak_malloced_memory 7646896\nshard3.heap.does_zap_garbage 0\nshard3.heap.externally_allocated_size 38894857\nshard3.cpu.bucket 9999\nshard3.cpu.used 16.565664999999854\nshard3.cpu.limit 20\nshard3.cpu.start 0.028170000000045547\nshard3.cpu.percent 82.82832499999927\nshard3.stats.count 21\nshard3.stats.size 3243\nshard3.stats.cpu 0.2993669999998474\n",
+    "stats": "text/graphite\n8097510\n1561647644953\nshard3.energy-container.W28N14 0\nshard3.energy-container.W29N14 3240\nshard3.energy-container.W32N13 3530\nshard3.spawn-busy.Spawn1 5\nshard3.spawn-busy.Spawn2 5\nshard3.spawn-busy.Spawn3 0\nshard3.spawn-busy.Spawn4 83\nshard3.spawn-busy.Spawn5 0\nshard3.hostiles.value 0\nshard3.creep-population.value 50\nshard3.time.tick 8097510\nshard3.time.timestamp 1561647644952\nshard3.time.duration undefined\nshard3.gcl.level 4\nshard3.gcl.progress 8824076.834761765\nshard3.gcl.progressTotal 13891007.860237733\nshard3.gcl.progressPercent 63.52366166331396\nshard3.market.credits 13869.978\nshard3.room.W28N14.room.level 7\nshard3.room.W28N14.room.progress 6343502\nshard3.room.W28N14.room.progressTotal 10935000\nshard3.room.W28N14.room.progressPercent 58.0109922267947\nshard3.room.W28N14.room.energyAvailable 2190\nshard3.room.W28N14.room.energyCapacityAvailable 5600\nshard3.room.W28N14.controller.level 7\nshard3.room.W28N14.controller.progress 6343502\nshard3.room.W28N14.controller.progressTotal 10935000\nshard3.room.W28N14.controller.progressPercent 58.0109922267947\nshard3.room.W28N14.storage.energy 556231\nshard3.room.W28N14.storage.O 18750\nshard3.room.W28N14.storage.K 5000\nshard3.room.W28N14.storage.L 15446\nshard3.room.W28N14.storage.Z 11000\nshard3.room.W28N14.terminal.energy 20000\nshard3.room.W28N14.terminal.L 10000\nshard3.room.W29N14.room.level 7\nshard3.room.W29N14.room.progress 2467568\nshard3.room.W29N14.room.progressTotal 10935000\nshard3.room.W29N14.room.progressPercent 22.56577960676726\nshard3.room.W29N14.room.energyAvailable 4220\nshard3.room.W29N14.room.energyCapacityAvailable 5600\nshard3.room.W29N14.controller.level 7\nshard3.room.W29N14.controller.progress 2467568\nshard3.room.W29N14.controller.progressTotal 10935000\nshard3.room.W29N14.controller.progressPercent 22.56577960676726\nshard3.room.W29N14.storage.energy 549925\nshard3.room.W29N14.storage.H 500\nshard3.room.W29N14.storage.O 21000\nshard3.room.W29N14.storage.U 5500\nshard3.room.W29N14.storage.K 5500\nshard3.room.W29N14.storage.L 12739\nshard3.room.W29N14.storage.Z 13500\nshard3.room.W29N14.terminal.energy 20000\nshard3.room.W29N14.terminal.Z 10000\nshard3.room.W32N13.room.level 6\nshard3.room.W32N13.room.progress 1289017\nshard3.room.W32N13.room.progressTotal 3645000\nshard3.room.W32N13.room.progressPercent 35.3639780521262\nshard3.room.W32N13.room.energyAvailable 1852\nshard3.room.W32N13.room.energyCapacityAvailable 2300\nshard3.room.W32N13.controller.level 6\nshard3.room.W32N13.controller.progress 1289017\nshard3.room.W32N13.controller.progressTotal 3645000\nshard3.room.W32N13.controller.progressPercent 35.3639780521262\nshard3.room.W32N13.storage.energy 556369\nshard3.room.W32N13.storage.power 500\nshard3.room.W32N13.storage.O 19358\nshard3.room.W32N13.storage.K 5000\nshard3.room.W32N13.storage.L 12100\nshard3.room.W32N13.storage.Z 10768\nshard3.room.W32N13.terminal.energy 20000\nshard3.room.W32N13.terminal.O 10000\nshard3.heap.total_heap_size 68067328\nshard3.heap.total_heap_size_executable 3670016\nshard3.heap.total_physical_size 65652064\nshard3.heap.total_available_size 543952112\nshard3.heap.used_heap_size 44411760\nshard3.heap.heap_size_limit 608174080\nshard3.heap.malloced_memory 8192\nshard3.heap.peak_malloced_memory 7644376\nshard3.heap.does_zap_garbage 0\nshard3.heap.externally_allocated_size 38860226\nshard3.cpu.bucket 10000\nshard3.cpu.used 16.747175000000425\nshard3.cpu.limit 20\nshard3.cpu.start 0.03170300000056159\nshard3.cpu.percent 83.73587500000212\nshard3.stats.count 21\nshard3.stats.size 3454\nshard3.stats.cpu 0.4645430000000488\n",
     "rooms": {
         "W27N14": {
             "tasks": {},
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W28N13": {
             "tasks": {},
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W28N14": {
             "tasks": {
@@ -1404,7 +1829,7 @@
             "linksEmpty": ["[LINK_ID]"],
             "resourceLimits": {
                 "energy": {
-                    "minTerminal": 0,
+                    "minTerminal": 20000,
                     "maxStorage": 400000,
                     "minMarket": 900000,
                     "minProduction": 1000000
@@ -1440,15 +1865,15 @@
                     "minProduction": 0
                 },
                 "L": {
-                    "minTerminal": 0,
+                    "minTerminal": 10000,
                     "maxStorage": 6000,
-                    "minMarket": 10000,
+                    "minMarket": 20000,
                     "minProduction": 600000
                 },
                 "Z": {
                     "minTerminal": 0,
                     "maxStorage": 6000,
-                    "minMarket": 10000,
+                    "minMarket": 900000,
                     "minProduction": 0
                 },
                 "X": {
@@ -1668,9 +2093,19 @@
                     "minProduction": 0
                 }
             },
-            "terminalEnergyCost": 4277,
-            "terminalTransfer": "5d104c36b61dc25c130ccffc:5000:L:MarketOrder",
             "containerSources": {
+                "5cff24da5b0b7e667bffeb4f": {
+                    "id": "5cff24da5b0b7e667bffeb4f",
+                    "pos": {
+                        "x": 38,
+                        "y": 21,
+                        "roomName": "W27N14"
+                    },
+                    "energy": 370,
+                    "time": 8097502,
+                    "distance": 75,
+                    "ed": 2.466666666666667
+                },
                 "5cff237a63738f09b78089bb": {
                     "id": "5cff237a63738f09b78089bb",
                     "pos": {
@@ -1678,10 +2113,10 @@
                         "y": 17,
                         "roomName": "W28N15"
                     },
-                    "energy": 1230,
-                    "time": 8069727,
+                    "energy": 620,
+                    "time": 8097502,
                     "distance": 81,
-                    "ed": 7.592592592592593
+                    "ed": 3.8271604938271606
                 },
                 "5cfed38c15b6e542a338d399": {
                     "id": "5cfed38c15b6e542a338d399",
@@ -1690,10 +2125,10 @@
                         "y": 10,
                         "roomName": "W28N13"
                     },
-                    "energy": 470,
-                    "time": 8069727,
+                    "energy": 630,
+                    "time": 8097502,
                     "distance": 19,
-                    "ed": 12.368421052631579
+                    "ed": 16.57894736842105
                 },
                 "5cfeeb0fff1e577e6595b3d4": {
                     "id": "5cfeeb0fff1e577e6595b3d4",
@@ -1702,40 +2137,27 @@
                         "y": 16,
                         "roomName": "W28N13"
                     },
-                    "energy": 1210,
-                    "time": 8069727,
+                    "energy": 1450,
+                    "time": 8097502,
                     "distance": 28,
-                    "ed": 21.607142857142858
-                },
-                "5cfed049c4be3409e53dab3d": {
-                    "id": "5cfed049c4be3409e53dab3d",
-                    "pos": {
-                        "x": 15,
-                        "y": 35,
-                        "roomName": "W27N15"
-                    },
-                    "energy": 1180,
-                    "time": 8069727,
-                    "distance": 83,
-                    "ed": 7.108433734939759
-                },
-                "5cff24da5b0b7e667bffeb4f": {
-                    "id": "5cff24da5b0b7e667bffeb4f",
-                    "pos": {
-                        "x": 38,
-                        "y": 21,
-                        "roomName": "W27N14"
-                    },
-                    "energy": 2000,
-                    "time": 8069727,
-                    "distance": 75,
-                    "ed": 13.333333333333334
+                    "ed": 25.892857142857142
                 }
-            }
+            },
+            "terminalDelta": 1,
+            "innerLabs": ["5d03cb6c7588385df8fb9934", "5d03b0ba90528371b51a2a10"],
+            "labTarget": "100:GH",
+            "terminalEnergyCost": 164
         },
         "W29N13": {
             "tasks": {},
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W29N14": {
             "tasks": {
@@ -1800,7 +2222,7 @@
             "linksEmpty": ["[LINK_ID]"],
             "resourceLimits": {
                 "energy": {
-                    "minTerminal": 0,
+                    "minTerminal": 20000,
                     "maxStorage": 400000,
                     "minMarket": 900000,
                     "minProduction": 1000000
@@ -1842,9 +2264,9 @@
                     "minProduction": 0
                 },
                 "Z": {
-                    "minTerminal": 0,
+                    "minTerminal": 10000,
                     "maxStorage": 6000,
-                    "minMarket": 500000,
+                    "minMarket": 20000,
                     "minProduction": 600000
                 },
                 "X": {
@@ -2064,7 +2486,6 @@
                     "minProduction": 0
                 }
             },
-            "terminalEnergyCost": 238,
             "containerSources": {
                 "5d0748ce001e5f10d3711de2": {
                     "id": "5d0748ce001e5f10d3711de2",
@@ -2073,18 +2494,40 @@
                         "y": 23,
                         "roomName": "W29N13"
                     },
-                    "energy": 1256,
-                    "time": 8069727,
+                    "energy": 1590,
+                    "time": 8097502,
                     "distance": 36,
-                    "ed": 17.444444444444443
+                    "ed": 22.083333333333332
                 }
-            }
+            },
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }],
+            "terminalEnergyCost": null
         },
         "W27N15": {
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W28N15": {
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W29N15": {
             "roomArray": {
@@ -2130,7 +2573,7 @@
                 "powerSpawns": [],
                 "spawns": ["5d0104bf31b2a87e93fdbb0c"],
                 "extensions": ["5d0133e27533fd09b61a8c0a", "5d015635fa12b46765929526", "5d016726877f9609b3198a94", "5d0176afec08c40fb7a773cf", "5d0185b84055d70fae3c5405", "5d03066df149a971a0d30a7c", "5d0334ccac87dd5deefae4aa", "5d0345163edbdf532d3ca51d", "5d0356caa5512f287c023c7d", "5d0627c735873a443bffd57d", "5d063877c2ac64535960d447", "5d0684fb986dd6111290f3cd", "5d06a00aeb73245dbd32ab7e", "5d06a6f77f9d5e442fc9ee35", "5d06ac91b2e0d3444eee2987", "5d06b17ff4868943ff7aa24b", "5d06b95c308228440a378b4d", "5d06bc2d06f42a71bf96d6ba", "5d06c2eac4e054334754232a", "5d075819c9a3621121bba00a", "5d076115459317530ebcba25", "5d076d8afb328d10d9e06497", "5d07717bf25684287ddc18d9", "5d07759df4868943ff7af352", "5d077d186cea8e71b60f1298", "5d0782b0308228440a37de75", "5d078899308228440a37e0e6", "5d0a11c3c2ac6453596273cd", "5d0a12eb0765293387daddff", "5d0a14177588385df8fe0dd1", "5d0fd2b1b2e0d3444ef1f3c5", "5d0fd39ac889b0336d1cbc36", "5d0fd4ccb2e0d3444ef1f4a4", "5d0fd5b6102f1010d1df0cbe", "5d0fd708ac87dd5deeffdf89", "5d0fd857c9a3621121be9591", "5d0fd8686cea8e71b612a9f7", "5d0fd965dee2263388177040", "5d0fda78fb328d10d9e35776", "5d0feac7dee2263388177760"],
-                "links": ["5d07569bb43d0171ddde1965", "5d076a78dee226338813fd1d", "5d0fed6529c9cb5363cbc565"],
+                "links": ["5d076a78dee226338813fd1d", "5d0fed6529c9cb5363cbc565", "5d13b4582ed6a52004ee3ade"],
                 "labs": [],
                 "extractors": ["5d0feafe17877628a72c2e5d"],
                 "ramparts": [],
@@ -2143,7 +2586,7 @@
             "linksEmpty": ["[LINK_ID]"],
             "resourceLimits": {
                 "energy": {
-                    "minTerminal": 0,
+                    "minTerminal": 20000,
                     "maxStorage": 400000,
                     "minMarket": 900000,
                     "minProduction": 1000000
@@ -2161,9 +2604,9 @@
                     "minProduction": 0
                 },
                 "O": {
-                    "minTerminal": 0,
+                    "minTerminal": 10000,
                     "maxStorage": 6000,
-                    "minMarket": 500000,
+                    "minMarket": 20000,
                     "minProduction": 600000
                 },
                 "U": {
@@ -2407,32 +2850,7 @@
                     "minProduction": 0
                 }
             },
-            "terminalEnergyCost": 238,
             "containerSources": {
-                "5d0a3a42bc3c41285878c107": {
-                    "id": "5d0a3a42bc3c41285878c107",
-                    "pos": {
-                        "x": 15,
-                        "y": 39,
-                        "roomName": "W32N12"
-                    },
-                    "energy": 890,
-                    "time": 8068959,
-                    "distance": 59,
-                    "ed": 7.5423728813559325
-                },
-                "5d0f3aef225947335b2831c0": {
-                    "id": "5d0f3aef225947335b2831c0",
-                    "pos": {
-                        "x": 16,
-                        "y": 16,
-                        "roomName": "W32N14"
-                    },
-                    "energy": 1170,
-                    "time": 8068860,
-                    "distance": 84,
-                    "ed": 6.964285714285714
-                },
                 "5d09fae741a69b286384a8fd": {
                     "id": "5d09fae741a69b286384a8fd",
                     "pos": {
@@ -2440,10 +2858,10 @@
                         "y": 8,
                         "roomName": "W33N13"
                     },
-                    "energy": 1580,
-                    "time": 8069727,
+                    "energy": 590,
+                    "time": 8097502,
                     "distance": 70,
-                    "ed": 11.285714285714286
+                    "ed": 4.214285714285714
                 },
                 "5d0a00100c39a428613cc024": {
                     "id": "5d0a00100c39a428613cc024",
@@ -2452,12 +2870,44 @@
                         "y": 24,
                         "roomName": "W33N13"
                     },
-                    "energy": 2000,
-                    "time": 8069727,
+                    "energy": 990,
+                    "time": 8097502,
                     "distance": 54,
-                    "ed": 18.51851851851852
+                    "ed": 9.166666666666666
+                },
+                "5d0a3a42bc3c41285878c107": {
+                    "id": "5d0a3a42bc3c41285878c107",
+                    "pos": {
+                        "x": 15,
+                        "y": 39,
+                        "roomName": "W32N12"
+                    },
+                    "energy": 280,
+                    "time": 8097502,
+                    "distance": 59,
+                    "ed": 15.932203389830509
+                },
+                "5d0f3aef225947335b2831c0": {
+                    "id": "5d0f3aef225947335b2831c0",
+                    "pos": {
+                        "x": 16,
+                        "y": 16,
+                        "roomName": "W32N14"
+                    },
+                    "energy": 1380,
+                    "time": 8097502,
+                    "distance": 84,
+                    "ed": 8.214285714285714
                 }
-            }
+            },
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }],
+            "terminalEnergyCost": 476
         },
         "W30N14": {
             "roomArray": {
@@ -2496,10 +2946,24 @@
             }
         },
         "W32N14": {
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W32N12": {
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W31N12": {
             "roomArray": {
@@ -2520,7 +2984,14 @@
             }
         },
         "W33N13": {
-            "roomArray": {}
+            "roomArray": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W27N16": {
             "roomArray": {
@@ -2557,7 +3028,14 @@
                 "towers": [],
                 "lairs": []
             },
-            "containerSources": {}
+            "containerSources": {},
+            "innerLabs": [{
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }, {
+                "labID": "[LAB_ID]",
+                "resource": "[RESOURCE]"
+            }]
         },
         "W33N14": {
             "roomArray": {
@@ -2600,43 +3078,43 @@
     "spawns": {
         "Spawn1": {
             "energy": {
-                "containerStorage": 162,
+                "containerStorage": 0,
                 "containerCount": 2
             },
-            "lastSpawnAttempt": "longDistanceMiner",
-            "lastSpawn": "longDistanceMiner"
+            "lastSpawnAttempt": "lorry",
+            "lastSpawn": "lorry"
         },
         "Spawn2": {
             "energy": {
-                "containerStorage": 1094,
+                "containerStorage": 3240,
                 "containerCount": 2
             },
-            "lastSpawnAttempt": "longDistanceBuilder",
-            "lastSpawn": "longDistanceBuilder"
+            "lastSpawnAttempt": "lorry",
+            "lastSpawn": "lorry"
         },
         "Spawn3": {
             "energy": {
-                "containerStorage": 286,
+                "containerStorage": 3530,
                 "containerCount": 2
             },
-            "lastSpawnAttempt": "longDistanceMiner",
-            "lastSpawn": "longDistanceMiner"
+            "lastSpawnAttempt": "claimer",
+            "lastSpawn": "claimer"
         },
         "Spawn4": {
             "energy": {
-                "containerStorage": 162,
+                "containerStorage": 0,
                 "containerCount": 2
             },
-            "lastSpawnAttempt": "longDistanceLorry",
-            "lastSpawn": "longDistanceLorry"
+            "lastSpawnAttempt": "mineralHarvester",
+            "lastSpawn": "mineralHarvester"
         },
         "Spawn5": {
             "energy": {
-                "containerStorage": 1094,
+                "containerStorage": 3240,
                 "containerCount": 2
             },
-            "lastSpawnAttempt": "longDistanceMiner",
-            "lastSpawn": "longDistanceMiner"
+            "lastSpawnAttempt": "miner",
+            "lastSpawn": "miner"
         }
     },
     "profiler": {

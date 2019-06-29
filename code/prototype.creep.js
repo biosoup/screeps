@@ -14,6 +14,7 @@ let mineralHarvester = require('role.mineralHarvester')
 let longDistanceMiner = require('role.longDistanceMiner')
 let longDistanceLorry = require('role.longDistanceLorry')
 let longDistanceBuilder = require('role.longDistanceBuilder')
+let scientist = require('role.scientist')
 
 
 Creep.prototype.runRole =
@@ -47,8 +48,10 @@ Creep.prototype.runRole =
             longDistanceLorry.newTask2(this)
         } else if (this.memory.role == 'longDistanceBuilder') {
             longDistanceBuilder.newTask(this)
+        } else if (this.memory.role == 'scientist') {
+            scientist.newTask(this)
         } else {
-            console.log("error " + this.memory.role + " " + this.room.name)
+            console.log("error - missing creep role " + this.memory.role + " " + this.room.name)
         }
     };
 

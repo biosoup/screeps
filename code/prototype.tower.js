@@ -33,7 +33,7 @@ StructureTower.prototype.repairStructures =
             });
 
             if (targets.length > 0) {
-                target = _.min(targets, 'hits')[0]
+                target = _.first(targets)
             }
 
             if (target) {
@@ -57,7 +57,7 @@ StructureTower.prototype.repairStructures =
             });
 
             if (targets.length > 0) {
-                target = _.min(targets, 'hits')
+                target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
             }
             
             if (target) {

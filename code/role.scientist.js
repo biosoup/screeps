@@ -24,38 +24,40 @@ module.exports = {
                         for (var lb in labs) {
                             //Checking inner labs
                             var currentInnerLab = labs[lb];
-                            if (currentInnerLab.mineralType != innerLabs[lb].resource || (currentInnerLab.mineralType == innerLabs[lb].resource && (currentInnerLab.mineralAmount < currentInnerLab.mineralCapacity && currentInnerLab.mineralAmount < amount))) {
-                                //Lab has to be prepared
-                                if (currentInnerLab.mineralType == undefined || currentInnerLab.mineralType == innerLabs[lb].resource) {
-                                    //Lab needs minerals
-                                    if (creep.storeAllBut(innerLabs[lb].resource) == true) {
-                                        if (_.sum(creep.carry) == 0) {
+                            if (!_.isEmpty(innerLabs[lb].resource)) {
+                                if (currentInnerLab.mineralType != innerLabs[lb].resource || (currentInnerLab.mineralType == innerLabs[lb].resource && (currentInnerLab.mineralAmount < currentInnerLab.mineralCapacity && currentInnerLab.mineralAmount < amount))) {
+                                    //Lab has to be prepared
+                                    if (currentInnerLab.mineralType == undefined || currentInnerLab.mineralType == innerLabs[lb].resource) {
+                                        //Lab needs minerals
+                                        if (creep.storeAllBut(innerLabs[lb].resource) == true) {
+                                            if (_.sum(creep.carry) == 0) {
+                                                //Get minerals from storage
+                                                var creepPackage = amount - currentInnerLab.mineralAmount;
+                                                if (creepPackage > creep.carryCapacity) {
+                                                    creepPackage = creep.carryCapacity;
+                                                }
+                                                if (creep.room.storage.store[innerLabs[lb].resource] < creepPackage) {
+                                                    //not enough resources in storage
+                                                    delete creep.room.memory.labOrder;
+                                                } else if (creep.withdraw(creep.room.storage, innerLabs[lb].resource, creepPackage) == ERR_NOT_IN_RANGE) {
+                                                    creep.travelTo(creep.room.storage);
+                                                }
+                                            } else {
+                                                creep.task = Tasks.transfer(currentInnerLab, innerLabs[lb].resource)
+                                            }
+                                        }
+                                    } else {
+                                        //Lab has to be emptied -> get rid of stuff in creep
+                                        if (creep.storeAllBut() == true) {
                                             //Get minerals from storage
-                                            var creepPackage = amount - currentInnerLab.mineralAmount;
-                                            if (creepPackage > creep.carryCapacity) {
-                                                creepPackage = creep.carryCapacity;
-                                            }
-                                            if (creep.room.storage.store[innerLabs[lb].resource] < creepPackage) {
-                                                //not enough resources in storage
-                                                delete creep.room.memory.labOrder;
-                                            } else if (creep.withdraw(creep.room.storage, innerLabs[lb].resource, creepPackage) == ERR_NOT_IN_RANGE) {
-                                                creep.travelTo(creep.room.storage);
-                                            }
-                                        } else {
-                                            creep.task = Tasks.transfer(currentInnerLab, innerLabs[lb].resource)
+                                            creep.task = Tasks.withdraw(currentInnerLab, currentInnerLab.mineralType)
                                         }
                                     }
-                                } else {
-                                    //Lab has to be emptied -> get rid of stuff in creep
-                                    if (creep.storeAllBut() == true) {
-                                        //Get minerals from storage
-                                        creep.task = Tasks.withdraw(currentInnerLab, currentInnerLab.mineralType)
-                                    }
+                                    break;
                                 }
-                                break;
-                            }
-                            if (currentInnerLab.mineralType == innerLabs[lb].resource && (currentInnerLab.mineralAmount == currentInnerLab.mineralCapacity || currentInnerLab.mineralAmount >= amount)) {
-                                labsReady++;
+                                if (currentInnerLab.mineralType == innerLabs[lb].resource && (currentInnerLab.mineralAmount == currentInnerLab.mineralCapacity || currentInnerLab.mineralAmount >= amount)) {
+                                    labsReady++;
+                                }
                             }
                         }
                         if (labsReady == 2) {
@@ -63,6 +65,7 @@ module.exports = {
                             creep.memory.sleep = 5;
                         }
                         break;
+
                     case "done":
                         //Empty all labs to storage
                         var emptylabs = 0;
@@ -107,7 +110,7 @@ module.exports = {
                         if (mineralsContainers.length == 0) {
                             delete creep.memory.targetBuffer;
                             delete creep.memory.resourceBuffer;
-                            creep.roleEnergyTransporter()
+                            //creep.roleEnergyTransporter()
                         } else {
                             //get minerals from container
                             if (creep.memory.tidyFull == undefined && _.sum(creep.carry) < creep.carryCapacity) {

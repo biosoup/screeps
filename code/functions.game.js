@@ -395,8 +395,8 @@ global.checkTerminalLimits = function (room, resource) {
         let info = Memory.buyOrder.split(":");
         let order = Game.market.getOrderById(info[1]);
         if (order != null) {
-            if (info[0] > 500) {
-                info[0] = 500;
+            if (info[0] > 5000) {
+                info[0] = 5000;
             }
             if (info[0] > order.amount) {
                 info[0] = order.amount;

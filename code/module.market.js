@@ -44,8 +44,8 @@ module.exports = {
             var left = info[0];
             var order = Game.market.getOrderById(info[1]);
             if (order != null) {
-                if (left > 500) {
-                    left = 500;
+                if (left > 5000) {
+                    left = 5000;
                 }
                 if (left > order.amount) {
                     left = order.amount;
@@ -71,20 +71,23 @@ module.exports = {
                         Memory.buyRoom = bestRoom.name;
                     }
                 }
-
-                var returnCode = Game.market.deal(order.id, left, bestRoom.name);
-                if (returnCode == OK) {
-                    info[0] -= left;
-                    if (LOG_MARKET == true) {
-                        console.log("<font color=#fe2ec8 type='highlight'>" + left + " " + order.resourceType + " bought in room " + bestRoom.name + " for " + (left * order.price) + " credits.</font>");
+                if (!_.isEmpty(bestRoom.name)) {
+                    var returnCode = Game.market.deal(order.id, left, bestRoom.name);
+                    if (returnCode == OK) {
+                        info[0] -= left;
+                        if (LOG_MARKET == true) {
+                            console.log("<font color=#fe2ec8 type='highlight'>" + left + " " + order.resourceType + " bought in room " + bestRoom.name + " for " + (left * order.price) + " credits.</font>");
+                        }
+                        if (info[0] > 0) {
+                            Memory.buyOrder = info.join(":");
+                        } else {
+                            delete Memory.buyOrder;
+                            delete Memory.buyRoom;
+                            console.log("<font color=#fe2ec8 type='highlight'>Buy order accomplished.</font>");
+                        }
                     }
-                    if (info[0] > 0) {
-                        Memory.buyOrder = info.join(":");
-                    } else {
-                        delete Memory.buyOrder;
-                        delete Memory.buyRoom;
-                        console.log("<font color=#fe2ec8 type='highlight'>Buy order accomplished.</font>");
-                    }
+                } else {
+                    console.log("No room with enough energy found!");
                 }
             } else {
                 delete Memory.buyOrder;
@@ -128,18 +131,18 @@ module.exports = {
                                     orders = _.sortBy(orders, "price");
                                     for (var o = 0; o < orders.length; o++) {
                                         //if (orders[o].price > 0.01) {
-                                            var orderResource = orders[o].resourceType;
-                                            var orderRoomName = orders[o].roomName;
-                                            var orderAmount;
-                                            if (surplusMinerals > orders[o].amount) {
-                                                orderAmount = orders[o].amount;
-                                            } else {
-                                                orderAmount = surplusMinerals;
-                                            }
-                                            var orderCosts = global.terminalTransfer(orderResource, orderAmount, orderRoomName, "cost");
-                                            if (orderAmount >= 500 && orderCosts <= Game.rooms[r].storage.store[RESOURCE_ENERGY] - 10000) {
-                                                Game.rooms[r].memory.terminalTransfer = orders[o].id + ":" + orderAmount + ":" + orderResource + ":MarketOrder";
-                                            }
+                                        var orderResource = orders[o].resourceType;
+                                        var orderRoomName = orders[o].roomName;
+                                        var orderAmount;
+                                        if (surplusMinerals > orders[o].amount) {
+                                            orderAmount = orders[o].amount;
+                                        } else {
+                                            orderAmount = surplusMinerals;
+                                        }
+                                        var orderCosts = global.terminalTransfer(orderResource, orderAmount, orderRoomName, "cost");
+                                        if (orderAmount >= 500 && orderCosts <= Game.rooms[r].storage.store[RESOURCE_ENERGY] - 10000) {
+                                            Game.rooms[r].memory.terminalTransfer = orders[o].id + ":" + orderAmount + ":" + orderResource + ":MarketOrder";
+                                        }
                                         /* } else {
                                             console.log("too cheap deal: "+orders[o].resourceType+" "+orders[o].roomName)
                                         } */
@@ -304,7 +307,7 @@ module.exports = {
                                 delete Game.rooms[r].memory.terminalTransfer;
                                 delete Game.rooms[r].memory.terminalEnergyCost;
                                 if (LOG_TERMINAL == true) {
-                                    console.log("<font color=#009bff type='highlight'>" + amount + " " + resource + " has been transferred to room " + targetRoom + " from "+Game.rooms[r].name+" using " + energyCost + " energy: " + comment + "</font>");
+                                    console.log("<font color=#009bff type='highlight'>" + amount + " " + resource + " has been transferred to room " + targetRoom + " from " + Game.rooms[r].name + " using " + energyCost + " energy: " + comment + "</font>");
                                 }
                             } else {
                                 if (amount < 100) {
@@ -354,54 +357,56 @@ module.exports = {
     },
     productionCode: function (r) {
         // Production Code
-        if (Game.cpu.bucket > CPU_THRESHOLD && Game.time % DELAYPRODUCTION == 0 && Game.rooms[r].memory.innerLabs != undefined && Game.rooms[r].memory.innerLabs[0].labID != "[LAB_ID]" && Game.rooms[r].memory.innerLabs[1].labID != "[LAB_ID]" &&
-            Game.rooms[r].memory.labOrder == undefined && Game.rooms[r].memory.labTarget == undefined) {
+        if (Game.cpu.bucket > CPU_THRESHOLD && Game.time % DELAYPRODUCTION == 0 && Game.rooms[r].memory.innerLabs != undefined && Game.rooms[r].memory.innerLabs[0] != "[LAB_ID]" && Game.rooms[r].memory.innerLabs[1] != "[LAB_ID]" &&
+            Game.rooms[r].memory.labOrder == undefined && Game.rooms[r].memory.labTarget == undefined && !_.isEmpty(Game.rooms[r].storage)) {
             for (let res in RESOURCES_ALL) {
-                if (RESOURCES_ALL[res] != RESOURCE_ENERGY && RESOURCES_ALL[res] != RESOURCE_POWER && mineralDescriptions[RESOURCES_ALL[res]].tier > 0) {
-                    var storageLevel;
-                    if (Game.rooms[r].storage.store[RESOURCES_ALL[res]] == undefined) {
-                        storageLevel = 0;
-                    } else {
-                        storageLevel = Game.rooms[r].storage.store[RESOURCES_ALL[res]];
-                    }
+                if (!_.isEmpty(mineralDescriptions[RESOURCES_ALL[res]])) {
+                    if (RESOURCES_ALL[res] != RESOURCE_ENERGY && RESOURCES_ALL[res] != RESOURCE_POWER && mineralDescriptions[RESOURCES_ALL[res]].tier > 0) {
+                        var storageLevel;
+                        if (Game.rooms[r].storage.store[RESOURCES_ALL[res]] == undefined) {
+                            storageLevel = 0;
+                        } else {
+                            storageLevel = Game.rooms[r].storage.store[RESOURCES_ALL[res]];
+                        }
 
-                    if ((storageLevel) < Game.rooms[r].memory.resourceLimits[RESOURCES_ALL[res]].minProduction) {
-                        //Try to produce resource
-                        let resource = RESOURCES_ALL[res];
+                        if ((storageLevel) < Game.rooms[r].memory.resourceLimits[RESOURCES_ALL[res]].minProduction) {
+                            //Try to produce resource
+                            let resource = RESOURCES_ALL[res];
 
-                        let delta = Math.ceil((Game.rooms[r].memory.resourceLimits[resource].minProduction - storageLevel) / 10) * 10;
+                            let delta = Math.ceil((Game.rooms[r].memory.resourceLimits[resource].minProduction - storageLevel) / 10) * 10;
 
-                        if (delta >= Game.rooms[r].memory.resourceLimits[resource].minProduction * 0.2 || delta >= 3000) {
-                            let genuineDelta = delta;
-                            var productionTarget = whatIsLackingFor(Game.rooms[r], delta, resource);
-                            let minProductionPacketSize = 100;
+                            if (delta >= Game.rooms[r].memory.resourceLimits[resource].minProduction * 0.2 || delta >= 3000) {
+                                let genuineDelta = delta;
+                                var productionTarget = whatIsLackingFor(Game.rooms[r], delta, resource);
+                                let minProductionPacketSize = 100;
 
-                            while (mineralDescriptions[productionTarget.resource].tier > 0 && Game.rooms[r].memory.labTarget == undefined && Game.cpu.getUsed() < 250) {
-                                if (productionTarget.amount == 0) {
-                                    productionTarget.amount = genuineDelta;
-                                }
-                                if (Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component1] >= minProductionPacketSize &&
-                                    Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component2] >= minProductionPacketSize) {
-                                    //All components ready, start production
-                                    let reactionAmount = Math.min(Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component1], Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component2]);
-                                    if (reactionAmount > genuineDelta) {
-                                        reactionAmount = genuineDelta;
+                                while (mineralDescriptions[productionTarget.resource].tier > 0 && Game.rooms[r].memory.labTarget == undefined && Game.cpu.getUsed() < 250) {
+                                    if (productionTarget.amount == 0) {
+                                        productionTarget.amount = genuineDelta;
                                     }
-                                    Game.rooms[r].memory.labTarget = reactionAmount + ":" + productionTarget.resource;
-                                    if (LOG_INFO == true) {
-                                        console.log("<font color=#ffca33 type='highlight'>Room " + Game.rooms[r].name + " started auto production of " + reactionAmount + " " + productionTarget.resource + ".</font>");
+                                    if (Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component1] >= minProductionPacketSize &&
+                                        Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component2] >= minProductionPacketSize) {
+                                        //All components ready, start production
+                                        let reactionAmount = Math.min(Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component1], Game.rooms[r].storage.store[mineralDescriptions[productionTarget.resource].component2]);
+                                        if (reactionAmount > genuineDelta) {
+                                            reactionAmount = genuineDelta;
+                                        }
+                                        Game.rooms[r].memory.labTarget = reactionAmount + ":" + productionTarget.resource;
+                                        if (LOG_INFO == true) {
+                                            console.log("<font color=#ffca33 type='highlight'>Room " + Game.rooms[r].name + " started auto production of " + reactionAmount + " " + productionTarget.resource + ".</font>");
+                                        }
+                                    } else if (Game.rooms[r].storage.store[mineralDescriptions[productionTarget].component1] < minProductionPacketSize) {
+                                        resource = mineralDescriptions[productionTarget].component1;
+                                    } else if (Game.rooms[r].storage.store[mineralDescriptions[productionTarget].component2] < minProductionPacketSize) {
+                                        resource = mineralDescriptions[productionTarget].component2;
                                     }
-                                } else if (Game.rooms[r].storage.store[mineralDescriptions[productionTarget].component1] < minProductionPacketSize) {
-                                    resource = mineralDescriptions[productionTarget].component1;
-                                } else if (Game.rooms[r].storage.store[mineralDescriptions[productionTarget].component2] < minProductionPacketSize) {
-                                    resource = mineralDescriptions[productionTarget].component2;
+                                    productionTarget = whatIsLackingFor(Game.rooms[r], genuineDelta, resource);
                                 }
-                                productionTarget = whatIsLackingFor(Game.rooms[r], genuineDelta, resource);
-                            }
 
-                            if (mineralDescriptions[productionTarget.resource].tier == 0) {
-                                //Tier 0 resource missing
-                                Game.rooms[r].memory.lastMissingComponent = productionTarget.resource;
+                                if (mineralDescriptions[productionTarget.resource].tier == 0) {
+                                    //Tier 0 resource missing
+                                    Game.rooms[r].memory.lastMissingComponent = productionTarget.resource;
+                                }
                             }
                         }
                     }
@@ -431,6 +436,7 @@ module.exports = {
                         if (labTarget.amount == 0) {
                             labTarget.amount = origAmount;
                         }
+                        //set a LAB order
                         Game.rooms[r].memory.labOrder = labTarget.amount + ":" + missingComponent1 + ":" + missingComponent2 + ":prepare";
                         if (missingComponent1 == mineralDescriptions[origResource].component1 && missingComponent2 == mineralDescriptions[origResource].component2) {
                             // Last production order given

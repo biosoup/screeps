@@ -29,17 +29,17 @@ module.exports = {
                     filter: s => s.structureType == STRUCTURE_WALL ||
                         s.structureType == STRUCTURE_RAMPART
                 });
-                structure = _.min(structure, "hits");
+                structure = _.first(_.sortByOrder(structure, ["hits"], ["asc"]));
             }
 
-            if (!hostile && structure) {
+            if (_.isEmpty(hostile) && !_.isEmpty(structure)) {
                 creep.task = Tasks.attack(structure)
             }
 
             if (Game.flags.GUARD_MOVE) {
                 creep.cancelOrder("move"); /* cancel ALL move orders */
                 creep.task = Tasks.goTo(Game.flags.GUARD_MOVE)
-                if (hostile) {
+                if (!_.isEmpty(hostile)) {
                     creep.task = Tasks.attack(hostile)
                     creep.task = Tasks.attack(structure)
 

@@ -465,28 +465,44 @@ Room.prototype.creepSpawnRun =
 
         //room interests
         let roomInterests = {}
+
+        //get all flags with code PURPLE for remote HARVESTERS
+        var redFlags = _.filter(Game.flags, (f) => f.color == COLOR_RED && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+        //get remote mining rooms for this spawnroom
+        for (var flag of redFlags) {
+            //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
+            roomInterests[flag.pos.roomName] = [flag.secondaryColor, 0, 0, 0, 0, 0]
+        }
+
+        //get all flags with code PURPLE for remote MINERS
+        var redFlags = _.filter(Game.flags, (f) => f.color == COLOR_PURPLE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+        //get remote mining rooms for this spawnroom
+        for (var flag of redFlags) {
+            //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
+            //builders & guard = boolean
+            roomInterests[flag.pos.roomName] = [0, flag.secondaryColor, 0, 1, 1, 1]
+        }
+
+        //code only for LORRIES
         if (spawnRoom.name == "W28N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
             //lorries = total count
-            //builders & guard = boolean
-            roomInterests.W28N13 = [0, 2, 6, 1, 1, 1]
-            roomInterests.W28N15 = [0, 1, 0, 1, 1, 1]
-            roomInterests.W27N15 = [0, 1, 0, 1, 1, 1]
-            roomInterests.W27N14 = [0, 1, 0, 1, 1, 1]
+            roomInterests.W28N14 = [0, 0, 4, 0, 0, 0]
         }
 
         if (spawnRoom.name == "W29N14") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W29N13 = [0, 1, 1, 1, 1, 1]
-            roomInterests.W31N14 = [0, 0, 0, 0, 0, 0]
+            //lorries = total count
+            roomInterests.W29N14 = [0, 0, 1, 0, 0, 0]
         }
 
         if (spawnRoom.name == "W32N13") {
             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests.W32N14 = [0, 1, 5, 1, 1, 1]
-            roomInterests.W32N12 = [0, 1, 0, 1, 1, 1]
-            roomInterests.W33N13 = [0, 2, 0, 1, 1, 1]
+            //lorries = total count
+            roomInterests.W32N13 = [0, 0, 4, 0, 0, 0]
         }
+
+        //console.log(spawnRoom.name+" "+JSON.stringify(roomInterests))
 
         let longDistanceHarvester = {}
         let longDistanceMiner = {}
@@ -574,7 +590,7 @@ Room.prototype.creepSpawnRun =
                 if (Game.rooms[interest] != undefined) {
                     //if hostiles present, spawn a task force!
                     var numHostiles = Game.rooms[interest].find(FIND_HOSTILE_CREEPS)
-                    if (numHostiles.length > 1) {
+                    if (numHostiles.length > 0) {
                         roomInterests[interest][5] = numHostiles.length;
                     } else {
                         roomInterests[interest][5] = 0
@@ -833,7 +849,7 @@ Room.prototype.creepSpawnRun =
                     if (!(name < 0) && name != undefined) {
                         testSpawn.memory.lastSpawn = spawnList[spawnEntry];
                         if (LOG_SPAWN == true) {
-                            //console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
+                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
                         }
                         spawnEntry++;
                     }

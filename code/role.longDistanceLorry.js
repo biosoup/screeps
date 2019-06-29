@@ -95,11 +95,11 @@ module.exports = {
                     }
                 }
 
-                if (validTarget != undefined && validTarget != null) {
+                if (!_.isEmpty(validTarget)) {
                     //target found, add it to creep.memory.target
                     creep.memory.target = validTarget;
                     container = Game.getObjectById(validTarget.id)
-                    if (container != null) {
+                    if (!_.isEmpty(container)) {
                         if (validTarget.energy >= creep.carryCapacity) {
                             //go work the target
                             creep.task = Tasks.withdraw(container);
@@ -117,7 +117,8 @@ module.exports = {
                             //console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] + "(" + validTarget.energy + ") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
                         }
                     } else {
-                        console.log(creep.name + " ERRRRR!!!  target not valid " + JSON.stringify(validTarget) + " " + JSON.stringify(allContainers) + " " + JSON.stringify(containerTargets))
+                        console.log(creep.name + " ERRRRR!!!  target not valid " + JSON.stringify(validTarget) + " " + JSON.stringify(allContainers) + " " + JSON.stringify(container))
+                        delete r.memory.containerSources[validTarget.id]
                     }
                 }
             } else {
@@ -134,7 +135,7 @@ module.exports = {
 
             //get home storage
             var homeStorage = Game.rooms[creep.memory.home].storage;
-            if (homeStorage != undefined && homeStorage != null) {
+            if (!_.isEmpty(homeStorage)) {
                 //put energy into storage
                 creep.task = Tasks.transfer(homeStorage)
                 creep.say("to storage!")
@@ -146,7 +147,7 @@ module.exports = {
             //creep is home, nad target is valid
             var validContainer = creep.memory.target
 
-            if (validContainer != undefined && validContainer != null) {
+            if (!_.isEmpty(validContainer)) {
                 //go work the target
                 creep.task = Tasks.withdraw(validContainer);
                 //creep.say("empty err?")
@@ -157,7 +158,7 @@ module.exports = {
 
             //get home storage
             var homeStorage = Game.rooms[creep.memory.home].storage;
-            if (homeStorage != undefined && homeStorage != null) {
+            if (!_.isEmpty(homeStorage)) {
                 //put energy into storage
                 creep.task = Tasks.transfer(homeStorage)
                 creep.say("to storage!")
@@ -169,7 +170,7 @@ module.exports = {
             if (creep.carry.energy > 0) {
                 //get home storage
                 var homeStorage = Game.rooms[creep.memory.home].storage;
-                if (homeStorage != undefined && homeStorage != null) {
+                if (!_.isEmpty(homeStorage)) {
                     //put energy into storage
                     creep.task = Tasks.transfer(homeStorage)
                     creep.say("to storage!")
@@ -189,7 +190,7 @@ module.exports = {
             //creep is abroad, nad target is valid
             var validTarget = creep.memory.target
             validTarget = Game.getObjectById(validTarget.id)
-            if (validTarget != undefined && validTarget != null) {
+            if (!_.isEmpty(validTarget)) {
                 if (validTarget.store[RESOURCE_ENERGY] > 0) {
                     //go work the target
                     creep.task = Tasks.withdraw(validTarget);
