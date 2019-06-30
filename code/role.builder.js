@@ -6,8 +6,9 @@ module.exports = {
     newTask: function (creep) {
 
         // if target is defined and creep is not in target room
-        if (creep.memory.target != undefined && creep.memory.target != null && creep.memory.target != "" && creep.room.name != creep.memory.target) {
-            creep.task = Tasks.goToRoom(creep.memory.target)
+        if (creep.room.name != creep.memory.home) {
+            //return to home room
+            creep.task = Tasks.goToRoom(creep.memory.home)
         } else {
             // if creep need energy, get him refilled
             if (creep.carry.energy > 0) {
@@ -23,10 +24,8 @@ module.exports = {
                         s.structureType != STRUCTURE_SPAWN
                 });
 
-
                 //find construction sites
                 var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-
 
                 if (closestRepairSite != undefined && closestRepairSite != null) {
                     //go reapir
@@ -48,12 +47,11 @@ module.exports = {
                             s.structureType != STRUCTURE_CONTROLLER &&
                             s.structureType != STRUCTURE_EXTENSION &&
                             s.structureType != STRUCTURE_TOWER &&
-                            s.structureType != STRUCTURE_WALL &&
                             s.structureType != STRUCTURE_SPAWN
                     });
 
-                    if (targets != undefined && targets != null && targets != "") {
-                        _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
+                    if (!_.isEmpty(targets)) {
+                        target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
                         if (target) {
                             creep.task = Tasks.repair(target);
                             creep.say("repairing")
@@ -71,7 +69,7 @@ module.exports = {
                                 });
 
                                 if (targets != undefined && targets != null && targets != "") {
-                                    _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
+                                    target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
                                     if (target) {
                                         creep.task = Tasks.repair(target);
                                         creep.say("repairing")

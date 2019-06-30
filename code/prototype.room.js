@@ -534,7 +534,7 @@ Room.prototype.creepSpawnRun =
                     if (Game.rooms[interest].controller != undefined && Game.rooms[interest].controller.reservation != undefined) {
                         if (Game.rooms[interest].controller.reservation.username == playerUsername) {
                             var reservationLeft = Game.rooms[interest].controller.reservation.ticksToEnd
-                            if (reservationLeft < 500) {
+                            if (reservationLeft < 3000) {
                                 minimumSpawnOf.claimer += 1 - inRooms;
                                 if (inRooms < 1) {
                                     claimer[interest] = 1;
@@ -640,12 +640,17 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        //Wall Repairer
-        /* if (spawnRoom.memory.roomSecure == true && constructionOfRampartsAndWalls == 0) {
+        //Wall Repairer – CONSTRUCTION
+        var wallRepairTargets = spawnRoom.find(FIND_STRUCTURES, {
+            filter: (s) => (s.structureType == STRUCTURE_RAMPART || s.structureType == STRUCTURE_WALL) && s.hits < WALLMAX
+        });
+        if (constructionOfRampartsAndWalls == 0) {
             minimumSpawnOf["wallRepairer"] = 0;
-        } else {
+        }
+        if (wallRepairTargets.length > 0) {
             minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
-        } */
+        }
+
 
         // spawnAttendant
         if (spawnRoom.storage != undefined) {
@@ -725,12 +730,14 @@ Room.prototype.creepSpawnRun =
 
         // Adjustments in case of hostile presence
         var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
-
+        var towersEnergy = spawnRoom.find(FIND_STRUCTURES, {
+            filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy > (s.energyCapacityAvailable/2)
+        });
         if (hostiles.length > 0) {
-            if (spawnRoom.memory.roomArray.towers.length > 0) {
-                minimumSpawnOf.guard = hostiles.length - 1;
+            if (towersEnergy.length > 0 ) {
+                minimumSpawnOf.guard = hostiles.length*2 - 1;
             } else {
-                minimumSpawnOf.guard = hostiles.length;
+                minimumSpawnOf.guard = hostiles.length*2;
             }
             minimumSpawnOf.upgrader = 0;
             minimumSpawnOf.builder = 0;
@@ -741,7 +748,7 @@ Room.prototype.creepSpawnRun =
             minimumSpawnOf.longDistanceLorry = 0;
             minimumSpawnOf.longDistanceBuilder = 0;
             minimumSpawnOf.demolisher = 0;
-            //minimumSpawnOf.wallRepairer *= 2;
+            minimumSpawnOf.wallRepairer *= 2;
         }
 
         // Measuring number of active creeps

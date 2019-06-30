@@ -4,7 +4,7 @@ module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
     newTask: function (creep) {
-        if (creep.carry.energy > 0) {
+        if (creep.carry.energy > 50) {
             //do the actual job
 
             // find closest spawn, extension or tower which is not full
