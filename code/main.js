@@ -122,7 +122,9 @@ module.exports.loop = function () {
         }
 
         // find all towers
-        var towers = Game.rooms[roomName].memory.roomArray.towers
+        if (!_.isEmpty(Game.rooms[roomName].memory.roomArray)) {
+            var towers = Game.rooms[roomName].memory.roomArray.towers
+        }
         if (towers != undefined && towers != null && towers != "") {
             //find hostiles in the room
             var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
@@ -136,7 +138,7 @@ module.exports.loop = function () {
             } else {
                 for (var tower of towers) {
                     tower = Game.getObjectById(tower);
-                    tower.healCreeps();       
+                    tower.healCreeps();
                 }
             }
 
@@ -154,7 +156,7 @@ module.exports.loop = function () {
         // balance resources
         market.resourceBalance(CPUdebug);
         // terminal transfers
-        market.terminalCode(roomName,CPUdebug);
+        market.terminalCode(roomName, CPUdebug);
 
         market.productionCode(roomName);
 
@@ -192,11 +194,11 @@ module.exports.loop = function () {
 
         //console.log(creep)
         try {
-            Game.creeps[creep].run();}
-        catch (err) {
+            Game.creeps[creep].run();
+        } catch (err) {
             Game.creeps[creep].say("MAIN ERR!!")
-            console.log("MAIN ERR: "+creep)
-            
+            console.log("MAIN ERR: " + creep)
+
         }
     }
 

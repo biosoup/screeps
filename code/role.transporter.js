@@ -49,8 +49,8 @@ module.exports = {
                 // Check resource status
                 if (creep.room.terminal.store[transferResource] >= packageVolume) {
                     //Check for energy level
-                    if ((transferResource != RESOURCE_ENERGY && creep.room.terminal.store[RESOURCE_ENERGY] < energyCost + packageVolume) 
-                    || transferResource == RESOURCE_ENERGY && creep.room.terminal.store[RESOURCE_ENERGY] + transferAmount > energyCost) {
+                    if ((transferResource != RESOURCE_ENERGY && creep.room.terminal.store[RESOURCE_ENERGY] < energyCost + packageVolume) ||
+                        transferResource == RESOURCE_ENERGY && creep.room.terminal.store[RESOURCE_ENERGY] + transferAmount > energyCost) {
                         //Get energy
                         if (energyCost > creep.carryCapacity) {
                             energyCost = creep.carryCapacity;
@@ -60,7 +60,7 @@ module.exports = {
                         // Get transfer resource
                         creep.task = Tasks.withdraw(creep.room.storage, transferResource, packageVolume)
                     } else {
-                        creep.say ("confused")
+                        creep.say("confused")
                         creep.task = Tasks.withdraw(creep.room.storage, RESOURCE_ENERGY, packageVolume)
                     }
                 } else {
@@ -201,6 +201,19 @@ module.exports = {
                         }
                     } else {
                         creep.say("bored")
+                        //get recycled
+
+                        //get closest free spawn
+                        var freeSpawn = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                            filter: s => s.structureType == STRUCTURE_SPAWN && _.isEmpty(s.spawning)
+                        });
+                        if (!_.isEmpty(freeSpawn)) {
+                            /* if (freeSpawn.recycleCreep != OK) {
+                                creep.travelTo(freeSpawn)
+                            } */
+                        } else {
+                            creep.say("nowhere to recycle")
+                        }
                     }
                 }
             }
