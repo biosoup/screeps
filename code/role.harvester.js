@@ -29,7 +29,17 @@ module.exports = {
                 structure = creep.room.storage;
             }
 
-            var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            var closestConstructionSite
+            if (creep.room.energyAvailable == creep.room.energyCapacityAvailable) {
+                closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
+                    filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
+                        s.structureType == STRUCTURE_EXTENSION
+                });
+            }
+
+            if (_.isEmpty(closestConstructionSite) && _.isEmpty(structure)) {
+                closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
+            }
 
             if (structure != undefined && closestConstructionSite == undefined) {
                 //if structure found, do work
@@ -61,10 +71,10 @@ module.exports = {
                 //find a link nerby the container
                 var link = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: s => s.structureType == STRUCTURE_LINK &&
-                    s.energy > 100
-                })[0];
+                        s.energy > 100
+                });
 
-                if(link != undefined && link != null) {
+                if (link != undefined && link != null) {
                     container = link
                 }
             }
@@ -74,19 +84,17 @@ module.exports = {
 
             if (container == undefined) {
                 // Harvest from an empty source if there is one, else pick any source
-                /* let sources = creep.room.find(FIND_SOURCES);
+                let sources = creep.room.find(FIND_SOURCES);
                 let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
-                if (unattendedSource) {
+                if (!_.isEmpty(unattendedSource)) {
                     unattendedSource = creep.pos.findClosestByPath(unattendedSource);
-                    console.log(unattendedSource)
                     creep.task = Tasks.harvest(unattendedSource);
-                } else { */
-                let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                if (source != undefined && source !== null) {
-                    //console.log(creep + " " + source)
-                    creep.task = Tasks.harvest(source);
+                } else {
+                    let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+                    if (source != undefined && source !== null) {
+                        creep.task = Tasks.harvest(source);
+                    }
                 }
-                //}
             } else {
                 creep.task = Tasks.withdraw(container);
             }

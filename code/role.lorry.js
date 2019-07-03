@@ -5,7 +5,7 @@ module.exports = {
     /** @param {Creep} creep */
     newTask: function (creep) {
 
-        if (creep.carry.energy == 0 && creep.carry == 0) {
+        if (creep.carry.energy < 100) {
             //get dropped resources
             var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
             //console.log(JSON.stringify(droppedEnergy))

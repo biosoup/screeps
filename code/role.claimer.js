@@ -16,6 +16,13 @@ module.exports = {
 
             } else {
                 //reserve controller
+                if (!_.isEmpty(creep.room.controller.sign)) {
+                    if (creep.room.controller.sign.username != playerUsername) {
+                        creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+                    }
+                } else {
+                    creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+                }
                 creep.task = Tasks.reserve(creep.room.controller);
             }
 

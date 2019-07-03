@@ -15,6 +15,7 @@ module.exports = {
                 if (innerLabs.length != 2) {
                     return "Not enough inner labs found!";
                 }
+                creep.say(status)
                 switch (status) {
                     case "prepare":
                         var labs = [];
@@ -30,6 +31,7 @@ module.exports = {
                                     if (currentInnerLab.mineralType == undefined || currentInnerLab.mineralType == innerLabs[lb].resource) {
                                         //Lab needs minerals
                                         if (creep.storeAllBut(innerLabs[lb].resource) == true) {
+                                            creep.say("Lab needs minerals")
                                             if (_.sum(creep.carry) == 0) {
                                                 //Get minerals from storage
                                                 var creepPackage = amount - currentInnerLab.mineralAmount;
@@ -39,18 +41,20 @@ module.exports = {
                                                 if (creep.room.storage.store[innerLabs[lb].resource] < creepPackage) {
                                                     //not enough resources in storage
                                                     delete creep.room.memory.labOrder;
-                                                } else if (creep.withdraw(creep.room.storage, innerLabs[lb].resource, creepPackage) == ERR_NOT_IN_RANGE) {
-                                                    creep.travelTo(creep.room.storage);
+                                                } else {
+                                                    //console.log(creep.room.storage+" "+ innerLabs[lb].resource+" "+ creepPackage)
+                                                    creep.task = Tasks.withdraw(creep.room.storage, innerLabs[lb].resource, creepPackage)
                                                 }
                                             } else {
                                                 creep.task = Tasks.transfer(currentInnerLab, innerLabs[lb].resource)
                                             }
                                         }
                                     } else {
+                                        creep.say("Lab to be empty!")
                                         //Lab has to be emptied -> get rid of stuff in creep
                                         if (creep.storeAllBut() == true) {
                                             //Get minerals from storage
-                                            creep.task = Tasks.withdraw(currentInnerLab, currentInnerLab.mineralType)
+                                            creep.task = Tasks.withdrawAll(currentInnerLab, currentInnerLab.mineralType)
                                         }
                                     }
                                     break;

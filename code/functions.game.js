@@ -426,6 +426,7 @@ global.checkStorageLimits = function (room, resource) {
     }
 };
 
+// FIXME: function is broken
 global.whatIsLackingFor = function (room, amount, resource) {
     //Return object [resource, amount] with lowest-tier resource missing in room for target resource
     var returnArray = {};
@@ -618,7 +619,9 @@ global.buyOrder = function (amount, resource, roomName, price) {
     }
 };
 
-
+/* TODO:
+    - add more checks before production
+    - add auto buy for missing resources */
 global.produce = function (roomName, amount, resource) {
     if (arguments.length == 0) {
         return "produce (roomName, amount, resource)";

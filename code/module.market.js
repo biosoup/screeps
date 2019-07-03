@@ -38,14 +38,20 @@ module.exports = {
     },
 
     marketCode: function (CPUdebug = false) {
+        /* 
+        FIXME:
+            - add market cooldown
+            - multiple buy rooms
+        */
+
         // Single Market Buy Orders
         if (Game.time % DELAYMARKETBUY == 0 && Game.cpu.bucket > CPU_THRESHOLD && Memory.buyOrder != undefined) {
             let info = Memory.buyOrder.split(":"); //Format: [AMOUNT]:[ORDERID]
             var left = info[0];
             var order = Game.market.getOrderById(info[1]);
             if (order != null) {
-                if (left > 5000) {
-                    left = 5000;
+                if (left > BUY_PACKETSIZE) {
+                    left = BUY_PACKETSIZE;
                 }
                 if (left > order.amount) {
                     left = order.amount;
@@ -71,12 +77,13 @@ module.exports = {
                         Memory.buyRoom = bestRoom.name;
                     }
                 }
-                if (!_.isEmpty(bestRoom.name)) {
+                if (!_.isEmpty(bestRoom.name) && bestRoom.terminal.cooldown == 0) {
                     var returnCode = Game.market.deal(order.id, left, bestRoom.name);
                     if (returnCode == OK) {
                         info[0] -= left;
                         if (LOG_MARKET == true) {
                             console.log("<font color=#fe2ec8 type='highlight'>" + left + " " + order.resourceType + " bought in room " + bestRoom.name + " for " + (left * order.price) + " credits.</font>");
+                            delete Memory.buyRoom;
                         }
                         if (info[0] > 0) {
                             Memory.buyOrder = info.join(":");

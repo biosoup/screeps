@@ -20,6 +20,8 @@ module.exports = {
                 filter: function (object) {
                     return object.structureType != STRUCTURE_CONTROLLER &&
                         object.structureType != STRUCTURE_KEEPER_LAIR &&
+                        object.structureType != STRUCTURE_STORAGE &&
+                        object.structureType != STRUCTURE_CONTAINER &&
                         object.structureType != STRUCTURE_WALL;
                 }
             });

@@ -16,6 +16,7 @@ DELAYDROPPEDENERGY = 3;
 RESOURCE_SPACE = "space";
 TERMINAL_PACKETSIZE = 5000; //Size of packets in resource balancing system
 AUTOSELL_PACKETSIZE = 5000;
+BUY_PACKETSIZE = 5000;
 TERMINALMARKETSTORE = 50000;
 RBS_PACKETSIZE = 5000;
 CPU_THRESHOLD = 500;
@@ -357,13 +358,13 @@ buildingPlans = {
 
     longDistanceHarvester: [{
             //Level 1 (max 300)
-            minEnergy: 200,
-            body: [MOVE, WORK, CARRY]
+            minEnergy: 250,
+            body: [MOVE, MOVE, WORK, CARRY]
         },
         {
             //Level 2 (max 550)
-            minEnergy: 400,
-            body: [MOVE, MOVE, WORK, WORK, CARRY, CARRY]
+            minEnergy: 500,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 3 (max 800)
@@ -399,13 +400,13 @@ buildingPlans = {
 
     harvester: [{
             //Level 1 (max 300)
-            minEnergy: 200,
-            body: [MOVE, WORK, CARRY]
+            minEnergy: 250,
+            body: [MOVE, MOVE, WORK, CARRY]
         },
         {
             //Level 2 (max 550)
-            minEnergy: 350,
-            body: [MOVE, MOVE, WORK, WORK, CARRY]
+            minEnergy: 400,
+            body: [MOVE, MOVE, MOVE, WORK, WORK, CARRY]
         },
         {
             //Level 3 (max 800)
@@ -609,8 +610,8 @@ buildingPlans = {
 
     builder: [{
             //Level 1 (max 300)
-            minEnergy: 200,
-            body: [MOVE, WORK, CARRY]
+            minEnergy: 250,
+            body: [MOVE, MOVE, WORK, CARRY]
         },
         {
             //Level 2 (max 550)
@@ -651,8 +652,8 @@ buildingPlans = {
 
     wallRepairer: [{
             //Level 1 (max 300)
-            minEnergy: 200,
-            body: [MOVE, WORK, CARRY]
+            minEnergy: 250,
+            body: [MOVE, MOVE, WORK, CARRY]
         },
         {
             //Level 2 (max 550)

@@ -201,19 +201,6 @@ module.exports = {
                         }
                     } else {
                         creep.say("bored")
-                        //get recycled
-
-                        //get closest free spawn
-                        var freeSpawn = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                            filter: s => s.structureType == STRUCTURE_SPAWN && _.isEmpty(s.spawning)
-                        });
-                        if (!_.isEmpty(freeSpawn)) {
-                            /* if (freeSpawn.recycleCreep != OK) {
-                                creep.travelTo(freeSpawn)
-                            } */
-                        } else {
-                            creep.say("nowhere to recycle")
-                        }
                     }
                 }
             }

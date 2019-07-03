@@ -24,8 +24,15 @@ module.exports = {
                         s.structureType != STRUCTURE_SPAWN
                 });
 
-                //find construction sites
-                var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                //find construction sites for important stuff
+                var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
+                    filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
+                        s.structureType == STRUCTURE_EXTENSION
+                });
+
+                if (_.isEmpty(closestConstructionSite)) {
+                    var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                }
 
                 if (closestRepairSite != undefined && closestRepairSite != null) {
                     //go reapir
@@ -65,7 +72,7 @@ module.exports = {
                             if (creep.room.storage.store[RESOURCE_ENERGY] > 300000) {
                                 var targets = creep.room.find(FIND_STRUCTURES, {
                                     filter: (s) =>
-                                        (s.hits < 1000000) && s.structureType == STRUCTURE_WALL
+                                        (s.hits < WALLMAX) && s.structureType == STRUCTURE_WALL
                                 });
 
                                 if (targets != undefined && targets != null && targets != "") {

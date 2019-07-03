@@ -6,8 +6,14 @@ module.exports = upgrader = {
     newTask: function (creep) {
         if (creep.carry.energy > 0) {
             //do the actual job
+            if (!_.isEmpty(creep.room.controller.sign)) {
+                if (creep.room.controller.sign.username != playerUsername) {
+                    creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+                }
+            } else {
+                creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+            }
             creep.task = Tasks.upgrade(creep.room.controller);
-
         } else {
             //first link nearby
             var container;

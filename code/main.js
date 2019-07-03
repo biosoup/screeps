@@ -1,4 +1,4 @@
-// version 0.3
+// version 0.4
 const CPUdebug = false;
 
 if (CPUdebug == true) {
@@ -105,6 +105,23 @@ module.exports.loop = function () {
     }
 
     if (CPUdebug == true) {
+        CPUdebugString = CPUdebugString.concat("<br>Start Tasks Code: " + Game.cpu.getUsed())
+    }
+    // ************ NEW TASK SYSTEM ************
+    for (let creep in Game.creeps) {
+        //if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" work Code: " + Game.cpu.getUsed())}
+        //console.log(Game.creeps[creep])
+
+        //if creep is idle, give him work
+        if (Game.creeps[creep].isIdle) {
+            Game.creeps[creep].runRole()
+        } else if (!Game.creeps[creep].hasValidTask) {
+            Game.creeps[creep].runRole()
+        }
+
+    }
+
+    if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Start Rooms Code: " + Game.cpu.getUsed())
     }
     //go through rooms
@@ -168,22 +185,7 @@ module.exports.loop = function () {
 
 
 
-    if (CPUdebug == true) {
-        CPUdebugString = CPUdebugString.concat("<br>Start Tasks Code: " + Game.cpu.getUsed())
-    }
-    // ************ NEW TASK SYSTEM ************
-    for (let creep in Game.creeps) {
-        //if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" work Code: " + Game.cpu.getUsed())}
-        //console.log(Game.creeps[creep])
-
-        //if creep is idle, give him work
-        if (Game.creeps[creep].isIdle) {
-            Game.creeps[creep].runRole()
-        } else if (!Game.creeps[creep].hasValidTask) {
-            Game.creeps[creep].runRole()
-        }
-
-    }
+  
 
     if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Start Creep run Code: " + Game.cpu.getUsed())

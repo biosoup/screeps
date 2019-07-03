@@ -1,3 +1,4 @@
 
 gruntfile.js
 **/node_modules
+.VSCodeCounter/

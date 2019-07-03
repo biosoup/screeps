@@ -30,12 +30,8 @@ let longDistanceHarvester = {
                     //if full and destination known, dump energy
                     creep.task = Tasks.transfer(structure)
                 } else {
-                    //if no structure as a destination, go wait near spawn
-                    var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                        filter: (s) => (s.structureType == STRUCTURE_SPAWN)
-                    });
-
-                    creep.task = Tasks.goTo(structure);
+                    //if no structure as a upgrade controller
+                    creep.task = Tasks.upgrade(creep.room.controller);
                 }
             } else {
                 //go to target room
