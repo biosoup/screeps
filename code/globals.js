@@ -30,6 +30,7 @@ LOG_PANICFLAG = true;
 LOG_INFO = true;
 
 playerUsername = "biosoup";
+roomSign = "Not fully automated, yet!"
 allies = [];
 myroomlist = _.values(Game.rooms).filter(r => _.get(r, ['controller', 'owner', 'username'], undefined) === playerUsername);
 myRooms = {};
@@ -494,36 +495,37 @@ buildingPlans = {
         },
         {
             //Level 3 (max 800)
-            minEnergy: 700,
-            body: [MOVE, MOVE, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 750,
+            body: [MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 4 (max 1300)
-            minEnergy: 1200,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 850,
+            body: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 5 (max 1800)
-            minEnergy: 1200,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 850,
+            body: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 6 (max 2300)
-            minEnergy: 1200,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 850,
+            body: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 7 (max 5600)
-            minEnergy: 1200,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 850,
+            body: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 8 (max 12900)
-            minEnergy: 1200,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 850,
+            body: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         }
     ],
 
+    //FIXME: add work parts on lower level compared to carry
     upgrader: [{
             //Level 1 (max 300)
             minEnergy: 300,
@@ -541,8 +543,8 @@ buildingPlans = {
         },
         {
             //Level 4 (max 1300)
-            minEnergy: 1250,
-            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 1300,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 5 (max 1800)

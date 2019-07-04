@@ -54,6 +54,8 @@ module.exports = {
                             s.structureType != STRUCTURE_CONTROLLER &&
                             s.structureType != STRUCTURE_EXTENSION &&
                             s.structureType != STRUCTURE_TOWER &&
+                            s.structureType != STRUCTURE_WALL &&
+                            s.structureType != STRUCTURE_RAMPART &&
                             s.structureType != STRUCTURE_SPAWN
                     });
 
@@ -72,7 +74,7 @@ module.exports = {
                             if (creep.room.storage.store[RESOURCE_ENERGY] > 300000) {
                                 var targets = creep.room.find(FIND_STRUCTURES, {
                                     filter: (s) =>
-                                        (s.hits < WALLMAX) && s.structureType == STRUCTURE_WALL
+                                        (s.hits < WALLMAX) && (s.structureType == STRUCTURE_WALL || s.structureType == STRUCTURE_RAMPART)
                                 });
 
                                 if (targets != undefined && targets != null && targets != "") {

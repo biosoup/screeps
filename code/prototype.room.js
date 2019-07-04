@@ -469,37 +469,42 @@ Room.prototype.creepSpawnRun =
         //get all flags with code PURPLE for remote HARVESTERS
         var redFlags = _.filter(Game.flags, (f) => f.color == COLOR_RED && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
         //get remote mining rooms for this spawnroom
-        for (var flag of redFlags) {
-            //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            roomInterests[flag.pos.roomName] = [flag.secondaryColor, 0, 0, 0, 0, 0]
-        }
-        if(!_.isEmpty(spawnRoom.storage)){
-            //get all flags with code PURPLE for remote MINERS
-            var redFlags = _.filter(Game.flags, (f) => f.color == COLOR_PURPLE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
-            //get remote mining rooms for this spawnroom
+        if (!_.isEmpty(redFlags)) {
             for (var flag of redFlags) {
                 //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-                //builders & guard = boolean
-                roomInterests[flag.pos.roomName] = [0, flag.secondaryColor, 0, 1, 1, 1]
+                roomInterests[flag.pos.roomName] = [flag.secondaryColor, 0, 0, 1, 0, 1]
             }
         }
-        //code only for LORRIES
-        if (spawnRoom.name == "W28N14") {
-            //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            //lorries = total count
-            roomInterests.W28N14 = [0, 0, 4, 0, 0, 0]
+
+        // flag based remote mining
+        if (!_.isEmpty(spawnRoom.storage)) {
+            //get all flags with code PURPLE for remote MINERS
+            var purpleFlags = _.filter(Game.flags, (f) => f.color == COLOR_PURPLE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+            //get remote mining rooms for this spawnroom
+            if (!_.isEmpty(purpleFlags)) {
+                for (var flag of purpleFlags) {
+                    //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
+                    //builders & guard = boolean
+                    roomInterests[flag.pos.roomName] = [0, flag.secondaryColor, 1, 1, 1, 1]
+                }
+            }
         }
 
-        if (spawnRoom.name == "W29N14") {
-            //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            //lorries = total count
-            roomInterests.W29N14 = [0, 0, 1, 0, 0, 0]
-        }
-
-        if (spawnRoom.name == "W32N13") {
-            //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-            //lorries = total count
-            roomInterests.W32N13 = [0, 0, 4, 0, 0, 0]
+        //flag based room claiming
+        if (!_.isEmpty(spawnRoom.storage)) {
+            //get gcl and number of rooms
+            var gcl = Game.gcl.level;
+            var numberOfRooms = _.sum(Game.rooms, room => room.controller && room.controller.my)
+            if (gcl > numberOfRooms.length) {
+                var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_GREY && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+                if (!_.isEmpty(greyFlags)) {
+                    for (var flag of greyFlags) {
+                        //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
+                        //builders & guard = boolean
+                        roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
+                    }
+                }
+            }
         }
 
         //console.log(spawnRoom.name+" "+JSON.stringify(roomInterests))
@@ -591,7 +596,18 @@ Room.prototype.creepSpawnRun =
                     //if hostiles present, spawn a task force!
                     var numHostiles = Game.rooms[interest].find(FIND_HOSTILE_CREEPS)
                     if (numHostiles.length > 0) {
-                        roomInterests[interest][5] = numHostiles.length;
+                        roomInterests[interest][5] = numHostiles.length * 2;
+                        //hostiles, do not do anything else
+                        roomInterests[interest][0] = 0
+                        minimumSpawnOf.longDistanceHarvester = minimumSpawnOf.longDistanceHarvester - roomInterests[interest][0];
+                        roomInterests[interest][1] = 0
+                        minimumSpawnOf.longDistanceMiner = minimumSpawnOf.longDistanceMiner - roomInterests[interest][1];
+                        roomInterests[interest][2] = 0
+                        minimumSpawnOf.longDistanceLorry = minimumSpawnOf.longDistanceLorry - roomInterests[interest][2];
+                        roomInterests[interest][3] = 0
+                        minimumSpawnOf.longDistanceBuilder = minimumSpawnOf.longDistanceBuilder - roomInterests[interest][3];
+                        roomInterests[interest][4] = 0
+                        minimumSpawnOf.claimer = minimumSpawnOf.claimer - roomInterests[interest][4];
                     } else {
                         roomInterests[interest][5] = 0
                     }
@@ -635,7 +651,7 @@ Room.prototype.creepSpawnRun =
         // Upgrader
         minimumSpawnOf["upgrader"] = 1;
         if (spawnRoom.storage != undefined) {
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 800000 && spawnRoom.controller.level < 8) {
+            if (spawnRoom.storage.store[RESOURCE_ENERGY] > (100000 * spawnRoom.controller.level) && spawnRoom.controller.level < 8) {
                 minimumSpawnOf.upgrader = 2;
             }
         }
@@ -770,9 +786,9 @@ Room.prototype.creepSpawnRun =
         var containerEnergy = spawnRoom.find(FIND_STRUCTURES, {
             filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 1900
         });
-        var numberOfTowers = _.sum(spawnRoom.find(FIND_STRUCTURES, {
+        var numberOfTowers = spawnRoom.find(FIND_STRUCTURES, {
             filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy > 0
-        }));
+        });
         /* 
         FIXME:
             - more agressive spawning on lower RCL
@@ -781,16 +797,17 @@ Room.prototype.creepSpawnRun =
 
         if (rcl <= 2) {
             minimumSpawnOf.harvester = numberOfSources * 4
+            minimumSpawnOf.lorry = 0
         } else if (rcl == 3) {
             minimumSpawnOf.harvester = numberOfSources * 3
         }
 
-        if (rcl <= 3 && containerEnergy.length > 0) {
-            minimumSpawnOf.upgrader = minimumSpawnOf.upgrader + numberOfSources;
+        if (rcl <= 4 && containerEnergy.length > 0) {
+            minimumSpawnOf.upgrader = minimumSpawnOf.upgrader + 1;
         }
 
         //keep a builder until we have towers for repairs
-        if ((rcl < 3 || numberOfTowers == 0) && minimumSpawnOf.builder == 0) {
+        if ((rcl < 3 || numberOfTowers.length == 0) && minimumSpawnOf.builder == 0) {
             minimumSpawnOf.builder = 1;
         }
 
@@ -1118,7 +1135,7 @@ Room.prototype.getSpawnList =
                 for (let e in container) {
                     containerEnergy += container[e].store[RESOURCE_ENERGY];
                 }
-                if (containerEnergy > 800000) {
+                if (containerEnergy > (100000 * spawnRoom.controller.level)) {
                     //spawnList.push("upgrader");
                 }
             }

@@ -6,6 +6,11 @@ module.exports = {
     newTask: function (creep) {
 
         if (creep.carry.energy < 100) {
+            if (_.sum(creep.carry) > _.sum(creep.carry[RESOURCE_ENERGY]) && !_.isEmpty(creep.room.storage)) {
+                //creep carries other stuff than just energy
+                creep.storeAllBut();
+                return;
+            }
             //get dropped resources
             var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
             //console.log(JSON.stringify(droppedEnergy))
@@ -104,7 +109,7 @@ module.exports = {
             if (!_.isEmpty(structure)) {
                 creep.task = Tasks.transfer(structure);
             } else {
-                creep.say('no place for energy')
+                //creep.say('no place for energy')
             }
         }
 

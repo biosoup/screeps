@@ -24,7 +24,13 @@ module.exports = {
                 // find container next to source
                 var container = source.pos.findInRange(FIND_STRUCTURES, 1, {
                     filter: s => s.structureType == STRUCTURE_CONTAINER
-                })[0];
+                });
+                //check for free space on first container
+                if (container[0].pos.lookFor(LOOK_CREEPS).length > 0 && container.length > 1) {
+                    container = container[1];
+                } else {
+                    container = container[0];
+                }
 
                 if (typeof container !== 'undefined') {
                     // if creep is on top of the container

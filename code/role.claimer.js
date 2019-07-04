@@ -8,22 +8,22 @@ module.exports = {
             //go to target room
             creep.task = Tasks.goToRoom(creep.memory.target)
         } else if (creep.room.name == creep.memory.target) {
-
-            if (creep.room.name == "W32N13") {
+            var greyFlag = creep.room.find(FIND_FLAGS, (f) => f.color == COLOR_GREY && f.room == creep.memory.target)
+            if (_.sum(greyFlag)>0) {
                 // try to claim controller
                 creep.task = Tasks.claim(creep.room.controller)
-                //if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE && creep.claimController(creep.room.controller) != ERR_GCL_NOT_ENOUGH) {}
-
+                creep.say("claim")
             } else {
                 //reserve controller
                 if (!_.isEmpty(creep.room.controller.sign)) {
                     if (creep.room.controller.sign.username != playerUsername) {
-                        creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+                        creep.task = Tasks.signController(creep.room.controller, roomSign)
                     }
                 } else {
-                    creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+                    creep.task = Tasks.signController(creep.room.controller, roomSign)
                 }
                 creep.task = Tasks.reserve(creep.room.controller);
+                creep.say("reserving")
             }
 
         } else {
