@@ -1,4 +1,4 @@
-// version 0.4
+// version 0.5
 const CPUdebug = false;
 
 if (CPUdebug == true) {
@@ -11,13 +11,11 @@ if (CPUdebug == true) {
 
 //system imports
 require('globals')
+require('prototype.Room.structures');
 //const profiler = require('screeps-profiler');
 const stats = require('stats');
 require("creep-tasks");
 var Traveler = require('Traveler');
-
-
-//to be implemented into my code - mainly Terminal code
 require('functions.game');
 
 // import modules

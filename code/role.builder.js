@@ -3,146 +3,57 @@ var Tasks = require("creep-tasks");
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    newTask: function (creep) {
+    newTask2: function (creep) {
+        if (creep.carry.energy > 0) {
+            //has energy -> do work
 
-        // if target is defined and creep is not in target room
-        if (creep.room.name != creep.memory.home) {
-            //return to home room
-            creep.task = Tasks.goToRoom(creep.memory.home)
-        } else {
-            // if creep need energy, get him refilled
-            if (creep.carry.energy > 0) {
-                //find critical repair sites
-                var closestRepairSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: (s) =>
-                        ((s.hits / s.hitsMax) < 0.5) &&
-                        s.structureType != STRUCTURE_CONTROLLER &&
-                        s.structureType != STRUCTURE_EXTENSION &&
-                        s.structureType != STRUCTURE_TOWER &&
-                        s.structureType != STRUCTURE_WALL &&
-                        s.structureType != STRUCTURE_RAMPART &&
-                        s.structureType != STRUCTURE_SPAWN
-                });
+            //find important buidlsites
+            var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
+                    s.structureType == STRUCTURE_EXTENSION
+            });
+            if (!_.isEmpty(closestImportantConstructionSite)) {
+                creep.task = Tasks.build(closestImportantConstructionSite);
+                creep.say(EM_BUILD + " " + EM_EXCLAMATION);
+                return;
+            }
 
-                //find construction sites for important stuff
-                var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
-                    filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
-                        s.structureType == STRUCTURE_EXTENSION
-                });
+            //find buildsites
+            var closestConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+            if (!_.isEmpty(closestConstructionSite)) {
+                creep.task = Tasks.build(closestConstructionSite);
+                creep.say(EM_BUILD);
+                return;
+            }
 
-                if (_.isEmpty(closestConstructionSite)) {
-                    var closestConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-                }
+            //find repairs
+            var closestRepairSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: (s) =>
+                    s.structureType != STRUCTURE_CONTROLLER
+            });
+            if (!_.isEmpty(closestRepairSite)) {
+                //sort them by hits
+                var closestRepairSite = _.sortBy(closestRepairSite, "hits")
 
-                if (closestRepairSite != undefined && closestRepairSite != null) {
-                    //go reapir
-                    creep.task = Tasks.repair(closestRepairSite);
-                    creep.say(":hammer:")
+                creep.task = Tasks.repair(closestConstructionSite);
+                creep.say(EM_WRENCH);
+                return;
+            }
 
-                } else if (closestConstructionSite != undefined && closestConstructionSite != null) {
-                    //go build
-                    creep.task = Tasks.build(closestConstructionSite);
-                    creep.say(":building_construction:");
-
-                } else {
-                    //if nothing is to be built, do something useful
-
-                    //Find the closest damaged Structure
-                    var targets = creep.room.find(FIND_STRUCTURES, {
-                        filter: (s) =>
-                            (s.hits / s.hitsMax) < 0.9 &&
-                            s.structureType != STRUCTURE_CONTROLLER &&
-                            s.structureType != STRUCTURE_EXTENSION &&
-                            s.structureType != STRUCTURE_TOWER &&
-                            s.structureType != STRUCTURE_WALL &&
-                            s.structureType != STRUCTURE_RAMPART &&
-                            s.structureType != STRUCTURE_SPAWN
-                    });
-
-                    if (!_.isEmpty(targets)) {
-                        target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
-                        if (target) {
-                            creep.task = Tasks.repair(target);
-                            creep.say(":hammer:")
-                        } else {
-                            console.log(JSON.stringify(targets))
-                            creep.say(":confused:")
-                        }
-                    } else {
-                        //add code to repair walls to 1mil hits
-                        if (creep.room.storage != undefined) {
-                            if (creep.room.storage.store[RESOURCE_ENERGY] > 300000) {
-                                var targets = creep.room.find(FIND_STRUCTURES, {
-                                    filter: (s) =>
-                                        (s.hits < WALLMAX) && (s.structureType == STRUCTURE_WALL || s.structureType == STRUCTURE_RAMPART)
-                                });
-
-                                if (targets != undefined && targets != null && targets != "") {
-                                    target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
-                                    if (target) {
-                                        creep.task = Tasks.repair(target);
-                                        creep.say(":hammer:")
-                                    }
-                                } else {
-                                    creep.say(":sleeping_bed:")
-                                    creep.task = Tasks.upgrade(creep.room.controller);
-                                }
-                            } else {
-                                creep.say(":sleeping_bed:")
-                                creep.task = Tasks.upgrade(creep.room.controller);
-                            }
-                        } else {
-                            creep.say(":sleeping_bed:")
-                            creep.task = Tasks.upgrade(creep.room.controller);
-                        }
-
-
-                    }
-                }
-
-
+            //nothing to do -> upgrade controller
+            if (creep.room.controller.my) {
+                creep.task = Tasks.upgrade(creep.room.controller);
+                creep.say(EM_LIGHTNING);
+                return;
             } else {
-                var container;
-                //look for storage
-                if (creep.room.storage != undefined) {
-                    if (creep.room.storage.store[RESOURCE_ENERGY] > 100) {
-                        container = creep.room.storage;
-                    } else {
-                        //if storage is empty find container
-                        container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                            filter: s => s.structureType == STRUCTURE_CONTAINER &&
-                                s.store[RESOURCE_ENERGY] > 100
-                        });
-                    }
-                } else {
-                    container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                        filter: s => s.structureType == STRUCTURE_CONTAINER &&
-                            s.store[RESOURCE_ENERGY] > 100
-                    });
-                }
+                creep.say(EM_SINGING);
+                return
+            }
 
-                //add a withraw task
-                if (container != undefined && container != null) {
-                    creep.task = Tasks.withdraw(container);
-                } else {
-                    // Harvest from an empty source if there is one, else pick any source
-                    /* let sources = creep.room.find(FIND_SOURCES);
-                    let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
-                    if (unattendedSource != undefined && unattendedSource != null) {
-                        unattendedSource = creep.pos.findClosestByPath(unattendedSource);
-                        creep.task = Tasks.harvest(unattendedSource);
-                    } else { */
-                    let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                    if (source != undefined && source != null) {
-                        //console.log(creep + " " + source)
-                        creep.task = Tasks.harvest(source);
-                    }
-                    //}
-                    creep.say("no energy source")
-                }
+        } else {
+            if(creep.getEnergy(creep, true)) {
+                return;
             }
         }
-
-
     }
 };

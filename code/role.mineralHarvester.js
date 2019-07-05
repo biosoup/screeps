@@ -5,32 +5,25 @@ module.exports = {
     /** @param {Creep} creep */
     newTask: function (creep) {
         if (_.sum(creep.carry) == creep.carryCapacity) {
-            //do the actual job
-
-            //find terminal
-            var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter: (s) => (s.structureType == STRUCTURE_TERMINAL) &&
-                    s.store < s.storeCapacity
-            });
-
-            //no structures, dump energy into storage
-            if (structure == undefined) {
-                structure = creep.room.storage;
-            }
-
-            if (structure != undefined && structure != null) {
+            //drop off everything
+            if (!_.isEmpty(creep.room.storage)) {
                 //if structure found, do work
-                creep.task = Tasks.transferAll(structure);
+                creep.task = Tasks.transferAll(creep.room.storage);
+                creep.say(EM_TRUCK)
+                return
+            } else {
+                creep.say(EM_EXCLAMATION)
             }
         } else {
+            //go mine minerals
             let source = creep.pos.findClosestByPath(FIND_MINERALS, {filter: (s) => s.mineralAmount > 0});
-
-            //console.log(creep)
-            if (source != undefined && source !== null) {
-                //console.log(creep+" "+source)
+            if (!_.isEmpty(source)) {
                 creep.task = Tasks.harvest(source);
+                creep.say(EM_FLEX)
+                return
+            }else {
+                creep.say(EM_EXCLAMATION)
             }
         }
-
     }
 };

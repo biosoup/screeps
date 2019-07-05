@@ -10,31 +10,9 @@ module.exports = {
             creep.say("other")
             return;
         } else if (creep.carry[RESOURCE_ENERGY] > 0) {
-            /* creep has energy -> work
-            order by lvl of importance for a lorry
-                1) towers
-                2) spawn & extensions
-                3) storage link
-             */
+            // creep has energy -> work
 
-            //find towers to give them their energy
-            var tower = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter: (s) => (s.structureType == STRUCTURE_TOWER) &&
-                    s.energy < s.energyCapacity
-            });
-            if (!_.isEmpty(tower)) {
-                creep.task = Tasks.transfer(tower);
-                return;
-            }
-
-            //find spawn and extension to refill
-            var spawn = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
-                        s.structureType == STRUCTURE_EXTENSION) &&
-                    s.energy < s.energyCapacity
-            });
-            if (!_.isEmpty(spawn)) {
-                creep.task = Tasks.transfer(spawn);
+            if(creep.fillStructures(creep)) {
                 return;
             }
 
@@ -56,7 +34,7 @@ module.exports = {
                 }
             } else {
                 creep.say("no storage")
-            }            
+            }
         } else {
             //creep is empty
 
@@ -76,52 +54,49 @@ module.exports = {
             }
 
             //get containers from room memory
-            if (!_.isEmpty(creep.room.memory.roomArray)) {
-                var containerIDs = creep.room.memory.roomArray.containers;
-                var containers = {};
-                for (var cID of containerIDs) {
-                    var c = Game.getObjectById(cID)
-                    //check for link nearby
-                    if (_.isEmpty(c.pos.findInRange(FIND_STRUCTURES, 2, {
-                            filter: s => s.structureType == STRUCTURE_LINK
-                        }))) {
-                        containers.push(c)
-                    }
+
+            var containers = creep.room.containers;
+            var targets = {}
+            for (var c of containers) {
+                //check for link nearby
+                var check = c.pos.findInRange(FIND_STRUCTURES, 2, {
+                    filter: s => s.structureType == STRUCTURE_LINK
+                });
+                if (_.isEmpty(check)) {
+                    targets.push(c)
                 }
-                //if there are continers -> sort from the fullest
-                if (!_.isEmpty(containers)) {
-                    var container = containers.sort(function (a, b) {
-                        return b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]
-                    })[0];
-                    creep.task = Tasks.withdraw(container);
-                    return;
-                } else {
-                    //no suitable containers
-                    if (!_.isEmpty(creep.room.storage)) {
-                        //we have storage
-                        if (creep.room.storage.store[RESOURCE_ENERGY] < (100000 * creep.room.controller.level)) {
-                            //if storage energy is low, look for link nearby and get enegy from it
-                            var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
-                                filter: s => s.structureType == STRUCTURE_LINK
-                            })[0];
-                            if (!_.isEmpty(link)) {
-                                creep.task = Tasks.withdraw(link);
-                                return;
-                            } else {
-                                //no link -> creep standby
-                                creep.say("no ene/link")
-                            }
-                        } else {
-                            //enough energy in storage
-                            creep.task = Tasks.withdraw(creep.room.storage);
+            }
+            //if there are continers -> sort from the fullest
+            if (!_.isEmpty(targets)) {
+                var container = targets.sort(function (a, b) {
+                    return b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]
+                })[0];
+                creep.task = Tasks.withdraw(container);
+                return;
+            } else {
+                //no suitable containers
+                if (!_.isEmpty(creep.room.storage)) {
+                    //we have storage
+                    if (creep.room.storage.store[RESOURCE_ENERGY] < (100000 * creep.room.controller.level)) {
+                        //if storage energy is low, look for link nearby and get enegy from it
+                        var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
+                            filter: s => s.structureType == STRUCTURE_LINK
+                        })[0];
+                        if (!_.isEmpty(link)) {
+                            creep.task = Tasks.withdraw(link);
                             return;
+                        } else {
+                            //no link -> creep standby
+                            creep.say("no ene/link")
                         }
                     } else {
-                        creep.say("no ene source")
+                        //enough energy in storage
+                        creep.task = Tasks.withdraw(creep.room.storage);
+                        return;
                     }
+                } else {
+                    creep.say("no ene source")
                 }
-            } else {
-                creep.say("no rArray")
             }
         }
     }

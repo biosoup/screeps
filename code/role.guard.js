@@ -2,60 +2,32 @@ var Tasks = require("creep-tasks");
 
 module.exports = {
     // a function to run the logic for this role
-    newTask: function (creep) {
+    nonTask: function (creep) {
+        //heal
+        if(creep.hits < creep.hitsMax) {
+            creep.heal(creep)
+        }
+        
         if (creep.room.name == creep.memory.target) {
-            // find source
-            var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
-                filter: function (object) {
-                    return object.owner != "Source Keeper";
+            //if in target room
+
+            //find hostiles
+            var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
+            if (!_.isEmpty(hostile)) {
+                //get into range and kill
+                if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
+                    creep.travelTo(hostile);
                 }
-            });
-
-            if (hostile) {
-                creep.say("Hostile! :knife::knife::knife:");
-                creep.task = Tasks.attack(hostile)
-            }
-
-            var structure = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
-                filter: function (object) {
-                    return object.structureType != STRUCTURE_CONTROLLER &&
-                        object.structureType != STRUCTURE_KEEPER_LAIR &&
-                        object.structureType != STRUCTURE_STORAGE &&
-                        object.structureType != STRUCTURE_CONTAINER &&
-                        object.structureType != STRUCTURE_WALL;
-                }
-            });
-
-            if (structure == null) {
-                structure = creep.pos.findInRange(FIND_STRUCTURES, 3, {
-                    filter: s => s.structureType == STRUCTURE_WALL ||
-                        s.structureType == STRUCTURE_RAMPART
-                });
-                structure = _.first(_.sortByOrder(structure, ["hits"], ["asc"]));
-            }
-
-            if (_.isEmpty(hostile) && !_.isEmpty(structure)) {
-                creep.task = Tasks.attack(structure)
-            }
-
-            if (Game.flags.GUARD_MOVE) {
-                creep.cancelOrder("move"); /* cancel ALL move orders */
-                creep.task = Tasks.goTo(Game.flags.GUARD_MOVE)
-                if (!_.isEmpty(hostile)) {
-                    creep.task = Tasks.attack(hostile)
-                    creep.task = Tasks.attack(structure)
-
-                    //add a healing between guards
-                }
-            }
-
-            if(creep.hit < creep.hitsMax) {
-                creep.task = Tasks.heal(creep)
+                creep.say("Hostile!"+EM_SWORDS);
+                return;
+            } else {
+                creep.say(EM_SINGING)
             }
 
         } else {
             //go to target room
             creep.task = Tasks.goToRoom(creep.memory.target)
         }
+
     }
 }

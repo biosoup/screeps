@@ -1,4 +1,5 @@
 require("creep-tasks");
+var Tasks = require("creep-tasks");
 
 let builder = require('role.builder')
 let upgrader = require('role.upgrader')
@@ -22,7 +23,7 @@ Creep.prototype.runRole =
     function () {
         //console.log(this)
         if (this.memory.role == 'builder') {
-            builder.newTask(this)
+            builder.newTask2(this)
         } else if (this.memory.role == 'upgrader') {
             upgrader.newTask(this)
         } else if (this.memory.role == 'harvester') {
@@ -36,7 +37,7 @@ Creep.prototype.runRole =
         } else if (this.memory.role == 'lorry') {
             lorry.newTask2(this)
         } else if (this.memory.role == 'guard') {
-            guard.newTask(this)
+            guard.nonTask(this)
         } else if (this.memory.role == 'spawnAttendant') {
             spawnAttendant.newTask(this)
         } else if (this.memory.role == 'transporter') {
@@ -58,50 +59,63 @@ Creep.prototype.runRole =
         }
     };
 
-/** @function 
-    @param {bool} useContainer
-    @param {bool} useSource */
-Creep.prototype.getEnergy =
-    function (useContainer, useSource) {
-        /** @type {StructureContainer} */
-        var container;
-        // if the Creep should look for containers
-        if (useContainer) {
-            // find closest storage
-            container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: s => (s.structureType == STRUCTURE_STORAGE) &&
-                    s.store[RESOURCE_ENERGY] > 300
-            });
+Creep.prototype.getEnergy = function (creep, useSource) {
+    // 1) storage, 2) continers, 3) harvest
 
-            //if storage empty
-            if (container == undefined) {
-                container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
-                        s.store[RESOURCE_ENERGY] > 100
-                });
-            }
-
-            // if one was found
-            if (container != undefined) {
-                // try to withdraw energy, if the container is not in range
-                if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    // move towards it
-                    this.travelTo(container);
-                }
-            }
+    //get from storage
+    if (!_.isEmpty(creep.room.storage)) {
+        if (creep.room.storage.store[RESOURCE_ENERGY] > 100) {
+            creep.task = Tasks.withdraw(creep.room.storage);
+            return true;
         }
-        // if no container was found and the Creep should look for Sources
-        if (container == undefined && useSource) {
-            // find closest source
-            var source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+    }
 
-            // try to harvest energy, if the source is not in range
-            if (this.harvest(source) == ERR_NOT_IN_RANGE) {
-                // move towards it
-                this.travelTo(source);
-            }
+    //get from continer
+    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] > 0)
+    var container = creep.pos.findClosestByPath(containers)
+    if (!_.isEmpty(container)) {
+        creep.task = Tasks.withdraw(container);
+        return true;
+    }
+
+    // if no container was found and the Creep should look for Sources
+    if (useSource) {
+        //harvest
+        var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+        if (!_.isEmpty(source)) {
+            creep.task = Tasks.harvest(source);
+            return true;
+        } else {
+            creep.say(EM_SINGING)
+            return false;
         }
-    };
+    }
+};
+
+Creep.prototype.fillStructures = function (creep) {
+    //fill main structures
+    var spawns = creep.room.spawns.filter(s => s.energy < s.energyCapacity)
+    var structure = creep.pos.findClosestByPath(spawns)
+    if (!_.isEmpty(structure)) {
+        creep.task = Tasks.transfer(structure);
+        return true;
+    }
+
+    var extensions = creep.room.extensions.filter(s => s.energy < s.energyCapacity)
+    var structure = creep.pos.findClosestByPath(extensions)
+    if (!_.isEmpty(structure)) {
+        creep.task = Tasks.transfer(structure);
+        return true;
+    }
+
+    //fill towers
+    var towers = creep.room.towers.filter(s => s.energy < s.energyCapacity)
+    var tower = creep.pos.findClosestByPath(towers)
+    if (!_.isEmpty(tower)) {
+        creep.task = Tasks.transfer(tower);
+        return true;
+    }
+};
 
 Creep.prototype.storeAllBut = function (resource) {
     // send creep to storage to empty itself into it, keeping one resource type. Use null to drop all resource types.

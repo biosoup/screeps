@@ -35,6 +35,32 @@ allies = [];
 myroomlist = _.values(Game.rooms).filter(r => _.get(r, ['controller', 'owner', 'username'], undefined) === playerUsername);
 myRooms = {};
 
+/**
+ * Emoji constants! (Because github integration mangles them in a non-nice way)
+ */
+
+EM_ZZZ = "\ud83d\udca4";         // "💤"
+EM_COOKIE = "\ud83c\udf6a";      // "🍪"
+EM_TEA = "\ud83c\udf75";         // "🍵"
+EM_COFFEE = "\u2615";            // "☕"
+EM_LIGHTNING = "\u26a1";         // "⚡"
+EM_BUILD = "\u2692";             // "⚒"
+EM_HAMMER = "\ud83d\udd28";      // "🔨"
+EM_BOMB = "\ud83d\udca3";        // "💣"
+EM_PACKAGE = "\ud83d\udce6";     // "📦"
+EM_TRUCK = "\ud83d\ude9a";       // "🚚"
+EM_EXCLAMATION = "\u2757";       // "❗"
+EM_PIN = "\ud83d\udccd";         // "📍"
+EM_WRENCH = "\ud83d\udd27";      // "🔧"
+EM_FLEX = "\ud83d\udcaa";        // "💪"
+EM_FLAG = "\ud83d\udea9";        // "🚩"
+EM_KILL = "\u2620\ufe0f";        // "☠️"
+EM_SWORDS = "\u2694";            // "⚔"
+EM_ARROW = "\u2650";             // "♐"
+EM_SYRINGE = "\ud83d\udc89";     // "💉"
+EM_SWIMMING = "\ud83c\udfca";    // "🏊"
+EM_SINGING = "\u266b\u266a\u266b"; // "♫♪♫"
+
 mineralDescriptions = {};
 mineralDescriptions.H = {
     tier: 0,

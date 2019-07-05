@@ -365,7 +365,7 @@ global.checkTerminalLimits = function (room, resource) {
     }
 
     //console.log(JSON.stringify(roomLimits)+" "+delta.amount)
-    
+
     //Check market selling orders to add minerals to terminal
     if (Object.keys(Game.market.orders).length > 0) {
         //Look through orders to determine whether additional material is needed in terminal
@@ -935,4 +935,16 @@ global.listCreeps = function (displayRole) {
     }
     returnstring = returnstring.concat("</tr></table>");
     return returnstring;
+};
+
+/**
+ * Unicode escape function.
+ * Sauced from: https://gist.github.com/mathiasbynens/1243213
+ */
+global.unicodeEscape = function (str) {
+    return str.replace(/[\s\S]/g, function (character) {
+        var escape = character.charCodeAt().toString(16),
+            longhand = escape.length > 2;
+        return '\\' + (longhand ? 'u' : 'x') + ('0000' + escape).slice(longhand ? -4 : -2);
+    });
 };

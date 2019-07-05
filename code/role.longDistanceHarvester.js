@@ -7,37 +7,30 @@ let longDistanceHarvester = {
         if (creep.memory.home != undefined && creep.room.name == creep.memory.home) {
             //if in home room
             if (creep.carry.energy > 0) {
-                // check if spawn needs energy
-                var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                    filter: (s) => (s.structureType == STRUCTURE_SPAWN) &&
-                        s.energy < s.energyCapacity
-                });
-
-                //if spawn is ok, then to storage
-                if (structure == undefined) {
-                    structure = creep.room.storage;
+                if(creep.fillStructures(creep)) {
+                    return;
                 }
 
-                //if there is no storage, then to container
-                if (structure == undefined) {
-                    structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                        filter: s => s.structureType == STRUCTURE_CONTAINER
-                        //&& s.store < s.storeCapacity
-                    });
-                }
-
-                if (structure != undefined) {
-                    //if full and destination known, dump energy
-                    creep.task = Tasks.transfer(structure)
+                //dump into storage
+                if (!_.isEmpty(creep.room.storage)) {
+                    creep.task = Tasks.transfer(creep.room.storage);
+                    return;
                 } else {
-                    //if no structure as a upgrade controller
-                    creep.task = Tasks.upgrade(creep.room.controller);
+                    //nothing to do -> upgrade controller
+                    if (creep.room.controller.my) {
+                        creep.task = Tasks.upgrade(creep.room.controller);
+                        creep.say(EM_LIGHTNING);
+                        return;
+                    } else {
+                        creep.say(EM_SINGING);
+                        return
+                    }
                 }
             } else {
                 //go to target room
                 creep.task = Tasks.goToRoom(creep.memory.target)
             }
-        } else if (creep.memory.target != undefined && creep.room.name == creep.memory.target) {
+        } else if (!_.isEmpty(creep.memory.target) && creep.room.name == creep.memory.target) {
             //if in target room
 
             //console.log(creep)
@@ -46,21 +39,20 @@ let longDistanceHarvester = {
             if (creep.carry.energy < creep.carryCapacity) {
                 let sources = creep.room.find(FIND_SOURCES);
                 let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
-
-                if (unattendedSource != undefined && unattendedSource != null) {
-
+                if (!_.isEmpty(unattendedSource)) {
                     unattendedSource = creep.pos.findClosestByPath(unattendedSource);
-                    if (unattendedSource !== null) {
-                        //console.log(creep + " un " + unattendedSource)
+                    if (!_.isEmpty(unattendedSource)) {
                         creep.task = Tasks.harvest(unattendedSource);
-                    } 
+                        creep.say(EM_HAMMER)
+                        return
+                    }
                 } else {
-                    if (sources != undefined) {
-                        console.log(creep + " " + sources[0])
+                    if (!_.isEmpty(sources)) {
                         creep.task = Tasks.harvest(sources[0]);
+                        creep.say(EM_HAMMER)
+                        return
                     }
                 }
-                creep.say(":pick:")
             } else {
                 //if full, go home
                 creep.task = Tasks.goToRoom(creep.memory.home)

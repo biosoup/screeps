@@ -568,7 +568,7 @@ Room.prototype.creepSpawnRun =
                 var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceBuilder' && c.memory.target == interest)
                 //if construction or repairs are needed, launch a builder
                 if (Game.rooms[interest] != undefined) {
-                    var numOfConstrustions = Game.rooms[interest].find(FIND_CONSTRUCTION_SITES)
+                    var numOfConstrustions = Game.rooms[interest].find(FIND_MY_CONSTRUCTION_SITES)
                     var numOfRepairsites = Game.rooms[interest].find(FIND_STRUCTURES, {
                         filter: (s) =>
                             ((s.hits / s.hitsMax) < 0.5) &&
@@ -631,7 +631,7 @@ Room.prototype.creepSpawnRun =
         //console.log(spawnRoom.name+" "+JSON.stringify(guard)+" "+minimumSpawnOf.guard)
 
         /**Spawning volumes scaling with # of sources in room**/
-        var constructionSites = spawnRoom.find(FIND_CONSTRUCTION_SITES);
+        var constructionSites = spawnRoom.find(FIND_MY_CONSTRUCTION_SITES);
         var constructionOfRampartsAndWalls = 0;
 
         // Builder
@@ -905,7 +905,7 @@ Room.prototype.creepSpawnRun =
                     if (!(name < 0) && name != undefined) {
                         testSpawn.memory.lastSpawn = spawnList[spawnEntry];
                         if (LOG_SPAWN == true) {
-                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + " creeps left: " + JSON.stringify(spawnList) + "</font>");
+                            console.log("<font color=#00ff22 type='highlight'>" + testSpawn.name + " is spawning creep: " + name + " in room " + spawnRoom.name + ". (CPU used: " + (Game.cpu.getUsed() - cpuStart) + ") on tick " + Game.time + "<br> creeps left: " + JSON.stringify(spawnList) + "</font>");
                         }
                         spawnEntry++;
                     }

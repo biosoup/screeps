@@ -367,7 +367,7 @@ const FIND_FLAGS = 110;
  * @constant
  * @type {number}
  */
-const FIND_CONSTRUCTION_SITES = 111;
+const FIND_MY_CONSTRUCTION_SITES = 111;
 
 /**
  * @constant

@@ -23,7 +23,7 @@ var roadBuilder = {
     }, //function
 
 	removeSites: function (room) {
-		var sites  = room.find(FIND_CONSTRUCTION_SITES);
+		var sites  = room.find(FIND_MY_CONSTRUCTION_SITES);
 		var i = sites.length
 		while(--i) {
 			sites[i].remove();

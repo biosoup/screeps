@@ -27,7 +27,8 @@ module.exports = {
 
                 if (container.hits < container.hitsMax && creep.carry.energy > 0) {
                     creep.task = Tasks.repair(container)
-                    creep.say("repairing")
+                    creep.say("\u{1F477}")
+                    
                 } else if (creep.carry.energy == creep.carryCapacity) {
                     //look for a link
                     var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
@@ -71,10 +72,10 @@ module.exports = {
             if (creep.carry.energy < creep.carryCapacity) {
                 creep.task = Tasks.harvest(source);
             } else {
-                var buildSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                var buildSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
                 if (buildSite != undefined && buildSite != null) {
                     creep.task = Tasks.build(buildSite);
-                    creep.say("building")
+                    creep.say("\u{1F3D7}")
                 } else {
                     creep.say("using link")
                     var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
