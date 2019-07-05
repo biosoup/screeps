@@ -621,10 +621,10 @@ Room.prototype.creepSpawnRun =
         }
 
         //add gew extra lorries
-        if (_.sum(spawnRoom.storage.store) == spawnRoom.storage.storeCapacity) {
-            minimumSpawnOf.longDistanceLorry = 0
+        if (_.sum(spawnRoom.storage.store) > 950000) {
+            minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 3);
         } else {
-            minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry * 1.25);
+            //minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 1.25);
         }
 
 
@@ -663,6 +663,9 @@ Room.prototype.creepSpawnRun =
             if (spawnRoom.storage.store[RESOURCE_ENERGY] > (100000 * spawnRoom.controller.level) && spawnRoom.controller.level < 8) {
                 minimumSpawnOf.upgrader = 2;
             }
+            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 950000 ** spawnRoom.controller.level < 8) {
+                minimumSpawnOf.upgrader = minimumSpawnOf.upgrader + 1;
+            }
         }
 
         //Wall Repairer – CONSTRUCTION
@@ -693,11 +696,8 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["miner"] = numberOfSources;
 
         //minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
-        if (_.size(spawnRoom.memory.roomArray.links) >= 2) {
-            minimumSpawnOf["lorry"] = 0;
-        } else {
-            minimumSpawnOf["lorry"] = 1;
-        }
+        minimumSpawnOf["lorry"] = 1;
+
 
         minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners / 2) - numberOfLorries - numberOfSA
         //minimumSpawnOf["builder"] = Math.ceil(numberOfSources * 0.5);
@@ -1146,7 +1146,7 @@ Room.prototype.getSpawnList =
                     containerEnergy += container[e].store[RESOURCE_ENERGY];
                 }
                 if (containerEnergy > (100000 * spawnRoom.controller.level) + 100000) {
-                    spawnList.push("upgrader");
+                    //spawnList.push("upgrader");
                 }
             }
 

@@ -34,7 +34,7 @@ Creep.prototype.runRole =
         } else if (this.memory.role == 'miner') {
             miner.newTask(this)
         } else if (this.memory.role == 'lorry') {
-            lorry.newTask(this)
+            lorry.newTask2(this)
         } else if (this.memory.role == 'guard') {
             guard.newTask(this)
         } else if (this.memory.role == 'spawnAttendant') {

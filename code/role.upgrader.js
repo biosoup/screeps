@@ -20,7 +20,7 @@ module.exports = upgrader = {
 
             container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
                 filter: s => s.structureType == STRUCTURE_LINK &&
-                    s.energy > 100
+                    s.energy > 0
             })[0];
 
             //then use storage if there is anything in it
