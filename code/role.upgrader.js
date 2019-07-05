@@ -8,50 +8,60 @@ module.exports = upgrader = {
             //do the actual job
             if (!_.isEmpty(creep.room.controller.sign)) {
                 if (creep.room.controller.sign.username != playerUsername) {
-                    creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+                    creep.task = Tasks.signController(creep.room.controller, roomSign)
                 }
             } else {
-                creep.task = Tasks.signController(creep.room.controller, "Not yet fully automated... :(")
+                creep.task = Tasks.signController(creep.room.controller, roomSign)
             }
             creep.task = Tasks.upgrade(creep.room.controller);
+            return
         } else {
             //first link nearby
-            var container;
-
-            container = creep.pos.findInRange(FIND_STRUCTURES, 2, {
+            var link = creep.pos.findInRange(FIND_STRUCTURES, 2, {
                 filter: s => s.structureType == STRUCTURE_LINK &&
                     s.energy > 0
             })[0];
+            if (!_.isEmpty(link)) {
+                creep.task = Tasks.withdraw(link);
+                return;
+            }
+
+            //then container nearby
+            var containerNearby = creep.pos.findInRange(FIND_STRUCTURES, 2, {
+                filter: s => s.structureType == STRUCTURE_CONTAINER &&
+                    s.energy > 0
+            })[0];
+            if (!_.isEmpty(containerNearby)) {
+                creep.task = Tasks.withdraw(containerNearby);
+                return;
+            }
 
             //then use storage if there is anything in it
-            if (container == undefined || container == null && creep.room.storage.store[RESOURCE_ENERGY] > 500) {
-                container = creep.room.storage;
-            }
-
-
-            //then closest container
-            if (container == undefined || container == null) {
-                container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: s => s.structureType == STRUCTURE_CONTAINER &&
-                        s.store[RESOURCE_ENERGY] > 100
-                });
-            }
-
-            //add a withraw task
-            if (container != undefined && container != null) {
-                creep.task = Tasks.withdraw(container);
-                //console.log(JSON.stringify(container) + " 1")
-            } else {
-                // find closest source
-                let source = creep.pos.findClosestByPath(FIND_SOURCES);
-                if (source != undefined && source != null) {
-                    //console.log(creep + " " + source)
-                    //creep.task = Tasks.harvest(source);
-                    creep.say("harvesting")
+            if (!_.isEmpty(creep.room.storage)) {
+                if (creep.room.storage.store[RESOURCE_ENERGY] > 500) {
+                    creep.task = Tasks.withdraw(creep.room.storage);
                     return;
                 }
             }
 
+            //then closest container
+            var container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: s => s.structureType == STRUCTURE_CONTAINER &&
+                    s.store[RESOURCE_ENERGY] > 100
+            });
+            if (!_.isEmpty(container)) {
+                creep.task = Tasks.withdraw(container);
+                return;
+            }
+
+            //everything failed, harvest
+            let source = creep.pos.findClosestByPath(FIND_SOURCES);
+            if (!_.isEmpty(source)) {
+                creep.task = Tasks.harvest(source);
+                return;
+            }
+
+            creep.say("ERR!!")
         }
     }
 };
