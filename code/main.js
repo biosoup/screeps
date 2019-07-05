@@ -140,7 +140,7 @@ module.exports.loop = function () {
         if (!_.isEmpty(Game.rooms[roomName].memory.roomArray)) {
             var towers = Game.rooms[roomName].memory.roomArray.towers
         }
-        if (towers != undefined && towers != null && towers != "") {
+        if (!_.isEmpty(towers)) {
             //find hostiles in the room
             var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
             if (hostiles.length > 0) {
@@ -157,7 +157,7 @@ module.exports.loop = function () {
                 }
             }
 
-            if (hostiles == "") {
+            if (_.isEmpty(hostiles)) {
                 //no hostiles, one tower to repair
                 var tower = Game.getObjectById(towers[0]);
                 tower.repairStructures();
@@ -176,14 +176,7 @@ module.exports.loop = function () {
         market.productionCode(roomName);
 
         market.labCode(roomName);
-
-
-
     }
-
-
-
-  
 
     if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Start Creep run Code: " + Game.cpu.getUsed())
@@ -197,12 +190,9 @@ module.exports.loop = function () {
             Game.creeps[creep].run();
         } catch (err) {
             Game.creeps[creep].say("MAIN ERR!!")
-            console.log("MAIN ERR: " + creep)
-
+            console.log("MAIN ERR: " + creep + " " + err)
         }
     }
-
-
 
     if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Start stats Code: " + Game.cpu.getUsed())
@@ -210,45 +200,38 @@ module.exports.loop = function () {
     //other stats
     //var elapsedInSeconds = ((new Date()).getTime() - Memory.stats.lastTS) / 1000
     if ((Game.time % 10) == 0 && Game.cpu.bucket > 100) {
-        var containerStats = {};
         var spawnBusy = {};
         for (var spawnName in Game.spawns) {
-            var containers = Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
-                filter: {
-                    structureType: STRUCTURE_CONTAINER
-                }
-            });
-            var containerStorage = 0;
-            for (var container of containers) {
-                containerStorage = containerStorage + container.store[RESOURCE_ENERGY];
-            }
-            Game.spawns[spawnName].memory.energy = {};
-            Game.spawns[spawnName].memory.energy.containerStorage = containerStorage;
-            Game.spawns[spawnName].memory.energy.containerCount = containers.length;
-
             if (Game.spawns[spawnName].spawning) {
                 spawnBusy[Game.spawns[spawnName].name] = Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime;
             } else {
                 spawnBusy[Game.spawns[spawnName].name] = 0;
             }
-
-            containerStats[Game.spawns[spawnName].room.name] = containerStorage;
         }
-        stats.addStat('energy-container', {}, containerStats)
         stats.addStat('spawn-busy', {}, spawnBusy)
-
-        //check for hostiles in any room
+        
+        var containerStats = {};
+        var hostilesStats = {};
         var countHostiles = 0;
-        for (let roomName in Game.rooms) {
+        for (var roomName in Game.rooms) {
+            var containers = Game.rooms[roomName].containers
+            var containerStorage = 0;
+            for (var container of containers) {
+                containerStorage = containerStorage + container.store[RESOURCE_ENERGY];
+            }
+            containerStats[Game.rooms[roomName].name] = containerStorage;
+
             var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
             if (hostiles.length > 0) {
-                //console.log(roomName + " found hostiles: " + hostiles.length)
                 countHostiles = countHostiles + hostiles.length
+                hostilesStats[Game.rooms[roomName].name] = hostiles.length
             }
         }
+        stats.addStat('energy-container', {}, containerStats)
+        stats.addStat('hostiles-room', {}, hostilesStats)
+
+        //check for hostiles in any room
         stats.addSimpleStat('hostiles', countHostiles);
-
-
         stats.addSimpleStat('creep-population', Object.keys(Game.creeps).length);
 
         stats.commit();

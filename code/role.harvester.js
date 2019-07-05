@@ -3,7 +3,7 @@ var Tasks = require("creep-tasks");
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    newTask2: function (creep) {
+    newTask: function (creep) {
         if (creep.carry.energy > 0) {
             if(creep.fillStructures(creep)) {
                 return;

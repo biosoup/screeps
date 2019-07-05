@@ -23,7 +23,7 @@ Creep.prototype.runRole =
     function () {
         //console.log(this)
         if (this.memory.role == 'builder') {
-            builder.newTask2(this)
+            builder.newTask(this)
         } else if (this.memory.role == 'upgrader') {
             upgrader.newTask(this)
         } else if (this.memory.role == 'harvester') {
@@ -35,7 +35,7 @@ Creep.prototype.runRole =
         } else if (this.memory.role == 'miner') {
             miner.newTask(this)
         } else if (this.memory.role == 'lorry') {
-            lorry.newTask2(this)
+            lorry.newTask(this)
         } else if (this.memory.role == 'guard') {
             guard.nonTask(this)
         } else if (this.memory.role == 'spawnAttendant') {
@@ -47,7 +47,7 @@ Creep.prototype.runRole =
         } else if (this.memory.role == 'longDistanceMiner') {
             longDistanceMiner.newTask(this)
         } else if (this.memory.role == 'longDistanceLorry') {
-            longDistanceLorry.newTask2(this)
+            longDistanceLorry.newTask(this)
         } else if (this.memory.role == 'longDistanceBuilder') {
             longDistanceBuilder.newTask(this)
         } else if (this.memory.role == 'scientist') {
@@ -80,14 +80,22 @@ Creep.prototype.getEnergy = function (creep, useSource) {
 
     // if no container was found and the Creep should look for Sources
     if (useSource) {
-        //harvest
-        var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-        if (!_.isEmpty(source)) {
-            creep.task = Tasks.harvest(source);
-            return true;
+        let sources = creep.room.find(FIND_SOURCES);
+        let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
+        if (!_.isEmpty(unattendedSource)) {
+            unattendedSource = creep.pos.findClosestByPath(unattendedSource);
+            if (!_.isEmpty(unattendedSource)) {
+                creep.task = Tasks.harvest(unattendedSource);
+                creep.say(EM_HAMMER)
+                return
+            }
         } else {
-            creep.say(EM_SINGING)
-            return false;
+            if (!_.isEmpty(sources)) {
+                var rand = _.random(sources.length)
+                creep.task = Tasks.harvest(sources[rand]);
+                creep.say(EM_HAMMER)
+                return
+            }
         }
     }
 };

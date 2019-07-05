@@ -8,7 +8,7 @@ module.exports = {
         if (creep.carry.energy > 0) {
             //find structures that need repairing
             var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX);
-            var walls = creep.room.walls.filter(s => s.hits < WALLMAX);
+            var walls = creep.room.constructedWalls.filter(s => s.hits < WALLMAX);
             var targets = {
                 ...ramparts,
                 ...walls
@@ -35,7 +35,7 @@ module.exports = {
             }
         } else {
             //get energy
-            if(creep.getEnergy(creep, true)) {
+            if (creep.getEnergy(creep, true)) {
                 return;
             }
         }

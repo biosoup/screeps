@@ -21,6 +21,14 @@ module.exports = {
                 creep.say("Hostile!"+EM_SWORDS);
                 return;
             } else {
+                //find damaged creeps
+                var hitCreeps = creep.pos.findClosestByRange(FIND_CREEPS, {filter: c => c.hits < c.hitsMax})
+                if(!_.isEmpty(hitCreeps)) {
+                    creep.task = Tasks.heal(hitCreeps)
+                    creep.say(EM_SYRINGE)
+                    return
+                }
+
                 creep.say(EM_SINGING)
             }
 

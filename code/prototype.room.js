@@ -495,14 +495,28 @@ Room.prototype.creepSpawnRun =
             //get gcl and number of rooms
             var gcl = Game.gcl.level;
             var numberOfRooms = _.sum(Game.rooms, room => room.controller && room.controller.my)
-            if (gcl > numberOfRooms.length) {
+            var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_GREY && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+            if (gcl > numberOfRooms) {
                 //FIXME: when room is claimed, but needs a builder & spawn built
-                var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_GREY && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
                 if (!_.isEmpty(greyFlags)) {
                     for (var flag of greyFlags) {
                         //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                         //builders & guard = boolean
                         roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
+                        var newRoom = flag.pos.roomName;
+                    }
+                }
+            } else {
+                if (!_.isEmpty(greyFlags)) {
+                    for (var flag of greyFlags) {
+                        var spawnExists = Game.rooms[flag.pos.roomName].spawns
+                        if (spawnExists.length == 0) {
+                            //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
+                            //builders & guard = boolean
+                            roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
+                        } else {
+                            //remove flag
+                        }
                     }
                 }
             }
@@ -569,18 +583,16 @@ Room.prototype.creepSpawnRun =
                 //if construction or repairs are needed, launch a builder
                 if (Game.rooms[interest] != undefined) {
                     var numOfConstrustions = Game.rooms[interest].find(FIND_MY_CONSTRUCTION_SITES)
-                    var numOfRepairsites = Game.rooms[interest].find(FIND_STRUCTURES, {
+                    var numOfRepairsites = Game.rooms[interest].find(FIND_MY_STRUCTURES, {
                         filter: (s) =>
                             ((s.hits / s.hitsMax) < 0.5) &&
                             s.structureType != STRUCTURE_CONTROLLER &&
-                            s.structureType != STRUCTURE_EXTENSION &&
-                            s.structureType != STRUCTURE_TOWER &&
                             s.structureType != STRUCTURE_WALL &&
-                            s.structureType != STRUCTURE_RAMPART &&
-                            s.structureType != STRUCTURE_SPAWN
+                            s.structureType != STRUCTURE_RAMPART
                     });
+                    
                     if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
-                        roomInterests[interest][3] = 1
+                        roomInterests[interest][3] = roomInterests[interest][3]
                     } else {
                         roomInterests[interest][3] = 0
                     }
@@ -588,6 +600,15 @@ Room.prototype.creepSpawnRun =
                     minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
                     if (inRooms < roomInterests[interest][3]) {
                         longDistanceBuilder[interest] = roomInterests[interest][3]
+                    }
+                }
+            }
+            if (roomInterests[interest][4] > 0) {
+                if (interest == newRoom) {
+                    var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'claimer' && c.memory.target == interest)
+                    minimumSpawnOf.claimer += 1 - inRooms;
+                    if (inRooms < 1) {
+                        claimer[interest] = 1;
                     }
                 }
             }
@@ -628,7 +649,7 @@ Room.prototype.creepSpawnRun =
         }
 
 
-        //console.log(spawnRoom.name+" "+JSON.stringify(guard)+" "+minimumSpawnOf.guard)
+        //console.log(spawnRoom.name + " " + JSON.stringify(longDistanceBuilder) + " " + minimumSpawnOf.longDistanceBuilder)
 
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_MY_CONSTRUCTION_SITES);
@@ -813,6 +834,13 @@ Room.prototype.creepSpawnRun =
 
         if (rcl <= 4 && containerEnergy.length > 0) {
             minimumSpawnOf.upgrader = minimumSpawnOf.upgrader + 1;
+        }
+
+        //we can claim new room, pause upgraders
+        if (!_.isEmpty(newRoom)) {
+            minimumSpawnOf.upgrader = 0
+            minimumSpawnOf.longDistanceMiner = 0
+            minimumSpawnOf.longDistanceLorry = 0
         }
 
         //keep a builder until we have towers for repairs
@@ -1028,7 +1056,7 @@ Room.prototype.getSpawnList =
             },
             claimer: {
                 name: "claimer",
-                prio: 190,
+                prio: 140,
                 energyRole: false,
                 min: minimumSpawnOf.claimer,
                 max: numberOf.claimer,
@@ -1060,7 +1088,7 @@ Room.prototype.getSpawnList =
             },
             longDistanceLorry: {
                 name: "longDistanceLorry",
-                prio: 130,
+                prio: 150,
                 energyRole: true,
                 min: minimumSpawnOf.longDistanceLorry,
                 max: numberOf.longDistanceLorry,
@@ -1068,7 +1096,7 @@ Room.prototype.getSpawnList =
             },
             longDistanceBuilder: {
                 name: "longDistanceBuilder",
-                prio: 140,
+                prio: 70,
                 energyRole: true,
                 min: minimumSpawnOf.longDistanceBuilder,
                 max: numberOf.longDistanceBuilder,

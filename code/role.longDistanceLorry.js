@@ -3,7 +3,7 @@ var Tasks = require("creep-tasks");
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    newTask2: function (creep) {
+    newTask: function (creep) {
         let cpuStart = Game.cpu.getUsed();
         if (!_.isEmpty(Game.rooms[creep.memory.home].memory.containerSources)) {
             if (creep.room.name == creep.memory.home && (creep.carry.energy == 0 || _.isEmpty(creep.memory.target))) {
