@@ -12,7 +12,7 @@ module.exports = {
             });
 
             if (hostile) {
-                creep.say("Hostile!");
+                creep.say("Hostile! :knife::knife::knife:");
                 creep.task = Tasks.attack(hostile)
             }
 

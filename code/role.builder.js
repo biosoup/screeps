@@ -37,12 +37,12 @@ module.exports = {
                 if (closestRepairSite != undefined && closestRepairSite != null) {
                     //go reapir
                     creep.task = Tasks.repair(closestRepairSite);
-                    creep.say("repairing")
+                    creep.say(":hammer:")
 
                 } else if (closestConstructionSite != undefined && closestConstructionSite != null) {
                     //go build
                     creep.task = Tasks.build(closestConstructionSite);
-                    creep.say("building");
+                    creep.say(":building_construction:");
 
                 } else {
                     //if nothing is to be built, do something useful
@@ -63,10 +63,10 @@ module.exports = {
                         target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
                         if (target) {
                             creep.task = Tasks.repair(target);
-                            creep.say("repairing")
+                            creep.say(":hammer:")
                         } else {
                             console.log(JSON.stringify(targets))
-                            creep.say("confused")
+                            creep.say(":confused:")
                         }
                     } else {
                         //add code to repair walls to 1mil hits
@@ -81,18 +81,18 @@ module.exports = {
                                     target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
                                     if (target) {
                                         creep.task = Tasks.repair(target);
-                                        creep.say("repairing")
+                                        creep.say(":hammer:")
                                     }
                                 } else {
-                                    creep.say("nothing to do")
+                                    creep.say(":sleeping_bed:")
                                     creep.task = Tasks.upgrade(creep.room.controller);
                                 }
                             } else {
-                                creep.say("nothing to do")
+                                creep.say(":sleeping_bed:")
                                 creep.task = Tasks.upgrade(creep.room.controller);
                             }
                         } else {
-                            creep.say("nothing to do")
+                            creep.say(":sleeping_bed:")
                             creep.task = Tasks.upgrade(creep.room.controller);
                         }
 

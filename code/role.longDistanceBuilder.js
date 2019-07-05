@@ -28,12 +28,12 @@ module.exports = {
                 if (!_.isEmpty(closestRepairSite)) {
                     //go reapir
                     creep.task = Tasks.repair(closestRepairSite);
-                    creep.say("repairing")
+                    creep.say(":hammer:")
 
                 } else if (!_.isEmpty(closestConstructionSite)) {
                     //go build
                     creep.task = Tasks.build(closestConstructionSite);
-                    creep.say("building");
+                    creep.say(":building_construction:");
 
                 } else {
                     //if nothing is to be built, do something useful
@@ -52,9 +52,9 @@ module.exports = {
 
                     if (!_.isEmpty(target)) {
                         creep.task = Tasks.repair(target);
-                        creep.say("repairing")
+                        creep.say(":hammer:")
                     } else {
-                        creep.say("nothing to do")
+                        creep.say(":sleeping_bed:")
                         creep.task = Tasks.signController(creep.room.controller, "I'm bored...")
                     }
                 }

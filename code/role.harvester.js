@@ -49,9 +49,9 @@ module.exports = {
                 if (closestConstructionSite != undefined && closestConstructionSite != null) {
                     //go build
                     creep.task = Tasks.build(closestConstructionSite);
-                    creep.say("building");
+                    creep.say(":hammer:");
                 } else {
-                    creep.say("nothing to do")
+                    creep.say(":sleeping_bed:")
                     creep.task = Tasks.upgrade(creep.room.controller);
                 }
             }

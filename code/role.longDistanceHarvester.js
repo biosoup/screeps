@@ -60,7 +60,7 @@ let longDistanceHarvester = {
                         creep.task = Tasks.harvest(sources[0]);
                     }
                 }
-                creep.say("harvesting")
+                creep.say(":pick:")
             } else {
                 //if full, go home
                 creep.task = Tasks.goToRoom(creep.memory.home)
