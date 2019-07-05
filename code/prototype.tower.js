@@ -28,7 +28,7 @@ StructureTower.prototype.repairStructures =
             //Find the closest damaged Structure
             var targets = this.room.find(FIND_STRUCTURES, {
                 filter: (s) =>
-                    (s.hits < 500) &&
+                    (s.hits < 2000) &&
                     s.structureType != STRUCTURE_CONTROLLER
             });
 

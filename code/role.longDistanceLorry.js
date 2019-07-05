@@ -139,7 +139,7 @@ module.exports = {
                 if (!_.isEmpty(homeStorage)) {
                     //put energy into storage
                     creep.task = Tasks.transfer(homeStorage)
-                    creep.say("to storage!")
+                    creep.say("storage full!")
                 } else {
                     console.log("storage not found!!! " + creep.name + " " + creep.room.name + " " + creep.memory.home)
                     creep.say("confused storage")

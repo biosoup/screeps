@@ -26,13 +26,13 @@ module.exports = {
                     filter: s => s.structureType == STRUCTURE_CONTAINER
                 });
                 //check for free space on first container
-                if (container[0].pos.lookFor(LOOK_CREEPS).length > 0 && container.length > 1) {
-                    container = container[1];
-                } else {
-                    container = container[0];
-                }
+                if (!_.isEmpty(container)) {
+                    if (container[0].pos.lookFor(LOOK_CREEPS).length > 0 && container.length > 1 && creep.pos != container[1].pos) {
+                        container = container[1];
+                    } else {
+                        container = container[0];
+                    }
 
-                if (typeof container !== 'undefined') {
                     // if creep is on top of the container
                     if (creep.pos.isEqualTo(container.pos)) {
                         //if container needs repairs
@@ -49,7 +49,7 @@ module.exports = {
                                 if (container.hits < container.hitsMax && container.store[RESOURCE_ENERGY] == container.storeCapacity) {
                                     creep.task = Tasks.withdraw(container);
                                 }
-                                
+
                                 creep.say("nothing to do")
                             }
                         }
@@ -72,7 +72,7 @@ module.exports = {
                             creep.task = Tasks.build(buildSite);
                             creep.say("building")
                         }
-                        
+
                     }
                 }
 

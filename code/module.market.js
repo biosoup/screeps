@@ -37,7 +37,7 @@ module.exports = {
         }
     },
 
-    marketCode: function (CPUdebug = false) {
+    marketCode: function () {
         /* 
         FIXME:
             - add market cooldown
@@ -105,9 +105,6 @@ module.exports = {
             }
         }
         // Market Auto Selling Code
-        if (CPUdebug == true) {
-            CPUdebugString = CPUdebugString.concat("<br>Start Market Code: " + Game.cpu.getUsed())
-        }
         if (Game.time % DELAYMARKETAUTOSELL == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
             //Remove expired market orders
             let expiredOrders = _.filter(Game.market.orders, {
@@ -163,10 +160,7 @@ module.exports = {
         }
     },
 
-    resourceBalance: function (CPUdebug = false) {
-        if (CPUdebug == true) {
-            CPUdebugString = CPUdebugString.concat("<br>Start Resource Balancing: " + Game.cpu.getUsed())
-        }
+    resourceBalance: function () {
         if (Game.time % DELAYRESOURCEBALANCING == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
             // Inter-room resource balancing
             for (let r in myRooms) {
@@ -269,11 +263,8 @@ module.exports = {
         }
     },
 
-    terminalCode: function (r, CPUdebug = false) {
+    terminalCode: function (r) {
         // Terminal code
-        if (CPUdebug == true) {
-            CPUdebugString = CPUdebugString.concat("<br>Starting terminal code: " + Game.cpu.getUsed())
-        }
         if (Game.cpu.bucket > CPU_THRESHOLD && Game.rooms[r].memory.terminalTransfer != undefined && Game.rooms[r].terminal != undefined && Game.rooms[r].terminal.owner.username == playerUsername) {
             var terminal = Game.rooms[r].terminal;
             if (terminal != undefined && terminal.cooldown == 0 && terminal.owner.username == playerUsername && Game.rooms[r].memory.terminalTransfer != undefined) {

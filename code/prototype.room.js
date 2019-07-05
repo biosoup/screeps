@@ -496,6 +496,7 @@ Room.prototype.creepSpawnRun =
             var gcl = Game.gcl.level;
             var numberOfRooms = _.sum(Game.rooms, room => room.controller && room.controller.my)
             if (gcl > numberOfRooms.length) {
+                //FIXME: when room is claimed, but needs a builder & spawn built
                 var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_GREY && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
                 if (!_.isEmpty(greyFlags)) {
                     for (var flag of greyFlags) {
@@ -619,6 +620,14 @@ Room.prototype.creepSpawnRun =
             }
         }
 
+        //add gew extra lorries
+        if (_.sum(spawnRoom.storage.store) == spawnRoom.storage.storeCapacity) {
+            minimumSpawnOf.longDistanceLorry = 0
+        } else {
+            minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry * 1.25);
+        }
+
+
         //console.log(spawnRoom.name+" "+JSON.stringify(guard)+" "+minimumSpawnOf.guard)
 
         /**Spawning volumes scaling with # of sources in room**/
@@ -684,7 +693,7 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["miner"] = numberOfSources;
 
         //minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
-        if (_.size(spawnRoom.memory.roomArray.minerals.links) >= 3) {
+        if (_.size(spawnRoom.memory.roomArray.links) >= 2) {
             minimumSpawnOf["lorry"] = 0;
         } else {
             minimumSpawnOf["lorry"] = 1;
@@ -822,6 +831,7 @@ Room.prototype.creepSpawnRun =
         let neededTicksThreshold = 1300 * spawnRoom.memory.roomArray.spawns.length;
         if (neededTicksToSpawn > neededTicksThreshold) {
             console.log("<font color=#ff0000 type='highlight'>Warning: Possible bottleneck to spawn creeps needed for room " + spawnRoom.name + "  detected: " + neededTicksToSpawn + " ticks > " + neededTicksThreshold + " ticks</font>");
+            minimumSpawnOf.spawnAttendant = minimumSpawnOf.spawnAttendant + 1
         }
         let spawnList = this.getSpawnList(spawnRoom, minimumSpawnOf, numberOf);
         let spawnEntry = 0;
@@ -1127,7 +1137,7 @@ Room.prototype.getSpawnList =
             var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
 
             //Surplus Upgrader Spawning
-            if (numberOf.harvester + numberOf.lorry > 0 && hostiles.length == 0 && spawnRoom.controller.level < 8 && numberOf.upgrader < (minimumSpawnOf.upgrader * 2)) {
+            if (numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant > 0 && hostiles.length == 0 && spawnRoom.controller.level < 8) {
                 let container = spawnRoom.find(FIND_STRUCTURES, {
                     filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE
                 });
@@ -1135,8 +1145,8 @@ Room.prototype.getSpawnList =
                 for (let e in container) {
                     containerEnergy += container[e].store[RESOURCE_ENERGY];
                 }
-                if (containerEnergy > (100000 * spawnRoom.controller.level)) {
-                    //spawnList.push("upgrader");
+                if (containerEnergy > (100000 * spawnRoom.controller.level) + 100000) {
+                    spawnList.push("upgrader");
                 }
             }
 

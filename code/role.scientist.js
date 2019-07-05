@@ -25,7 +25,7 @@ module.exports = {
                         for (var lb in labs) {
                             //Checking inner labs
                             var currentInnerLab = labs[lb];
-                            if (!_.isEmpty(innerLabs[lb].resource)) {
+                            if (!_.isEmpty(innerLabs[lb].resource) && !_.isEmpty(currentInnerLab)) {
                                 if (currentInnerLab.mineralType != innerLabs[lb].resource || (currentInnerLab.mineralType == innerLabs[lb].resource && (currentInnerLab.mineralAmount < currentInnerLab.mineralCapacity && currentInnerLab.mineralAmount < amount))) {
                                     //Lab has to be prepared
                                     if (currentInnerLab.mineralType == undefined || currentInnerLab.mineralType == innerLabs[lb].resource) {
@@ -50,11 +50,12 @@ module.exports = {
                                             }
                                         }
                                     } else {
-                                        creep.say("Lab to be empty!")
+                                        //FIXME:
+                                        //creep.say("Lab to be empty!")
                                         //Lab has to be emptied -> get rid of stuff in creep
                                         if (creep.storeAllBut() == true) {
                                             //Get minerals from storage
-                                            creep.task = Tasks.withdrawAll(currentInnerLab, currentInnerLab.mineralType)
+                                            creep.task = Tasks.withdraw(currentInnerLab, currentInnerLab.mineralType)
                                         }
                                     }
                                     break;
