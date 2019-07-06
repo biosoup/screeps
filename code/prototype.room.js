@@ -470,24 +470,40 @@ Room.prototype.creepSpawnRun =
 
         //console.log(JSON.stringify(spawnRoom.controller))
         if (_.isEmpty(spawnRoom.controller.owner)) {
-                var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS, {
-                    filter: f => f.name != "Invader"
-                })
-                if (hostiles.length == 0) {
-                    //FIXME: get other spawns
-                    spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-E16N18", COLOR_WHITE, COLOR_YELLOW)
-                    console.log(spawnRoom.name + " has been defeated!! Sending recovery team!!")
-
-                    //FIXME: claim flag only when safe
-                    //var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
-                    spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-E16N18", COLOR_GREY, COLOR_PURPLE)
-                } else {
-                    console.log(spawnRoom.name + " has been defeated!! Occupied by " + hostiles.length)
+            var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS, {
+                filter: f => f.name != "Invader"
+            })
+            if (hostiles.length == 0) {
+                //get closest other spawns
+                var flagRoomName = spawnRoom.name
+                var distance = {}
+                for (let roomName in Game.rooms) {
+                    var r = Game.rooms[roomName];
+                    if (!_.isEmpty(r.memory.roomArray.spawns)) {
+                        if (r.name != flagRoomName) {
+                            distance[r.name] = {}
+                            distance[r.name].name = r.name
+                            distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                        }
+                    }
                 }
-                return -1;
+                distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+
+                spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-"+distanceName, COLOR_WHITE, COLOR_YELLOW)
+                console.log(spawnRoom.name + " has been defeated!! Sending recovery team!!")
+
+                //FIXME: claim flag only when safe –> when full complement of guards is in place
+
+                //var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
+                spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-"+distanceName, COLOR_GREY, COLOR_PURPLE)
+            } else {
+                console.log(spawnRoom.name + " has been defeated!! Occupied by " + hostiles.length)
+            }
+            return -1;
         } else {
-            var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room.name == spawnRoom.name)
-            if(spawnRoom.controller.level > 3 && !_.isEmpty(greyFlags)) {
+            var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.pos.roomName == spawnRoom.name)
+            if (spawnRoom.controller.level >= 3 && !_.isEmpty(greyFlags) && !_.isEmpty(spawnRoom.towers)) {
+                console.log(JSON.stringify(greyFlags))
                 for (var flag of greyFlags) {
                     flag.remove()
                 }
@@ -564,7 +580,7 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        
+
 
         //console.log(spawnRoom.name+" "+JSON.stringify(roomInterests))
 
@@ -629,7 +645,7 @@ Room.prototype.creepSpawnRun =
                     var numOfConstrustions = Game.rooms[interest].find(FIND_MY_CONSTRUCTION_SITES)
                     var numOfRepairsites = Game.rooms[interest].find(FIND_MY_STRUCTURES, {
                         filter: (s) =>
-                            ((s.hits / s.hitsMax) < 0.5) &&
+                            ((s.hits / s.hitsMax) < 0.8) &&
                             s.structureType != STRUCTURE_CONTROLLER &&
                             s.structureType != STRUCTURE_WALL &&
                             s.structureType != STRUCTURE_RAMPART
@@ -732,7 +748,7 @@ Room.prototype.creepSpawnRun =
             if (spawnRoom.storage.store[RESOURCE_ENERGY] > (100000 * spawnRoom.controller.level) && spawnRoom.controller.level < 8) {
                 minimumSpawnOf.upgrader = 2;
             }
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 950000 ** spawnRoom.controller.level < 8) {
+            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 950000 && spawnRoom.controller.level < 8) {
                 minimumSpawnOf.upgrader = minimumSpawnOf.upgrader + 1;
             }
         }
@@ -878,7 +894,7 @@ Room.prototype.creepSpawnRun =
         }
 
         if (rcl <= 3) {
-            let sources = spawnRoom.find(FIND_SOURCES); 
+            let sources = spawnRoom.find(FIND_SOURCES);
             var freeSpots = 0
             for (var s of sources) {
                 //check how many free space each has

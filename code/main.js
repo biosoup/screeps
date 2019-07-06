@@ -114,13 +114,17 @@ module.exports.loop = function () {
         //if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" work Code: " + Game.cpu.getUsed())}
         //console.log(Game.creeps[creep])
 
-        //if creep is idle, give him work
-        if (Game.creeps[creep].isIdle) {
-            Game.creeps[creep].runRole()
-        } else if (!Game.creeps[creep].hasValidTask) {
-            Game.creeps[creep].runRole()
+        try {
+            //if creep is idle, give him work
+            if (Game.creeps[creep].isIdle) {
+                Game.creeps[creep].runRole()
+            } else if (!Game.creeps[creep].hasValidTask) {
+                Game.creeps[creep].runRole()
+            }
+        } catch (err) {
+            Game.creeps[creep].say("RUN ROLE ERR!!")
+            console.log("RUN ROLE ERR: " + creep + " " + err)
         }
-
     }
 
     if (CPUdebug == true) {
@@ -136,11 +140,56 @@ module.exports.loop = function () {
                 Game.rooms[roomName].controller.activateSafeMode()
             } else if (!_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode)) {
                 //room on cooldown, but safemode not active
+
+                //get closest other spawns
+                var flagRoomName = spawnRoom.name
+                var distance = {}
+                for (let roomName in Game.rooms) {
+                    var r = Game.rooms[roomName];
+                    if (!_.isEmpty(r.memory.roomArray.spawns)) {
+                        if (r.name != flagRoomName) {
+                            distance[r.name] = {}
+                            distance[r.name].name = r.name
+                            distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                        }
+                    }
+                }
+                distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+
+                //check if flag does not exists
+                var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
+                if (_.isEmpty(whiteFlags)) {
+                    //set a flag
+                    spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
+                    console.log(spawnRoom.name + " in troubles!! Sending response team!!")
+                }
             } else {
-                //no avaliable safe modes
+                //no avaliable safe modes –> send response team
+
+                //get closest other spawns
+                var flagRoomName = spawnRoom.name
+                var distance = {}
+                for (let roomName in Game.rooms) {
+                    var r = Game.rooms[roomName];
+                    if (!_.isEmpty(r.memory.roomArray.spawns)) {
+                        if (r.name != flagRoomName) {
+                            distance[r.name] = {}
+                            distance[r.name].name = r.name
+                            distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                        }
+                    }
+                }
+                distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+
+                //check if flag does not exists
+                var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
+                if (_.isEmpty(whiteFlags)) {
+                    //set a flag
+                    spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
+                    console.log(spawnRoom.name + " in troubles!! Sending response team!!")
+                }
             }
         }
-
 
         if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
             //refresh room data
@@ -255,6 +304,19 @@ module.exports.loop = function () {
 
         stats.commit();
     }
+
+
+    /* *** TEST SPACE *** */
+
+    try {
+
+
+    } catch (err) {
+        console.log("ERR: " + err)
+    }
+    //var closeSpawn = spawnName.findClosestByRange(Game.spawns, {filter: s=> s.room.name != spawnName.room.name})
+    //console.log(JSON.stringify(closeSpawn))
+
 
     if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Finish: " + Game.cpu.getUsed());

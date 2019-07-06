@@ -71,7 +71,7 @@ Creep.prototype.getEnergy = function (creep, useSource) {
     }
 
     //get from continer
-    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] > 50)
+    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] > 100)
     var container = creep.pos.findClosestByPath(containers)
     if (!_.isEmpty(container)) {
         creep.task = Tasks.withdraw(container);

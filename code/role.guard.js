@@ -21,16 +21,7 @@ module.exports = {
                 creep.say("Hostile!" + EM_SWORDS);
                 return;
             } else {
-                var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room)
-                if (!_.isEmpty(whiteFlags)) {
-                    var spawnR = creep.room.find(FIND_FLAGS)
-                    if (!_.isEmpty(spawnR)) {
-                        //console.log(JSON.stringify(spawnR))
-                        //creep.moveTo(spawnR)
-                    }
-                    creep.say(EM_FLAG)
-                    return
-                }
+
 
                 //find damaged creeps
                 var hitCreeps = creep.pos.findClosestByRange(FIND_CREEPS, {
@@ -41,6 +32,22 @@ module.exports = {
                     creep.say(EM_SYRINGE)
                     return
                 }
+
+                var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room)
+                if (!_.isEmpty(whiteFlags)) {
+                    var spawnR = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                        filter: s => s.structureType == STRUCTURE_SPAWN
+                    })
+                    if (!_.isEmpty(spawnR)) {
+                        //console.log(JSON.stringify(spawnR))
+                        creep.moveTo(spawnR)
+                    }
+                    if ((Game.time % 3) == 0) {
+                        creep.say(EM_FLAG)
+                    }
+                    return
+                }
+
                 if ((Game.time % 3) == 0) {
                     creep.say(EM_SINGING)
                 }
