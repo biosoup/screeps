@@ -4,10 +4,10 @@ module.exports = {
     // a function to run the logic for this role
     nonTask: function (creep) {
         //heal
-        if(creep.hits < creep.hitsMax) {
+        if (creep.hits < creep.hitsMax) {
             creep.heal(creep)
         }
-        
+
         if (creep.room.name == creep.memory.target) {
             //if in target room
 
@@ -18,18 +18,32 @@ module.exports = {
                 if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
                     creep.travelTo(hostile);
                 }
-                creep.say("Hostile!"+EM_SWORDS);
+                creep.say("Hostile!" + EM_SWORDS);
                 return;
             } else {
+                var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room)
+                if (!_.isEmpty(whiteFlags)) {
+                    var spawnR = creep.room.find(FIND_FLAGS)
+                    if (!_.isEmpty(spawnR)) {
+                        //console.log(JSON.stringify(spawnR))
+                        //creep.moveTo(spawnR)
+                    }
+                    creep.say(EM_FLAG)
+                    return
+                }
+
                 //find damaged creeps
-                var hitCreeps = creep.pos.findClosestByRange(FIND_CREEPS, {filter: c => c.hits < c.hitsMax})
-                if(!_.isEmpty(hitCreeps)) {
+                var hitCreeps = creep.pos.findClosestByRange(FIND_CREEPS, {
+                    filter: c => c.hits < c.hitsMax
+                })
+                if (!_.isEmpty(hitCreeps)) {
                     creep.task = Tasks.heal(hitCreeps)
                     creep.say(EM_SYRINGE)
                     return
                 }
-
-                creep.say(EM_SINGING)
+                if ((Game.time % 3) == 0) {
+                    creep.say(EM_SINGING)
+                }
             }
 
         } else {

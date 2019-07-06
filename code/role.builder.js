@@ -27,31 +27,33 @@ module.exports = {
             }
 
             //find repairs
-            var closestRepairSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            var closestRepairSite = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                 filter: (s) =>
-                    s.structureType != STRUCTURE_CONTROLLER
+                    s.structureType != STRUCTURE_CONTROLLER &&
+                    s.hits < s.hitsMax
             });
             if (!_.isEmpty(closestRepairSite)) {
                 //sort them by hits
                 var closestRepairSite = _.sortBy(closestRepairSite, "hits")
-
-                creep.task = Tasks.repair(closestConstructionSite);
+                creep.task = Tasks.repair(closestRepairSite);
                 creep.say(EM_WRENCH);
                 return;
             }
 
             //nothing to do -> upgrade controller
-            if (creep.room.controller.my) {
-                creep.task = Tasks.upgrade(creep.room.controller);
-                creep.say(EM_LIGHTNING);
-                return;
+            if (!_.isEmpty(creep.room.controller)) {
+                if (creep.room.controller.my) {
+                    creep.task = Tasks.upgrade(creep.room.controller);
+                    creep.say(EM_LIGHTNING);
+                    return;
+                }
             } else {
                 creep.say(EM_SINGING);
                 return
             }
 
         } else {
-            if(creep.getEnergy(creep, true)) {
+            if (creep.getEnergy(creep, true)) {
                 return;
             }
         }

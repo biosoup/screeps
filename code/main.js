@@ -75,7 +75,11 @@ module.exports.loop = function () {
         } */
 
         for (let roomName in Game.rooms) {
-            Game.rooms[roomName].creepSpawnRun(Game.rooms[roomName]);
+            if (!_.isEmpty(Game.rooms[roomName].memory.roomArray)) {
+                if (!_.isEmpty(Game.rooms[roomName].memory.roomArray.spawns)) {
+                    Game.rooms[roomName].creepSpawnRun(Game.rooms[roomName]);
+                }
+            }
         }
     }
 
@@ -124,6 +128,20 @@ module.exports.loop = function () {
     }
     //go through rooms
     for (let roomName in Game.rooms) {
+        var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS, {
+            filter: f => f.name != "Invader"
+        })
+        if (Game.rooms[roomName].controller.level < 0 && Game.rooms[roomName].controller.level > 0 && hostiles.length > 0) {
+            if (_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode) && Game.rooms[roomName].controller.safeModeAvailable > 0) {
+                Game.rooms[roomName].controller.activateSafeMode()
+            } else if (!_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode)) {
+                //room on cooldown, but safemode not active
+            } else {
+                //no avaliable safe modes
+            }
+        }
+
+
         if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
             //refresh room data
             Game.rooms[roomName].refreshData(roomName)
@@ -191,6 +209,7 @@ module.exports.loop = function () {
         } catch (err) {
             Game.creeps[creep].say("MAIN ERR!!")
             console.log("MAIN ERR: " + creep + " " + err)
+            Game.creeps[creep].task = {}
         }
     }
 
@@ -209,7 +228,7 @@ module.exports.loop = function () {
             }
         }
         stats.addStat('spawn-busy', {}, spawnBusy)
-        
+
         var containerStats = {};
         var hostilesStats = {};
         var countHostiles = 0;

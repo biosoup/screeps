@@ -39,26 +39,26 @@ myRooms = {};
  * Emoji constants! (Because github integration mangles them in a non-nice way)
  */
 
-EM_ZZZ = "\ud83d\udca4";         // "💤"
-EM_COOKIE = "\ud83c\udf6a";      // "🍪"
-EM_TEA = "\ud83c\udf75";         // "🍵"
-EM_COFFEE = "\u2615";            // "☕"
-EM_LIGHTNING = "\u26a1";         // "⚡"
-EM_BUILD = "\u2692";             // "⚒"
-EM_HAMMER = "\ud83d\udd28";      // "🔨"
-EM_BOMB = "\ud83d\udca3";        // "💣"
-EM_PACKAGE = "\ud83d\udce6";     // "📦"
-EM_TRUCK = "\ud83d\ude9a";       // "🚚"
-EM_EXCLAMATION = "\u2757";       // "❗"
-EM_PIN = "\ud83d\udccd";         // "📍"
-EM_WRENCH = "\ud83d\udd27";      // "🔧"
-EM_FLEX = "\ud83d\udcaa";        // "💪"
-EM_FLAG = "\ud83d\udea9";        // "🚩"
-EM_KILL = "\u2620\ufe0f";        // "☠️"
-EM_SWORDS = "\u2694";            // "⚔"
-EM_ARROW = "\u2650";             // "♐"
-EM_SYRINGE = "\ud83d\udc89";     // "💉"
-EM_SWIMMING = "\ud83c\udfca";    // "🏊"
+EM_ZZZ = "\ud83d\udca4"; // "💤"
+EM_COOKIE = "\ud83c\udf6a"; // "🍪"
+EM_TEA = "\ud83c\udf75"; // "🍵"
+EM_COFFEE = "\u2615"; // "☕"
+EM_LIGHTNING = "\u26a1"; // "⚡"
+EM_BUILD = "\u2692"; // "⚒"
+EM_HAMMER = "\ud83d\udd28"; // "🔨"
+EM_BOMB = "\ud83d\udca3"; // "💣"
+EM_PACKAGE = "\ud83d\udce6"; // "📦"
+EM_TRUCK = "\ud83d\ude9a"; // "🚚"
+EM_EXCLAMATION = "\u2757"; // "❗"
+EM_PIN = "\ud83d\udccd"; // "📍"
+EM_WRENCH = "\ud83d\udd27"; // "🔧"
+EM_FLEX = "\ud83d\udcaa"; // "💪"
+EM_FLAG = "\ud83d\udea9"; // "🚩"
+EM_KILL = "\u2620\ufe0f"; // "☠️"
+EM_SWORDS = "\u2694"; // "⚔"
+EM_ARROW = "\u2650"; // "♐"
+EM_SYRINGE = "\ud83d\udc89"; // "💉"
+EM_SWIMMING = "\ud83c\udfca"; // "🏊"
 EM_SINGING = "\u266b\u266a\u266b"; // "♫♪♫"
 
 mineralDescriptions = {};
@@ -348,38 +348,38 @@ buildingPlans = {
         },
         {
             //Level 2 (max 550)
-            minEnergy: 250,
-            body: [MOVE, MOVE, WORK, CARRY]
+            minEnergy: 550,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 3 (max 800)
-            minEnergy: 250,
-            body: [MOVE, MOVE, WORK, CARRY]
+            minEnergy: 550,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 4 (max 1300)
-            minEnergy: 250,
-            body: [MOVE, MOVE, WORK, CARRY]
+            minEnergy: 550,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 5 (max 1800)
-            minEnergy: 250,
-            body: [MOVE, MOVE, WORK, CARRY]
+            minEnergy: 550,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 6 (max 2300)
-            minEnergy: 250,
-            body: [MOVE, MOVE, WORK, CARRY]
+            minEnergy: 550,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 7 (max 5600)
-            minEnergy: 250,
-            body: [MOVE, MOVE, WORK, CARRY]
+            minEnergy: 550,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 8 (max 12900)
-            minEnergy: 250,
-            body: [MOVE, MOVE, WORK, CARRY]
+            minEnergy: 550,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         }
     ],
 
@@ -1101,42 +1101,42 @@ buildingPlans = {
     longDistanceLorry: [{
             //Level 1 (max 300)
             minEnergy: 300,
-            body: [MOVE,MOVE,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, CARRY, CARRY, CARRY, CARRY]
         },
         {
             //Level 2 (max 550)
             minEnergy: 450,
-            body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         },
         {
             //Level 3 (max 800)
             minEnergy: 750,
-            body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         },
         {
             //Level 4 (max 1300)
             minEnergy: 1200,
-            body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         },
         {
             //Level 5 (max 1800)
             minEnergy: 1500,
-            body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         },
         {
             //Level 6 (max 2300)
             minEnergy: 1500,
-            body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         },
         {
             //Level 7 (max 5600)
             minEnergy: 1500,
-            body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         },
         {
             //Level 8 (max 12900)
             minEnergy: 1500,
-            body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         }
     ],
 

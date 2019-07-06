@@ -419,6 +419,8 @@ Room.prototype.creepSpawnRun =
             }
         }
 
+
+
         if (globalSpawningStatus == 0) {
             //All spawns busy, inactive or player lost control of the room
             return -1;
@@ -466,6 +468,32 @@ Room.prototype.creepSpawnRun =
         //room interests
         let roomInterests = {}
 
+        //console.log(JSON.stringify(spawnRoom.controller))
+        if (_.isEmpty(spawnRoom.controller.owner)) {
+                var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS, {
+                    filter: f => f.name != "Invader"
+                })
+                if (hostiles.length == 0) {
+                    //FIXME: get other spawns
+                    spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-E16N18", COLOR_WHITE, COLOR_YELLOW)
+                    console.log(spawnRoom.name + " has been defeated!! Sending recovery team!!")
+
+                    //FIXME: claim flag only when safe
+                    //var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
+                    spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-E16N18", COLOR_GREY, COLOR_PURPLE)
+                } else {
+                    console.log(spawnRoom.name + " has been defeated!! Occupied by " + hostiles.length)
+                }
+                return -1;
+        } else {
+            var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room.name == spawnRoom.name)
+            if(spawnRoom.controller.level > 3 && !_.isEmpty(greyFlags)) {
+                for (var flag of greyFlags) {
+                    flag.remove()
+                }
+            }
+        }
+
         //get all flags with code PURPLE for remote HARVESTERS
         var redFlags = _.filter(Game.flags, (f) => f.color == COLOR_RED && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
         //get remote mining rooms for this spawnroom
@@ -490,6 +518,20 @@ Room.prototype.creepSpawnRun =
             }
         }
 
+        //flag based room defense
+        if (!_.isEmpty(spawnRoom.storage)) {
+            //get gcl and number of rooms
+            var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+            if (!_.isEmpty(whiteFlags)) {
+                for (var flag of whiteFlags) {
+                    //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
+                    //builders & guard = boolean
+                    roomInterests[flag.pos.roomName] = [0, 0, 0, 0, 0, flag.secondaryColor]
+                    var defend = flag.pos.roomName;
+                }
+            }
+        }
+
         //flag based room claiming
         if (!_.isEmpty(spawnRoom.storage)) {
             //get gcl and number of rooms
@@ -497,7 +539,6 @@ Room.prototype.creepSpawnRun =
             var numberOfRooms = _.sum(Game.rooms, room => room.controller && room.controller.my)
             var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_GREY && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
             if (gcl > numberOfRooms) {
-                //FIXME: when room is claimed, but needs a builder & spawn built
                 if (!_.isEmpty(greyFlags)) {
                     for (var flag of greyFlags) {
                         //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
@@ -516,11 +557,14 @@ Room.prototype.creepSpawnRun =
                             roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
                         } else {
                             //remove flag
+                            flag.remove()
                         }
                     }
                 }
             }
         }
+
+        
 
         //console.log(spawnRoom.name+" "+JSON.stringify(roomInterests))
 
@@ -590,7 +634,7 @@ Room.prototype.creepSpawnRun =
                             s.structureType != STRUCTURE_WALL &&
                             s.structureType != STRUCTURE_RAMPART
                     });
-                    
+
                     if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
                         roomInterests[interest][3] = roomInterests[interest][3]
                     } else {
@@ -630,6 +674,8 @@ Room.prototype.creepSpawnRun =
                         minimumSpawnOf.longDistanceBuilder = minimumSpawnOf.longDistanceBuilder - roomInterests[interest][3];
                         roomInterests[interest][4] = 0
                         minimumSpawnOf.claimer = minimumSpawnOf.claimer - roomInterests[interest][4];
+                    } else if (interest == defend) {
+                        roomInterests[interest][5] = roomInterests[interest][5];
                     } else {
                         roomInterests[interest][5] = 0
                     }
@@ -642,10 +688,12 @@ Room.prototype.creepSpawnRun =
         }
 
         //add gew extra lorries
-        if (_.sum(spawnRoom.storage.store) > 950000) {
-            minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 3);
-        } else {
-            //minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 1.25);
+        if (!_.isEmpty(spawnRoom.storage)) {
+            if (_.sum(spawnRoom.storage.store) > 950000) {
+                minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 3);
+            } else {
+                //minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 1.25);
+            }
         }
 
 
@@ -825,11 +873,20 @@ Room.prototype.creepSpawnRun =
             - fixed numbers for now
         */
 
-        if (rcl <= 2) {
-            minimumSpawnOf.harvester = numberOfSources * 4
+        if (rcl == 2) {
             minimumSpawnOf.lorry = 0
-        } else if (rcl == 3) {
-            minimumSpawnOf.harvester = numberOfSources * 3
+        }
+
+        if (rcl <= 3) {
+            let sources = spawnRoom.find(FIND_SOURCES); 
+            var freeSpots = 0
+            for (var s of sources) {
+                //check how many free space each has
+                var freeSpaces = spawnRoom.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
+                freeSpaces = freeSpaces.filter(f => f.terrain == "wall")
+                freeSpots = freeSpots + (9 - freeSpaces.length)
+            }
+            minimumSpawnOf.harvester = freeSpots;
         }
 
         if (rcl <= 4 && containerEnergy.length > 0) {
@@ -851,7 +908,7 @@ Room.prototype.creepSpawnRun =
         //Check whether spawn trying to spawn too many creeps
         let missingBodyParts = 0;
         for (let rn in minimumSpawnOf) {
-            if (minimumSpawnOf[rn] != undefined && buildingPlans[rn] != undefined) {
+            if (!_.isEmpty(minimumSpawnOf[rn]) && !_.isEmpty(buildingPlans[rn])) {
                 missingBodyParts += minimumSpawnOf[rn] * buildingPlans[rn][rcl - 1].body.length;
             }
         }

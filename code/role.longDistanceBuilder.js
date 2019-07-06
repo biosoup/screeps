@@ -35,7 +35,7 @@ module.exports = {
                 //find repairs
                 var closestRepairSite = creep.room.find(FIND_STRUCTURES, {
                     filter: (s) =>
-                        s.structureType != STRUCTURE_CONTROLLER
+                        s.structureType != STRUCTURE_CONTROLLER && s.hits < s.hitsMax
                 });
                 var closestRepairSite = _.first(_.sortBy(closestRepairSite, "hits"))
                 if (!_.isEmpty(closestRepairSite)) {
@@ -56,7 +56,7 @@ module.exports = {
                 }
 
             } else {
-                if(creep.getEnergy(creep, true)) {
+                if (creep.getEnergy(creep, true)) {
                     return;
                 }
             }

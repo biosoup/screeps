@@ -71,7 +71,7 @@ Creep.prototype.getEnergy = function (creep, useSource) {
     }
 
     //get from continer
-    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] > 0)
+    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] > 50)
     var container = creep.pos.findClosestByPath(containers)
     if (!_.isEmpty(container)) {
         creep.task = Tasks.withdraw(container);
@@ -87,14 +87,33 @@ Creep.prototype.getEnergy = function (creep, useSource) {
             if (!_.isEmpty(unattendedSource)) {
                 creep.task = Tasks.harvest(unattendedSource);
                 creep.say(EM_HAMMER)
-                return
+                return true;
             }
         } else {
             if (!_.isEmpty(sources)) {
-                var rand = _.random(sources.length)
-                creep.task = Tasks.harvest(sources[rand]);
-                creep.say(EM_HAMMER)
-                return
+                var targetSource = []
+                var i = 0;
+                for (var s of sources) {
+                    //check how many free space each has
+                    //console.log(JSON.stringify(s))
+                    var freeSpaces = creep.room.lookForAtArea(LOOK_TERRAIN,s.pos.y-1,s.pos.x-1,s.pos.y+1,s.pos.x+1, true);
+                    freeSpaces = freeSpaces.filter(f => f.terrain == "wall")
+                    //console.log(freeSpaces.length+" "+JSON.stringify(freeSpaces))
+                    
+                    //check how many targets it
+                    if (freeSpaces.length+s.targetedBy.length < 9) {
+                        targetSource[i] = s
+                        i++
+                    }
+                }
+                if(!_.isEmpty(targetSource)) {
+                    var rand = _.random(targetSource.length - 1)
+                    creep.task = Tasks.harvest(targetSource[rand]);
+                    creep.say(EM_HAMMER)
+                    return true;
+                } else {
+                    creep.say(EM_ZZZ)
+                }
             }
         }
     }
