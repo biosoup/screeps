@@ -649,7 +649,7 @@ Room.prototype.creepSpawnRun =
                     var numOfConstrustions = Game.rooms[interest].find(FIND_CONSTRUCTION_SITES)
                     var numOfRepairsites = Game.rooms[interest].find(FIND_STRUCTURES, {
                         filter: (s) =>
-                            ((s.hits / s.hitsMax) < 0.8) &&
+                            ((s.hits / s.hitsMax) < 0.7) &&
                             s.structureType != STRUCTURE_CONTROLLER &&
                             s.structureType != STRUCTURE_WALL &&
                             s.structureType != STRUCTURE_RAMPART

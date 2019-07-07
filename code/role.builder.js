@@ -30,12 +30,9 @@ module.exports = {
             var closestRepairSite = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                 filter: (s) =>
                     s.structureType != STRUCTURE_CONTROLLER &&
-                    s.structureType != STRUCTURE_RAMPART &&
                     s.hits < s.hitsMax
             });
-            var closestRepairSite = _.sortBy(closestRepairSite, "hits")
             if (!_.isEmpty(closestRepairSite)) {
-                //sort them by hits
                 creep.task = Tasks.repair(closestRepairSite);
                 creep.say(EM_WRENCH);
                 return;

@@ -5,12 +5,15 @@
 function deref(ref) {
     return Game.getObjectById(ref) || Game.flags[ref] || Game.creeps[ref] || Game.spawns[ref] || null;
 }
+
 function derefRoomPosition(protoPos) {
     return new RoomPosition(protoPos.x, protoPos.y, protoPos.roomName);
 }
+
 function isEnergyStructure(structure) {
     return structure.energy != undefined && structure.energyCapacity != undefined;
 }
+
 function isStoreStructure(structure) {
     return structure.store != undefined;
 }
@@ -44,8 +47,7 @@ class Task {
                 ref: target.ref,
                 _pos: target.pos,
             };
-        }
-        else {
+        } else {
             this._target = {
                 ref: '',
                 _pos: {
@@ -167,16 +169,14 @@ class Task {
         let validTarget = false;
         if (this.target) {
             validTarget = this.isValidTarget();
-        }
-        else if (this.options.blind && !Game.rooms[this.targetPos.roomName]) {
+        } else if (this.options.blind && !Game.rooms[this.targetPos.roomName]) {
             // If you can't see the target's room but you have blind enabled, then that's okay
             validTarget = true;
         }
         // Return if the task is valid; if not, finalize/delete the task and return false
         if (validTask && validTarget) {
             return true;
-        }
-        else {
+        } else {
             // Switch to parent task if there is one
             this.finish();
             return this.parent ? this.parent.isValid() : false;
@@ -216,8 +216,7 @@ class Task {
                 this.finish();
             }
             return result;
-        }
-        else {
+        } else {
             this.moveToTarget();
         }
     }
@@ -238,8 +237,7 @@ class Task {
             let terrain = position.lookFor(LOOK_TERRAIN)[0];
             if (terrain === 'swamp') {
                 swampPosition = position;
-            }
-            else {
+            } else {
                 return creep.move(creep.pos.getDirectionTo(position));
             }
         }
@@ -254,8 +252,7 @@ class Task {
         this.moveToNextPos();
         if (this.creep) {
             this.creep.task = this.parent;
-        }
-        else {
+        } else {
             console.log(`No creep executing ${this.name}!`);
         }
     }
@@ -282,8 +279,7 @@ class TaskAttack extends Task {
         if (creep.getActiveBodyparts(ATTACK) > 0) {
             if (creep.pos.isNearTo(target)) {
                 attackReturn = creep.attack(target);
-            }
-            else {
+            } else {
                 attackReturn = this.moveToTarget(1); // approach target if you also have attack parts
             }
         }
@@ -292,12 +288,10 @@ class TaskAttack extends Task {
         }
         if (attackReturn == OK && rangedAttackReturn == OK) {
             return OK;
-        }
-        else {
+        } else {
             if (attackReturn != OK) {
                 return rangedAttackReturn;
-            }
-            else {
+            } else {
                 return attackReturn;
             }
         }
@@ -442,8 +436,7 @@ class TaskGetBoosted extends Task {
             this.target.mineralAmount >= LAB_BOOST_MINERAL * partCount &&
             this.target.energy >= LAB_BOOST_ENERGY * partCount) {
             return this.target.boostCreep(this.creep, this.data.amount);
-        }
-        else {
+        } else {
             return ERR_NOT_FOUND;
         }
     }
@@ -474,10 +467,15 @@ function hasPos(obj) {
 class TaskGoTo extends Task {
     constructor(target, options = {}) {
         if (hasPos(target)) {
-            super(TaskGoTo.taskName, {ref: '', pos: target.pos}, options);
-        }
-        else {
-            super(TaskGoTo.taskName, {ref: '', pos: target}, options);
+            super(TaskGoTo.taskName, {
+                ref: '',
+                pos: target.pos
+            }, options);
+        } else {
+            super(TaskGoTo.taskName, {
+                ref: '',
+                pos: target
+            }, options);
         }
         // Settings
         this.settings.targetRange = 1;
@@ -497,8 +495,7 @@ class TaskGoTo extends Task {
         // Return if the task is valid; if not, finalize/delete the task and return false
         if (validTask) {
             return true;
-        }
-        else {
+        } else {
             // Switch to parent task if there is one
             let isValid = false;
             if (this.parent) {
@@ -516,7 +513,10 @@ TaskGoTo.taskName = 'goTo';
 
 class TaskGoToRoom extends Task {
     constructor(roomName, options = {}) {
-        super(TaskGoToRoom.taskName, {ref: '', pos: new RoomPosition(25, 25, roomName)}, options);
+        super(TaskGoToRoom.taskName, {
+            ref: '',
+            pos: new RoomPosition(25, 25, roomName)
+        }, options);
         // Settings
         this.settings.targetRange = 24; // Target is almost always controller flag, so range of 2 is acceptable
     }
@@ -535,8 +535,7 @@ class TaskGoToRoom extends Task {
         // Return if the task is valid; if not, finalize/delete the task and return false
         if (validTask) {
             return true;
-        }
-        else {
+        } else {
             // Switch to parent task if there is one
             let isValid = false;
             if (this.parent) {
@@ -570,8 +569,7 @@ class TaskHarvest extends Task {
         // return false;
         if (isSource(this.target)) {
             return this.target.energy > 0;
-        }
-        else {
+        } else {
             return this.target.mineralAmount > 0;
         }
     }
@@ -596,8 +594,7 @@ class TaskHeal extends Task {
     work() {
         if (this.creep.pos.isNearTo(this.target)) {
             return this.creep.heal(this.target);
-        }
-        else {
+        } else {
             this.moveToTarget(1);
         }
         return this.creep.rangedHeal(this.target);
@@ -676,18 +673,14 @@ class TaskWithdraw extends Task {
         let target = this.target;
         if (target instanceof Tombstone || isStoreStructure(target)) {
             return (target.store[this.data.resourceType] || 0) >= amount;
-        }
-        else if (isEnergyStructure(target) && this.data.resourceType == RESOURCE_ENERGY) {
+        } else if (isEnergyStructure(target) && this.data.resourceType == RESOURCE_ENERGY) {
             return target.energy >= amount;
-        }
-        else {
+        } else {
             if (target instanceof StructureLab) {
                 return this.data.resourceType == target.mineralType && target.mineralAmount >= amount;
-            }
-            else if (target instanceof StructureNuker) {
+            } else if (target instanceof StructureNuker) {
                 return this.data.resourceType == RESOURCE_GHODIUM && target.ghodium >= amount;
-            }
-            else if (target instanceof StructurePowerSpawn) {
+            } else if (target instanceof StructurePowerSpawn) {
                 return this.data.resourceType == RESOURCE_POWER && target.power >= amount;
             }
         }
@@ -778,25 +771,20 @@ class TaskTransfer extends Task {
         let target = this.target;
         if (target instanceof Creep) {
             return _.sum(target.carry) <= target.carryCapacity - amount;
-        }
-        else if (isStoreStructure(target)) {
+        } else if (isStoreStructure(target)) {
             return _.sum(target.store) <= target.storeCapacity - amount;
-        }
-        else if (isEnergyStructure(target) && this.data.resourceType == RESOURCE_ENERGY) {
+        } else if (isEnergyStructure(target) && this.data.resourceType == RESOURCE_ENERGY) {
             return target.energy <= target.energyCapacity - amount;
-        }
-        else {
+        } else {
             if (target instanceof StructureLab) {
                 return (target.mineralType == this.data.resourceType || !target.mineralType) &&
-                       target.mineralAmount <= target.mineralCapacity - amount;
-            }
-            else if (target instanceof StructureNuker) {
+                    target.mineralAmount <= target.mineralCapacity - amount;
+            } else if (target instanceof StructureNuker) {
                 return this.data.resourceType == RESOURCE_GHODIUM &&
-                       target.ghodium <= target.ghodiumCapacity - amount;
-            }
-            else if (target instanceof StructurePowerSpawn) {
+                    target.ghodium <= target.ghodiumCapacity - amount;
+            } else if (target instanceof StructurePowerSpawn) {
                 return this.data.resourceType == RESOURCE_POWER &&
-                       target.power <= target.powerCapacity - amount;
+                    target.power <= target.powerCapacity - amount;
             }
         }
         return false;
@@ -830,10 +818,15 @@ TaskUpgrade.taskName = 'upgrade';
 class TaskDrop extends Task {
     constructor(target, resourceType = RESOURCE_ENERGY, amount = undefined, options = {}) {
         if (target instanceof RoomPosition) {
-            super(TaskDrop.taskName, {ref: '', pos: target}, options);
-        }
-        else {
-            super(TaskDrop.taskName, {ref: '', pos: target.pos}, options);
+            super(TaskDrop.taskName, {
+                ref: '',
+                pos: target
+            }, options);
+        } else {
+            super(TaskDrop.taskName, {
+                ref: '',
+                pos: target.pos
+            }, options);
         }
         // Settings
         this.settings.oneShot = true;
@@ -859,8 +852,7 @@ class TaskDrop extends Task {
         // Return if the task is valid; if not, finalize/delete the task and return false
         if (validTask) {
             return true;
-        }
-        else {
+        } else {
             // Switch to parent task if there is one
             let isValid = false;
             if (this.parent) {
@@ -1172,11 +1164,11 @@ Object.defineProperty(RoomPosition.prototype, 'neighbors', {
 });
 RoomPosition.prototype.isPassible = function (ignoreCreeps = false) {
     // Is terrain passable?
-    
+
     let terrain = Game.map.getRoomTerrain(this.roomName);
-    if (terrain.get(this.x,this.y) == TERRAIN_MASK_WALL) 
-      return false;
-    
+    if (terrain.get(this.x, this.y) == TERRAIN_MASK_WALL)
+        return false;
+
     if (this.isVisible) {
         // Are there creeps?
         if (ignoreCreeps == false && this.lookFor(LOOK_CREEPS).length > 0)
@@ -1184,9 +1176,9 @@ RoomPosition.prototype.isPassible = function (ignoreCreeps = false) {
         // Are there structures?
         let impassibleStructures = _.filter(this.lookFor(LOOK_STRUCTURES), function (s) {
             return this.structureType != STRUCTURE_ROAD &&
-                   s.structureType != STRUCTURE_CONTAINER &&
-                   !(s.structureType == STRUCTURE_RAMPART && (s.my ||
-                                                              s.isPublic));
+                s.structureType != STRUCTURE_CONTAINER &&
+                !(s.structureType == STRUCTURE_RAMPART && (s.my ||
+                    s.isPublic));
         });
         return impassibleStructures.length == 0;
     }

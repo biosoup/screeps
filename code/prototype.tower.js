@@ -9,7 +9,7 @@ StructureTower.prototype.defend =
 
 StructureTower.prototype.healCreeps =
     function () {
-        //....first heal any damaged creeps
+        //first heal any damaged creeps
         for (var name in Game.creeps) {
             // get the creep object
             var creep = Game.creeps[name];
@@ -26,18 +26,13 @@ StructureTower.prototype.repairStructures =
 
         if (this.energy > 200) {
             //Find the closest damaged Structure
-            var targets = this.room.find(FIND_STRUCTURES, {
+            var target = this.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (s) =>
-                    s.hits < 500 &&
+                    ((s.hits < 2000 && s.hitsMax > 2000) || (s.hitsMax < 800)) &&
                     s.structureType != STRUCTURE_CONTROLLER
             });
-            if (targets.length > 0) {
-                target = _.first(targets)
-            }
-
-            if (target) {
+            if (!_.isEmpty(target)) {
                 this.repair(target);
-                //console.log(target + " " + target.hits + " " + this.room.name + " " + this.repair(target))
             }
         }
 
@@ -58,7 +53,7 @@ StructureTower.prototype.repairStructures =
             if (targets.length > 0) {
                 target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
             }
-            
+
             if (target) {
                 var result = this.repair(target);
                 //console.log(target + " " + target.hits + " " + this.room.name + " " + result)

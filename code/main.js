@@ -135,8 +135,9 @@ module.exports.loop = function () {
         var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS, {
             filter: f => f.name != "Invader"
         })
+        var towers = Game.rooms[roomName].towers
         if (!_.isEmpty(Game.rooms[roomName].controller)) {
-            if (Game.rooms[roomName].controller.level > 0 && hostiles.length > 1) {
+            if (Game.rooms[roomName].controller.level > 0 && (hostiles.length - (towers.length * 2)) > 0) {
                 if (_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode) && Game.rooms[roomName].controller.safeModeAvailable > 0) {
                     Game.rooms[roomName].controller.activateSafeMode()
                 } else if (!_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode)) {
@@ -223,8 +224,10 @@ module.exports.loop = function () {
             }
 
             if (_.isEmpty(hostiles)) {
-                //no hostiles, one tower to repair
-                tower.repairStructures();
+                for (var tower of towers) {
+                    //no hostiles, one tower to repair
+                    tower.repairStructures();
+                }
             }
         }
 
@@ -254,7 +257,7 @@ module.exports.loop = function () {
             Game.creeps[creep].run();
         } catch (err) {
             Game.creeps[creep].say("MAIN ERR!!")
-            console.log("MAIN ERR: " + creep + " at: " + creep.room.name + " " + err.stack)
+            console.log("MAIN ERR: " + creep + " at: " + err.stack)
             Game.creeps[creep].task = {}
         }
     }

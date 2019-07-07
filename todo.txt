@@ -1,11 +1,62 @@
-/** TODO or TO BE DONE
+/** TODO: or TO BE DONE
 token: 99f7c6d7-209f-48ce-bdf0-57ff39d125bf
 
 PRIORITIES
-* terminal sell code
-* terminal multiroom energy help
+* dynamic spawning
+    - low lever (RCL 0-3)
+        - maximize harvesters
+        - miners for sources
+        - 1 upgrader, 1 builder, 1 wallrepair to 500k
+        - all based on the e/t that can be brought in
+    - mid level (RCL 4-6)
+        - remote mining to fill storage
+        - dynamic number of upgraders mixed in the que
+        - wallrepair to 2 mil 
+        - spawnAttendant + lorry
+        - add claimers
+    - high level (RCL 7+)
+        - add mining, trading and scientist
+
+* base-building code
+    - flag based
+    - core body
+        - first to show visuals based from flag/spawn1
+            - prepare fixed steps for each RCL
+        - later automatic space find
+    - find best place for arms
+    - find roads to sources and stuff
+    - automatic repair
+
+* emergency situation
+    - base lockdown
+        - no spawning except guard
+        - priority refill for towers
+    - safemode
+    - request help
 
 * scout role
+    - 2T, 2M
+
+* energy optimization
+    - recycling of creeps
+    - lorry dynamic sizing
+    - gather energy input room/remotes
+
+* group defense/attack
+
+
+- flag based attack??
+- intershard creeps
+	- navigation
+	- memory handling
+	- send rampart distmantler
+		- flag based?
+- arbitrage / autobuy code
+- autobuy code for minimum levels in room storages
+- room visual for enemy room
+	- weak spots
+	- tower DPS
+	- flag based?
 ------
 
 
@@ -41,19 +92,6 @@ PRIORITIES
     
 - better console conrol
     - on room level?
-
-- tower logic
-    - emergency supply
-    - emergency protocol
-
-- spawner logic 
-    - compute expected ROI of worker
-    
-- distatntWorkers
-    - distantMiner
-        - ROI tracking
-    - distantBuilder
-    - distantLorry
 
 - defense / attack creeps
     - flag based attack waves

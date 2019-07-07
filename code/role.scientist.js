@@ -50,8 +50,6 @@ module.exports = {
                                             }
                                         }
                                     } else {
-                                        //FIXME:
-                                        //creep.say("Lab to be empty!")
                                         //Lab has to be emptied -> get rid of stuff in creep
                                         if (creep.storeAllBut() == true) {
                                             //Get minerals from storage
@@ -66,7 +64,7 @@ module.exports = {
                             }
                         }
                         if (labsReady == 2) {
-                            creep.say("Waiting ...");
+                            creep.say("Waiting")
                             creep.memory.sleep = 5;
                         }
                         break;

@@ -551,7 +551,6 @@ buildingPlans = {
         }
     ],
 
-    //FIXME: add work parts on lower level compared to carry
     upgrader: [{
             //Level 1 (max 300)
             minEnergy: 300,
