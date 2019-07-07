@@ -234,8 +234,6 @@ module.exports.loop = function () {
 
         // default resource limits
         market.resourceLimits(roomName);
-        // market buy and auto sell
-        market.marketCode(CPUdebug);
         // balance resources
         market.resourceBalance(CPUdebug);
         // terminal transfers
@@ -245,6 +243,9 @@ module.exports.loop = function () {
 
         market.labCode(roomName);
     }
+
+    //run market code
+    market.marketCode();
 
     if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Start Creep run Code: " + Game.cpu.getUsed())

@@ -72,29 +72,31 @@ module.exports = {
                         }
                     }
                     if (bestRoom == undefined || bestRoom.name == undefined) {
-                        console.log("No room with enough energy found!");
+                        console.log("No best room with enough energy found!");
                     } else {
                         Memory.buyRoom = bestRoom.name;
                     }
                 }
-                if (!_.isEmpty(bestRoom.name) && bestRoom.terminal.cooldown == 0) {
-                    var returnCode = Game.market.deal(order.id, left, bestRoom.name);
-                    if (returnCode == OK) {
-                        info[0] -= left;
-                        if (LOG_MARKET == true) {
-                            console.log("<font color=#fe2ec8 type='highlight'>" + left + " " + order.resourceType + " bought in room " + bestRoom.name + " for " + (left * order.price) + " credits.</font>");
-                            delete Memory.buyRoom;
+                if (!_.isEmpty(bestRoom)) {
+                    if (!_.isEmpty(bestRoom.name) && bestRoom.terminal.cooldown == 0) {
+                        var returnCode = Game.market.deal(order.id, left, bestRoom.name);
+                        if (returnCode == OK) {
+                            info[0] -= left;
+                            if (LOG_MARKET == true) {
+                                console.log("<font color=#fe2ec8 type='highlight'>" + left + " " + order.resourceType + " bought in room " + bestRoom.name + " for " + (left * order.price) + " credits.</font>");
+                                delete Memory.buyRoom;
+                            }
+                            if (info[0] > 0) {
+                                Memory.buyOrder = info.join(":");
+                            } else {
+                                delete Memory.buyOrder;
+                                delete Memory.buyRoom;
+                                console.log("<font color=#fe2ec8 type='highlight'>Buy order accomplished.</font>");
+                            }
                         }
-                        if (info[0] > 0) {
-                            Memory.buyOrder = info.join(":");
-                        } else {
-                            delete Memory.buyOrder;
-                            delete Memory.buyRoom;
-                            console.log("<font color=#fe2ec8 type='highlight'>Buy order accomplished.</font>");
-                        }
+                    } else {
+                        console.log("No room with enough energy found!");
                     }
-                } else {
-                    console.log("No room with enough energy found!");
                 }
             } else {
                 delete Memory.buyOrder;
