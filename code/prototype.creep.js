@@ -71,11 +71,13 @@ Creep.prototype.getEnergy = function (creep, useSource) {
     }
 
     //get from continer
-    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] > 100)
-    var container = creep.pos.findClosestByPath(containers)
-    if (!_.isEmpty(container)) {
-        creep.task = Tasks.withdraw(container);
-        return true;
+    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] >= 100)
+    if (!_.isEmpty(containers)) {
+        var container = creep.pos.findClosestByPath(containers)
+        if (!_.isEmpty(container)) {
+            creep.task = Tasks.withdraw(container);
+            return true;
+        }
     }
 
     // if no container was found and the Creep should look for Sources
@@ -96,17 +98,17 @@ Creep.prototype.getEnergy = function (creep, useSource) {
                 for (var s of sources) {
                     //check how many free space each has
                     //console.log(JSON.stringify(s))
-                    var freeSpaces = creep.room.lookForAtArea(LOOK_TERRAIN,s.pos.y-1,s.pos.x-1,s.pos.y+1,s.pos.x+1, true);
+                    var freeSpaces = creep.room.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
                     freeSpaces = freeSpaces.filter(f => f.terrain == "wall")
                     //console.log(freeSpaces.length+" "+JSON.stringify(freeSpaces))
-                    
+
                     //check how many targets it
-                    if (freeSpaces.length+s.targetedBy.length < 9) {
+                    if (freeSpaces.length + s.targetedBy.length < 9) {
                         targetSource[i] = s
                         i++
                     }
                 }
-                if(!_.isEmpty(targetSource)) {
+                if (!_.isEmpty(targetSource)) {
                     var rand = _.random(targetSource.length - 1)
                     creep.task = Tasks.harvest(targetSource[rand]);
                     creep.say(EM_HAMMER)

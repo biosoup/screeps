@@ -542,7 +542,7 @@ Room.prototype.creepSpawnRun =
                 for (var flag of whiteFlags) {
                     //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                     //builders & guard = boolean
-                    roomInterests[flag.pos.roomName] = [0, 0, 0, 0, 0, flag.secondaryColor]
+                    roomInterests[flag.pos.roomName] = [0, 0, 0, 2, 0, flag.secondaryColor]
                     var defend = flag.pos.roomName;
                 }
             }
@@ -559,8 +559,12 @@ Room.prototype.creepSpawnRun =
                     for (var flag of greyFlags) {
                         //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                         //builders & guard = boolean
-                        roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
-                        var newRoom = flag.pos.roomName;
+                        if(Game.room[flag.room].controller.my) {
+                            roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
+                        } else {
+                            roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
+                            var newRoom = flag.pos.roomName;
+                        }
                     }
                 }
             } else {
@@ -642,15 +646,15 @@ Room.prototype.creepSpawnRun =
                 var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'longDistanceBuilder' && c.memory.target == interest)
                 //if construction or repairs are needed, launch a builder
                 if (Game.rooms[interest] != undefined) {
-                    var numOfConstrustions = Game.rooms[interest].find(FIND_MY_CONSTRUCTION_SITES)
-                    var numOfRepairsites = Game.rooms[interest].find(FIND_MY_STRUCTURES, {
+                    var numOfConstrustions = Game.rooms[interest].find(FIND_CONSTRUCTION_SITES)
+                    var numOfRepairsites = Game.rooms[interest].find(FIND_STRUCTURES, {
                         filter: (s) =>
                             ((s.hits / s.hitsMax) < 0.8) &&
                             s.structureType != STRUCTURE_CONTROLLER &&
                             s.structureType != STRUCTURE_WALL &&
                             s.structureType != STRUCTURE_RAMPART
                     });
-
+                    //console.log(interest+" "+numOfConstrustions.length +" "+ numOfRepairsites.length)
                     if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
                         roomInterests[interest][3] = roomInterests[interest][3]
                     } else {
@@ -746,10 +750,13 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["upgrader"] = 1;
         if (spawnRoom.storage != undefined) {
             if (spawnRoom.storage.store[RESOURCE_ENERGY] > (100000 * spawnRoom.controller.level) && spawnRoom.controller.level < 8) {
-                minimumSpawnOf.upgrader = 2;
-            }
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 950000 && spawnRoom.controller.level < 8) {
-                minimumSpawnOf.upgrader = minimumSpawnOf.upgrader + 1;
+                //add more upgraders
+                var mutiply = spawnRoom.storage.store[RESOURCE_ENERGY] / (100000 * spawnRoom.controller.level) 
+                minimumSpawnOf.upgrader = _.ceil(2 * mutiply)
+
+                //pull back on remote
+                minimumSpawnOf.longDistanceHarvester = minimumSpawnOf.longDistanceHarvester / 2;
+                minimumSpawnOf.longDistanceLorry = minimumSpawnOf.longDistanceLorry / 2;
             }
         }
 
@@ -768,8 +775,8 @@ Room.prototype.creepSpawnRun =
         // spawnAttendant
         if (spawnRoom.storage != undefined) {
             minimumSpawnOf["spawnAttendant"] = 1;
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000 && spawnRoom.energyAvailable == 0) {
-                minimumSpawnOf["spawnAttendant"] += 1;
+            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000 && spawnRoom.energyAvailable < (spawnRoom.energyCapacityAvailable/2)) {
+                //minimumSpawnOf["spawnAttendant"] = 2;
             }
         }
 
@@ -903,10 +910,6 @@ Room.prototype.creepSpawnRun =
                 freeSpots = freeSpots + (9 - freeSpaces.length)
             }
             minimumSpawnOf.harvester = freeSpots;
-        }
-
-        if (rcl <= 4 && containerEnergy.length > 0) {
-            minimumSpawnOf.upgrader = minimumSpawnOf.upgrader + 1;
         }
 
         //we can claim new room, pause upgraders
@@ -1065,7 +1068,7 @@ Room.prototype.getSpawnList =
             },
             wallRepairer: {
                 name: "wallRepairer",
-                prio: 210,
+                prio: 130,
                 energyRole: false,
                 min: minimumSpawnOf.wallRepairer,
                 max: numberOf.wallRepairer,

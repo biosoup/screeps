@@ -14,9 +14,19 @@ module.exports = {
 
                 //find important buidlsites
                 var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                    filter: (s) => 
+                        s.structureType == STRUCTURE_SPAWN
+                });
+                if (!_.isEmpty(closestImportantConstructionSite)) {
+                    creep.task = Tasks.build(closestImportantConstructionSite);
+                    creep.say(EM_BUILD + " " + EM_EXCLAMATION);
+                    return;
+                }
+
+                var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
                     filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
                         s.structureType == STRUCTURE_EXTENSION ||
-                        s.structureType == STRUCTURE_SPAWN
+                        s.structureType == STRUCTURE_TOWER
                 });
                 if (!_.isEmpty(closestImportantConstructionSite)) {
                     creep.task = Tasks.build(closestImportantConstructionSite);

@@ -41,6 +41,8 @@ module.exports = {
                     if (!_.isEmpty(spawnR)) {
                         //console.log(JSON.stringify(spawnR))
                         creep.moveTo(spawnR)
+                    } else {
+                        creep.moveTo(creep.room.controller)
                     }
                     if ((Game.time % 3) == 0) {
                         creep.say(EM_FLAG)
