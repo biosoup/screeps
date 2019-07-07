@@ -5,93 +5,90 @@ module.exports = {
     newTask: function (creep) {
         // get source
         var source = Game.getObjectById(creep.memory.sourceId);
-
-        if (source != null) {
+        if (!_.isEmpty(source)) {
             // find container next to source
-            var container = source.pos.findInRange(FIND_STRUCTURES, 1, {
-                filter: s => s.structureType == STRUCTURE_CONTAINER
-            })[0];
+            var container = _.first(source.pos.findInRange(creep.room.containers, 1));
+
+            //creep has container
+            if (!_.isEmpty(container)) {
+                // if creep is on top of the container
+                if (creep.pos.isEqualTo(container.pos)) {
+                    if (container.hits < container.hitsMax && creep.carry.energy > 0) {
+                        creep.task = Tasks.repair(container)
+                        creep.say(EM_WRENCH)
+                        return
+                    } else if (creep.carry.energy == creep.carryCapacity) {
+                        //look for a link
+                        var link = _.first(source.pos.findInRange(creep.room.links, 2))
+                        if (!_.isEmpty(link)) {
+                            if (link.energy < link.energyCapacity) {
+                                //there is a space in the link
+                                creep.task = Tasks.transfer(link);
+                                return;
+                            } else if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
+                                // harvest source
+                                creep.task = Tasks.harvest(source);
+                                return;
+                            }
+                        } else {
+                            if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
+                                // harvest source
+                                creep.task = Tasks.harvest(source);
+                                return;
+                            }
+                        }
+                    } else if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
+                        //container has free space -> harvest source
+                        creep.task = Tasks.harvest(source);
+                        return;
+                    } else {
+                        if (creep.carry.energy < creep.carryCapacity) {
+                            // harvest source
+                            creep.task = Tasks.harvest(source);
+                            return
+                        } else {
+                            //no free space
+                            creep.say(EM_EXCLAMATION + "" + EM_PACKAGE)
+                        }
+                    }
+                } else {
+                    // if creep is not on top of the container
+                    creep.travelTo(container);
+                    return;
+                }
+            } else {
+                creep.say("missing container")
+                if (creep.carry.energy < creep.carryCapacity) {
+                    creep.task = Tasks.harvest(source);
+                    return
+                } else {
+                    var buildSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+                    if (!_.isEmpty(buildSite)) {
+                        creep.task = Tasks.build(buildSite);
+                        creep.say(EM_BUILD)
+                        return
+                    } else {
+                        //no container, check for link
+                        var link = _.first(source.pos.findInRange(creep.room.links, 2))
+                        if (!_.isEmpty(link)) {
+                            if (link.energy < link.energyCapacity) {
+                                //there is a space in the link
+                                creep.task = Tasks.transfer(link);
+                                creep.say(EM_LIGHTNING)
+                                return
+                            }
+                        } else {
+                            creep.say(EM_EXCLAMATION + "" + EM_LIGHTNING)
+                        }
+                    }
+
+                }
+            }
         } else {
             creep.say("missing source")
-        }
-
-        if (source == undefined || source == null) {
             console.log(creep + " " + source)
-        }
-
-        //creep has container
-        if (typeof container !== 'undefined') {
-
-            // if creep is on top of the container
-            if (creep.pos.isEqualTo(container.pos)) {
-
-                if (container.hits < container.hitsMax && creep.carry.energy > 0) {
-                    creep.task = Tasks.repair(container)
-                    creep.say("\u{1F477}")
-                    
-                } else if (creep.carry.energy == creep.carryCapacity) {
-                    //look for a link
-                    var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
-                        filter: s => s.structureType == STRUCTURE_LINK
-                    })[0];
-
-                    if (link != undefined && link != null) {
-                        //console.log(link)
-                        if (link.energy < link.energyCapacity) {
-                            //there is a space in the link
-                            creep.task = Tasks.transfer(link);
-                        } else if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
-                            // harvest source
-                            creep.task = Tasks.harvest(source);
-                        }
-                    } else {
-                        if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
-                            // harvest source
-                            creep.task = Tasks.harvest(source);
-                        }
-                    }
-                } else if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
-                    //container has free space
-
-                    // harvest source
-                    creep.task = Tasks.harvest(source);
-                } else {
-                    creep.say("full container")
-                    if (creep.carry.energy < creep.carryCapacity) {
-                        // harvest source
-                        creep.task = Tasks.harvest(source);
-                    }
-                }
-            } else {
-                // if creep is not on top of the container
-                creep.travelTo(container);
-            }
-
-        } else {
-            creep.say("missing container")
-            if (creep.carry.energy < creep.carryCapacity) {
-                creep.task = Tasks.harvest(source);
-            } else {
-                var buildSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
-                if (buildSite != undefined && buildSite != null) {
-                    creep.task = Tasks.build(buildSite);
-                    creep.say("\u{1F3D7}")
-                } else {
-                    creep.say("using link")
-                    var link = source.pos.findInRange(FIND_STRUCTURES, 2, {
-                        filter: s => s.structureType == STRUCTURE_LINK
-                    })[0];
-                    if (link != undefined) {
-                        if (link.energy < link.energyCapacity) {
-                            //there is a space in the link
-                            creep.task = Tasks.transfer(link);
-                        }
-                    } else {
-                        creep.say("no link")
-                    }
-                }
-
-            }
+            creep.task = Tasks.goTo(source)
+            return
         }
     }
 };

@@ -20,7 +20,7 @@ BUY_PACKETSIZE = 5000;
 TERMINALMARKETSTORE = 50000;
 RBS_PACKETSIZE = 5000;
 CPU_THRESHOLD = 500;
-WALLMAX = 1500000;
+WALLMAX = 10000000;
 MINSURPLUSENERGY = 100000;
 LOG_TERMINAL = true;
 LOG_MARKET = true;
@@ -1349,6 +1349,8 @@ buildingPlans = {
         }
     ],
 
+
+
     einarr: [{
             //Level 1 (max 300)
             minEnergy: 260,
@@ -1388,6 +1390,48 @@ buildingPlans = {
             //Level 8 (max 12900)
             minEnergy: 5220,
             body: [TOUGH, HEAL, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, HEAL, MOVE, MOVE]
+        }
+    ],
+
+    safecreep: [{
+            //Level 1 (max 300)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+        },
+        {
+            //Level 2 (max 550)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+        },
+        {
+            //Level 3 (max 800)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+        },
+        {
+            //Level 4 (max 1300)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+        },
+        {
+            //Level 5 (max 1750)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+        },
+        {
+            //Level 6 (max 2100)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+        },
+        {
+            //Level 7 (max 5600)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
+        },
+        {
+            //Level 8 (max 12900)
+            minEnergy: 1250,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         }
     ]
 };

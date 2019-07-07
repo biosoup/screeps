@@ -471,7 +471,7 @@ Room.prototype.creepSpawnRun =
         //console.log(JSON.stringify(spawnRoom.controller))
         if (_.isEmpty(spawnRoom.controller.owner)) {
             var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS, {
-                filter: f => f.name != "Invader"
+                filter: f => f.owner != "Invader"
             })
             if (hostiles.length == 0) {
                 //get closest other spawns
@@ -489,13 +489,13 @@ Room.prototype.creepSpawnRun =
                 }
                 distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
 
-                spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-"+distanceName, COLOR_WHITE, COLOR_YELLOW)
+                spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
                 console.log(spawnRoom.name + " has been defeated!! Sending recovery team!!")
 
                 //FIXME: claim flag only when safe –> when full complement of guards is in place
 
                 //var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
-                spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-"+distanceName, COLOR_GREY, COLOR_PURPLE)
+                spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-" + distanceName, COLOR_GREY, COLOR_PURPLE)
             } else {
                 console.log(spawnRoom.name + " has been defeated!! Occupied by " + hostiles.length)
             }
@@ -529,7 +529,8 @@ Room.prototype.creepSpawnRun =
                 for (var flag of purpleFlags) {
                     //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                     //builders & guard = boolean
-                    roomInterests[flag.pos.roomName] = [0, flag.secondaryColor, 1, 1, 1, 1]
+                    roomInterests[flag.pos.roomName] = [0, flag.secondaryColor, 1.5, 1, 1, 1]
+                    //FIXME: dynamic number of lorries, based on distance, e/t and RCL
                 }
             }
         }
@@ -559,7 +560,7 @@ Room.prototype.creepSpawnRun =
                     for (var flag of greyFlags) {
                         //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                         //builders & guard = boolean
-                        if(Game.room[flag.room].controller.my) {
+                        if (Game.room[flag.room].controller.my) {
                             roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
                         } else {
                             roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
@@ -682,7 +683,31 @@ Room.prototype.creepSpawnRun =
                     //if hostiles present, spawn a task force!
                     var numHostiles = Game.rooms[interest].find(FIND_HOSTILE_CREEPS)
                     if (numHostiles.length > 0) {
+                        //check hostiles body composition
+                        var maxAttackBodyParts = 0;
+                        var AttackBodyParts = 0;
+                        for (var h in hostiles) {
+                            AttackBodyParts = 0;
+                            for (var part in hostiles[h].body) {
+                                if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
+                                    //attacking body part found
+                                    AttackBodyParts++;
+                                }
+                            }
+                            if (AttackBodyParts > maxAttackBodyParts) {
+                                maxAttackBodyParts = AttackBodyParts;
+                            }
+                        }
+
+                        if (AttackBodyParts > 0) {
+                            //roomInterests[interest][5] = numHostiles.length * 2;
+                            console.log("being attacked by "+AttackBodyParts+" attack parts")
+                        } else {
+                            console.log("R enemy scout in "+interest)
+                        }
+
                         roomInterests[interest][5] = numHostiles.length * 2;
+
                         //hostiles, do not do anything else
                         roomInterests[interest][0] = 0
                         minimumSpawnOf.longDistanceHarvester = minimumSpawnOf.longDistanceHarvester - roomInterests[interest][0];
@@ -707,17 +732,10 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        //add gew extra lorries
-        if (!_.isEmpty(spawnRoom.storage)) {
-            if (_.sum(spawnRoom.storage.store) > 950000) {
-                minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 3);
-            } else {
-                //minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 1.25);
-            }
-        }
+        
 
 
-        //console.log(spawnRoom.name + " " + JSON.stringify(longDistanceBuilder) + " " + minimumSpawnOf.longDistanceBuilder)
+        console.log(spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
 
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_MY_CONSTRUCTION_SITES);
@@ -751,12 +769,8 @@ Room.prototype.creepSpawnRun =
         if (spawnRoom.storage != undefined) {
             if (spawnRoom.storage.store[RESOURCE_ENERGY] > (100000 * spawnRoom.controller.level) && spawnRoom.controller.level < 8) {
                 //add more upgraders
-                var mutiply = spawnRoom.storage.store[RESOURCE_ENERGY] / (100000 * spawnRoom.controller.level) 
+                var mutiply = spawnRoom.storage.store[RESOURCE_ENERGY] / (100000 * spawnRoom.controller.level)
                 minimumSpawnOf.upgrader = _.ceil(2 * mutiply)
-
-                //pull back on remote
-                minimumSpawnOf.longDistanceHarvester = minimumSpawnOf.longDistanceHarvester / 2;
-                minimumSpawnOf.longDistanceLorry = minimumSpawnOf.longDistanceLorry / 2;
             }
         }
 
@@ -775,8 +789,16 @@ Room.prototype.creepSpawnRun =
         // spawnAttendant
         if (spawnRoom.storage != undefined) {
             minimumSpawnOf["spawnAttendant"] = 1;
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000 && spawnRoom.energyAvailable < (spawnRoom.energyCapacityAvailable/2)) {
+            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000 && spawnRoom.energyAvailable < (spawnRoom.energyCapacityAvailable / 2)) {
                 //minimumSpawnOf["spawnAttendant"] = 2;
+            }
+
+            //pull back on lorries when storage is overflowing
+            if (_.sum(spawnRoom.storage.store) > 900000) {
+                minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 3);
+            } else {
+                //round that number
+                minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry);
             }
         }
 
@@ -846,16 +868,48 @@ Room.prototype.creepSpawnRun =
         }
 
         // Adjustments in case of hostile presence
+
+        //hostiles somewhere
+        if(minimumSpawnOf.guard > 0) {
+            //limit everything else
+            minimumSpawnOf.upgrader = 0;
+            minimumSpawnOf.builder = 0;
+            minimumSpawnOf.longDistanceHarvester = 0;
+            minimumSpawnOf.mineralHarvester = 0;
+            minimumSpawnOf.spawnAttendant = 0;
+            minimumSpawnOf.longDistanceMiner = 0;
+            minimumSpawnOf.longDistanceLorry = 0;
+            minimumSpawnOf.longDistanceBuilder = 0;
+            minimumSpawnOf.demolisher = 0;
+            minimumSpawnOf.wallRepairer = 0;
+        }
+
         var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
-        var towersEnergy = spawnRoom.find(FIND_STRUCTURES, {
-            filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy > (s.energyCapacityAvailable / 2)
-        });
         if (hostiles.length > 0) {
-            if (towersEnergy.length > 0) {
-                minimumSpawnOf.guard = hostiles.length * 2 - 1;
-            } else {
-                minimumSpawnOf.guard = hostiles.length * 2;
+            //check hostiles body composition
+            var maxAttackBodyParts = 0;
+            var AttackBodyParts = 0;
+            for (var h in hostiles) {
+                AttackBodyParts = 0;
+                for (var part in hostiles[h].body) {
+                    if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
+                        //attacking body part found
+                        AttackBodyParts++;
+                    }
+                }
+                if (AttackBodyParts > maxAttackBodyParts) {
+                    maxAttackBodyParts = AttackBodyParts;
+                }
             }
+
+            if (AttackBodyParts > 0) {
+                minimumSpawnOf.guard = hostiles.length * 2;
+                console.log("being attacked by "+AttackBodyParts+" attack parts")
+            }
+
+            minimumSpawnOf.guard = hostiles.length * 2;
+
+            //limit everything else
             minimumSpawnOf.upgrader = 0;
             minimumSpawnOf.builder = 0;
             minimumSpawnOf.longDistanceHarvester = 0;
@@ -867,6 +921,8 @@ Room.prototype.creepSpawnRun =
             minimumSpawnOf.demolisher = 0;
             minimumSpawnOf.wallRepairer *= 2;
         }
+
+        
 
         // Measuring number of active creeps
         let counter = _.countBy(allMyCreeps, "memory.role");
@@ -946,7 +1002,7 @@ Room.prototype.creepSpawnRun =
                 let testSpawn = Game.getObjectById(spawnRoom.memory.roomArray.spawns[s]);
                 if (testSpawn != null && testSpawn.spawning == null && testSpawn.memory.spawnRole != "x") {
                     var debug = [spawnList, spawnList, numberOf]
-                    //console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
+                    console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
 
                     // Spawn!
                     if (spawnList[spawnEntry] == "miner") {

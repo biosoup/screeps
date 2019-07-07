@@ -28,7 +28,7 @@ StructureTower.prototype.repairStructures =
             //Find the closest damaged Structure
             var target = this.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (s) =>
-                    ((s.hits < 2000 && s.hitsMax > 2000) || (s.hitsMax < 800)) &&
+                    s.hits < 500 &&
                     s.structureType != STRUCTURE_CONTROLLER
             });
             if (!_.isEmpty(target)) {

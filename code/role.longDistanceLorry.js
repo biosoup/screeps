@@ -47,7 +47,7 @@ module.exports = {
                             if (validTarget.energy >= creep.carryCapacity) {
                                 //go work the target
                                 creep.task = Tasks.withdraw(container);
-                                creep.say("target found!")
+                                creep.say(EM_TRUCK)
 
                                 //substract current request
                                 r.memory.containerSources[validTarget.id].energy = r.memory.containerSources[validTarget.id].energy - creep.carryCapacity
@@ -71,7 +71,7 @@ module.exports = {
                         creep.suicide()
                     } else {
                         creep.memory.target = {};
-                        creep.say("no valid target")
+                        creep.say(EM_ZZZ)
                     }
                 }
             } else if (creep.room.name == creep.memory.home && creep.carry.energy > 0) {
@@ -105,7 +105,7 @@ module.exports = {
                 if (!_.isEmpty(homeStorage)) {
                     //put energy into storage
                     creep.task = Tasks.transfer(homeStorage)
-                    creep.say("to storage!")
+                    creep.say(EM_TRUCK)
                 } else {
                     console.log("storage not found!!! " + creep.name + " " + creep.room.name + " " + creep.memory.home)
                     creep.say("confused")
@@ -138,7 +138,7 @@ module.exports = {
                     if (validTarget.store[RESOURCE_ENERGY] > 0) {
                         //go work the target
                         creep.task = Tasks.withdraw(validTarget);
-                        creep.say("to target!")
+                        creep.say(EM_PIN+""+EM_TRUCK)
                     } else {
                         creep.say("target empty")
                         creep.memory.target = {}

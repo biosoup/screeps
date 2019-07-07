@@ -133,7 +133,7 @@ module.exports.loop = function () {
     //go through rooms
     for (let roomName in Game.rooms) {
         var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS, {
-            filter: f => f.name != "Invader"
+            filter: f => f.owner != "Invader"
         })
         var towers = Game.rooms[roomName].towers
         if (!_.isEmpty(Game.rooms[roomName].controller)) {

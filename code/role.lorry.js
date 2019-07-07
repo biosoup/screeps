@@ -54,7 +54,7 @@ module.exports = {
             }
 
             //get from continer
-            var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] > 100)
+            var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] == s.storeCapacity)
             var container = creep.pos.findClosestByPath(containers)
             if (!_.isEmpty(container)) {
                 creep.task = Tasks.withdraw(container);

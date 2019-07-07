@@ -11,11 +11,17 @@ module.exports = {
                 //find structures that need repairing
                 var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX);
                 var walls = creep.room.constructedWalls.filter(s => s.hits < WALLMAX);
-                var targets = _.difference(ramparts,walls)
-                
                 //sort by hits
-                target = _.first(_.sortBy(targets, "hits"));
+                var rampart = _.first(_.sortBy(ramparts, "hits"));
+                var wall = _.first(_.sortBy(walls, "hits"));
+                //console.log(creep.room.name+" R:"+rampart.hits+" W:"+wall.hits)
                 
+                if (rampart.hits<wall.hits) {
+                    var target = rampart;
+                } else {
+                    var target = wall;
+                }
+
                 // if we find a wall that has to be repaired
                 if (!_.isEmpty(target)) {
                     creep.task = Tasks.repair(target)

@@ -30,12 +30,35 @@ module.exports = {
             var closestRepairSite = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                 filter: (s) =>
                     s.structureType != STRUCTURE_CONTROLLER &&
+                    s.structureType != STRUCTURE_WALL &&
+                    s.structureType != STRUCTURE_RAMPART &&
                     s.hits < s.hitsMax
             });
             if (!_.isEmpty(closestRepairSite)) {
                 creep.task = Tasks.repair(closestRepairSite);
                 creep.say(EM_WRENCH);
                 return;
+            }
+
+            //repair walls & ramparts
+            var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX);
+            var walls = creep.room.constructedWalls.filter(s => s.hits < WALLMAX);
+            //sort by hits
+            var rampart = _.first(_.sortBy(ramparts, "hits"));
+            var wall = _.first(_.sortBy(walls, "hits"));
+            //console.log(creep.room.name+" R:"+rampart.hits+" W:"+wall.hits)
+
+            if (rampart.hits < wall.hits) {
+                var target = rampart;
+            } else {
+                var target = wall;
+            }
+
+            // if we find a wall that has to be repaired
+            if (!_.isEmpty(target)) {
+                creep.task = Tasks.repair(target)
+                creep.say(EM_WRENCH)
+                return
             }
 
             //nothing to do -> upgrade controller
