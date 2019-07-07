@@ -24,6 +24,7 @@ require('prototype.tower');
 require('prototype.spawn');
 require('prototype.room');
 var market = require('module.market');
+var spawnLogic = require('module.spawnLogic');
 
 // PROFILER
 //profiler.enable();
@@ -310,8 +311,11 @@ module.exports.loop = function () {
     /* *** TEST SPACE *** */
 
     try {
-
-
+        if ((Game.time % 5) == 0 && Game.cpu.bucket > 100) {
+            /* for (let roomName in Game.rooms) {
+                
+            } */
+        }
     } catch (err) {
         console.log("ERR: " + err)
     }

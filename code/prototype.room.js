@@ -403,6 +403,48 @@ Room.prototype.linksRun =
         }
     };
 
+Room.prototype.checkForDefeat = function (spawnRoom) {
+    if (_.isEmpty(spawnRoom.controller.owner)) {
+        var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS)
+        if (hostiles.length == 0) {
+            //get closest other spawns
+            var flagRoomName = spawnRoom.name
+            var distance = {}
+            for (let roomName in Game.rooms) {
+                var r = Game.rooms[roomName];
+                if (!_.isEmpty(r.memory.roomArray.spawns)) {
+                    if (r.name != flagRoomName) {
+                        distance[r.name] = {}
+                        distance[r.name].name = r.name
+                        distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                    }
+                }
+            }
+            distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+
+            spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
+            console.log(spawnRoom.name + " has been defeated!! Sending recovery team!!")
+
+            //FIXME: claim flag only when safe –> when full complement of guards is in place
+
+            //var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
+            spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-" + distanceName, COLOR_GREY, COLOR_PURPLE)
+        } else {
+            console.log(spawnRoom.name + " has been defeated!! Occupied by " + hostiles.length)
+        }
+        return true;
+    } else {
+        var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.pos.roomName == spawnRoom.name)
+        if (spawnRoom.controller.level >= 3 && !_.isEmpty(greyFlags) && !_.isEmpty(spawnRoom.towers)) {
+            console.log(JSON.stringify(greyFlags))
+            for (var flag of greyFlags) {
+                flag.remove()
+            }
+        }
+        return false;
+    }
+};
+
 Room.prototype.creepSpawnRun =
     function (spawnRoom) {
         let globalSpawningStatus = 0;
@@ -419,7 +461,10 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-
+        if (this.checkForDefeat(spawnRoom)) {
+            //room has been defeated, no need to spawn anymore
+            return -1;
+        }
 
         if (globalSpawningStatus == 0) {
             //All spawns busy, inactive or player lost control of the room
@@ -467,48 +512,6 @@ Room.prototype.creepSpawnRun =
 
         //room interests
         let roomInterests = {}
-
-        //console.log(JSON.stringify(spawnRoom.controller))
-        if (_.isEmpty(spawnRoom.controller.owner)) {
-            var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS, {
-                filter: f => f.owner != "Invader"
-            })
-            if (hostiles.length == 0) {
-                //get closest other spawns
-                var flagRoomName = spawnRoom.name
-                var distance = {}
-                for (let roomName in Game.rooms) {
-                    var r = Game.rooms[roomName];
-                    if (!_.isEmpty(r.memory.roomArray.spawns)) {
-                        if (r.name != flagRoomName) {
-                            distance[r.name] = {}
-                            distance[r.name].name = r.name
-                            distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
-                        }
-                    }
-                }
-                distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
-
-                spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
-                console.log(spawnRoom.name + " has been defeated!! Sending recovery team!!")
-
-                //FIXME: claim flag only when safe –> when full complement of guards is in place
-
-                //var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
-                spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-" + distanceName, COLOR_GREY, COLOR_PURPLE)
-            } else {
-                console.log(spawnRoom.name + " has been defeated!! Occupied by " + hostiles.length)
-            }
-            return -1;
-        } else {
-            var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.pos.roomName == spawnRoom.name)
-            if (spawnRoom.controller.level >= 3 && !_.isEmpty(greyFlags) && !_.isEmpty(spawnRoom.towers)) {
-                console.log(JSON.stringify(greyFlags))
-                for (var flag of greyFlags) {
-                    flag.remove()
-                }
-            }
-        }
 
         //get all flags with code PURPLE for remote HARVESTERS
         var redFlags = _.filter(Game.flags, (f) => f.color == COLOR_RED && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
@@ -688,6 +691,7 @@ Room.prototype.creepSpawnRun =
                         var AttackBodyParts = 0;
                         for (var h in hostiles) {
                             AttackBodyParts = 0;
+                            console.log(JSON.stringify(hostiles[h].body))
                             for (var part in hostiles[h].body) {
                                 if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
                                     //attacking body part found
@@ -701,9 +705,9 @@ Room.prototype.creepSpawnRun =
 
                         if (AttackBodyParts > 0) {
                             //roomInterests[interest][5] = numHostiles.length * 2;
-                            console.log("being attacked by "+AttackBodyParts+" attack parts")
+                            console.log("being attacked by " + AttackBodyParts + " attack parts")
                         } else {
-                            console.log("R enemy scout in "+interest)
+                            console.log("R enemy scout in " + interest)
                         }
 
                         roomInterests[interest][5] = numHostiles.length * 2;
@@ -728,14 +732,14 @@ Room.prototype.creepSpawnRun =
                     if (inRooms < roomInterests[interest][5]) {
                         guard[interest] = roomInterests[interest][5]
                     }
+                    if (minimumSpawnOf.guard > 0) {
+                        console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
+                    }
                 }
             }
         }
 
-        
-
-
-        console.log(spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
+        //console.log(spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
 
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_MY_CONSTRUCTION_SITES);
@@ -868,61 +872,39 @@ Room.prototype.creepSpawnRun =
         }
 
         // Adjustments in case of hostile presence
+        var hostileValues = spawnRoom.checkForHostiles(spawnRoom);
+        var numberOfTowers = spawnRoom.find(FIND_STRUCTURES, {
+            filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy > 0
+        });
+        if (!_.isEmpty(hostileValues)) {
+            if (hostileValues.numHostiles > 0) {
+                console.log("Being attacked by " + hostileValues.numHostiles + " with:" + hostileValues.maxAttackBodyParts + " attack parts")
 
-        //hostiles somewhere
-        if(minimumSpawnOf.guard > 0) {
-            //limit everything else
-            minimumSpawnOf.upgrader = 0;
-            minimumSpawnOf.builder = 0;
-            minimumSpawnOf.longDistanceHarvester = 0;
-            minimumSpawnOf.mineralHarvester = 0;
-            minimumSpawnOf.spawnAttendant = 0;
-            minimumSpawnOf.longDistanceMiner = 0;
-            minimumSpawnOf.longDistanceLorry = 0;
-            minimumSpawnOf.longDistanceBuilder = 0;
-            minimumSpawnOf.demolisher = 0;
-            minimumSpawnOf.wallRepairer = 0;
+                //Get number of towers
+                if (numberOfTowers > 0) {
+                    //lower by the amount of towers
+                    hostileValues.numHostiles = hostileValues.numHostiles - numberOfTowers;
+                }
+
+                minimumSpawnOf.guard = hostileValues.numHostiles * 2;
+                guard[spawnRoom.name] = hostileValues.numHostiles * 2;
+
+                //limit everything else
+                minimumSpawnOf.upgrader = 0;
+                minimumSpawnOf.builder = 0;
+                minimumSpawnOf.longDistanceHarvester = 0;
+                minimumSpawnOf.mineralHarvester = 0;
+                minimumSpawnOf.spawnAttendant = 0;
+                minimumSpawnOf.longDistanceMiner = 0;
+                minimumSpawnOf.longDistanceLorry = 0;
+                minimumSpawnOf.longDistanceBuilder = 0;
+                minimumSpawnOf.demolisher = 0;
+                minimumSpawnOf.wallRepairer *= 2;
+            }
         }
 
-        var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
-        if (hostiles.length > 0) {
-            //check hostiles body composition
-            var maxAttackBodyParts = 0;
-            var AttackBodyParts = 0;
-            for (var h in hostiles) {
-                AttackBodyParts = 0;
-                for (var part in hostiles[h].body) {
-                    if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
-                        //attacking body part found
-                        AttackBodyParts++;
-                    }
-                }
-                if (AttackBodyParts > maxAttackBodyParts) {
-                    maxAttackBodyParts = AttackBodyParts;
-                }
-            }
 
-            if (AttackBodyParts > 0) {
-                minimumSpawnOf.guard = hostiles.length * 2;
-                console.log("being attacked by "+AttackBodyParts+" attack parts")
-            }
 
-            minimumSpawnOf.guard = hostiles.length * 2;
-
-            //limit everything else
-            minimumSpawnOf.upgrader = 0;
-            minimumSpawnOf.builder = 0;
-            minimumSpawnOf.longDistanceHarvester = 0;
-            minimumSpawnOf.mineralHarvester = 0;
-            minimumSpawnOf.spawnAttendant = 0;
-            minimumSpawnOf.longDistanceMiner = 0;
-            minimumSpawnOf.longDistanceLorry = 0;
-            minimumSpawnOf.longDistanceBuilder = 0;
-            minimumSpawnOf.demolisher = 0;
-            minimumSpawnOf.wallRepairer *= 2;
-        }
-
-        
 
         // Measuring number of active creeps
         let counter = _.countBy(allMyCreeps, "memory.role");
@@ -943,9 +925,7 @@ Room.prototype.creepSpawnRun =
         var containerEnergy = spawnRoom.find(FIND_STRUCTURES, {
             filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 1900
         });
-        var numberOfTowers = spawnRoom.find(FIND_STRUCTURES, {
-            filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy > 0
-        });
+
         /* 
         FIXME:
             - more agressive spawning on lower RCL
@@ -1001,8 +981,8 @@ Room.prototype.creepSpawnRun =
                 // Iterate through spawns
                 let testSpawn = Game.getObjectById(spawnRoom.memory.roomArray.spawns[s]);
                 if (testSpawn != null && testSpawn.spawning == null && testSpawn.memory.spawnRole != "x") {
-                    var debug = [spawnList, spawnList, numberOf]
-                    console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
+                    var debug = [spawnList, minimumSpawnOf, numberOf]
+                    //console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
 
                     // Spawn!
                     if (spawnList[spawnEntry] == "miner") {
@@ -1055,6 +1035,9 @@ Room.prototype.creepSpawnRun =
                             name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "guard") {
+                        if (_.isEmpty(guard)) {
+                            console.log("ERR spawning a GUARD!! " + JSON.stringify(minimumSpawnOf.guard))
+                        }
                         for (var roomName in guard) {
                             name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
@@ -1077,241 +1060,297 @@ Room.prototype.creepSpawnRun =
         }
     };
 
-Room.prototype.getSpawnList =
-    function (spawnRoom, minimumSpawnOf, numberOf) {
-        let rcl = spawnRoom.controller.level;
+Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
+    let rcl = spawnRoom.controller.level;
 
-        let tableImportance = {
-            harvester: {
-                name: "harvester",
-                prio: 10,
-                energyRole: true,
-                min: minimumSpawnOf.harvester,
-                max: numberOf.harvester,
-                minEnergy: buildingPlans.harvester[rcl - 1].minEnergy
-            },
-            miniharvester: {
-                name: "miniharvester",
-                prio: 5,
-                energyRole: true,
-                min: 0,
-                max: 0,
-                minEnergy: buildingPlans.miniharvester[rcl - 1].minEnergy
-            },
-            miner: {
-                name: "miner",
-                prio: 11,
-                energyRole: true,
-                min: minimumSpawnOf.miner,
-                max: numberOf.miner,
-                minEnergy: buildingPlans.miner[rcl - 1].minEnergy
-            },
-            builder: {
-                name: "builder",
-                prio: 60,
-                energyRole: false,
-                min: minimumSpawnOf.builder,
-                max: numberOf.builder,
-                minEnergy: buildingPlans.builder[rcl - 1].minEnergy
-            },
-            repairer: {
-                name: "repairer",
-                prio: 170,
-                energyRole: false,
-                min: minimumSpawnOf.repairer,
-                max: numberOf.repairer,
-                minEnergy: buildingPlans.repairer[rcl - 1].minEnergy
-            },
-            wallRepairer: {
-                name: "wallRepairer",
-                prio: 130,
-                energyRole: false,
-                min: minimumSpawnOf.wallRepairer,
-                max: numberOf.wallRepairer,
-                minEnergy: buildingPlans.wallRepairer[rcl - 1].minEnergy
-            },
-            mineralHarvester: {
-                name: "mineralHarvester",
-                prio: 200,
-                energyRole: false,
-                min: minimumSpawnOf.mineralHarvester,
-                max: numberOf.mineralHarvester,
-                minEnergy: buildingPlans.mineralHarvester[rcl - 1].minEnergy
-            },
-            upgrader: {
-                name: "upgrader",
-                prio: 80,
-                energyRole: false,
-                min: minimumSpawnOf.upgrader,
-                max: numberOf.upgrader,
-                minEnergy: buildingPlans.upgrader[rcl - 1].minEnergy
-            },
-            spawnAttendant: {
-                name: "spawnAttendant",
-                prio: 15,
-                energyRole: false,
-                min: minimumSpawnOf.spawnAttendant,
-                max: numberOf.spawnAttendant,
-                minEnergy: buildingPlans.spawnAttendant[rcl - 1].minEnergy
-            },
-            lorry: {
-                name: "lorry",
-                prio: 20,
-                energyRole: true,
-                min: minimumSpawnOf.lorry,
-                max: numberOf.lorry,
-                minEnergy: buildingPlans.lorry[rcl - 1].minEnergy
-            },
-            scientist: {
-                name: "scientist",
-                prio: 220,
-                energyRole: false,
-                min: minimumSpawnOf.scientist,
-                max: numberOf.scientist,
-                minEnergy: buildingPlans.scientist[rcl - 1].minEnergy
-            },
-            longDistanceHarvester: {
-                name: "longDistanceHarvester",
-                prio: 100,
-                energyRole: true,
-                min: minimumSpawnOf.longDistanceHarvester,
-                max: numberOf.longDistanceHarvester,
-                minEnergy: buildingPlans.longDistanceHarvester[rcl - 1].minEnergy
-            },
-            longDistanceMiner: {
-                name: "longDistanceMiner",
-                prio: 120,
-                energyRole: true,
-                min: minimumSpawnOf.longDistanceMiner,
-                max: numberOf.longDistanceMiner,
-                minEnergy: buildingPlans.longDistanceMiner[rcl - 1].minEnergy
-            },
-            claimer: {
-                name: "claimer",
-                prio: 140,
-                energyRole: false,
-                min: minimumSpawnOf.claimer,
-                max: numberOf.claimer,
-                minEnergy: buildingPlans.claimer[rcl - 1].minEnergy
-            },
-            bigClaimer: {
-                name: "bigClaimer",
-                prio: 160,
-                energyRole: false,
-                min: minimumSpawnOf.bigClaimer,
-                max: numberOf.bigClaimer,
-                minEnergy: buildingPlans.bigClaimer[rcl - 1].minEnergy
-            },
-            guard: {
-                name: "guard",
-                prio: 11,
-                energyRole: false,
-                min: minimumSpawnOf.guard,
-                max: numberOf.guard,
-                minEnergy: buildingPlans.guard[rcl - 1].minEnergy
-            },
-            demolisher: {
-                name: "demolisher",
-                prio: 230,
-                energyRole: true,
-                min: minimumSpawnOf.demolisher,
-                max: numberOf.demolisher,
-                minEnergy: buildingPlans.demolisher[rcl - 1].minEnergy
-            },
-            longDistanceLorry: {
-                name: "longDistanceLorry",
-                prio: 150,
-                energyRole: true,
-                min: minimumSpawnOf.longDistanceLorry,
-                max: numberOf.longDistanceLorry,
-                minEnergy: buildingPlans.longDistanceLorry[rcl - 1].minEnergy
-            },
-            longDistanceBuilder: {
-                name: "longDistanceBuilder",
-                prio: 70,
-                energyRole: true,
-                min: minimumSpawnOf.longDistanceBuilder,
-                max: numberOf.longDistanceBuilder,
-                minEnergy: buildingPlans.longDistanceBuilder[rcl - 1].minEnergy
-            },
-            attacker: {
-                name: "attacker",
-                prio: 80,
-                energyRole: false,
-                min: minimumSpawnOf.attacker,
-                max: numberOf.attacker,
-                minEnergy: buildingPlans.attacker[rcl - 1].minEnergy
-            },
-            archer: {
-                name: "archer",
-                prio: 80,
-                energyRole: false,
-                min: minimumSpawnOf.apaHatchi,
-                max: numberOf.apaHatchi,
-                minEnergy: buildingPlans.archer[rcl - 1].minEnergy
-            },
-            healer: {
-                name: "healer",
-                prio: 90,
-                energyRole: false,
-                min: minimumSpawnOf.healer,
-                max: numberOf.healer,
-                minEnergy: buildingPlans.healer[rcl - 1].minEnergy
-            },
-            einarr: {
-                name: "einarr",
-                prio: 50,
-                energyRole: false,
-                min: minimumSpawnOf.einarr,
-                max: numberOf.einarr,
-                minEnergy: buildingPlans.einarr[rcl - 1].minEnergy
-            },
-            transporter: {
-                name: "transporter",
-                prio: 2400,
-                energyRole: false,
-                min: minimumSpawnOf.transporter,
-                max: numberOf.transporter,
-                minEnergy: buildingPlans.transporter[rcl - 1].minEnergy
-            }
-        };
-
-        if ((numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant) == 0) {
-            // Set up miniHarvester to spawn
-            tableImportance.miniharvester.min = 1;
-        }
-
-        tableImportance = _.filter(tableImportance, function (x) {
-            return (!(x.min == 0 || x.min == x.max || x.max > x.min))
-        });
-        if (tableImportance.length > 0) {
-            tableImportance = _.sortBy(tableImportance, "prio");
-
-            let spawnList = [];
-            for (let c in tableImportance) {
-                for (let i = 0; i < (tableImportance[c].min - tableImportance[c].max); i++) {
-                    spawnList.push(tableImportance[c].name);
-                }
-            }
-
-            var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
-
-            //Surplus Upgrader Spawning
-            if (numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant > 0 && hostiles.length == 0 && spawnRoom.controller.level < 8) {
-                let container = spawnRoom.find(FIND_STRUCTURES, {
-                    filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE
-                });
-                let containerEnergy = 0;
-                for (let e in container) {
-                    containerEnergy += container[e].store[RESOURCE_ENERGY];
-                }
-                if (containerEnergy > (100000 * spawnRoom.controller.level) + 100000) {
-                    //spawnList.push("upgrader");
-                }
-            }
-
-            return spawnList;
-        } else {
-            return null;
+    let tableImportance = {
+        harvester: {
+            name: "harvester",
+            prio: 10,
+            energyRole: true,
+            min: minimumSpawnOf.harvester,
+            max: numberOf.harvester,
+            minEnergy: buildingPlans.harvester[rcl - 1].minEnergy
+        },
+        miniharvester: {
+            name: "miniharvester",
+            prio: 5,
+            energyRole: true,
+            min: 0,
+            max: 0,
+            minEnergy: buildingPlans.miniharvester[rcl - 1].minEnergy
+        },
+        miner: {
+            name: "miner",
+            prio: 11,
+            energyRole: true,
+            min: minimumSpawnOf.miner,
+            max: numberOf.miner,
+            minEnergy: buildingPlans.miner[rcl - 1].minEnergy
+        },
+        builder: {
+            name: "builder",
+            prio: 60,
+            energyRole: false,
+            min: minimumSpawnOf.builder,
+            max: numberOf.builder,
+            minEnergy: buildingPlans.builder[rcl - 1].minEnergy
+        },
+        repairer: {
+            name: "repairer",
+            prio: 170,
+            energyRole: false,
+            min: minimumSpawnOf.repairer,
+            max: numberOf.repairer,
+            minEnergy: buildingPlans.repairer[rcl - 1].minEnergy
+        },
+        wallRepairer: {
+            name: "wallRepairer",
+            prio: 130,
+            energyRole: false,
+            min: minimumSpawnOf.wallRepairer,
+            max: numberOf.wallRepairer,
+            minEnergy: buildingPlans.wallRepairer[rcl - 1].minEnergy
+        },
+        mineralHarvester: {
+            name: "mineralHarvester",
+            prio: 200,
+            energyRole: false,
+            min: minimumSpawnOf.mineralHarvester,
+            max: numberOf.mineralHarvester,
+            minEnergy: buildingPlans.mineralHarvester[rcl - 1].minEnergy
+        },
+        upgrader: {
+            name: "upgrader",
+            prio: 80,
+            energyRole: false,
+            min: minimumSpawnOf.upgrader,
+            max: numberOf.upgrader,
+            minEnergy: buildingPlans.upgrader[rcl - 1].minEnergy
+        },
+        spawnAttendant: {
+            name: "spawnAttendant",
+            prio: 15,
+            energyRole: false,
+            min: minimumSpawnOf.spawnAttendant,
+            max: numberOf.spawnAttendant,
+            minEnergy: buildingPlans.spawnAttendant[rcl - 1].minEnergy
+        },
+        lorry: {
+            name: "lorry",
+            prio: 20,
+            energyRole: true,
+            min: minimumSpawnOf.lorry,
+            max: numberOf.lorry,
+            minEnergy: buildingPlans.lorry[rcl - 1].minEnergy
+        },
+        scientist: {
+            name: "scientist",
+            prio: 220,
+            energyRole: false,
+            min: minimumSpawnOf.scientist,
+            max: numberOf.scientist,
+            minEnergy: buildingPlans.scientist[rcl - 1].minEnergy
+        },
+        longDistanceHarvester: {
+            name: "longDistanceHarvester",
+            prio: 100,
+            energyRole: true,
+            min: minimumSpawnOf.longDistanceHarvester,
+            max: numberOf.longDistanceHarvester,
+            minEnergy: buildingPlans.longDistanceHarvester[rcl - 1].minEnergy
+        },
+        longDistanceMiner: {
+            name: "longDistanceMiner",
+            prio: 120,
+            energyRole: true,
+            min: minimumSpawnOf.longDistanceMiner,
+            max: numberOf.longDistanceMiner,
+            minEnergy: buildingPlans.longDistanceMiner[rcl - 1].minEnergy
+        },
+        claimer: {
+            name: "claimer",
+            prio: 140,
+            energyRole: false,
+            min: minimumSpawnOf.claimer,
+            max: numberOf.claimer,
+            minEnergy: buildingPlans.claimer[rcl - 1].minEnergy
+        },
+        bigClaimer: {
+            name: "bigClaimer",
+            prio: 160,
+            energyRole: false,
+            min: minimumSpawnOf.bigClaimer,
+            max: numberOf.bigClaimer,
+            minEnergy: buildingPlans.bigClaimer[rcl - 1].minEnergy
+        },
+        guard: {
+            name: "guard",
+            prio: 11,
+            energyRole: false,
+            min: minimumSpawnOf.guard,
+            max: numberOf.guard,
+            minEnergy: buildingPlans.guard[rcl - 1].minEnergy
+        },
+        demolisher: {
+            name: "demolisher",
+            prio: 230,
+            energyRole: true,
+            min: minimumSpawnOf.demolisher,
+            max: numberOf.demolisher,
+            minEnergy: buildingPlans.demolisher[rcl - 1].minEnergy
+        },
+        longDistanceLorry: {
+            name: "longDistanceLorry",
+            prio: 150,
+            energyRole: true,
+            min: minimumSpawnOf.longDistanceLorry,
+            max: numberOf.longDistanceLorry,
+            minEnergy: buildingPlans.longDistanceLorry[rcl - 1].minEnergy
+        },
+        longDistanceBuilder: {
+            name: "longDistanceBuilder",
+            prio: 70,
+            energyRole: true,
+            min: minimumSpawnOf.longDistanceBuilder,
+            max: numberOf.longDistanceBuilder,
+            minEnergy: buildingPlans.longDistanceBuilder[rcl - 1].minEnergy
+        },
+        attacker: {
+            name: "attacker",
+            prio: 80,
+            energyRole: false,
+            min: minimumSpawnOf.attacker,
+            max: numberOf.attacker,
+            minEnergy: buildingPlans.attacker[rcl - 1].minEnergy
+        },
+        archer: {
+            name: "archer",
+            prio: 80,
+            energyRole: false,
+            min: minimumSpawnOf.apaHatchi,
+            max: numberOf.apaHatchi,
+            minEnergy: buildingPlans.archer[rcl - 1].minEnergy
+        },
+        healer: {
+            name: "healer",
+            prio: 90,
+            energyRole: false,
+            min: minimumSpawnOf.healer,
+            max: numberOf.healer,
+            minEnergy: buildingPlans.healer[rcl - 1].minEnergy
+        },
+        einarr: {
+            name: "einarr",
+            prio: 50,
+            energyRole: false,
+            min: minimumSpawnOf.einarr,
+            max: numberOf.einarr,
+            minEnergy: buildingPlans.einarr[rcl - 1].minEnergy
+        },
+        transporter: {
+            name: "transporter",
+            prio: 2400,
+            energyRole: false,
+            min: minimumSpawnOf.transporter,
+            max: numberOf.transporter,
+            minEnergy: buildingPlans.transporter[rcl - 1].minEnergy
         }
     };
+
+    if ((numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant) == 0) {
+        // Set up miniHarvester to spawn
+        tableImportance.miniharvester.min = 1;
+    }
+
+    tableImportance = _.filter(tableImportance, function (x) {
+        return (!(x.min == 0 || x.min == x.max || x.max > x.min))
+    });
+    if (tableImportance.length > 0) {
+        tableImportance = _.sortBy(tableImportance, "prio");
+
+        let spawnList = [];
+        for (let c in tableImportance) {
+            for (let i = 0; i < (tableImportance[c].min - tableImportance[c].max); i++) {
+                spawnList.push(tableImportance[c].name);
+            }
+        }
+
+        var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
+
+        //Surplus Upgrader Spawning
+        if (numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant > 0 && hostiles.length == 0 && spawnRoom.controller.level < 8) {
+            let container = spawnRoom.find(FIND_STRUCTURES, {
+                filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE
+            });
+            let containerEnergy = 0;
+            for (let e in container) {
+                containerEnergy += container[e].store[RESOURCE_ENERGY];
+            }
+            if (containerEnergy > (100000 * spawnRoom.controller.level) + 100000) {
+                //spawnList.push("upgrader");
+            }
+        }
+
+        return spawnList;
+    } else {
+        return null;
+    }
+};
+
+Room.prototype.checkForHostiles = function (roomName) {
+    /*  TODO:
+        return number of hostiles
+        return number of attack & heal parts combined
+    */
+
+    //FIXME: add a check for friendly units / Invaders
+    var hostiles = roomName.find(FIND_HOSTILE_CREEPS);
+    if (hostiles.length > 0) {
+        var value = {};
+        //check hostiles body composition
+        var maxAttackBodyParts = 0;
+        var maxHealBodyParts = 0;
+        var numberOfAttackBodyParts = 0;
+        var numberOfHealBodyParts = 0;
+        var AttackBodyParts = 0;
+        var HealBodyParts = 0;
+        for (var h in hostiles) {
+            AttackBodyParts = 0;
+            for (var part in hostiles[h].body) {
+                if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
+                    //attacking body part found
+                    AttackBodyParts++;
+                }
+                if (hostiles[h].body[part].type == HEAL) {
+                    //attacking body part found
+                    HealBodyParts++;
+                }
+            }
+            if (AttackBodyParts > maxAttackBodyParts) {
+                maxAttackBodyParts = AttackBodyParts;
+                numberOfAttackBodyParts += AttackBodyParts;
+            }
+            if (HealBodyParts > maxHealBodyParts) {
+                maxHealBodyParts = HealBodyParts;
+                numberOfHealBodyParts += HealBodyParts
+            }
+        }
+
+        value["numHostiles"] = hostiles.length;
+
+        value["maxAttack"] = maxAttackBodyParts;
+        value["numAttack"] = numberOfAttackBodyParts;
+
+        value["maxHeal"] = maxHealBodyParts;
+        value["numHeal"] = numberOfHealBodyParts;
+
+        if (hostiles.length == 1 && maxAttackBodyParts == 0 && maxHealBodyParts == 0) {
+            value["scout"] = true
+        }
+
+        return value;
+    } else {
+        return null;
+    }
+};
