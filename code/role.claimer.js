@@ -13,6 +13,16 @@ module.exports = {
         } else if (creep.room.name == creep.memory.target) {
             // if in target room
 
+            //check for hostiles
+            let hostileValues = creep.room.checkForHostiles(creep.room)
+            if (!_.isEmpty(hostileValues)) {
+                if (hostileValues.numHostiles > 0) {
+                    creep.room.createFlag(25, 25, "DEFEND-" + creep.room.name + "-" + creep.memory.home, COLOR_WHITE, COLOR_PURPLE)
+                    creep.task = Tasks.goToRoom(creep.memory.home);
+                    return
+                }
+            }
+
             //check for grey flags to claim the room
             var greyFlag = creep.room.find(FIND_FLAGS, {
                 filter: (f) => f.color == COLOR_GREY && f.room == creep.room

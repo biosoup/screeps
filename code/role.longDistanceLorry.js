@@ -5,6 +5,17 @@ module.exports = {
     /** @param {Creep} creep */
     newTask: function (creep) {
         let cpuStart = Game.cpu.getUsed();
+
+        //check for hostiles
+        let hostileValues = creep.room.checkForHostiles(creep.room)
+        if (!_.isEmpty(hostileValues)) {
+            if (hostileValues.numHostiles > 0) {
+                creep.room.createFlag(25, 25, "DEFEND-" + creep.room.name + "-" + creep.memory.home, COLOR_WHITE, COLOR_PURPLE)
+                creep.task = Tasks.goToRoom(creep.memory.home);
+                return
+            }
+        }
+
         if (!_.isEmpty(Game.rooms[creep.memory.home].memory.containerSources)) {
             if (creep.room.name == creep.memory.home && (creep.carry.energy == 0 || _.isEmpty(creep.memory.target))) {
                 //creep is home, empty, with no target
@@ -138,7 +149,7 @@ module.exports = {
                     if (validTarget.store[RESOURCE_ENERGY] > 0) {
                         //go work the target
                         creep.task = Tasks.withdraw(validTarget);
-                        creep.say(EM_PIN+""+EM_TRUCK)
+                        creep.say(EM_PIN + "" + EM_TRUCK)
                     } else {
                         creep.say("target empty")
                         creep.memory.target = {}

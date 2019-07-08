@@ -683,58 +683,66 @@ Room.prototype.creepSpawnRun =
             if (roomInterests[interest][5] > 0) {
                 var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == interest)
                 if (Game.rooms[interest] != undefined) {
+                    //if I have vision, check for other properties of hostiles
+
                     //if hostiles present, spawn a task force!
-                    var numHostiles = Game.rooms[interest].find(FIND_HOSTILE_CREEPS)
-                    if (numHostiles.length > 0) {
-                        //check hostiles body composition
-                        var maxAttackBodyParts = 0;
-                        var AttackBodyParts = 0;
-                        for (var h in numHostiles) {
-                            AttackBodyParts = 0;
-                            console.log(JSON.stringify(numHostiles[h].body))
-                            for (var part in numHostiles[h].body) {
-                                if (numHostiles[h].body[part].type == ATTACK || numHostiles[h].body[part].type == RANGED_ATTACK) {
-                                    //attacking body part found
-                                    AttackBodyParts++;
+                    let hostileValues = creep.room.checkForHostiles(creep.room)
+                    if (!_.isEmpty(hostileValues)) {
+                        if (hostileValues.numHostiles > 0) {
+                            if (hostileValues.maxAttackBodyParts > 0) {
+                                console.log("*!!!* " + interest + " Being attacked by " + hostileValues.numHostiles + " with:    " + hostileValues.numberOfAttackBodyParts + " attack parts and " + hostileValues.numberOfHealBodyParts + " heal parts")
+                                if (hostileValues.numberOfAttackBodyParts < 3 && hostileValues.numberOfHealBodyParts < 2) {
+                                    //small invader
+                                    roomInterests[interest][5] = hostileValues.numHostiles;
+                                } else {
+                                    //big invader or with healers
+                                    roomInterests[interest][5] = hostileValues.numHostiles * 2;
                                 }
-                            }
-                            if (AttackBodyParts > maxAttackBodyParts) {
-                                maxAttackBodyParts = AttackBodyParts;
-                            }
-                        }
 
-                        if (AttackBodyParts > 0) {
-                            roomInterests[interest][5] = numHostiles.length * 2;
-                            console.log("*!!!* Being attacked by " + numHostiles.length + " with:" + maxAttackBodyParts + " attack parts")
+                                //hostiles, do not spawn anything else for this room
+                                roomInterests[interest][0] = 0
+                                minimumSpawnOf.longDistanceHarvester = minimumSpawnOf.longDistanceHarvester - roomInterests[interest][0];
+                                roomInterests[interest][1] = 0
+                                minimumSpawnOf.longDistanceMiner = minimumSpawnOf.longDistanceMiner - roomInterests[interest][1];
+                                roomInterests[interest][2] = 0
+                                minimumSpawnOf.longDistanceLorry = minimumSpawnOf.longDistanceLorry - roomInterests[interest][2];
+                                roomInterests[interest][3] = 0
+                                minimumSpawnOf.longDistanceBuilder = minimumSpawnOf.longDistanceBuilder - roomInterests[interest][3];
+                                roomInterests[interest][4] = 0
+                                minimumSpawnOf.claimer = minimumSpawnOf.claimer - roomInterests[interest][4];
+                            } else {
+                                console.log("R enemy scout in " + interest)
+                            }
                         } else {
-                            console.log("R enemy scout in " + interest)
+                            //should not happen
+                            roomInterests[interest][5] = 0;
+                            console.log("guard code - smth wrong")
                         }
 
-                        //roomInterests[interest][5] = numHostiles.length * 2;
+                        //update the minimumSpawnOf
+                        minimumSpawnOf.guard += roomInterests[interest][5];
 
-                        //hostiles, do not do anything else
-                        roomInterests[interest][0] = 0
-                        minimumSpawnOf.longDistanceHarvester = minimumSpawnOf.longDistanceHarvester - roomInterests[interest][0];
-                        roomInterests[interest][1] = 0
-                        minimumSpawnOf.longDistanceMiner = minimumSpawnOf.longDistanceMiner - roomInterests[interest][1];
-                        roomInterests[interest][2] = 0
-                        minimumSpawnOf.longDistanceLorry = minimumSpawnOf.longDistanceLorry - roomInterests[interest][2];
-                        roomInterests[interest][3] = 0
-                        minimumSpawnOf.longDistanceBuilder = minimumSpawnOf.longDistanceBuilder - roomInterests[interest][3];
-                        roomInterests[interest][4] = 0
-                        minimumSpawnOf.claimer = minimumSpawnOf.claimer - roomInterests[interest][4];
-                    } else if (interest == defend) {
-                        roomInterests[interest][5] = roomInterests[interest][5];
-                    } else {
-                        roomInterests[interest][5] = 0
+                        //update count for spawn loop
+                        if (inRooms < roomInterests[interest][5]) {
+                            guard[interest] = roomInterests[interest][5]
+                        }
+
+                        //debug
+                        if (minimumSpawnOf.guard > 0) {
+                            //console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
+                        }
                     }
-                    minimumSpawnOf.guard += roomInterests[interest][5];
-                    if (inRooms < roomInterests[interest][5]) {
-                        guard[interest] = roomInterests[interest][5]
+                } else {
+                    //we do not have vision - rely on flag
+
+                    //check for flag
+                    var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name))
+                    if (!_.isEmpty(whiteFlags)) {
+                        minimumSpawnOf.guard += whiteFlags.secondaryColor;
+                        console.log(JSON.stringify(whiteFlags))
+                        guard[whiteFlags.pos.roomName] = whiteFlags.secondaryColor
                     }
-                    if (minimumSpawnOf.guard > 0) {
-                        //console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
-                    }
+                    console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
                 }
             }
         }
@@ -1339,11 +1347,11 @@ Room.prototype.checkForHostiles = function (roomName) {
 
         value["numHostiles"] = hostiles.length;
 
-        value["maxAttack"] = maxAttackBodyParts;
-        value["numAttack"] = numberOfAttackBodyParts;
+        value["maxAttackBodyParts"] = maxAttackBodyParts;
+        value["numberOfAttackBodyParts"] = numberOfAttackBodyParts;
 
-        value["maxHeal"] = maxHealBodyParts;
-        value["numHeal"] = numberOfHealBodyParts;
+        value["maxmaxHealBodyPartsHeal"] = maxHealBodyParts;
+        value["numberOfHealBodyParts"] = numberOfHealBodyParts;
 
         if (hostiles.length == 1 && maxAttackBodyParts == 0 && maxHealBodyParts == 0) {
             value["scout"] = true

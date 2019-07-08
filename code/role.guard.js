@@ -15,6 +15,8 @@ module.exports = {
             var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
             if (!_.isEmpty(hostile)) {
                 //get into range and kill
+
+                //FIXME: attack healers first
                 if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
                     creep.travelTo(hostile);
                 }
@@ -33,26 +35,22 @@ module.exports = {
                     return
                 }
 
-                var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room)
+
+                //remove flags when no enemies
+                var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
                 if (!_.isEmpty(whiteFlags)) {
-                    var spawnR = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                        filter: s => s.structureType == STRUCTURE_SPAWN
-                    })
-                    if (!_.isEmpty(spawnR)) {
-                        //console.log(JSON.stringify(spawnR))
-                        creep.moveTo(spawnR)
-                    } else {
-                        creep.moveTo(creep.room.controller)
-                    }
-                    if ((Game.time % 3) == 0) {
-                        creep.say(EM_FLAG)
-                    }
-                    return
+                    creep.say(EM_FLAG)
+                    whiteFlags.remove()
                 }
 
                 if ((Game.time % 3) == 0) {
                     creep.say(EM_SINGING)
+                    var center = new RoomPosition(25,25,creep.room.name)
+                    creep.task = Tasks.goTo(center)
+                    return
                 }
+
+
             }
 
         } else {

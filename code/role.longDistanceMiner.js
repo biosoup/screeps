@@ -7,6 +7,17 @@ module.exports = {
         if (!_.isEmpty(creep.memory.target) && creep.room.name != creep.memory.target) {
             creep.task = Tasks.goToRoom(creep.memory.target)
         } else if (!_.isEmpty(creep.memory.target) && creep.room.name == creep.memory.target) {
+            //check for hostiles
+            let hostileValues = creep.room.checkForHostiles(creep.room)
+            if (!_.isEmpty(hostileValues)) {
+                if (hostileValues.numHostiles > 0) {
+                    creep.room.createFlag(25, 25, "DEFEND-" + creep.room.name + "-" + creep.memory.home, COLOR_WHITE, COLOR_PURPLE)
+                    creep.task = Tasks.goToRoom(creep.memory.home);
+                    return
+                }
+            }
+
+
             let sources = creep.room.find(FIND_SOURCES);
             let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
             if (!_.isEmpty(unattendedSource)) {
