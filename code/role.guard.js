@@ -43,7 +43,7 @@ module.exports = {
                 if ((Game.time % 3) == 0) {
                     creep.say(EM_SINGING)
                     var center = new RoomPosition(25,25,creep.room.name)
-                    creep.task = Tasks.goTo(center)
+                    //creep.task = Tasks.goTo(center)
                     return
                 }
 

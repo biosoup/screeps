@@ -38,6 +38,8 @@ module.exports = {
         } else {
             //creep is empty
 
+            //FIXME: do not go near hostiles!
+
             //look for dropped resources
             var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
             if (!_.isEmpty(droppedEnergy)) {

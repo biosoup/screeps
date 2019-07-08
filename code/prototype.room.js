@@ -436,7 +436,7 @@ Room.prototype.checkForDefeat = function (spawnRoom) {
     } else {
         var greyFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.pos.roomName == spawnRoom.name)
         if (spawnRoom.controller.level >= 3 && !_.isEmpty(greyFlags) && !_.isEmpty(spawnRoom.towers)) {
-            console.log(JSON.stringify(greyFlags))
+            //console.log(JSON.stringify(greyFlags))
             for (var flag of greyFlags) {
                 flag.remove()
             }
@@ -563,12 +563,12 @@ Room.prototype.creepSpawnRun =
                     for (var flag of greyFlags) {
                         //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                         //builders & guard = boolean
-                        if (Game.room[flag.room].controller.my) {
+                        /* if (Game.room[flag.room].controller.my) {
                             roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
-                        } else {
+                        } else { */
                             roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
                             var newRoom = flag.pos.roomName;
-                        }
+                        //}
                     }
                 }
             } else {
@@ -661,6 +661,8 @@ Room.prototype.creepSpawnRun =
                     //console.log(interest+" "+numOfConstrustions.length +" "+ numOfRepairsites.length)
                     if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
                         roomInterests[interest][3] = roomInterests[interest][3]
+                    } else if (interest == newRoom) {
+                        minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
                     } else {
                         roomInterests[interest][3] = 0
                     }
@@ -668,6 +670,14 @@ Room.prototype.creepSpawnRun =
                     minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
                     if (inRooms < roomInterests[interest][3]) {
                         longDistanceBuilder[interest] = roomInterests[interest][3]
+                    }
+                } else {
+                    //no vision into the room
+                    if (interest == newRoom) {
+                        minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
+                        if (inRooms < roomInterests[interest][3]) {
+                            longDistanceBuilder[interest] = roomInterests[interest][3]
+                        }
                     }
                 }
             }
@@ -726,11 +736,6 @@ Room.prototype.creepSpawnRun =
                         if (inRooms < roomInterests[interest][5]) {
                             guard[interest] = roomInterests[interest][5]
                         }
-
-                        //debug
-                        if (minimumSpawnOf.guard > 0) {
-                            //console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
-                        }
                     }
                 } else {
                     //we do not have vision - rely on flag
@@ -739,10 +744,10 @@ Room.prototype.creepSpawnRun =
                     var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name))
                     if (!_.isEmpty(whiteFlags)) {
                         minimumSpawnOf.guard += whiteFlags.secondaryColor;
-                        console.log(JSON.stringify(whiteFlags))
                         guard[whiteFlags.pos.roomName] = whiteFlags.secondaryColor
+                        console.log("Enemy in " + whiteFlags.pos.roomName)
+                        //console.log(JSON.stringify(whiteFlags))
                     }
-                    console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
                 }
             }
         }
@@ -794,16 +799,14 @@ Room.prototype.creepSpawnRun =
             minimumSpawnOf["wallRepairer"] = 0;
         }
         if (wallRepairTargets.length > 0) {
-            minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
+            //minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
+            minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
         }
 
 
         // spawnAttendant
         if (spawnRoom.storage != undefined) {
             minimumSpawnOf["spawnAttendant"] = 1;
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000 && spawnRoom.energyAvailable < (spawnRoom.energyCapacityAvailable / 2)) {
-                //minimumSpawnOf["spawnAttendant"] = 2;
-            }
 
             //pull back on lorries when storage is overflowing
             if (_.sum(spawnRoom.storage.store) > 900000) {
@@ -894,8 +897,16 @@ Room.prototype.creepSpawnRun =
                     hostileValues.numHostiles = hostileValues.numHostiles - numberOfTowers;
                 }
 
-                minimumSpawnOf.guard = hostileValues.numHostiles * 2;
-                guard[spawnRoom.name] = hostileValues.numHostiles * 2;
+
+
+                if (hostileValues.numHostiles >= 4) {
+                    //siege mode, support walls!
+                    minimumSpawnOf.guard = 0;
+                    guard[spawnRoom.name] = 0;
+                } else {
+                    minimumSpawnOf.guard = hostileValues.numHostiles * 2;
+                    guard[spawnRoom.name] = hostileValues.numHostiles * 2;
+                }
 
                 //limit everything else
                 minimumSpawnOf.upgrader = 0;
@@ -907,7 +918,7 @@ Room.prototype.creepSpawnRun =
                 minimumSpawnOf.longDistanceLorry = 0;
                 minimumSpawnOf.longDistanceBuilder = 0;
                 minimumSpawnOf.demolisher = 0;
-                minimumSpawnOf.wallRepairer *= 2;
+                minimumSpawnOf.wallRepairer *= 3;
             }
         }
 
@@ -990,7 +1001,7 @@ Room.prototype.creepSpawnRun =
                 let testSpawn = Game.getObjectById(spawnRoom.memory.roomArray.spawns[s]);
                 if (testSpawn != null && testSpawn.spawning == null && testSpawn.memory.spawnRole != "x") {
                     var debug = [spawnList, minimumSpawnOf, numberOf]
-                    //console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
+                    console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
 
                     // Spawn!
                     if (spawnList[spawnEntry] == "miner") {

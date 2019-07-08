@@ -93,13 +93,12 @@ module.exports.loop = function () {
         if (Game.spawns[spawnName].spawning) {
             var spawningCreep = Game.creeps[Game.spawns[spawnName].spawning.name];
             var Percentage = (((Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime) / Game.spawns[spawnName].spawning.needTime) * 100).toFixed(2);
-            var symbol = '\uD83D\uDEA7';
             Game.spawns[spawnName].room.visual.text(
-                symbol + spawningCreep.memory.role + ' ' + Percentage + '%',
+                spawningCreep.memory.role + ' ' + Percentage + '%',
                 Game.spawns[spawnName].pos.x - 1,
-                Game.spawns[spawnName].pos.y - 10, {
+                Game.spawns[spawnName].pos.y - 10 - _.random(2), {
                     size: '0.7',
-                    align: 'left',
+                    align: 'center',
                     opacity: 0.5,
                     'backgroundColor': '#040404',
                     color: 'white'
@@ -138,6 +137,9 @@ module.exports.loop = function () {
         })
         var towers = Game.rooms[roomName].towers
         if (!_.isEmpty(Game.rooms[roomName].controller)) {
+            //TODO: different approach, activate safemode, when non invaders get too close to spawn/controller
+
+
             if (Game.rooms[roomName].controller.level > 0 && (hostiles.length - (towers.length * 2)) > 0) {
                 if (_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode) && Game.rooms[roomName].controller.safeModeAvailable > 0) {
                     Game.rooms[roomName].controller.activateSafeMode()

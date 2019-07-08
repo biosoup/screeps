@@ -125,6 +125,14 @@ Creep.prototype.getEnergy = function (creep, useSource) {
 };
 
 Creep.prototype.fillStructures = function (creep) {
+    //fill towers
+    var towers = creep.room.towers.filter(s => s.energy < 500)
+    var tower = creep.pos.findClosestByPath(towers)
+    if (!_.isEmpty(tower)) {
+        creep.task = Tasks.transfer(tower);
+        return true;
+    }
+
     //fill main structures
     var spawns = creep.room.spawns.filter(s => s.energy < s.energyCapacity)
     var structure = creep.pos.findClosestByPath(spawns)
@@ -147,6 +155,7 @@ Creep.prototype.fillStructures = function (creep) {
         creep.task = Tasks.transfer(tower);
         return true;
     }
+    
 };
 
 Creep.prototype.storeAllBut = function (resource) {

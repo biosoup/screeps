@@ -7,6 +7,26 @@ module.exports = {
         if (creep.carry.energy > 0) {
             //has energy -> do work
 
+            //find important buidlsites -> SPAWN
+            var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                filter: (s) => s.structureType == STRUCTURE_SPAWN
+            });
+            if (!_.isEmpty(closestImportantConstructionSite)) {
+                creep.task = Tasks.build(closestImportantConstructionSite);
+                creep.say(EM_BUILD + " " + EM_EXCLAMATION);
+                return;
+            }
+
+            //find important buidlsites -> TOWER
+            var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                filter: (s) => s.structureType == STRUCTURE_TOWER
+            });
+            if (!_.isEmpty(closestImportantConstructionSite)) {
+                creep.task = Tasks.build(closestImportantConstructionSite);
+                creep.say(EM_BUILD + " " + EM_EXCLAMATION);
+                return;
+            }
+
             //find important buidlsites
             var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
