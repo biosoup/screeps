@@ -686,7 +686,7 @@ Room.prototype.creepSpawnRun =
                     //if I have vision, check for other properties of hostiles
 
                     //if hostiles present, spawn a task force!
-                    let hostileValues = creep.room.checkForHostiles(creep.room)
+                    let hostileValues = spawnRoom.checkForHostiles(spawnRoom)
                     if (!_.isEmpty(hostileValues)) {
                         if (hostileValues.numHostiles > 0) {
                             if (hostileValues.maxAttackBodyParts > 0) {
@@ -1325,6 +1325,7 @@ Room.prototype.checkForHostiles = function (roomName) {
         var HealBodyParts = 0;
         for (var h in hostiles) {
             AttackBodyParts = 0;
+            HealBodyParts = 0;
             for (var part in hostiles[h].body) {
                 if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
                     //attacking body part found
@@ -1341,7 +1342,7 @@ Room.prototype.checkForHostiles = function (roomName) {
             }
             if (HealBodyParts > maxHealBodyParts) {
                 maxHealBodyParts = HealBodyParts;
-                numberOfHealBodyParts += HealBodyParts
+                numberOfHealBodyParts += HealBodyParts;
             }
         }
 

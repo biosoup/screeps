@@ -9,14 +9,18 @@ module.exports = {
         } else {
             if (creep.carry.energy > 0) {
                 //find structures that need repairing
-                var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX);
-                var walls = creep.room.constructedWalls.filter(s => s.hits < WALLMAX);
+                if (!_.isEmpty(creep.room.ramparts)) {
+                    var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX);
+                }
+                if (!_.isEmpty(creep.room.constructedWalls)) {
+                    var walls = creep.room.constructedWalls.filter(s => s.hits < WALLMAX);
+                }
                 //sort by hits
                 var rampart = _.first(_.sortBy(ramparts, "hits"));
                 var wall = _.first(_.sortBy(walls, "hits"));
                 //console.log(creep.room.name+" R:"+rampart.hits+" W:"+wall.hits)
-                
-                if (rampart.hits<wall.hits) {
+
+                if (rampart.hits < wall.hits) {
                     var target = rampart;
                 } else {
                     var target = wall;
