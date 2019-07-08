@@ -689,11 +689,11 @@ Room.prototype.creepSpawnRun =
                         //check hostiles body composition
                         var maxAttackBodyParts = 0;
                         var AttackBodyParts = 0;
-                        for (var h in hostiles) {
+                        for (var h in numHostiles) {
                             AttackBodyParts = 0;
-                            console.log(JSON.stringify(hostiles[h].body))
-                            for (var part in hostiles[h].body) {
-                                if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
+                            console.log(JSON.stringify(numHostiles[h].body))
+                            for (var part in numHostiles[h].body) {
+                                if (numHostiles[h].body[part].type == ATTACK || numHostiles[h].body[part].type == RANGED_ATTACK) {
                                     //attacking body part found
                                     AttackBodyParts++;
                                 }
@@ -704,13 +704,13 @@ Room.prototype.creepSpawnRun =
                         }
 
                         if (AttackBodyParts > 0) {
-                            //roomInterests[interest][5] = numHostiles.length * 2;
-                            console.log("being attacked by " + AttackBodyParts + " attack parts")
+                            roomInterests[interest][5] = numHostiles.length * 2;
+                            console.log("*!!!* Being attacked by " + numHostiles.length + " with:" + maxAttackBodyParts + " attack parts")
                         } else {
                             console.log("R enemy scout in " + interest)
                         }
 
-                        roomInterests[interest][5] = numHostiles.length * 2;
+                        //roomInterests[interest][5] = numHostiles.length * 2;
 
                         //hostiles, do not do anything else
                         roomInterests[interest][0] = 0
@@ -733,7 +733,7 @@ Room.prototype.creepSpawnRun =
                         guard[interest] = roomInterests[interest][5]
                     }
                     if (minimumSpawnOf.guard > 0) {
-                        console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
+                        //console.log(interest + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
                     }
                 }
             }

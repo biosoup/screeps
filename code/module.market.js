@@ -38,12 +38,6 @@ module.exports = {
     },
 
     marketCode: function () {
-        /* 
-        FIXME:
-            - add market cooldown
-            - multiple buy rooms
-        */
-
         // Single Market Buy Orders
         if (Game.time % DELAYMARKETBUY == 0 && Game.cpu.bucket > CPU_THRESHOLD && Memory.buyOrder != undefined) {
             let info = Memory.buyOrder.split(":"); //Format: [AMOUNT]:[ORDERID]
