@@ -67,10 +67,15 @@ module.exports = {
             var rampart = _.first(_.sortBy(ramparts, "hits"));
             var wall = _.first(_.sortBy(walls, "hits"));
             //console.log(creep.room.name+" R:"+rampart.hits+" W:"+wall.hits)
-
-            if (rampart.hits < wall.hits) {
+            if (!_.isEmpty(rampart) && !_.isEmpty(wall)) {
+                if (rampart.hits < wall.hits) {
+                    var target = rampart;
+                } else {
+                    var target = wall;
+                }
+            } else if (!_.isEmpty(rampart)) {
                 var target = rampart;
-            } else {
+            } else if (!_.isEmpty(wall)) {
                 var target = wall;
             }
 

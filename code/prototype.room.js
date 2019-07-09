@@ -566,8 +566,8 @@ Room.prototype.creepSpawnRun =
                         /* if (Game.room[flag.room].controller.my) {
                             roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
                         } else { */
-                            roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
-                            var newRoom = flag.pos.roomName;
+                        roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
+                        var newRoom = flag.pos.roomName;
                         //}
                     }
                 }
@@ -692,15 +692,16 @@ Room.prototype.creepSpawnRun =
             }
             if (roomInterests[interest][5] > 0) {
                 var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == interest)
+                var inRoomsCurrent = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.home == spawnRoom.name && c.memory.target != interest)
                 if (Game.rooms[interest] != undefined) {
                     //if I have vision, check for other properties of hostiles
 
                     //if hostiles present, spawn a task force!
-                    let hostileValues = spawnRoom.checkForHostiles(spawnRoom)
+                    let hostileValues = spawnRoom.checkForHostiles(Game.rooms[interest])
                     if (!_.isEmpty(hostileValues)) {
                         if (hostileValues.numHostiles > 0) {
                             if (hostileValues.maxAttackBodyParts > 0) {
-                                console.log("*!!!* " + interest + " Being attacked by " + hostileValues.numHostiles + " with:    " + hostileValues.numberOfAttackBodyParts + " attack parts and " + hostileValues.numberOfHealBodyParts + " heal parts")
+                                console.log("*!!!* " + interest + " Being attacked by " + hostileValues.numHostiles + " with: " + hostileValues.numberOfAttackBodyParts + " attack parts and " + hostileValues.numberOfHealBodyParts + " heal parts. Response team: " + inRooms)
                                 if (hostileValues.numberOfAttackBodyParts < 3 && hostileValues.numberOfHealBodyParts < 2) {
                                     //small invader
                                     roomInterests[interest][5] = hostileValues.numHostiles;
@@ -734,25 +735,33 @@ Room.prototype.creepSpawnRun =
 
                         //update count for spawn loop
                         if (inRooms < roomInterests[interest][5]) {
-                            guard[interest] = roomInterests[interest][5]
+                            guard[interest] = roomInterests[interest][5] 
                         }
+                        //FIXME: not spawning enough guards
+
+                        console.log("Enemy in " + interest + " with " + inRooms + " guards dispathed from " + spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
                     }
                 } else {
                     //we do not have vision - rely on flag
 
                     //check for flag
-                    var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name))
+                    var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name && f.pos.roomName == interest))
                     if (!_.isEmpty(whiteFlags)) {
-                        minimumSpawnOf.guard += whiteFlags.secondaryColor;
-                        guard[whiteFlags.pos.roomName] = whiteFlags.secondaryColor
-                        console.log("Enemy in " + whiteFlags.pos.roomName)
-                        //console.log(JSON.stringify(whiteFlags))
+                        minimumSpawnOf.guard += roomInterests[interest][5] + inRoomsCurrent;
+                        if (inRooms < roomInterests[interest][5]) {
+                            guard[interest] = roomInterests[interest][5]
+                        }
+
+                        console.log("Enemy in " + whiteFlags.pos.roomName + " with " + inRooms + " guards dispathed from " + _.last(_.words(whiteFlags.name, /[^-]+/g)) + "/" + spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
                     }
                 }
             }
         }
 
-        //console.log(spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
+        if (minimumSpawnOf.guard > 0) {
+            var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.home == spawnRoom.name)
+            console.log("Enemy! " + inRooms + " guards from " + spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
+        }
 
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_MY_CONSTRUCTION_SITES);
@@ -799,8 +808,11 @@ Room.prototype.creepSpawnRun =
             minimumSpawnOf["wallRepairer"] = 0;
         }
         if (wallRepairTargets.length > 0) {
-            //minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
-            minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
+            if (_.isEmpty(spawnRoom.storage)) {
+                minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
+            } else {
+                minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
+            }
         }
 
 
@@ -889,7 +901,7 @@ Room.prototype.creepSpawnRun =
         });
         if (!_.isEmpty(hostileValues)) {
             if (hostileValues.numHostiles > 0) {
-                console.log("Being attacked by " + hostileValues.numHostiles + " with:" + hostileValues.maxAttackBodyParts + " attack parts")
+                //console.log("Being attacked by " + hostileValues.numHostiles + " with:" + hostileValues.maxAttackBodyParts + " attack parts")
 
                 //Get number of towers
                 if (numberOfTowers > 0) {
@@ -951,7 +963,7 @@ Room.prototype.creepSpawnRun =
             - fixed numbers for now
         */
 
-        if (rcl == 2) {
+        if (rcl <= 2) {
             minimumSpawnOf.lorry = 0
         }
 
@@ -1001,7 +1013,7 @@ Room.prototype.creepSpawnRun =
                 let testSpawn = Game.getObjectById(spawnRoom.memory.roomArray.spawns[s]);
                 if (testSpawn != null && testSpawn.spawning == null && testSpawn.memory.spawnRole != "x") {
                     var debug = [spawnList, minimumSpawnOf, numberOf]
-                    console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
+                    //console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
 
                     // Spawn!
                     if (spawnList[spawnEntry] == "miner") {

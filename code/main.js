@@ -84,28 +84,6 @@ module.exports.loop = function () {
         }
     }
 
-    // for each spawn
-    if (CPUdebug == true) {
-        CPUdebugString = CPUdebugString.concat("<br>Start Spawn visualisation Code: " + Game.cpu.getUsed())
-    }
-    for (var spawnName in Game.spawns) {
-        //if spawning just add visuals
-        if (Game.spawns[spawnName].spawning) {
-            var spawningCreep = Game.creeps[Game.spawns[spawnName].spawning.name];
-            var Percentage = (((Game.spawns[spawnName].spawning.needTime - Game.spawns[spawnName].spawning.remainingTime) / Game.spawns[spawnName].spawning.needTime) * 100).toFixed(2);
-            Game.spawns[spawnName].room.visual.text(
-                spawningCreep.memory.role + ' ' + Percentage + '%',
-                Game.spawns[spawnName].pos.x - 1,
-                Game.spawns[spawnName].pos.y - 10 - _.random(2), {
-                    size: '0.7',
-                    align: 'center',
-                    opacity: 0.5,
-                    'backgroundColor': '#040404',
-                    color: 'white'
-                });
-        }
-    }
-
     if (CPUdebug == true) {
         CPUdebugString = CPUdebugString.concat("<br>Start Tasks Code: " + Game.cpu.getUsed())
     }
@@ -132,118 +110,164 @@ module.exports.loop = function () {
     }
     //go through rooms
     for (let roomName in Game.rooms) {
-        var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS, {
-            filter: f => f.owner != "Invader"
-        })
-        var towers = Game.rooms[roomName].towers
         if (!_.isEmpty(Game.rooms[roomName].controller)) {
-            //TODO: different approach, activate safemode, when non invaders get too close to spawn/controller
+            if (Game.rooms[roomName].controller.my) {
+                //check for hostiles
+                var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS, {
+                    filter: f => f.owner != "Invader"
+                })
+                if (hostiles.length > 0) {
+                    //activate safemode, when non-invaders get too close to spawn
+                    var closeRange = 0;
+                    for (var h in hostiles) {
+                        //get closest spawn
+                        /* var spawnNear = h.pos.findClosestByRange(FIND_MY_SPAWNS)
+                        if (spawnNear.pos.isRangeTo(h) > closeRange) {
+                            closeRange = spawnNear.pos.isRangeTo(h)
+                        } */
+                    }
+                    console.log("closerange:" + closeRange)
 
+                    //if hostile is closer than 6 -> safemode
+                    if (closeRange < 6 && closeRange > 0) {
+                        //Game.rooms[roomName].controller.activateSafeMode()
+                        console.log("WARNING: Hostile too close!! SAFEMODE!!")
+                    } else if (!_.isEmpty(Game.rooms[roomName].storage)) {
+                        if (Game.rooms[roomName].storage.store[RESOURCE_ENERGY] > 100000) {
+                            //we have energy, do siege mode
+                            //TODO: implement siege mode
+                        } else {
+                            //no energy left, ask for help
 
-            if (Game.rooms[roomName].controller.level > 0 && (hostiles.length - (towers.length * 2)) > 0) {
-                if (_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode) && Game.rooms[roomName].controller.safeModeAvailable > 0) {
-                    Game.rooms[roomName].controller.activateSafeMode()
-                } else if (!_.isEmpty(Game.rooms[roomName].controller.safeModeCooldown) && _.isEmpty(Game.rooms[roomName].controller.safeMode)) {
-                    //room on cooldown, but safemode not active
+                            //get closest other spawns
+                            var flagRoomName = roomName
+                            var distance = {}
+                            for (let roomName in Game.rooms) {
+                                var r = Game.rooms[roomName];
+                                if (!_.isEmpty(r.memory.roomArray.spawns)) {
+                                    if (r.name != flagRoomName) {
+                                        distance[r.name] = {}
+                                        distance[r.name].name = r.name
+                                        distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                                    }
+                                }
+                            }
+                            distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
 
-                    //get closest other spawns
-                    var flagRoomName = spawnRoom.name
-                    var distance = {}
-                    for (let roomName in Game.rooms) {
-                        var r = Game.rooms[roomName];
-                        if (!_.isEmpty(r.memory.roomArray.spawns)) {
-                            if (r.name != flagRoomName) {
-                                distance[r.name] = {}
-                                distance[r.name].name = r.name
-                                distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                            //check if flag does not exists
+                            var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
+                            if (_.isEmpty(whiteFlags)) {
+                                //set a flag
+                                Game.rooms[roomName].createFlag(25, 25, "DEFEND-" + roomName + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
+                                console.log(roomName + " in troubles!! Sending response team!!")
                             }
                         }
-                    }
-                    distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+                    } else {
+                        //no avaliable storage and no safe modes –> send response team
 
-                    //check if flag does not exists
-                    var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
-                    if (_.isEmpty(whiteFlags)) {
-                        //set a flag
-                        spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
-                        console.log(spawnRoom.name + " in troubles!! Sending response team!!")
+                        //get closest other spawns
+                        var flagRoomName = roomName
+                        var distance = {}
+                        for (let roomName in Game.rooms) {
+                            var r = Game.rooms[roomName];
+                            if (!_.isEmpty(r.memory.roomArray.spawns)) {
+                                if (r.name != flagRoomName) {
+                                    distance[r.name] = {}
+                                    distance[r.name].name = r.name
+                                    distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                                }
+                            }
+                        }
+                        distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+
+                        //check if flag does not exists
+                        var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
+                        if (_.isEmpty(whiteFlags)) {
+                            //set a flag
+                            Game.rooms[roomName].createFlag(25, 25, "DEFEND-" + roomName + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
+                            console.log(roomName + " in troubles!! Sending response team!!")
+                        }
+                    }
+                }
+            }
+
+            if (!_.isEmpty(Game.rooms[roomName].spawns)) {
+                var spawningCreep = {}
+                for (var s in Game.rooms[roomName].spawns) {
+                    var spawnName = Game.rooms[roomName].spawns[s]
+                    //if spawning just add visuals
+                    if (spawnName.spawning) {
+                        spawningCreep[spawnName] = {}
+                        spawningCreep[spawnName].name = spawnName.spawning.name;
+                        spawningCreep[spawnName].percent = (((spawnName.spawning.needTime - spawnName.spawning.remainingTime) / spawnName.spawning.needTime) * 100).toFixed(2);
+                    }
+                }
+                var i = 0
+                if (!_.isEmpty(spawningCreep)) {
+                    for (var s in spawningCreep) {
+                        Game.rooms[roomName].visual.text(
+                            spawningCreep[s].percent + '% '+ spawningCreep[s].name + ' ',
+                            spawnName.pos.x - 1,
+                            spawnName.pos.y - 10 - i, {
+                                size: '0.7',
+                                align: 'left',
+                                opacity: 0.5,
+                                'backgroundColor': '#040404',
+                                color: 'white'
+                            });
+                        i++;
+                    }
+                }
+            }
+
+            if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
+                //refresh room data
+                Game.rooms[roomName].refreshData(roomName)
+            }
+
+            //run link balancing
+            if ((Game.time % DELAYLINK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
+                Game.rooms[roomName].linksRun(roomName)
+
+                Game.rooms[roomName].refreshContainerSources(roomName)
+            }
+
+            // find all towers
+            var towers = Game.rooms[roomName].towers
+            if (!_.isEmpty(towers)) {
+                //find hostiles in the room
+                var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
+                if (hostiles.length > 0) {
+                    for (var tower of towers) {
+                        var closestTarget = tower.pos.findClosestByRange(hostiles)
+                        // all towers attack
+                        tower.attack(closestTarget);
                     }
                 } else {
-                    //no avaliable safe modes –> send response team
-
-                    //get closest other spawns
-                    var flagRoomName = spawnRoom.name
-                    var distance = {}
-                    for (let roomName in Game.rooms) {
-                        var r = Game.rooms[roomName];
-                        if (!_.isEmpty(r.memory.roomArray.spawns)) {
-                            if (r.name != flagRoomName) {
-                                distance[r.name] = {}
-                                distance[r.name].name = r.name
-                                distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
-                            }
-                        }
+                    for (var tower of towers) {
+                        tower.healCreeps();
                     }
-                    distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+                }
 
-                    //check if flag does not exists
-                    var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
-                    if (_.isEmpty(whiteFlags)) {
-                        //set a flag
-                        spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
-                        console.log(spawnRoom.name + " in troubles!! Sending response team!!")
+                if (_.isEmpty(hostiles)) {
+                    for (var tower of towers) {
+                        //no hostiles, one tower to repair
+                        tower.repairStructures();
                     }
                 }
             }
+
+            // default resource limits
+            market.resourceLimits(roomName);
+            // balance resources
+            market.resourceBalance(CPUdebug);
+            // terminal transfers
+            market.terminalCode(roomName, CPUdebug);
+
+            market.productionCode(roomName);
+
+            market.labCode(roomName);
         }
-
-        if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
-            //refresh room data
-            Game.rooms[roomName].refreshData(roomName)
-        }
-
-        //run link balancing
-        if ((Game.time % DELAYLINK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
-            Game.rooms[roomName].linksRun(roomName)
-
-            Game.rooms[roomName].refreshContainerSources(roomName)
-        }
-
-        // find all towers
-        var towers = Game.rooms[roomName].towers
-        if (!_.isEmpty(towers)) {
-            //find hostiles in the room
-            var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
-            if (hostiles.length > 0) {
-                for (var tower of towers) {
-                    var closestTarget = tower.pos.findClosestByRange(hostiles)
-                    // all towers attack
-                    tower.attack(closestTarget);
-                }
-            } else {
-                for (var tower of towers) {
-                    tower.healCreeps();
-                }
-            }
-
-            if (_.isEmpty(hostiles)) {
-                for (var tower of towers) {
-                    //no hostiles, one tower to repair
-                    tower.repairStructures();
-                }
-            }
-        }
-
-        // default resource limits
-        market.resourceLimits(roomName);
-        // balance resources
-        market.resourceBalance(CPUdebug);
-        // terminal transfers
-        market.terminalCode(roomName, CPUdebug);
-
-        market.productionCode(roomName);
-
-        market.labCode(roomName);
     }
 
     //run market code

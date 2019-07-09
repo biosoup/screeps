@@ -11,10 +11,32 @@ module.exports = {
         if (creep.room.name == creep.memory.target) {
             //if in target room
 
+            //step away from edge and from road
+            if(creep.pos.y == 49) {
+                var step = new RoomPosition(creep.pos.x, 48, creep.room.name)
+                creep.travelTo(step)
+            } else if(creep.pos.y == 0) {
+                var step = new RoomPosition(creep.pos.x, 1, creep.room.name)
+                creep.travelTo(step)
+            } else if(creep.pos.x == 49) {
+                var step = new RoomPosition(48, creep.pos.y, creep.room.name)
+                creep.travelTo(step)
+            } else if(creep.pos.y == 0) {
+                var step = new RoomPosition(1, creep.pos.y, creep.room.name)
+                creep.travelTo(step)
+            } else if (!_.isEmpty(creep.pos.lookFor(LOOK_STRUCTURES))) {
+                var step = new RoomPosition(creep.pos.x+_.random(1), creep.pos.y+_.random(1), creep.room.name)
+                creep.travelTo(step)
+            }
+
+
             //FIXME: attack healers first
+
             //find hostiles
             var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
             if (!_.isEmpty(hostile)) {
+                
+
                 //get into range and kill
                 creep.task = Tasks.attack(hostile)
                 creep.say("Hostile!" + EM_SWORDS);
@@ -42,8 +64,7 @@ module.exports = {
 
                 if ((Game.time % 3) == 0) {
                     creep.say(EM_SINGING)
-                    var center = new RoomPosition(25,25,creep.room.name)
-                    //creep.task = Tasks.goTo(center)
+                    //creep.task = Tasks.goTo(creep.room.controller)
                     return
                 }
 

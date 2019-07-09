@@ -91,7 +91,7 @@ module.exports = {
         });
 
         if (hostileValues.numHostiles > 0) {
-            console.log("Being attacked by " + hostileValues.numHostiles + " with:" + hostileValues.maxAttackBodyParts + " attack parts")
+            console.log("Being attacked by " + hostileValues.numHostiles + " hostiles with:" + hostileValues.maxAttackBodyParts + " attack parts")
 
             //Get number of towers
             if (numberOfTowers > 0) {

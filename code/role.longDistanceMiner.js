@@ -15,6 +15,11 @@ module.exports = {
                     creep.task = Tasks.goToRoom(creep.memory.home);
                     return
                 }
+            } else {
+                var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.pos.roomName == creep.room.name))
+                if (!_.isEmpty(whiteFlags)) {
+                    whiteFlags.remove()
+                }
             }
 
 
