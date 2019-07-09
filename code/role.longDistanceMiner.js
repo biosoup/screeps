@@ -22,10 +22,16 @@ module.exports = {
                 }
             }
 
+            //console.log(creep.room.containers)
+
+            if(!_.isEmpty(creep.memory.container)) {
+                var cID = Game.getObjectById(creep.memory.container)
+                var source = cID.pos.findInRange(FIND_SOURCES)
+            }
 
             let sources = creep.room.find(FIND_SOURCES);
             let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
-            if (!_.isEmpty(unattendedSource)) {
+            if (!_.isEmpty(unattendedSource) && _.isEmpty(source)) {
                 var source = creep.pos.findClosestByPath(unattendedSource);
             }
 
@@ -48,6 +54,7 @@ module.exports = {
 
                     // if creep is on top of the container
                     if (creep.pos.isEqualTo(container.pos)) {
+                        creep.memory.container = container.id
                         //if container needs repairs
                         if (container.hits < container.hitsMax && creep.carry.energy > 0) {
                             creep.task = Tasks.repair(container)

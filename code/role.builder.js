@@ -30,7 +30,8 @@ module.exports = {
             //find important buidlsites
             var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
-                    s.structureType == STRUCTURE_EXTENSION
+                    s.structureType == STRUCTURE_EXTENSION || 
+                    s.structureType == STRUCTURE_STORAGE
             });
             if (!_.isEmpty(closestImportantConstructionSite)) {
                 creep.task = Tasks.build(closestImportantConstructionSite);

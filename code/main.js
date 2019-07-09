@@ -67,14 +67,6 @@ module.exports.loop = function () {
         if (CPUdebug == true) {
             CPUdebugString = CPUdebugString.concat("<br>Start Spawn Code: " + Game.cpu.getUsed())
         }
-        // for each spawn
-        /* for (var spawnName in Game.spawns) {
-            //update minimum number of creeps
-            Game.spawns[spawnName].creepSpawnCounts(Game.spawns[spawnName]);
-            // run spawn logic
-            Game.spawns[spawnName].spawnCreepsIfNecessary();
-        } */
-
         for (let roomName in Game.rooms) {
             if (!_.isEmpty(Game.rooms[roomName].memory.roomArray)) {
                 if (!_.isEmpty(Game.rooms[roomName].memory.roomArray.spawns)) {

@@ -12,9 +12,15 @@ module.exports = {
             if (creep.carry.energy > 0) {
                 //has energy -> do work
 
+                //do not let controleer to downgrade
+                if (creep.room.controller.ticksToDowngrade < 5000) {
+                    creep.task = Tasks.transfer(creep.room.storage);
+                    return;
+                }
+
                 //find important buidlsites
                 var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
-                    filter: (s) => 
+                    filter: (s) =>
                         s.structureType == STRUCTURE_SPAWN
                 });
                 if (!_.isEmpty(closestImportantConstructionSite)) {

@@ -116,6 +116,7 @@ module.exports = {
                 if (!_.isEmpty(homeStorage)) {
                     //put energy into storage
                     creep.task = Tasks.transfer(homeStorage)
+                    //FIXME: add road repair code & road placement code
                     creep.say(EM_TRUCK)
                 } else {
                     console.log("storage not found!!! " + creep.name + " " + creep.room.name + " " + creep.memory.home)
