@@ -1,5 +1,5 @@
 //require plans for body and arms
-require("./module.colony.base.buildings")
+require("./module.colony.autobuild.buildings")
 
 
 module.exports = {
