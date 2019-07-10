@@ -1,6 +1,11 @@
 //module: colony
 
 /*
+- gather colony data
+    - layout
+    - rooms terrain
+    - put all into segments
+        - one segment for each colony?
 - figure out current colony status
     - level
     - what is happening
