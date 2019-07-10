@@ -1,4 +1,4 @@
-var Tasks = require("./x.creep-tasks");
+var Tasks = require("tools.creep-tasks");
 
 module.exports = {
     newTask: function (creep) {

@@ -13,9 +13,9 @@ if (CPUdebug == true) {
 require('globals')
 require('prototype.Room.structures');
 //const profiler = require('screeps-profiler');
-const stats = require('./x.stats');
-require("./x.creep-tasks");
-var Traveler = require('./x.Traveler');
+const stats = require('tools.stats');
+require("tools.creep-tasks");
+var Traveler = require('tools.Traveler');
 require('functions.game');
 
 // import modules
