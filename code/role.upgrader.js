@@ -1,4 +1,4 @@
-var Tasks = require("creep-tasks");
+var Tasks = require("./x.creep-tasks");
 
 module.exports = upgrader = {
     // a function to run the logic for this role

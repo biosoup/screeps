@@ -1,3 +1,10 @@
+/* 
+
+TODO: Move to correct places in other files
+- leave only market stuff
+
+*/
+
 module.exports = {
     resourceLimits: function (r) {
         //Set default resource limits:

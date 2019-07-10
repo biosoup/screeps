@@ -1,4 +1,4 @@
-// version 0.5
+// version 0.6
 const CPUdebug = false;
 
 if (CPUdebug == true) {
@@ -13,9 +13,9 @@ if (CPUdebug == true) {
 require('globals')
 require('prototype.Room.structures');
 //const profiler = require('screeps-profiler');
-const stats = require('stats');
-require("creep-tasks");
-var Traveler = require('Traveler');
+const stats = require('./x.stats');
+require("./x.creep-tasks");
+var Traveler = require('./x.Traveler');
 require('functions.game');
 
 // import modules
@@ -23,7 +23,7 @@ require('prototype.creep');
 require('prototype.tower');
 require('prototype.spawn');
 require('prototype.room');
-var market = require('module.market');
+var market = require('./module.colony.market');
 var spawnLogic = require('module.spawnLogic');
 
 // PROFILER

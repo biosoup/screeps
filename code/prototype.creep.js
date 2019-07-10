@@ -1,5 +1,5 @@
-require("creep-tasks");
-var Tasks = require("creep-tasks");
+require("./x.creep-tasks");
+var Tasks = require("./x.creep-tasks");
 
 let builder = require('role.builder')
 let upgrader = require('role.upgrader')
