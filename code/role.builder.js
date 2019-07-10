@@ -11,6 +11,8 @@ module.exports = {
             var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
                 filter: (s) => s.structureType == STRUCTURE_SPAWN
             });
+            //FIXME: get construction sites once, then filter on top of them
+
             if (!_.isEmpty(closestImportantConstructionSite)) {
                 creep.task = Tasks.build(closestImportantConstructionSite);
                 creep.say(EM_BUILD + " " + EM_EXCLAMATION);

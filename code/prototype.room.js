@@ -700,7 +700,7 @@ Room.prototype.creepSpawnRun =
                     let hostileValues = spawnRoom.checkForHostiles(Game.rooms[interest])
                     if (!_.isEmpty(hostileValues)) {
                         if (hostileValues.numHostiles > 0) {
-                            if (hostileValues.maxAttackBodyParts > 0) {
+                            if (hostileValues.numberOfAttackBodyParts > 0) {
                                 console.log("*!!!* " + interest + " Being attacked by " + hostileValues.numHostiles + " with: " + hostileValues.numberOfAttackBodyParts + " attack parts and " + hostileValues.numberOfHealBodyParts + " heal parts. Response team: " + inRooms)
                                 if (hostileValues.numberOfAttackBodyParts < 3 && hostileValues.numberOfHealBodyParts < 2) {
                                     //small invader
@@ -735,7 +735,7 @@ Room.prototype.creepSpawnRun =
 
                         //update count for spawn loop
                         if (inRooms < roomInterests[interest][5]) {
-                            guard[interest] = roomInterests[interest][5] 
+                            guard[interest] = roomInterests[interest][5]
                         }
                         //FIXME: not spawning enough guards
 
@@ -811,7 +811,11 @@ Room.prototype.creepSpawnRun =
             if (_.isEmpty(spawnRoom.storage)) {
                 minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
             } else {
-                minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
+                if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000) {
+                    minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
+                } else { 
+                    minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
+                }
             }
         }
 

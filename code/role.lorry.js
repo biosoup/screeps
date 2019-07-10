@@ -21,13 +21,15 @@ module.exports = {
                 if (creep.room.storage.store[RESOURCE_ENERGY] > (100000 * creep.room.controller.level)) {
                     //enough stored energy, look for link nearby and send enegy from it
                     var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
-                        filter: s => s.structureType == STRUCTURE_LINK
+                        filter: s => s.structureType == STRUCTURE_LINK &&
+                            s.energy < s.energyCapacity
                     })[0];
                     if (!_.isEmpty(link)) {
                         creep.task = Tasks.transfer(link);
                         return;
                     } else {
-                        //no link, store energy
+                        //no link or link full 
+
                         //creep.task = Tasks.transfer(creep.room.storage);
                         return;
                     }
@@ -60,7 +62,7 @@ module.exports = {
             var container = creep.pos.findClosestByPath(containers)
             if (!_.isEmpty(container)) {
                 creep.task = Tasks.withdraw(container);
-                return ;
+                return;
             }
 
             //no suitable containers

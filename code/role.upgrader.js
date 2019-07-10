@@ -6,6 +6,7 @@ module.exports = upgrader = {
     newTask: function (creep) {
         if (creep.carry.energy > 0) {
             //do the actual job
+
             if (!_.isEmpty(creep.room.controller.sign)) {
                 if (creep.room.controller.sign.username != playerUsername) {
                     creep.task = Tasks.signController(creep.room.controller, roomSign)
@@ -25,7 +26,7 @@ module.exports = upgrader = {
             }
 
             //then container nearby
-            var container = creep.room.controller.pos.findInRange(creep.room.containers, 2, {filter: f=> f.energy > 0})
+            var container = creep.room.controller.pos.findInRange(creep.room.containers, 2, {filter: f=> f.store[RESOURCE_ENERGY] > 0})
             if (!_.isEmpty(container)) {
                 creep.task = Tasks.withdraw(container[0]);
                 creep.say(EM_PACKAGE)

@@ -155,7 +155,16 @@ Creep.prototype.fillStructures = function (creep) {
         creep.task = Tasks.transfer(tower);
         return true;
     }
-    
+
+    //fill upgrade container
+    var container = _.first(creep.room.controller.pos.findInRange(creep.room.containers, 2, {
+        filter: f => f.store[RESOURCE_ENERGY] < f.storeCapacity
+    }))
+    if (!_.isEmpty(container)) {
+        creep.task = Tasks.transfer(container);
+        return;
+    }
+
 };
 
 Creep.prototype.storeAllBut = function (resource) {

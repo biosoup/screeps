@@ -4,7 +4,7 @@ module.exports = {
     newTask: function (creep) {
         //var nuker = Game.getObjectById(creep.room.memory.roomArray.nukers[0]);
 
-        if (creep.room.memory.terminalTransfer != undefined) {
+        if (!_.isEmpty(creep.room.memory.terminalTransfer)) {
             //ongoing terminal transfer
             if (_.sum(creep.carry) > 0) {
                 //Creep full
@@ -78,7 +78,7 @@ module.exports = {
                                 creep.task = Tasks.transfer(nuker, RESOURCE_GHODIUM)
                             }
                         } */
-        } else if (creep.room.storage != undefined && creep.room.terminal != undefined) {
+        } else if (!_.isEmpty(creep.room.storage) && !_.isEmpty(creep.room.terminal)) {
             //Nothing special going on check for terminal levels
             var terminalDelta;
             if (creep.room.memory.terminalDelta == undefined || Game.time % 10 == 0 || creep.room.memory.terminalDelta != 0) {
@@ -140,6 +140,7 @@ module.exports = {
                                 load = creep.carryCapacity;
                             }
                             creep.task = Tasks.withdraw(creep.room.terminal, res, load)
+                            creep.say(EM_PACKAGE)
                             terminalDelta++;
                             break;
                         }
@@ -158,6 +159,7 @@ module.exports = {
                                 }
 
                                 creep.task = Tasks.withdraw(creep.room.storage, res, load)
+                                creep.say(EM_COOKIE)
                                 breaker = true;
                                 break;
                             }
@@ -196,7 +198,18 @@ module.exports = {
                                 }
                                 if (containerResource != undefined) {
                                     creep.task = Tasks.withdraw(container, containerResource)
+                                    return
                                 }
+                            }
+                            
+
+                            var spawn = _.first(creep.room.find(STRUCTURE_SPAWN, {
+                                filter: s => _.isEmpty(s.spawning.name)
+                            }))
+                            if (!_.isEmpty(spawn)) {
+                                //creep.task = Tasks.getRenewed(spawn);
+                            } else {
+                                creep.say(EM_TEA)
                             }
                         }
                     } else {
