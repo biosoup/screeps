@@ -46,7 +46,7 @@ module.exports = {
                 });
                 //check for free space on first container
                 if (!_.isEmpty(container)) {
-                    if (container[0].pos.lookFor(LOOK_CREEPS).length > 0 && container.length > 1 && creep.pos != container[1].pos) {
+                    if (container[0].pos.lookFor(LOOK_CREEPS).length > 0 && container.length > 1 && creep.pos != container[1].pos && creep.pos != container[0].pos) {
                         container = container[1];
                     } else {
                         container = container[0];
