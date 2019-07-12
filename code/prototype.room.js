@@ -56,27 +56,24 @@ Room.prototype.buildRoadsRoom = function (room) {
     }
 };
 
-//place rampard and extensions automatically around spawn
-Room.prototype.bunker = function (spawnName) {
+Room.prototype.baseBunker = function (spawnName) {
+    //build a rampart bunker around spawn
+};
+
+Room.prototype.baseRCLBuild = function (spawnName) {
+    //concole command: Game.rooms["E15N12"].baseRCLBuild("Spawn5")
+
     var s1 = Game.spawns[spawnName]
-    var leftTopCorner = new RoomPosition(s1.pos.x - 5, s1.pos.y - 10, s1.pos.roomName)
+    var tlc = new RoomPosition(s1.pos.x - 5, s1.pos.y - 9, s1.pos.roomName)
     var rcl = this.controller.level
     var room = Game.rooms[s1.pos.roomName];
 
-    if (_.isEmpty(base)) {
-        //no base layout
-        return false;
-    }
-
-    rcl = 1;
     //fixed placement for each RCL level
     switch (rcl) {
         case 1:
             //containers for sources
             for (var s in this.sources) {
                 //set containers for sources
-
-                //check how many free space each has
                 var freeSpaces = s.room.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
                 freeSpaces = freeSpaces.filter(f => f.terrain != "wall" && f.terrain != "source")
                 var closestPlaceForContainer = s1.pos.findClosestByPath(freeSpaces)
@@ -91,29 +88,189 @@ Room.prototype.bunker = function (spawnName) {
 
             break
         case 2:
-            //+5 extensions, ramparts, waals
+            //+5 extensions, ramparts, walls
+            if (!_.isEmpty(baseRCL2)) {
+                var base = baseRCL2
+            }
             break
         case 3:
             //+5 extensions, +1 tower
+            if (!_.isEmpty(baseRCL3)) {
+                var base = baseRCL3
+            }
             break
         case 4:
             //+10 extensions, storage
+            if (!_.isEmpty(baseRCL4)) {
+                var base = baseRCL4
+            }
             break
         case 5:
             //+10 extensions, +1 tower, 2 links
+            if (!_.isEmpty(baseRCL5)) {
+                var base = baseRCL5
+            }
             break
         case 6:
             //+10 extensions, +1 link, extractor, 3 labs, terminal
+            if (!_.isEmpty(baseRCL6)) {
+                var base = baseRCL6
+            }
             break
         case 7:
             //+10 extensions, +1 tower, +1 link, +3 labs, +1 spawn
+            if (!_.isEmpty(baseRCL7)) {
+                var base = baseRCL7
+            }
             break
         case 8:
             //+10 extensions, +3 tower, +2 link, +1 spawn, +4 labs, observer, power spawn
+            if (!_.isEmpty(baseRCL8)) {
+                var base = baseRCL8
+            }
             break
-        default:
-            //no rcl, no building
-            break
+    }
+
+    if (!_.isEmpty(base)) {
+        /* console.log(JSON.stringify(base))
+        console.log(JSON.stringify(tlc)) */
+
+        //place the buildings
+        if (!_.isEmpty(base.buildings.extension)) {
+            for (var s of baseRCL3.buildings.extension.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+
+                //console.log(JSON.stringify(destination) + " " + place.length)
+
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_EXTENSION)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.tower)) {
+            for (var s of base.buildings.tower.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_TOWER)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.road)) {
+            for (var s of base.buildings.road.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                const terrain = room.getTerrain();
+                var tile = terrain.get(tlc.x + s.x, tlc.y + s.y)
+                if (place.length > 0 || tile == TERRAIN_MASK_WALL) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_ROAD)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.terminal)) {
+            for (var s of base.buildings.terminal.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_TERMINAL)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.link)) {
+            for (var s of base.buildings.link.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_LINK)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.spawn)) {
+            for (var s of base.buildings.spawn.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_SPAWN)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.nuker)) {
+            for (var s of base.buildings.nuker.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_NUKER)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.lab)) {
+            for (var s of base.buildings.lab.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_LAB)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.powerSpawn)) {
+            for (var s of base.buildings.powerSpawn.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_POWER_SPAWN)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.observer)) {
+            for (var s of base.buildings.observer.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_OBSERVER)
+                }
+            }
+        }
     }
 };
 

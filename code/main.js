@@ -111,7 +111,9 @@ module.exports.loop = function () {
                     //activate safemode, when non-invaders get too close to spawn
                     var closeRange = 0;
 
-                    closeRangeHostile = Game.rooms[roomName].spawns[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS)
+                    closeRangeHostile = Game.rooms[roomName].spawns[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
+                        filter: f => f.owner != "Invader"
+                    })
                     closeRange = Game.rooms[roomName].spawns[0].pos.getRangeTo(closeRangeHostile);
 
 
