@@ -2,403 +2,468 @@
 
 /* 
 BODY JSON
-- 10 extensions included for RCL 3
-- built around storage
-- 5 wide / 9 tall
-- includes higher lvl structures
 
 to calculate the relative positions, just use the absolute values and compare them from spawn 1
 
 
-https://screeps.arcath.net/building-planner/?share=N4IgdghgtgpiBcIQBoQGcAWEBOATB6WeADCiNgMYA2BAHGQEYCuAllbi2AOZoKhoAXAPbYIXOPFAAHIb3gBtUAA8EAJgAsqAJ4IAjAHYAvgF1DqbEIj5JIGXMUgV8VQGZteo8mVq3IHfF1aM29nTT89IK9HNTD-QODo5wBWdwDIkNUU8IDPDKy4gDYEp1dU3SKokti9CozqgIBOYpiypObnAtb21VUuyrVe7N0m-o6ykbrU1WJu+t11bt84l278vRXR0uzVXVWp3dNUNCkIAHcwPltZBAcSpb0JxMzx7sH-aZMzEGFTmGxLuw3DL3ZwzTZrUGLMoLcHQ15lXJPTpDIyHEBUTgAawB1wUeS6aJgSgEMDAaBYQguNkBeKRZXSdKGtSebxq8KGDJKyLiMIyrICvJZ+263LUu02ooCGz5ZRWaJJ2CgnAgNGpuNuPgJXzATExfxx9kmQzlXyEDDQfwAbvq1YanvUdp9UDJftgAMonc4GoGM94zUyGQxAA
+https://screeps.arcath.net/building-planner/?share=N4IgdghgtgpiBcIQBoQGcAWEBOATB6WeADCiNgMYA2CAHKgEYCuAllbi2AOZoKhoAXAPbYIXOPFAAHIb3gBtUAA8EAJgCcqAJ4IAjAHYAvgF1DqATGxROEGpJAy5ikCvgBmXdr0BWE2ZDCAO6WfA6yCM6uGl7wqsRmymr6MQYJLmoAbClGyInuniA68Km56e6q2WlRmoU+fqhUnADWoY4RearJtcW+pqhoUhCBYK3hCh01RbrqVQgeKTOlUV1TM33gTE0h9m3jZdHdugAs9eRCEPg7Y5Fq9IcZs7F3Uzkdz3q0jwdTn0tzxClfnk3ADDq8yiCUg8-rFJnpoW8Ur4Yap3sUTjDIYcMcDQVNkcCClMERCKvdHljVhS8Wp4ii0dMvmi4l8Vh8vllDkD9mziiSopziRSiXo3BSyVNVBS3CldKyUmKUYK9FKUd5ZV91YcCfsjlCvnrsZqFgbAabuizMSLitzXG4JezMTLtRTDVMcRC3fDpSbMV7YnTgf7dLa5tbVHLMQ7YqrcTFVLGefHIx1lTGmfHE8sUlnbhrMTTiimIdbdLnYrzdIHPSlq3bS3W1MH4usYEoLGA0CwhCMrk5U-mOlrJeapsWosHy6pg4qOsGdRPKijg4s58njRbx2ph2op7yE184emrZmfRby25-RHXb6g0u7y6-Qqb4cL8Gt+VBxDnSOnc+-0aUb-oSKQena0bHOKSIcsB+w7uiMGAR0lZgZk0FqvqGFghuPw4bSiFUkq8aNrEabXii+4kai64oke5FxpuwrEVBhyrt+zFARaJH2jRwI-moH5uPxfJnrhAEvHhxRUWmVYsVM3HCbJWFTGK6xUBADCjP2+xHros46Tmh5ftUtYZoc3GFkpiKvvKhyCZZF6lnK6wyME2AAMqDMMWntBClmqf4QgMGglgAG7bNI1zWSpfiGIYQA
  */
-var body = {
+var base = {
+    "rcl": 8,
     "buildings": {
         "storage": {
             "pos": [{
-                "x": 2,
-                "y": 4
+                "x": 5,
+                "y": 7
             }]
         },
-        "road": {
+        "terminal": {
             "pos": [{
-                "x": 1,
-                "y": 4
-            }, {
-                "x": 1,
+                "x": 7,
                 "y": 5
-            }, {
-                "x": 2,
-                "y": 5
-            }, {
-                "x": 2,
-                "y": 5
-            }, {
-                "x": 3,
-                "y": 5
-            }, {
-                "x": 3,
-                "y": 4
-            }, {
-                "x": 3,
-                "y": 3
-            }, {
-                "x": 1,
-                "y": 3
-            }, {
-                "x": 2,
-                "y": 3
-            }, {
-                "x": 2,
-                "y": 6
-            }, {
-                "x": 2,
-                "y": 2
-            }, {
-                "x": 4,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 6
-            }, {
-                "x": 4,
-                "y": 6
-            }, {
-                "x": 2,
-                "y": 7
-            }, {
-                "x": 2,
-                "y": 1
-            }, {
-                "x": 1,
-                "y": 0
-            }, {
-                "x": 3,
-                "y": 0
-            }, {
-                "x": 1,
-                "y": 8
-            }, {
-                "x": 3,
-                "y": 8
-            }]
-        },
-        "spawn": {
-            "pos": [{
-                "x": 1,
-                "y": 6
-            }, {
-                "x": 3, // !!!! S1 / BODYCENTER !!!!
-                "y": 6
-            }, {
-                "x": 0,
-                "y": 7
             }]
         },
         "tower": {
             "pos": [{
-                "x": 1,
-                "y": 7
+                "x": 5,
+                "y": 10
             }, {
                 "x": 3,
                 "y": 7
             }, {
-                "x": 1,
-                "y": 1
+                "x": 2,
+                "y": 7
             }, {
-                "x": 3,
-                "y": 1
+                "x": 7,
+                "y": 7
             }, {
-                "x": 0,
-                "y": 4
+                "x": 8,
+                "y": 7
             }, {
-                "x": 4,
-                "y": 4
+                "x": 5,
+                "y": 5
             }]
         },
         "link": {
             "pos": [{
                 "x": 3,
-                "y": 2
+                "y": 5
             }]
         },
-        "extension": {
+        "spawn": {
             "pos": [{
-                "x": 4,
-                "y": 5
+                "x": 5,
+                "y": 9
             }, {
-                "x": 4,
-                "y": 3
+                "x": 7,
+                "y": 9
             }, {
-                "x": 0,
-                "y": 3
-            }, {
-                "x": 0,
-                "y": 5
-            }, {
-                "x": 4,
-                "y": 1
-            }, {
-                "x": 0,
-                "y": 1
-            }, {
-                "x": 0,
-                "y": 8
-            }, {
-                "x": 4,
-                "y": 8
-            }, {
-                "x": 4,
-                "y": 0
-            }, {
-                "x": 0,
-                "y": 0
-            }]
-        },
-        "terminal": {
-            "pos": [{
-                "x": 1,
-                "y": 2
+                "x": 3,
+                "y": 9
             }]
         },
         "nuker": {
             "pos": [{
+                "x": 5,
+                "y": 4
+            }]
+        },
+        "road": {
+            "pos": [{
+                "x": 4,
+                "y": 6
+            }, {
+                "x": 4,
+                "y": 7
+            }, {
+                "x": 4,
+                "y": 8
+            }, {
+                "x": 5,
+                "y": 8
+            }, {
+                "x": 6,
+                "y": 8
+            }, {
+                "x": 6,
+                "y": 7
+            }, {
+                "x": 6,
+                "y": 6
+            }, {
+                "x": 5,
+                "y": 6
+            }, {
+                "x": 4,
+                "y": 5
+            }, {
+                "x": 4,
+                "y": 4
+            }, {
+                "x": 6,
+                "y": 4
+            }, {
+                "x": 6,
+                "y": 5
+            }, {
+                "x": 7,
+                "y": 6
+            }, {
+                "x": 8,
+                "y": 6
+            }, {
+                "x": 6,
+                "y": 9
+            }, {
+                "x": 6,
+                "y": 10
+            }, {
+                "x": 4,
+                "y": 9
+            }, {
+                "x": 4,
+                "y": 10
+            }, {
+                "x": 3,
+                "y": 8
+            }, {
                 "x": 2,
+                "y": 8
+            }, {
+                "x": 3,
+                "y": 6
+            }, {
+                "x": 2,
+                "y": 6
+            }, {
+                "x": 7,
+                "y": 3
+            }, {
+                "x": 8,
+                "y": 2
+            }, {
+                "x": 9,
+                "y": 1
+            }, {
+                "x": 3,
+                "y": 3
+            }, {
+                "x": 2,
+                "y": 2
+            }, {
+                "x": 1,
+                "y": 1
+            }, {
+                "x": 1,
+                "y": 5
+            }, {
+                "x": 0,
+                "y": 6
+            }, {
+                "x": 0,
+                "y": 4
+            }, {
+                "x": 1,
+                "y": 9
+            }, {
+                "x": 0,
+                "y": 8
+            }, {
+                "x": 0,
+                "y": 10
+            }, {
+                "x": 7,
+                "y": 8
+            }, {
+                "x": 8,
+                "y": 8
+            }, {
+                "x": 9,
+                "y": 5
+            }, {
+                "x": 10,
+                "y": 4
+            }, {
+                "x": 10,
+                "y": 6
+            }, {
+                "x": 9,
+                "y": 9
+            }, {
+                "x": 10,
+                "y": 10
+            }, {
+                "x": 10,
+                "y": 8
+            }, {
+                "x": 7,
+                "y": 11
+            }, {
+                "x": 8,
+                "y": 12
+            }, {
+                "x": 6,
+                "y": 12
+            }, {
+                "x": 3,
+                "y": 11
+            }, {
+                "x": 2,
+                "y": 12
+            }, {
+                "x": 4,
+                "y": 12
+            }, {
+                "x": 3,
+                "y": 2
+            }, {
+                "x": 4,
+                "y": 1
+            }, {
+                "x": 6,
+                "y": 1
+            }, {
+                "x": 7,
+                "y": 2
+            }, {
+                "x": 3,
+                "y": 0
+            }, {
+                "x": 10,
+                "y": 0
+            }, {
+                "x": 7,
+                "y": 0
+            }, {
+                "x": 0,
                 "y": 0
             }]
         },
-        "observer": {
+        "extension": {
             "pos": [{
                 "x": 2,
+                "y": 1
+            }, {
+                "x": 1,
+                "y": 2
+            }, {
+                "x": 0,
+                "y": 1
+            }, {
+                "x": 0,
+                "y": 2
+            }, {
+                "x": 0,
+                "y": 3
+            }, {
+                "x": 0,
+                "y": 5
+            }, {
+                "x": 0,
+                "y": 7
+            }, {
+                "x": 0,
+                "y": 9
+            }, {
+                "x": 0,
+                "y": 11
+            }, {
+                "x": 1,
+                "y": 11
+            }, {
+                "x": 1,
+                "y": 12
+            }, {
+                "x": 3,
+                "y": 12
+            }, {
+                "x": 5,
+                "y": 12
+            }, {
+                "x": 7,
+                "y": 12
+            }, {
+                "x": 9,
+                "y": 12
+            }, {
+                "x": 10,
+                "y": 11
+            }, {
+                "x": 10,
+                "y": 9
+            }, {
+                "x": 10,
+                "y": 7
+            }, {
+                "x": 10,
+                "y": 5
+            }, {
+                "x": 10,
+                "y": 3
+            }, {
+                "x": 10,
+                "y": 2
+            }, {
+                "x": 10,
+                "y": 1
+            }, {
+                "x": 8,
+                "y": 1
+            }, {
+                "x": 9,
+                "y": 2
+            }, {
+                "x": 9,
+                "y": 3
+            }, {
+                "x": 9,
+                "y": 4
+            }, {
+                "x": 8,
+                "y": 3
+            }, {
+                "x": 7,
+                "y": 4
+            }, {
+                "x": 8,
+                "y": 4
+            }, {
+                "x": 8,
+                "y": 5
+            }, {
+                "x": 2,
+                "y": 3
+            }, {
+                "x": 1,
+                "y": 4
+            }, {
+                "x": 2,
+                "y": 4
+            }, {
+                "x": 3,
+                "y": 4
+            }, {
+                "x": 2,
+                "y": 5
+            }, {
+                "x": 1,
+                "y": 6
+            }, {
+                "x": 1,
+                "y": 7
+            }, {
+                "x": 1,
                 "y": 8
+            }, {
+                "x": 1,
+                "y": 10
+            }, {
+                "x": 2,
+                "y": 9
+            }, {
+                "x": 2,
+                "y": 10
+            }, {
+                "x": 2,
+                "y": 11
+            }, {
+                "x": 3,
+                "y": 10
+            }, {
+                "x": 4,
+                "y": 11
+            }, {
+                "x": 5,
+                "y": 11
+            }, {
+                "x": 6,
+                "y": 11
+            }, {
+                "x": 7,
+                "y": 10
+            }, {
+                "x": 8,
+                "y": 9
+            }, {
+                "x": 9,
+                "y": 10
+            }, {
+                "x": 8,
+                "y": 10
+            }, {
+                "x": 8,
+                "y": 11
+            }, {
+                "x": 9,
+                "y": 11
+            }, {
+                "x": 9,
+                "y": 6
+            }, {
+                "x": 9,
+                "y": 8
+            }, {
+                "x": 9,
+                "y": 7
+            }, {
+                "x": 1,
+                "y": 0
+            }, {
+                "x": 2,
+                "y": 0
+            }, {
+                "x": 8,
+                "y": 0
+            }, {
+                "x": 9,
+                "y": 0
+            }, {
+                "x": 1,
+                "y": 3
+            }]
+        },
+        "lab": {
+            "pos": [{
+                "x": 5,
+                "y": 3
+            }, {
+                "x": 5,
+                "y": 2
+            }, {
+                "x": 5,
+                "y": 1
+            }, {
+                "x": 5,
+                "y": 0
+            }, {
+                "x": 4,
+                "y": 0
+            }, {
+                "x": 6,
+                "y": 0
+            }, {
+                "x": 4,
+                "y": 2
+            }, {
+                "x": 3,
+                "y": 1
+            }, {
+                "x": 6,
+                "y": 2
+            }, {
+                "x": 7,
+                "y": 1
             }]
         },
         "powerSpawn": {
             "pos": [{
+                "x": 6,
+                "y": 3
+            }]
+        },
+        "observer": {
+            "pos": [{
                 "x": 4,
-                "y": 7
-            }]
-        }
-    }
-}
-
-
-/*
-ARMS
-- 6 arms needed total, 5 with extensions, 1 with labs
-- 5 wide, 5 tall
-- connect on corners, with no overlaps to body
-*/
-var armExtensionsTopLeft = {
-    "buildings": {
-        "road": {
-            "pos": [{
-                "x": 1,
-                "y": 1
-            }, {
-                "x": 0,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 2
-            }, {
-                "x": 3,
-                "y": 3
-            }]
-        },
-        "extension": {
-            "pos": [{
-                "x": 1,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 1
-            }, {
-                "x": 3,
-                "y": 1
-            }, {
-                "x": 3,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 1
-            }, {
-                "x": 0,
-                "y": 2
-            }, {
-                "x": 1,
-                "y": 2
-            }, {
-                "x": 1,
-                "y": 3
-            }, {
-                "x": 2,
-                "y": 3
-            }]
-        }
-    }
-}
-var armExtensionsTopRight = {
-    "buildings": {
-        "road": {
-            "pos": [{
-                "x": 3,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 1
-            }, {
-                "x": 1,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 3
-            }]
-        },
-        "extension": {
-            "pos": [{
-                "x": 1,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 0
-            }, {
-                "x": 3,
-                "y": 1
-            }, {
-                "x": 3,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 1
-            }, {
-                "x": 1,
-                "y": 3
-            }, {
-                "x": 2,
-                "y": 3
-            }, {
-                "x": 1,
-                "y": 1
-            }, {
-                "x": 2,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 2
-            }]
-        },
-        "spawn": {
-            "pos": []
-        }
-    }
-}
-
-var armLabsTopLeft = {
-    "buildings": {
-        "lab": {
-            "pos": [{
-                "x": 1,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 0
-            }, {
-                "x": 3,
-                "y": 2
-            }, {
-                "x": 2,
-                "y": 3
-            }, {
-                "x": 1,
-                "y": 3
-            }, {
-                "x": 0,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 1
-            }, {
-                "x": 3,
-                "y": 1
-            }, {
-                "x": 2,
-                "y": 1
-            }, {
-                "x": 1,
-                "y": 2
-            }]
-        },
-        "road": {
-            "pos": [{
-                "x": 1,
-                "y": 1
-            }, {
-                "x": 0,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 2
-            }, {
-                "x": 3,
-                "y": 3
-            }]
-        }
-    }
-}
-var armLabsTopRight = {
-    "buildings": {
-        "lab": {
-            "pos": [{
-                "x": 1,
-                "y": 0
-            }, {
-                "x": 1,
-                "y": 1
-            }, {
-                "x": 2,
-                "y": 2
-            }, {
-                "x": 2,
-                "y": 0
-            }, {
-                "x": 3,
-                "y": 2
-            }, {
-                "x": 2,
-                "y": 3
-            }, {
-                "x": 1,
-                "y": 3
-            }, {
-                "x": 0,
-                "y": 2
-            }, {
-                "x": 0,
-                "y": 1
-            }, {
-                "x": 3,
-                "y": 1
-            }]
-        },
-        "road": {
-            "pos": [{
-                "x": 3,
-                "y": 0
-            }, {
-                "x": 2,
-                "y": 1
-            }, {
-                "x": 1,
-                "y": 2
-            }, {
-                "x": 0,
                 "y": 3
             }]
         }

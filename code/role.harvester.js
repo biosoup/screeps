@@ -7,7 +7,7 @@ module.exports = {
         if (creep.carry.energy > 0) {
             //do not let controleer to downgrade
             if(creep.room.controller.ticksToDowngrade < 5000) {
-                creep.task = Tasks.transfer(creep.room.storage);
+                creep.task = Tasks.upgrade(creep.room.controller)
                 return;
             }
 

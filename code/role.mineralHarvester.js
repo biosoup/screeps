@@ -23,6 +23,9 @@ module.exports = {
                 return
             }else {
                 creep.say(EM_EXCLAMATION)
+                
+                let spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS)
+                creep.task = Tasks.getRecycled(spawn);
             }
         }
     }

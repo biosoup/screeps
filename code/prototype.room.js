@@ -1,130 +1,225 @@
+"use strict";
+
 /** ADD
 - structure placement
     - road building system
     - bunker around spawn
-
-
 */
+
+require("module.colony.autobuild.buildings");
 
 // find best routes between spawn bunker and resources
 // OR find best routes between spawn and room borders
-Room.prototype.roads =
-    function () {
+Room.prototype.buildRoad = function (from, to) {
+    //requires two positions
+    console.log("Create road from: " + from + "to: " + to);
+    var path = from.findPathTo(to, {
+        ignoreCreeps: true,
+        ignoreRoads: false
+    });
+    var room = Game.rooms[from.roomName];
+    for (var step in path) {
+        room.createConstructionSite(path[step].x, path[step].y, STRUCTURE_ROAD);
+    } //for
+    console.log("finsihed for loop");
+};
 
-        //add task for it to be built
-    };
+Room.prototype.removeSites = function (room) {
+    var sites = room.find(FIND_MY_CONSTRUCTION_SITES);
+    var i = sites.length
+    while (--i) {
+        sites[i].remove();
+    }
+};
+
+Room.prototype.buildRoadsRoom = function (room) {
+    var sources = room.find(FIND_SOURCES);
+    var controller = room.controller;
+    var spawns = room.find(FIND_MY_SPAWNS);
+    var structures = room.find(FIND_MY_STRUCTURES, {
+        filter: function (structure) {
+            return structure.structureType == STRUCTURE_EXTRACTOR ||
+                structure.structureType == STRUCTURE_STORAGE ||
+                structure.structureType == STRUCTURE_EXTRACTOR
+        }
+    });
+    sources.concat(spawns);
+    structures.push(controller);
+
+    console.log(room, "buildroads betwen", structures);
+    for (var i = 0; i < structures.length; i++) {
+        for (var j = 0; j < structures.length; j++) {
+            if (i != j) {
+                this.buildRoad(structures[i].pos, structures[j].pos);
+            }
+        }
+    }
+};
 
 //place rampard and extensions automatically around spawn
-Room.prototype.bunker =
-    function () {
+Room.prototype.bunker = function (spawnName) {
+    var s1 = Game.spawns[spawnName]
+    var leftTopCorner = new RoomPosition(s1.pos.x - 5, s1.pos.y - 10, s1.pos.roomName)
+    var rcl = this.controller.level
+    var room = Game.rooms[s1.pos.roomName];
 
-        //add task for it to be built
-    };
+    if (_.isEmpty(base)) {
+        //no base layout
+        return false;
+    }
 
-Room.prototype.refreshContainerSources =
-    function (r) {
-        r = Game.rooms[r];
-        //get home room storage
-        if (r.storage != undefined) {
-            //get rooms with longDistanceMiners in it
-            var allMinerCreeps = _.filter(Game.creeps, (c) => c.memory.home == r.name && c.memory.role == "longDistanceMiner");
-            var inRooms = _.map(allMinerCreeps, "memory.target")
+    rcl = 1;
+    //fixed placement for each RCL level
+    switch (rcl) {
+        case 1:
+            //containers for sources
+            for (var s in this.sources) {
+                //set containers for sources
 
-            //get continers in those rooms
-            var containerList = [];
-            for (let roomName of inRooms) {
-                if (!_.isEmpty(roomName)) {
-                    if (Game.rooms[roomName] != undefined) {
-                        var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                            filter: s => s.structureType == STRUCTURE_CONTAINER
-                        });
-                        containerList = [...containerList, ...roomContainers]
-                    }
+                //check how many free space each has
+                var freeSpaces = s.room.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
+                freeSpaces = freeSpaces.filter(f => f.terrain != "wall" && f.terrain != "source")
+                var closestPlaceForContainer = s1.pos.findClosestByPath(freeSpaces)
+                room.createConstructionSite(closestPlaceForContainer.pos.x, closestPlaceForContainer.pos.y, STRUCTURE_CONTAINER)
+            }
+
+            //container for controller
+            var freeSpaces = room.controller.room.lookForAtArea(LOOK_TERRAIN, room.controller.pos.y - 1, room.controller.pos.x - 1, room.controller.pos.y + 1, room.controller.pos.x + 1, true);
+            freeSpaces = freeSpaces.filter(f => f.terrain != "wall" && f.terrain != "controller")
+            var closestPlaceForContainer = s1.pos.findClosestByPath(freeSpaces)
+            room.createConstructionSite(closestPlaceForContainer.pos.x, closestPlaceForContainer.pos.y, STRUCTURE_CONTAINER)
+
+            break
+        case 2:
+            //+5 extensions, ramparts, waals
+            break
+        case 3:
+            //+5 extensions, +1 tower
+            break
+        case 4:
+            //+10 extensions, storage
+            break
+        case 5:
+            //+10 extensions, +1 tower, 2 links
+            break
+        case 6:
+            //+10 extensions, +1 link, extractor, 3 labs, terminal
+            break
+        case 7:
+            //+10 extensions, +1 tower, +1 link, +3 labs, +1 spawn
+            break
+        case 8:
+            //+10 extensions, +3 tower, +2 link, +1 spawn, +4 labs, observer, power spawn
+            break
+        default:
+            //no rcl, no building
+            break
+    }
+};
+
+Room.prototype.refreshContainerSources = function (r) {
+    r = Game.rooms[r];
+    //get home room storage
+    if (!_.isEmpty(r.storage)) {
+        //get rooms with longDistanceMiners in it
+        var allMinerCreeps = _.filter(Game.creeps, (c) => c.memory.home == r.name && c.memory.role == "longDistanceMiner");
+        var inRooms = _.map(allMinerCreeps, "memory.target")
+
+        //get continers in those rooms
+        var containerList = [];
+        for (let roomName of inRooms) {
+            if (!_.isEmpty(roomName)) {
+                if (Game.rooms[roomName] != undefined) {
+                    var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
+                        filter: s => s.structureType == STRUCTURE_CONTAINER
+                    });
+                    containerList = [...containerList, ...roomContainers]
                 }
             }
+        }
 
-            storagePosition = r.storage.pos;
+        var storagePosition = r.storage.pos;
 
-            //if the memory space is not there
-            if (r.memory.containerSources === undefined) {
-                r.memory.containerSources = {};
-            }
+        //if the memory space is not there
+        if (r.memory.containerSources === undefined) {
+            r.memory.containerSources = {};
+        }
 
-            //if refersh time, empty all continer data
-            if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > 5000) {
-                r.memory.containerSources = {};
-            }
+        //if refersh time, empty all continer data
+        if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > 5000) {
+            r.memory.containerSources = {};
+        }
 
-            //get info about containers
-            for (let container of containerList) {
-                if (container != undefined && container != null) {
-                    if (r.memory.containerSources[container.id] != undefined) {
-                        if ((r.memory.containerSources[container.id].time + 30) < Game.time) {
-                            //if the container ID exists, just update it
-                            r.memory.containerSources[container.id].id = container.id
-                            r.memory.containerSources[container.id].pos = container.pos
-                            r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
-                            r.memory.containerSources[container.id].time = Game.time
-                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY] / (r.memory.containerSources[container.id].distance * 2)
-                        }
-                    } else {
-                        //if it does not exists, create it and calculate distance
-                        r.memory.containerSources[container.id] = {}
+        //get info about containers
+        for (let container of containerList) {
+            if (container != undefined && container != null) {
+                if (r.memory.containerSources[container.id] != undefined) {
+                    if ((r.memory.containerSources[container.id].time + 30) < Game.time) {
+                        //if the container ID exists, just update it
                         r.memory.containerSources[container.id].id = container.id
                         r.memory.containerSources[container.id].pos = container.pos
                         r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
                         r.memory.containerSources[container.id].time = Game.time
+                        r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY] / (r.memory.containerSources[container.id].distance * 2)
+                    }
+                } else {
+                    //if it does not exists, create it and calculate distance
+                    r.memory.containerSources[container.id] = {}
+                    r.memory.containerSources[container.id].id = container.id
+                    r.memory.containerSources[container.id].pos = container.pos
+                    r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
+                    r.memory.containerSources[container.id].time = Game.time
 
-                        let distance = PathFinder.search(
-                            storagePosition, container.pos, {
-                                // We need to set the defaults costs higher so that we
-                                // can set the road cost lower in `roomCallback`
-                                plainCost: 2,
-                                swampCost: 10,
+                    let distance = PathFinder.search(
+                        storagePosition, container.pos, {
+                            // We need to set the defaults costs higher so that we
+                            // can set the road cost lower in `roomCallback`
+                            plainCost: 2,
+                            swampCost: 10,
 
-                                roomCallback: function (roomName) {
-                                    let room = Game.rooms[roomName];
-                                    // In this example `room` will always exist, but since 
-                                    // PathFinder supports searches which span multiple rooms 
-                                    // you should be careful!
-                                    if (!room) return;
-                                    let costs = new PathFinder.CostMatrix;
-                                    room.find(FIND_STRUCTURES).forEach(function (struct) {
-                                        if (struct.structureType === STRUCTURE_ROAD) {
-                                            // Favor roads over plain tiles
-                                            costs.set(struct.pos.x, struct.pos.y, 1);
-                                        } else if (struct.structureType !== STRUCTURE_CONTAINER &&
-                                            (struct.structureType !== STRUCTURE_RAMPART ||
-                                                !struct.my)) {
-                                            // Can't walk through non-walkable buildings
-                                            costs.set(struct.pos.x, struct.pos.y, 0xff);
-                                        }
-                                    });
-                                    return costs;
-                                },
-                            }
-                        );
-                        if (distance[4] != true) {
-                            r.memory.containerSources[container.id].distance = distance.path.length
-                            r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY] / (r.memory.containerSources[container.id].distance * 2)
-                        } else {
-                            r.memory.containerSources[container.id].distance = false
-                            r.memory.containerSources[container.id].ed = 0
+                            roomCallback: function (roomName) {
+                                let room = Game.rooms[roomName];
+                                // In this example `room` will always exist, but since 
+                                // PathFinder supports searches which span multiple rooms 
+                                // you should be careful!
+                                if (!room) return;
+                                let costs = new PathFinder.CostMatrix;
+                                room.find(FIND_STRUCTURES).forEach(function (struct) {
+                                    if (struct.structureType === STRUCTURE_ROAD) {
+                                        // Favor roads over plain tiles
+                                        costs.set(struct.pos.x, struct.pos.y, 1);
+                                    } else if (struct.structureType !== STRUCTURE_CONTAINER &&
+                                        (struct.structureType !== STRUCTURE_RAMPART ||
+                                            !struct.my)) {
+                                        // Can't walk through non-walkable buildings
+                                        costs.set(struct.pos.x, struct.pos.y, 0xff);
+                                    }
+                                });
+                                return costs;
+                            },
                         }
+                    );
+                    if (distance[4] != true) {
+                        r.memory.containerSources[container.id].distance = distance.path.length
+                        r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY] / (r.memory.containerSources[container.id].distance * 2)
+                    } else {
+                        r.memory.containerSources[container.id].distance = false
+                        r.memory.containerSources[container.id].ed = 0
                     }
                 }
             }
-            //console.log(r.name + " " + JSON.stringify(r.memory.containerSources));
-
-            /*  
-            W28N14 {"5cfed049c4be3409e53dab3d":{"pos":{"x":15,"y":35,"roomName":"W27N15"},"energy":2000,"time":8004585,"distance":82},"5cff24da5b0b7e667bffeb4f":{"pos":{"x":38,"y":21,"roomName":"W27N14"},"energy":1610,"time":8004585,"distance":75},"5cff237a63738f09b78089bb":{"pos":{"x":34,"y":17,"roomName":"W28N15"},"energy":1470,"time":8004585,"distance":81},"5cfed38c15b6e542a338d399":{"pos":{"x":20,"y":10,"roomName":"W28N13"},"energy":1207,"time":8004585,"distance":19},"5cfeeb0fff1e577e6595b3d4":{"pos":{"x":25,"y":16,"roomName":"W28N13"},"energy":1756,"time":8004585,"distance":28}}
-            W29N14 {"5d0748ce001e5f10d3711de2":{"pos":{"x":5,"y":23,"roomName":"W29N13"},"energy":1950,"time":8004585,"distance":36}}
-            W32N13 {"5d09fae741a69b286384a8fd":{"pos":{"x":23,"y":8,"roomName":"W33N13"},"energy":0,"time":8004585,"distance":70},"5d0a00100c39a428613cc024":{"pos":{"x":35,"y":24,"roomName":"W33N13"},"energy":2000,"time":8004585,"distance":54}} 
-            */
-        } else {
-            return -1;
         }
-    };
+        //console.log(r.name + " " + JSON.stringify(r.memory.containerSources));
+
+        /*  
+        W28N14 {"5cfed049c4be3409e53dab3d":{"pos":{"x":15,"y":35,"roomName":"W27N15"},"energy":2000,"time":8004585,"distance":82},"5cff24da5b0b7e667bffeb4f":{"pos":{"x":38,"y":21,"roomName":"W27N14"},"energy":1610,"time":8004585,"distance":75},"5cff237a63738f09b78089bb":{"pos":{"x":34,"y":17,"roomName":"W28N15"},"energy":1470,"time":8004585,"distance":81},"5cfed38c15b6e542a338d399":{"pos":{"x":20,"y":10,"roomName":"W28N13"},"energy":1207,"time":8004585,"distance":19},"5cfeeb0fff1e577e6595b3d4":{"pos":{"x":25,"y":16,"roomName":"W28N13"},"energy":1756,"time":8004585,"distance":28}}
+        W29N14 {"5d0748ce001e5f10d3711de2":{"pos":{"x":5,"y":23,"roomName":"W29N13"},"energy":1950,"time":8004585,"distance":36}}
+        W32N13 {"5d09fae741a69b286384a8fd":{"pos":{"x":23,"y":8,"roomName":"W33N13"},"energy":0,"time":8004585,"distance":70},"5d0a00100c39a428613cc024":{"pos":{"x":35,"y":24,"roomName":"W33N13"},"energy":2000,"time":8004585,"distance":54}} 
+        */
+    } else {
+        return -1;
+    }
+};
 
 Room.prototype.refreshData =
     function (r) {
@@ -813,7 +908,7 @@ Room.prototype.creepSpawnRun =
             } else {
                 if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000) {
                     minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
-                } else { 
+                } else {
                     minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
                 }
             }
@@ -841,7 +936,7 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["miner"] = numberOfSources;
 
         //minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
-        minimumSpawnOf["lorry"] = 1;
+        minimumSpawnOf["lorry"] = 2;
 
 
         minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners / 2) - numberOfLorries - numberOfSA
@@ -868,13 +963,13 @@ Room.prototype.creepSpawnRun =
                 if (spawnRoom.memory.terminalDelta == undefined || Game.time % 10 == 0 || spawnRoom.memory.terminalDelta != 0) {
                     terminalDelta = 0;
                     for (var res in spawnRoom.terminal.store) {
-                        delta = checkTerminalLimits(spawnRoom, res);
+                        var delta = checkTerminalLimits(spawnRoom, res);
                         terminalDelta += Math.abs(delta.amount);
                         //console.log(terminalDelta)
                     }
 
                     for (var res in spawnRoom.storage.store) {
-                        delta = checkTerminalLimits(spawnRoom, res);
+                        var delta = checkTerminalLimits(spawnRoom, res);
                         terminalDelta += Math.abs(delta.amount);
                         //console.log(terminalDelta)
                     }
@@ -908,33 +1003,38 @@ Room.prototype.creepSpawnRun =
                 //console.log("Being attacked by " + hostileValues.numHostiles + " with:" + hostileValues.maxAttackBodyParts + " attack parts")
 
                 //Get number of towers
-                if (numberOfTowers > 0) {
-                    //lower by the amount of towers
-                    hostileValues.numHostiles = hostileValues.numHostiles - numberOfTowers;
-                }
-
-
-
-                if (hostileValues.numHostiles >= 4) {
-                    //siege mode, support walls!
-                    minimumSpawnOf.guard = 0;
-                    guard[spawnRoom.name] = 0;
+                if (numberOfTowers >= hostileValues.numHostiles) {
+                    //towers shoudl be enough
                 } else {
-                    minimumSpawnOf.guard = hostileValues.numHostiles * 2;
-                    guard[spawnRoom.name] = hostileValues.numHostiles * 2;
+                    if (hostileValues.numHostiles >= 4) {
+                        //siege mode, just support walls!
+                        minimumSpawnOf.guard = 0;
+                        guard[spawnRoom.name] = 0;
+                    } else {
+                        if (spawnRoom.controller.safeMode == undefined) {
+                            //only when safe mode is not active
+                            minimumSpawnOf.guard = hostileValues.numHostiles;
+                            guard[spawnRoom.name] = hostileValues.numHostiles;
+                        }
+                    }
                 }
 
-                //limit everything else
-                minimumSpawnOf.upgrader = 0;
-                minimumSpawnOf.builder = 0;
-                minimumSpawnOf.longDistanceHarvester = 0;
-                minimumSpawnOf.mineralHarvester = 0;
-                minimumSpawnOf.spawnAttendant = 0;
-                minimumSpawnOf.longDistanceMiner = 0;
-                minimumSpawnOf.longDistanceLorry = 0;
-                minimumSpawnOf.longDistanceBuilder = 0;
-                minimumSpawnOf.demolisher = 0;
-                minimumSpawnOf.wallRepairer *= 3;
+
+
+
+                if (spawnRoom.controller.safeMode == undefined) {
+                    //limit everything else
+                    minimumSpawnOf.upgrader = 0;
+                    minimumSpawnOf.builder = 0;
+                    minimumSpawnOf.longDistanceHarvester = 0;
+                    minimumSpawnOf.mineralHarvester = 0;
+                    minimumSpawnOf.spawnAttendant = 0;
+                    minimumSpawnOf.longDistanceMiner = 0;
+                    minimumSpawnOf.longDistanceLorry = 0;
+                    minimumSpawnOf.longDistanceBuilder = 0;
+                    minimumSpawnOf.demolisher = 0;
+                }
+                minimumSpawnOf.wallRepairer *= 2;
             }
         }
 
@@ -972,15 +1072,23 @@ Room.prototype.creepSpawnRun =
         }
 
         if (rcl <= 3) {
-            let sources = spawnRoom.find(FIND_SOURCES);
-            var freeSpots = 0
-            for (var s of sources) {
-                //check how many free space each has
-                var freeSpaces = spawnRoom.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
-                freeSpaces = freeSpaces.filter(f => f.terrain == "wall")
-                freeSpots = freeSpots + (9 - freeSpaces.length)
+            /* minimumSpawnOf.guard += 1
+            guard[spawnRoom.name] += 1 */
+
+            if (numberOfMiners == 0) {
+                let sources = spawnRoom.find(FIND_SOURCES);
+                var freeSpots = 0
+                for (var s of sources) {
+                    //check how many free space each has
+                    var freeSpaces = spawnRoom.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
+                    freeSpaces = freeSpaces.filter(f => f.terrain == "wall")
+                    freeSpots = freeSpots + (9 - freeSpaces.length)
+                }
+                minimumSpawnOf.harvester = freeSpots * 2;
+            } else {
+                minimumSpawnOf.harvester = numberOfSources
+                minimumSpawnOf.lorry = numberOfSources + 1
             }
-            minimumSpawnOf.harvester = freeSpots;
         }
 
         //we can claim new room, pause upgraders
@@ -1071,7 +1179,7 @@ Room.prototype.creepSpawnRun =
                         }
                     } else if (spawnList[spawnEntry] == "guard") {
                         if (_.isEmpty(guard)) {
-                            console.log("ERR spawning a GUARD!! " + JSON.stringify(minimumSpawnOf.guard))
+                            console.log("ERR spawning a GUARD!! in " + spawnRoom.name + " " + JSON.stringify(minimumSpawnOf.guard))
                         }
                         for (var roomName in guard) {
                             name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
@@ -1205,7 +1313,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         claimer: {
             name: "claimer",
-            prio: 140,
+            prio: 150,
             energyRole: false,
             min: minimumSpawnOf.claimer,
             max: numberOf.claimer,
@@ -1237,7 +1345,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         longDistanceLorry: {
             name: "longDistanceLorry",
-            prio: 150,
+            prio: 140,
             energyRole: true,
             min: minimumSpawnOf.longDistanceLorry,
             max: numberOf.longDistanceLorry,
@@ -1388,5 +1496,21 @@ Room.prototype.checkForHostiles = function (roomName) {
         return value;
     } else {
         return null;
+    }
+};
+
+Room.prototype.getType = function (roomName) {
+    const res = /[EW](\d+)[NS](\d+)/.exec(roomName);
+    const [, EW, NS] = res;
+    const EWI = EW % 10,
+        NSI = NS % 10;
+    if (EWI === 0 || NSI === 0) {
+        return 'Highway';
+    } else if (EWI === 5 && NSI === 5) {
+        return 'Center';
+    } else if (Math.abs(5 - EWI) <= 1 && Math.abs(5 - NSI) <= 1) {
+        return 'SourceKeeper';
+    } else {
+        return 'Room';
     }
 };

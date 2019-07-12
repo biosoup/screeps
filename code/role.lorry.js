@@ -52,8 +52,13 @@ module.exports = {
             if (!_.isEmpty(tombstones)) {
                 tombstone = creep.pos.findClosestByPath(tombstones)
                 if (!_.isEmpty(tombstone)) {
-                    creep.task = Tasks.withdrawAll(tombstone);
-                    return;
+                    if (!_.isEmpty(creep.room.storage)) {
+                        creep.task = Tasks.withdrawAll(tombstone);
+                        return;
+                    } else {
+                        creep.task = Tasks.withdraw(tombstone, RESOURCE_ENERGY);
+                        return;
+                    }
                 }
             }
 

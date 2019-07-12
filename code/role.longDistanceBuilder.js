@@ -68,6 +68,7 @@ module.exports = {
                     return;
                 } else {
                     creep.say(EM_SINGING);
+                    creep.task = Tasks.signController(creep.room.controller, roomSign)
                     return
                 }
 

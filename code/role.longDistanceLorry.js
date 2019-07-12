@@ -79,6 +79,8 @@ module.exports = {
                 } else {
                     if (creepPossibleDistance < 50) {
                         creep.say("dying")
+                        /* let spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS)
+                        creep.task = Tasks.getRecycled(spawn); */
                         creep.suicide()
                     } else {
                         creep.memory.target = {};

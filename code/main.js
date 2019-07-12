@@ -11,7 +11,7 @@ if (CPUdebug == true) {
 
 //system imports
 require('globals')
-require('prototype.Room.structures');
+require('./tools.prototype.Room.structures');
 //const profiler = require('screeps-profiler');
 const stats = require('tools.stats');
 require("tools.creep-tasks");
@@ -24,7 +24,6 @@ require('prototype.tower');
 require('prototype.spawn');
 require('prototype.room');
 var market = require('./module.colony.market');
-var spawnLogic = require('module.spawnLogic');
 
 // PROFILER
 //profiler.enable();
@@ -111,18 +110,16 @@ module.exports.loop = function () {
                 if (hostiles.length > 0) {
                     //activate safemode, when non-invaders get too close to spawn
                     var closeRange = 0;
-                    for (var h in hostiles) {
-                        //get closest spawn
-                        /* var spawnNear = h.pos.findClosestByRange(FIND_MY_SPAWNS)
-                        if (spawnNear.pos.isRangeTo(h) > closeRange) {
-                            closeRange = spawnNear.pos.isRangeTo(h)
-                        } */
-                    }
-                    console.log("closerange:" + closeRange)
+
+                    closeRangeHostile = Game.rooms[roomName].spawns[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS)
+                    closeRange = Game.rooms[roomName].spawns[0].pos.getRangeTo(closeRangeHostile);
+
+
+                    //console.log("close range:" + closeRange+" "+closeRangeHostile)
 
                     //if hostile is closer than 6 -> safemode
-                    if (closeRange < 6 && closeRange > 0) {
-                        //Game.rooms[roomName].controller.activateSafeMode()
+                    if (closeRange < 6 && closeRange > 0 && Game.rooms[roomName].controller.safeModeAvailable > 0) {
+                        Game.rooms[roomName].controller.activateSafeMode()
                         console.log("WARNING: Hostile too close!! SAFEMODE!!")
                     } else if (!_.isEmpty(Game.rooms[roomName].storage)) {
                         if (Game.rooms[roomName].storage.store[RESOURCE_ENERGY] > 100000) {
@@ -156,28 +153,33 @@ module.exports.loop = function () {
                         }
                     } else {
                         //no avaliable storage and no safe modes –> send response team
+                        if (Game.rooms[roomName].controller.safeMode == undefined) {
 
-                        //get closest other spawns
-                        var flagRoomName = roomName
-                        var distance = {}
-                        for (let roomName in Game.rooms) {
-                            var r = Game.rooms[roomName];
-                            if (!_.isEmpty(r.memory.roomArray.spawns)) {
-                                if (r.name != flagRoomName) {
-                                    distance[r.name] = {}
-                                    distance[r.name].name = r.name
-                                    distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                            //get closest other spawns
+                            var flagRoomName = roomName
+                            var distance = {}
+                            for (let roomName in Game.rooms) {
+                                var r = Game.rooms[roomName];
+                                if (!_.isEmpty(r.memory.roomArray)) {
+                                    if (!_.isEmpty(r.memory.roomArray.spawns)) {
+                                        if (r.name != flagRoomName) {
+                                            distance[r.name] = {}
+                                            distance[r.name].name = r.name
+                                            distance[r.name].dist = Game.map.getRoomLinearDistance(r.name, flagRoomName);
+                                        }
+                                    }
                                 }
                             }
-                        }
-                        distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+                            distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
 
-                        //check if flag does not exists
-                        var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
-                        if (_.isEmpty(whiteFlags)) {
-                            //set a flag
-                            Game.rooms[roomName].createFlag(25, 25, "DEFEND-" + roomName + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
-                            console.log(roomName + " in troubles!! Sending response team!!")
+                            //check if flag does not exists
+                            var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
+                            if (_.isEmpty(whiteFlags)) {
+                                //set a flag
+                                Game.rooms[roomName].createFlag(25, 25, "DEFEND-" + roomName + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
+                                console.log(roomName + " in troubles!! Sending response team!!")
+                            }
+
                         }
                     }
                 }
@@ -198,7 +200,7 @@ module.exports.loop = function () {
                 if (!_.isEmpty(spawningCreep)) {
                     for (var s in spawningCreep) {
                         Game.rooms[roomName].visual.text(
-                            spawningCreep[s].percent + '% '+ spawningCreep[s].name + ' ',
+                            spawningCreep[s].percent + '% ' + spawningCreep[s].name + ' ',
                             spawnName.pos.x - 1,
                             spawnName.pos.y - 10 - i, {
                                 size: '0.7',
@@ -230,14 +232,34 @@ module.exports.loop = function () {
                 //find hostiles in the room
                 var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
                 if (hostiles.length > 0) {
-                    for (var tower of towers) {
-                        var closestTarget = tower.pos.findClosestByRange(hostiles)
-                        // all towers attack
-                        tower.attack(closestTarget);
+                    if (Game.rooms[roomName].controller.safeMode == undefined) {
+                        //only attack when safe mode is not active
+                        for (var tower of towers) {
+                            var lowHealthTarget = _.min(hostiles, "hits")
+                            var distancetoTarget = tower.pos.getRangeTo(lowHealthTarget)
+                            var effectiveRange = 20
+
+                            // all towers attack
+                            if (distancetoTarget >= effectiveRange && lowHealthTarget.hits < lowHealthTarget.hitsMax) {
+                                tower.attack(lowHealthTarget);
+                            } else if (distancetoTarget < effectiveRange) {
+                                tower.attack(lowHealthTarget);
+                            } else {
+                                var injuredCreep = tower.room.find(FIND_CREEPS, {
+                                    filter: f => f.hits < f.hitsMax
+                                })
+                                var closestInjured = tower.pos.findClosestByRange(injuredCreep)
+                                tower.heal(closestInjured);
+                            }
+                        }
                     }
                 } else {
                     for (var tower of towers) {
-                        tower.healCreeps();
+                        var injuredCreep = tower.room.find(FIND_CREEPS, {
+                            filter: f => f.hits < f.hitsMax
+                        })
+                        var closestInjured = tower.pos.findClosestByRange(injuredCreep)
+                        tower.heal(closestInjured);
                     }
                 }
 

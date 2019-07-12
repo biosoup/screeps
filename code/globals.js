@@ -358,28 +358,28 @@ buildingPlans = {
         },
         {
             //Level 4 (max 1300)
-            minEnergy: 750,
-            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 1100,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 5 (max 1800)
-            minEnergy: 750,
-            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 1100,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 6 (max 2300)
-            minEnergy: 750,
-            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 1100,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 7 (max 5600)
-            minEnergy: 750,
-            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 1100,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 8 (max 12900)
-            minEnergy: 750,
-            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 1100,
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY]
         }
     ],
 
@@ -558,13 +558,13 @@ buildingPlans = {
         },
         {
             //Level 2 (max 550)
-            minEnergy: 550,
-            body: [MOVE, MOVE, MOVE, WORK, WORK, CARRY, CARRY, CARRY, CARRY]
+            minEnergy: 500,
+            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY]
         },
         {
             //Level 3 (max 800)
             minEnergy: 800,
-            body: [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY]
+            body: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, CARRY, CARRY]
         },
         {
             //Level 4 (max 1300)

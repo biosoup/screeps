@@ -461,6 +461,23 @@ class TaskGetRenewed extends Task {
 }
 TaskGetRenewed.taskName = 'getRenewed';
 
+class TaskGetRecycled extends Task {
+    constructor(target, options = {}) {
+        super(TaskGetRecycled.taskName, target, options);
+    }
+    isValidTask() {
+
+        return this.creep.ticksToLive != undefined;
+    }
+    isValidTarget() {
+        return this.target.my;
+    }
+    work() {
+        return this.target.recycleCreep(this.creep);
+    }
+}
+TaskGetRecycled.taskName = 'getRecycled';
+
 function hasPos(obj) {
     return obj.pos != undefined;
 }
@@ -609,7 +626,11 @@ class TaskMeleeAttack extends Task {
         this.settings.targetRange = 1;
     }
     isValidTask() {
-        return this.creep.getActiveBodyparts(ATTACK) > 0;
+        if (this.creep.hits > (this.creep.hitsMax / 2)) {
+            return this.creep.getActiveBodyparts(ATTACK) > 0;
+        } else {
+            return false
+        }
     }
     isValidTarget() {
         return this.target && this.target.hits > 0;

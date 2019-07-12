@@ -34,7 +34,7 @@ module.exports = {
 
                 // if we find a wall that has to be repaired
                 if (!_.isEmpty(target)) {
-                    creep.task = Tasks.repair(target)
+                    creep.task = Tasks.fortify(target)
                     creep.say(EM_WRENCH)
                     return
                 } else {

@@ -8,24 +8,34 @@ module.exports = {
             creep.heal(creep)
         }
 
+        var injuredCreep = creep.room.find(FIND_CREEPS, {
+            filter: f => f.hits < f.hitsMax
+        })
+        if (!_.isEmpty(injuredCreep)) {
+            var injuredCreep = creep.pos.findClosestByRange(injuredCreep)
+            if (creep.pos.inRangeTo(injuredCreep, 3)) {
+                creep.heal(injuredCreep);
+            }
+        }
+
         if (creep.room.name == creep.memory.target) {
             //if in target room
 
             //step away from edge and from road
-            if(creep.pos.y == 49) {
+            if (creep.pos.y == 49) {
                 var step = new RoomPosition(creep.pos.x, 48, creep.room.name)
                 creep.travelTo(step)
-            } else if(creep.pos.y == 0) {
+            } else if (creep.pos.y == 0) {
                 var step = new RoomPosition(creep.pos.x, 1, creep.room.name)
                 creep.travelTo(step)
-            } else if(creep.pos.x == 49) {
+            } else if (creep.pos.x == 49) {
                 var step = new RoomPosition(48, creep.pos.y, creep.room.name)
                 creep.travelTo(step)
-            } else if(creep.pos.y == 0) {
+            } else if (creep.pos.y == 0) {
                 var step = new RoomPosition(1, creep.pos.y, creep.room.name)
                 creep.travelTo(step)
             } else if (!_.isEmpty(creep.pos.lookFor(LOOK_STRUCTURES))) {
-                var step = new RoomPosition(creep.pos.x+_.random(1), creep.pos.y+_.random(1), creep.room.name)
+                var step = new RoomPosition(creep.pos.x + _.random(1), creep.pos.y + _.random(1), creep.room.name)
                 creep.travelTo(step)
             }
 
@@ -35,10 +45,10 @@ module.exports = {
             //find hostiles
             var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
             if (!_.isEmpty(hostile)) {
-                
 
-                //get into range and kill
-                creep.task = Tasks.attack(hostile)
+
+                //get in for the kill
+                creep.task = Tasks.meleeAttack(hostile)
                 creep.say("Hostile!" + EM_SWORDS);
                 return;
             } else {

@@ -23,7 +23,8 @@ StructureTower.prototype.healCreeps =
 StructureTower.prototype.repairStructures =
     function () {
         var target = {};
-
+    
+        //priority repair
         if (this.energy > 200) {
             //Find the closest damaged Structure
             var target = this.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -36,6 +37,7 @@ StructureTower.prototype.repairStructures =
             }
         }
 
+        //we have enough energy in the tower, keep the rest as reserver for invaders
         if (this.energy > 700) {
             //Find the closest damaged Structure
             var targets = this.room.find(FIND_STRUCTURES, {
@@ -53,6 +55,9 @@ StructureTower.prototype.repairStructures =
             if (targets.length > 0) {
                 target = _.first(_.sortByOrder(targets, ["hits"], ["asc"]));
             }
+
+            //new code
+            //target = _.min(targets, "hits")
 
             if (target) {
                 var result = this.repair(target);
