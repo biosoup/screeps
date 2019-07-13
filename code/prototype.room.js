@@ -10,6 +10,7 @@ require("module.colony.autobuild.buildings");
 
 // find best routes between spawn bunker and resources
 // OR find best routes between spawn and room borders
+
 Room.prototype.buildRoad = function (from, to) {
     //requires two IDs
     var origin = Game.getObjectById(from)
@@ -33,6 +34,29 @@ Room.prototype.buildRoad = function (from, to) {
     console.log("finsihed for loop");
 };
 
+Room.prototype.buildRoadXY = function (fx, fy, tx,ty) {
+    //requires two X Y (this first one is not created)
+    var origin = new RoomPosition(fx,fy,this.name)
+    var destination = new RoomPosition(tx,ty,this.name)
+    console.log("Create road from: " + origin + "to: " + destination);
+
+    var path = origin.findPathTo(destination, {
+        ignoreCreeps: true,
+        ignoreRoads: false
+    });
+    const terrain = this.getTerrain();
+    for (var step in path) {
+        
+        var tile = terrain.get(path[step].x, path[step].y)
+        if (tile == TERRAIN_MASK_WALL) {
+            //something already there
+        } else {
+            this.createConstructionSite(path[step].x, path[step].y, STRUCTURE_ROAD);
+        }
+    } //for
+    console.log("finsihed for loop");
+};
+
 Room.prototype.removeSites = function (room) {
     var sites = room.find(FIND_MY_CONSTRUCTION_SITES);
     var i = sites.length
@@ -42,6 +66,7 @@ Room.prototype.removeSites = function (room) {
 };
 
 Room.prototype.buildRoadsRoom = function (room) {
+    // NOT CURRENTLY IN USE
     var sources = room.find(FIND_SOURCES);
     var controller = room.controller;
     var spawns = room.find(FIND_MY_SPAWNS);
@@ -51,6 +76,8 @@ Room.prototype.buildRoadsRoom = function (room) {
                 structure.structureType == STRUCTURE_STORAGE
         }
     });
+    //TODO: add exits
+
     sources.concat(spawns);
     structures.push(controller);
 
@@ -65,6 +92,7 @@ Room.prototype.buildRoadsRoom = function (room) {
 };
 
 Room.prototype.baseBunker = function (spawnName) {
+    //TODO: finish this
     //build a rampart bunker around spawn
     var s1 = Game.spawns[spawnName]
     var tlc = new RoomPosition(s1.pos.x - 5, s1.pos.y - 9, s1.pos.roomName) //top left corner
@@ -96,12 +124,13 @@ Room.prototype.baseRCLBuild = function (spawnName) {
     //fixed placement for each RCL level
     switch (rcl) {
         case 1:
+            //FIXME:
             //containers for sources
             for (var s in this.sources) {
                 //set containers for sources
                 var freeSpaces = s.room.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
                 freeSpaces = freeSpaces.filter(f => f.terrain != "wall" && f.terrain != "source")
-                var closestPlaceForContainer = s1.pos.findClosestByPath(freeSpaces)
+                var closestPlaceForContainer = s1.pos.findClosestByPath(freeSpaces) // <- isuue here??
                 room.createConstructionSite(closestPlaceForContainer.pos.x, closestPlaceForContainer.pos.y, STRUCTURE_CONTAINER)
             }
 
@@ -170,12 +199,17 @@ Room.prototype.baseRCLBuild = function (spawnName) {
     }
 
     if (!_.isEmpty(base)) {
+        //TODO: create a check, if this is current layout
+
+
+
+
         /* console.log(JSON.stringify(base))
         console.log(JSON.stringify(tlc)) */
 
         //place the buildings
         if (!_.isEmpty(base.buildings.extension)) {
-            for (var s of baseRCL3.buildings.extension.pos) {
+            for (var s of base.buildings.extension.pos) {
                 //go through different buildings
                 var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
                 var place = room.lookForAt(LOOK_STRUCTURES, destination)
@@ -200,6 +234,19 @@ Room.prototype.baseRCLBuild = function (spawnName) {
                 } else {
                     //nothing there
                     room.createConstructionSite(destination, STRUCTURE_TOWER)
+                }
+            }
+        }
+        if (!_.isEmpty(base.buildings.storage)) {
+            for (var s of base.buildings.storage.pos) {
+                //go through different buildings
+                var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+                var place = room.lookForAt(LOOK_STRUCTURES, destination)
+                if (place.length > 0) {
+                    //something here
+                } else {
+                    //nothing there
+                    room.createConstructionSite(destination, STRUCTURE_STORAGE)
                 }
             }
         }
@@ -309,6 +356,9 @@ Room.prototype.baseRCLBuild = function (spawnName) {
                 }
             }
         }
+        return base.rcl
+    } else {
+        return null
     }
 };
 
@@ -950,7 +1000,7 @@ Room.prototype.creepSpawnRun =
                     });
                     //console.log(interest+" "+numOfConstrustions.length +" "+ numOfRepairsites.length)
                     if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
-                        roomInterests[interest][3] = roomInterests[interest][3]
+                        roomInterests[interest][3] = _.ceil((numOfConstrustions.length + numOfRepairsites.length)/10)
                     } else if (interest == newRoom) {
                         minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
                     } else {
@@ -1262,10 +1312,6 @@ Room.prototype.creepSpawnRun =
             - fixed numbers for now
         */
 
-        if (rcl <= 2) {
-            minimumSpawnOf.lorry = 0
-        }
-
         if (rcl <= 3) {
             /* minimumSpawnOf.guard += 1
             guard[spawnRoom.name] += 1 */
@@ -1284,9 +1330,13 @@ Room.prototype.creepSpawnRun =
                     minimumSpawnOf.harvester = 10
                 }
             } else {
-                minimumSpawnOf.harvester = numberOfSources
+                minimumSpawnOf.harvester = numberOfSources * 2
                 minimumSpawnOf.lorry = numberOfSources
             }
+        }
+
+        if (rcl <= 2) {
+            minimumSpawnOf.lorry = 1
         }
 
         //we can claim new room, pause upgraders

@@ -42,22 +42,25 @@ module.exports = {
 
             //FIXME: do not go near hostiles!
 
-            //look for dropped resources
-            var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
-            if (!_.isEmpty(droppedEnergy)) {
-                creep.task = Tasks.pickup(droppedEnergy);
-                return;
-            }
-            var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0)
-            if (!_.isEmpty(tombstones)) {
-                tombstone = creep.pos.findClosestByPath(tombstones)
-                if (!_.isEmpty(tombstone)) {
-                    if (!_.isEmpty(creep.room.storage)) {
-                        creep.task = Tasks.withdrawAll(tombstone);
-                        return;
-                    } else {
-                        creep.task = Tasks.withdraw(tombstone, RESOURCE_ENERGY);
-                        return;
+            var hostiles = creep.room.find(FIND_HOSTILE_CREEPS)
+            if (hostiles.length == 0) {
+                //look for dropped resources
+                var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
+                if (!_.isEmpty(droppedEnergy)) {
+                    creep.task = Tasks.pickup(droppedEnergy);
+                    return;
+                }
+                var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0)
+                if (!_.isEmpty(tombstones)) {
+                    tombstone = creep.pos.findClosestByPath(tombstones)
+                    if (!_.isEmpty(tombstone)) {
+                        if (!_.isEmpty(creep.room.storage)) {
+                            creep.task = Tasks.withdrawAll(tombstone);
+                            return;
+                        } else {
+                            creep.task = Tasks.withdraw(tombstone, RESOURCE_ENERGY);
+                            return;
+                        }
                     }
                 }
             }
@@ -83,7 +86,9 @@ module.exports = {
                         return;
                     } else {
                         //no link -> creep standby
-                        creep.say(EM_TEA)
+                        if ((Game.time % 3) == 0) {
+                            creep.say(EM_TEA)
+                        }
                     }
                 } else {
                     //enough energy in storage
@@ -91,7 +96,9 @@ module.exports = {
                     return;
                 }
             } else {
-                creep.say(EM_TEA)
+                if ((Game.time % 3) == 0) {
+                    creep.say(EM_TEA)
+                }
             }
 
         }

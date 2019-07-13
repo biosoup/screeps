@@ -29,6 +29,38 @@ module.exports = {
                         minMarket: 900000,
                         minProduction: 1000000
                     };
+                } else if (RESOURCES_ALL[res] == RESOURCE_ZYNTHIUM_KEANITE) {
+                    //ZK
+                    limit = {
+                        minTerminal: 0,
+                        maxStorage: 6000,
+                        minMarket: 900000,
+                        minProduction: 500
+                    };
+                } else if (RESOURCES_ALL[res] == RESOURCE_UTRIUM_LEMERGITE) {
+                    //UL
+                    limit = {
+                        minTerminal: 0,
+                        maxStorage: 6000,
+                        minMarket: 900000,
+                        minProduction: 500
+                    };
+                } else if (RESOURCES_ALL[res] == RESOURCE_GHODIUM) {
+                    //G
+                    limit = {
+                        minTerminal: 0,
+                        maxStorage: 6000,
+                        minMarket: 900000,
+                        minProduction: 5000
+                    };
+                } else if (RESOURCES_ALL[res] == RESOURCE_GHODIUM_HYDRIDE) {
+                    //GH
+                    limit = {
+                        minTerminal: 0,
+                        maxStorage: 6000,
+                        minMarket: 900000,
+                        minProduction: 1000
+                    };
                 } else {
                     // Rest
                     limit = {

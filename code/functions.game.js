@@ -2,6 +2,16 @@ global.getMasterSpawn = function (roomName) {
     return Game.rooms[roomName].memory.masterSpawn;
 };
 
+global.countConstructionSites = function () {
+    //shard wide check for number of construction sites
+    var count = 0
+    for (var roomName in Game.rooms) {
+        var cs = Game.rooms[roomName].find(FIND_CONSTRUCTION_SITES)
+        count = count + cs.length
+    }
+    return count
+}
+
 global.terminalTransfer = function (transferResource, transferAmount, targetRoomName, transferFlag) {
     // transfer resources to remote room from whatever room(s) is cheapest
     var roomCandidates = new Array();

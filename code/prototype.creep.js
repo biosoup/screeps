@@ -65,6 +65,30 @@ Creep.prototype.runRole =
 Creep.prototype.getEnergy = function (creep, useSource) {
     // 1) storage, 2) continers, 3) harvest
 
+    //if no hostiles around, go for dropped resources
+    var hostiles = creep.room.find(FIND_HOSTILE_CREEPS)
+    if (hostiles.length == 0) {
+        //look for dropped resources
+        var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
+        if (!_.isEmpty(droppedEnergy)) {
+            creep.task = Tasks.pickup(droppedEnergy);
+            return;
+        }
+        var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0)
+        if (!_.isEmpty(tombstones)) {
+            tombstone = creep.pos.findClosestByPath(tombstones)
+            if (!_.isEmpty(tombstone)) {
+                if (!_.isEmpty(creep.room.storage)) {
+                    creep.task = Tasks.withdrawAll(tombstone);
+                    return;
+                } else {
+                    creep.task = Tasks.withdraw(tombstone, RESOURCE_ENERGY);
+                    return;
+                }
+            }
+        }
+    }
+
     //get from storage
     if (!_.isEmpty(creep.room.storage)) {
         if (creep.room.storage.store[RESOURCE_ENERGY] > 100) {
@@ -158,7 +182,7 @@ Creep.prototype.fillStructures = function (creep) {
 
     //fill upgrade container
     var container = _.first(creep.room.controller.pos.findInRange(creep.room.containers, 2, {
-        filter: f => f.store[RESOURCE_ENERGY] < (f.storeCapacity/2)
+        filter: f => f.store[RESOURCE_ENERGY] < (f.storeCapacity / 2)
     }))
     if (!_.isEmpty(container)) {
         creep.task = Tasks.transfer(container);
