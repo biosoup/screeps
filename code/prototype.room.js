@@ -141,6 +141,19 @@ Room.prototype.baseRCLBuild = function (spawnName) {
             if (!_.isEmpty(baseRCL6)) {
                 var base = baseRCL6
             }
+
+            //build an extractor
+            var mineral = _.first(this.find(FIND_MINERALS))
+            if(!_.isEmpty(mineral)) {
+                var place = room.lookForAt(LOOK_STRUCTURES, mineral)
+                if (place.length == 0) {
+                    this.createConstructionSite(mineral, STRUCTURE_EXTRACTOR)
+                }
+                //and build a road for it
+                this.buildRoad(this.storage.id, mineral.id)
+            }
+
+            //TODO: define inner labs, when build
             break
         case 7:
             //+10 extensions, +1 tower, +1 link, +3 labs, +1 spawn
@@ -1267,6 +1280,9 @@ Room.prototype.creepSpawnRun =
                     freeSpots = freeSpots + (9 - freeSpaces.length)
                 }
                 minimumSpawnOf.harvester = freeSpots * 2;
+                if(minimumSpawnOf.harvester > 10) {
+                    minimumSpawnOf.harvester = 10
+                }
             } else {
                 minimumSpawnOf.harvester = numberOfSources
                 minimumSpawnOf.lorry = numberOfSources

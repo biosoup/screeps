@@ -83,7 +83,7 @@ module.exports = {
                         return;
                     } else {
                         //no link -> creep standby
-                        creep.say("no ene/link")
+                        creep.say(EM_TEA)
                     }
                 } else {
                     //enough energy in storage
@@ -91,7 +91,7 @@ module.exports = {
                     return;
                 }
             } else {
-                creep.say("no ene source")
+                creep.say(EM_TEA)
             }
 
         }
