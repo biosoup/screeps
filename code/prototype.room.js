@@ -11,15 +11,24 @@ require("module.colony.autobuild.buildings");
 // find best routes between spawn bunker and resources
 // OR find best routes between spawn and room borders
 Room.prototype.buildRoad = function (from, to) {
-    //requires two positions
-    console.log("Create road from: " + from + "to: " + to);
-    var path = from.findPathTo(to, {
+    //requires two IDs
+    var origin = Game.getObjectById(from)
+    var destination = Game.getObjectById(to)
+    console.log("Create road from: " + origin + "to: " + destination);
+
+    var path = origin.pos.findPathTo(destination, {
         ignoreCreeps: true,
         ignoreRoads: false
     });
-    var room = Game.rooms[from.roomName];
+    const terrain = origin.room.getTerrain();
     for (var step in path) {
-        room.createConstructionSite(path[step].x, path[step].y, STRUCTURE_ROAD);
+        
+        var tile = terrain.get(path[step].x, path[step].y)
+        if (tile == TERRAIN_MASK_WALL) {
+            //something already there
+        } else {
+            origin.room.createConstructionSite(path[step].x, path[step].y, STRUCTURE_ROAD);
+        }
     } //for
     console.log("finsihed for loop");
 };
@@ -39,8 +48,7 @@ Room.prototype.buildRoadsRoom = function (room) {
     var structures = room.find(FIND_MY_STRUCTURES, {
         filter: function (structure) {
             return structure.structureType == STRUCTURE_EXTRACTOR ||
-                structure.structureType == STRUCTURE_STORAGE ||
-                structure.structureType == STRUCTURE_EXTRACTOR
+                structure.structureType == STRUCTURE_STORAGE
         }
     });
     sources.concat(spawns);
@@ -50,7 +58,7 @@ Room.prototype.buildRoadsRoom = function (room) {
     for (var i = 0; i < structures.length; i++) {
         for (var j = 0; j < structures.length; j++) {
             if (i != j) {
-                this.buildRoad(structures[i].pos, structures[j].pos);
+                this.buildRoad(structures[i].id, structures[j].id);
             }
         }
     }
@@ -58,6 +66,23 @@ Room.prototype.buildRoadsRoom = function (room) {
 
 Room.prototype.baseBunker = function (spawnName) {
     //build a rampart bunker around spawn
+    var s1 = Game.spawns[spawnName]
+    var tlc = new RoomPosition(s1.pos.x - 5, s1.pos.y - 9, s1.pos.roomName) //top left corner
+    var brc = new RoomPosition(s1.pos.x + 5, s1.pos.y + 4, s1.pos.roomName) //bottom right corner
+    var rcl = this.controller.level
+    var room = Game.rooms[s1.pos.roomName];
+    var numberOfTowers = room.find(FIND_MY_STRUCTURES, {
+        filter: f => f.structureType == STRUCTURE_TOWER
+    })
+
+    if (rcl >= 4 && numberOfTowers.length >= 1) {
+        //find important buildings
+        //check if they have rampart
+        //place rampart
+
+        //place ramparts on the edge
+        //check if there is no wall
+    }
 };
 
 Room.prototype.baseRCLBuild = function (spawnName) {
@@ -1244,7 +1269,7 @@ Room.prototype.creepSpawnRun =
                 minimumSpawnOf.harvester = freeSpots * 2;
             } else {
                 minimumSpawnOf.harvester = numberOfSources
-                minimumSpawnOf.lorry = numberOfSources + 1
+                minimumSpawnOf.lorry = numberOfSources
             }
         }
 
