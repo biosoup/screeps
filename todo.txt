@@ -60,6 +60,25 @@ PRIORITIES
 ------
 
 
+Saruss [10:49 PM]
+I have similar. Its does not take that much CPU, but i cache it for own rooms
+
+In addition, i save which positions are attackable by range attack parts, but not walkable for enemy creeps
+
+explicit [10:58 PM]
+I do it as part of wall calculation. Then save the cost matrix to memory. I have protected, danger(within ranged attack range), unprotected values.
+I feel like general hostile avoidance is better.
+
+Saruss [11:08 PM]
+I do it as part of wall calc too, but as long as the walls are not up (early RCL), i cache another one. I think (for as i do not just wall all exits) its important when getting sieged, because with that, my code looks for what to spawn creeps for (and for what not),  so i do not send -for example harvesters, miners etc.- out into sure death and waste energy. Or to repair/build outside of the base (maybe a link at a source). This makes my rooms a bunch more resistant against long lastings attacks.
+
+eduter [11:17 PM]
+As part of my room planing, I use flood-fill to know what's inside the base and store it in memory. My workers choose parking spots when they start working on a target, so I only allow them to choose parking spots outside the walls, when the room is not under siege.
+
+Saruss [11:18 PM]
+I have a free parking spot inside, if possible, i check/reserve a big enough space.
+
+
 - multiroom focused rewrite
     - https://www.reddit.com/r/screeps/comments/6uzqkb/tips_for_multiroom_architecture/dmozat8/
     - smarter energy redistribution

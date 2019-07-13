@@ -105,14 +105,14 @@ module.exports.loop = function () {
             if (Game.rooms[roomName].controller.my) {
                 //check for hostiles
                 var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS, {
-                    filter: f => f.owner != "Invader"
+                    filter: f => f.owner.username != "Invader"
                 })
                 if (hostiles.length > 0) {
                     //activate safemode, when non-invaders get too close to spawn
                     var closeRange = 0;
 
                     closeRangeHostile = Game.rooms[roomName].spawns[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
-                        filter: f => f.owner != "Invader"
+                        filter: f => f.owner.username != "Invader"
                     })
                     closeRange = Game.rooms[roomName].spawns[0].pos.getRangeTo(closeRangeHostile);
 
@@ -233,47 +233,32 @@ module.exports.loop = function () {
 
             // find all towers
             var towers = Game.rooms[roomName].towers
-            if (!_.isEmpty(towers)) {
-                //find hostiles in the room
-                var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
-                if (hostiles.length > 0) {
-                    if (Game.rooms[roomName].controller.safeMode == undefined) {
-                        //only attack when safe mode is not active
-                        for (var tower of towers) {
-                            var lowHealthTarget = _.min(hostiles, "hits")
-                            var distancetoTarget = tower.pos.getRangeTo(lowHealthTarget)
-                            var effectiveRange = 20
-
-                            // all towers attack
-                            if (distancetoTarget >= effectiveRange && lowHealthTarget.hits < lowHealthTarget.hitsMax) {
-                                tower.attack(lowHealthTarget);
-                            } else if (distancetoTarget < effectiveRange) {
-                                tower.attack(lowHealthTarget);
-                            } else {
-                                var injuredCreep = tower.room.find(FIND_CREEPS, {
-                                    filter: f => f.hits < f.hitsMax
-                                })
-                                var closestInjured = tower.pos.findClosestByRange(injuredCreep)
-                                tower.heal(closestInjured);
+            try {
+                if (!_.isEmpty(towers)) {
+                    //find hostiles in the room
+                    var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
+                    if (hostiles.length > 0) {
+                        if (Game.rooms[roomName].controller.safeMode == undefined) {
+                            //only attack when safe mode is not active
+                            for (var tower of towers) {
+                                tower.defend(hostiles);
                             }
                         }
+                    } else {
+                        for (var tower of towers) {
+                            tower.healCreeps()
+                        }
                     }
-                } else {
-                    for (var tower of towers) {
-                        var injuredCreep = tower.room.find(FIND_CREEPS, {
-                            filter: f => f.hits < f.hitsMax
-                        })
-                        var closestInjured = tower.pos.findClosestByRange(injuredCreep)
-                        tower.heal(closestInjured);
-                    }
-                }
 
-                if (_.isEmpty(hostiles)) {
-                    for (var tower of towers) {
-                        //no hostiles, one tower to repair
-                        tower.repairStructures();
+                    if (_.isEmpty(hostiles)) {
+                        for (var tower of towers) {
+                            //no hostiles, one tower to repair
+                            tower.repairStructures();
+                        }
                     }
                 }
+            } catch (err) {
+                console.log("TOWER ERR: " + tower + " " + err.stack)
             }
 
             // default resource limits

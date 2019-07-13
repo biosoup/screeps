@@ -6,10 +6,10 @@
     - bunker around spawn
 */
 
+//import the base blueprints
 require("module.colony.autobuild.buildings");
 
-// find best routes between spawn bunker and resources
-// OR find best routes between spawn and room borders
+
 Room.prototype.basicVisuals = function () {
     var rcl = this.controller.level
     var rclPercent = (this.controller.progress / this.controller.progressTotal * 100).toFixed(2)
@@ -166,7 +166,7 @@ Room.prototype.baseRCLBuildCheck = function () {
             }
         }
     }
-    
+
     if (extensionsCount == 5) {
         return true;
     } else {
@@ -267,7 +267,7 @@ Room.prototype.baseRCLBuild = function () {
     }
 
     if (!_.isEmpty(base)) {
-        if(!this.baseRCLBuildCheck()) {
+        if (!this.baseRCLBuildCheck()) {
             //not current layout
             return "not current layout";
         }
