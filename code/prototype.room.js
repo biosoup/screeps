@@ -239,7 +239,8 @@ Room.prototype.baseRCLBuild = function () {
             }
 
             //build an extractor
-            var mineral = _.first(this.find(FIND_MINERALS))
+            //FIXME: run only once
+            /* var mineral = _.first(this.find(FIND_MINERALS))
             if (!_.isEmpty(mineral)) {
                 var place = room.lookForAt(LOOK_STRUCTURES, mineral)
                 if (place.length == 0) {
@@ -247,7 +248,7 @@ Room.prototype.baseRCLBuild = function () {
                 }
                 //and build a road for it
                 this.buildRoad(this.storage.id, mineral.id)
-            }
+            } */
 
             //TODO: define inner labs, when build
             break
@@ -266,16 +267,10 @@ Room.prototype.baseRCLBuild = function () {
     }
 
     if (!_.isEmpty(base)) {
-        //TODO: create a check, if this is currently used layout
-
         if(!this.baseRCLBuildCheck()) {
             //not current layout
             return "not current layout";
         }
-
-
-        /* console.log(JSON.stringify(base))
-        console.log(JSON.stringify(tlc)) */
 
         //place the buildings
         if (!_.isEmpty(base.buildings.extension)) {

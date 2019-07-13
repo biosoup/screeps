@@ -8,6 +8,16 @@ module.exports = {
             creep.task = Tasks.goToRoom(creep.memory.target)
         } else {
             if (creep.carry.energy > 0) {
+                //find buildsites for walls and ramparts
+                var closestConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                    filter: (s) => s.structureType == STRUCTURE_RAMPART || s.structureType == STRUCTURE_WALL
+                });
+                if (!_.isEmpty(closestConstructionSite)) {
+                    creep.task = Tasks.build(closestConstructionSite);
+                    creep.say(EM_BUILD);
+                    return;
+                }
+
                 //find structures that need repairing
                 if (!_.isEmpty(creep.room.ramparts)) {
                     var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX);
