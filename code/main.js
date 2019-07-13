@@ -202,11 +202,9 @@ module.exports.loop = function () {
                 if (!_.isEmpty(spawningCreep)) {
                     for (var s in spawningCreep) {
                         Game.rooms[roomName].visual.text(
-                            spawningCreep[s].percent + '% ' + spawningCreep[s].name + ' ',
-                            spawnName.pos.x - 1,
-                            spawnName.pos.y - 10 - i, {
+                            spawningCreep[s].percent + '% ' + spawningCreep[s].name + ' ', 47, 2 + i, {
                                 size: '0.7',
-                                align: 'left',
+                                align: 'right',
                                 opacity: 0.5,
                                 'backgroundColor': '#040404',
                                 color: 'white'
@@ -216,9 +214,14 @@ module.exports.loop = function () {
                 }
             }
 
+            //add room visuals
+            Game.rooms[roomName].basicVisuals()
+
             if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
                 //refresh room data
                 Game.rooms[roomName].refreshData(roomName)
+
+                Game.rooms[roomName].baseRCLBuild()
             }
 
             //run link balancing

@@ -606,6 +606,55 @@ global.sellHigh = function (amount, resource) {
     return (amountBuffer - amount) + " units queued for sale.";
 };
 
+global.buyLow = function (amount, resource, priceLimit) {
+    // buy as much as need below price limit
+    if (arguments.length == 0) {
+        return "sellHigh (amount, resource, priceLimit)";
+    }
+    let amountBuffer = amount;
+    let orders = Game.market.getAllOrders({
+        type: ORDER_SELL,
+        resourceType: resource
+    });
+    if (orders.length > 0) {
+        orders = _.filter(orders, (f) => f.price <= priceLimit)
+        orders = _.sortBy(orders, "amount");
+        orders = _.sortBy(orders, "price");
+
+        //this.console.log(this.JSON.stringify(orders))
+        if (!_.isEmpty(orders)) {
+            let orderIndex = 0;
+            for (let r in myRooms) {
+                if (myRooms[r].terminal != undefined && myRooms[r].memory.terminalTransfer == undefined) {
+                    let buyAmount;
+                    if (orders[orderIndex].amount > amount) {
+                        buyAmount = amount;
+                    } else {
+                        buyAmount = orders[orderIndex].amount;
+                    }
+
+                    if (buyAmount <= 0) {
+                        break;
+                    } else {
+                        buy(orders[orderIndex].id, buyAmount);
+
+                        amount -= buyAmount;
+                        return (amountBuffer - amount) + " units queued for buy." + orders[orderIndex].id + " " + buyAmount + " " + orders[orderIndex].price;
+                    }
+
+                    orderIndex++;
+                }
+            }
+        }
+    } else {
+        return "No valid sell orders on the market!"
+    }
+    if (amount < 0) {
+        amount = 0;
+    }
+    return (amountBuffer - amount) + " units queued for buy.";
+};
+
 global.sellOrder = function (amount, resource, roomName, price) {
     if (arguments.length == 0) {
         return "sellOrder (amount, resource, roomName, price)";

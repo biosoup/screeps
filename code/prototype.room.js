@@ -10,6 +10,30 @@ require("module.colony.autobuild.buildings");
 
 // find best routes between spawn bunker and resources
 // OR find best routes between spawn and room borders
+Room.prototype.basicVisuals = function () {
+    var rcl = this.controller.level
+    var rclPercent = (this.controller.progress / this.controller.progressTotal * 100).toFixed(2)
+    var rclLeft = (this.controller.progressTotal - this.controller.progress).toFixed(2)
+    var gcl = Game.gcl.level
+    var gclPercent = (Game.gcl.progress / Game.gcl.progressTotal * 100).toFixed(2)
+    var gclLeft = (Game.gcl.progressTotal - Game.gcl.progress).toFixed(2)
+
+    this.visual.text("GCL: level " + gcl + " | " + gclPercent + "% progress left: " + gclLeft, 2, 2, {
+        size: '0.7',
+        align: 'left',
+        opacity: 0.5,
+        'backgroundColor': '#040404',
+        color: 'white'
+    });
+
+    this.visual.text("RCL: level " + rcl + " | " + rclPercent + "% progress left: " + rclLeft, 2, 3, {
+        size: '0.7',
+        align: 'left',
+        opacity: 0.5,
+        'backgroundColor': '#040404',
+        color: 'white'
+    });
+}
 
 Room.prototype.buildRoad = function (from, to) {
     //requires two IDs
@@ -23,7 +47,7 @@ Room.prototype.buildRoad = function (from, to) {
     });
     const terrain = origin.room.getTerrain();
     for (var step in path) {
-        
+
         var tile = terrain.get(path[step].x, path[step].y)
         if (tile == TERRAIN_MASK_WALL) {
             //something already there
@@ -34,10 +58,10 @@ Room.prototype.buildRoad = function (from, to) {
     console.log("finsihed for loop");
 };
 
-Room.prototype.buildRoadXY = function (fx, fy, tx,ty) {
+Room.prototype.buildRoadXY = function (fx, fy, tx, ty) {
     //requires two X Y (this first one is not created)
-    var origin = new RoomPosition(fx,fy,this.name)
-    var destination = new RoomPosition(tx,ty,this.name)
+    var origin = new RoomPosition(fx, fy, this.name)
+    var destination = new RoomPosition(tx, ty, this.name)
     console.log("Create road from: " + origin + "to: " + destination);
 
     var path = origin.findPathTo(destination, {
@@ -46,7 +70,7 @@ Room.prototype.buildRoadXY = function (fx, fy, tx,ty) {
     });
     const terrain = this.getTerrain();
     for (var step in path) {
-        
+
         var tile = terrain.get(path[step].x, path[step].y)
         if (tile == TERRAIN_MASK_WALL) {
             //something already there
@@ -57,7 +81,8 @@ Room.prototype.buildRoadXY = function (fx, fy, tx,ty) {
     console.log("finsihed for loop");
 };
 
-Room.prototype.removeSites = function (room) {
+Room.prototype.removeSites = function () {
+    var room = this
     var sites = room.find(FIND_MY_CONSTRUCTION_SITES);
     var i = sites.length
     while (--i) {
@@ -113,10 +138,52 @@ Room.prototype.baseBunker = function (spawnName) {
     }
 };
 
-Room.prototype.baseRCLBuild = function (spawnName) {
-    //concole command: Game.rooms["E15N12"].baseRCLBuild("Spawn5")
+Room.prototype.baseRCLBuildCheck = function () {
+    var room = this;
+    if (!_.isEmpty(room.memory.masterSpawn)) {
+        var s1 = Game.getObjectById(room.memory.masterSpawn)
+    } else {
+        return null
+    }
+    var tlc = new RoomPosition(s1.pos.x - 5, s1.pos.y - 9, s1.pos.roomName)
+    var room = Game.rooms[s1.pos.roomName];
+    var base = baseRCL2; //check against lvl2
 
-    var s1 = Game.spawns[spawnName]
+    if (!_.isEmpty(base.buildings.extension)) {
+        var extensionsCount = 0
+        for (var s of base.buildings.extension.pos) {
+            //go through different buildings
+            var destination = new RoomPosition(tlc.x + s.x, tlc.y + s.y, tlc.roomName)
+            var place = room.lookForAt(LOOK_STRUCTURES, destination)
+
+            place = _.filter(place, (f) => f.structureType == STRUCTURE_EXTENSION)
+
+            if (place.length > 0) {
+                extensionsCount = extensionsCount + 1
+                //something here, chech for extension
+            } else {
+                //nothing there, which is bad
+            }
+        }
+    }
+    
+    if (extensionsCount == 5) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+Room.prototype.baseRCLBuild = function () {
+    //concole command: 
+    // Game.rooms.E15N12.baseRCLBuild()
+
+    var room = this;
+    if (!_.isEmpty(room.memory.masterSpawn)) {
+        var s1 = Game.getObjectById(room.memory.masterSpawn)
+    } else {
+        return null
+    }
     var tlc = new RoomPosition(s1.pos.x - 5, s1.pos.y - 9, s1.pos.roomName)
     var rcl = this.controller.level
     var room = Game.rooms[s1.pos.roomName];
@@ -173,7 +240,7 @@ Room.prototype.baseRCLBuild = function (spawnName) {
 
             //build an extractor
             var mineral = _.first(this.find(FIND_MINERALS))
-            if(!_.isEmpty(mineral)) {
+            if (!_.isEmpty(mineral)) {
                 var place = room.lookForAt(LOOK_STRUCTURES, mineral)
                 if (place.length == 0) {
                     this.createConstructionSite(mineral, STRUCTURE_EXTRACTOR)
@@ -199,9 +266,12 @@ Room.prototype.baseRCLBuild = function (spawnName) {
     }
 
     if (!_.isEmpty(base)) {
-        //TODO: create a check, if this is current layout
+        //TODO: create a check, if this is currently used layout
 
-
+        if(!this.baseRCLBuildCheck()) {
+            //not current layout
+            return "not current layout";
+        }
 
 
         /* console.log(JSON.stringify(base))
@@ -1000,7 +1070,7 @@ Room.prototype.creepSpawnRun =
                     });
                     //console.log(interest+" "+numOfConstrustions.length +" "+ numOfRepairsites.length)
                     if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
-                        roomInterests[interest][3] = _.ceil((numOfConstrustions.length + numOfRepairsites.length)/10)
+                        roomInterests[interest][3] = _.ceil((numOfConstrustions.length + numOfRepairsites.length) / 10)
                     } else if (interest == newRoom) {
                         minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
                     } else {
@@ -1326,11 +1396,11 @@ Room.prototype.creepSpawnRun =
                     freeSpots = freeSpots + (9 - freeSpaces.length)
                 }
                 minimumSpawnOf.harvester = freeSpots * 2;
-                if(minimumSpawnOf.harvester > 10) {
+                if (minimumSpawnOf.harvester > 10) {
                     minimumSpawnOf.harvester = 10
                 }
             } else {
-                minimumSpawnOf.harvester = numberOfSources * 2
+                minimumSpawnOf.harvester = numberOfSources * 2
                 minimumSpawnOf.lorry = numberOfSources
             }
         }

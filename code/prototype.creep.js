@@ -141,7 +141,10 @@ Creep.prototype.getEnergy = function (creep, useSource) {
                     creep.say(EM_HAMMER)
                     return true;
                 } else {
-                    creep.say(EM_ZZZ)
+                    var rand = _.random(sources.length - 1)
+                    creep.task = Tasks.harvest(sources[rand]);
+                    creep.say(EM_HAMMER)
+                    return true;
                 }
             }
         }
