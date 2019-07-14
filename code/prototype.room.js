@@ -9,6 +9,111 @@
 //import the base blueprints
 require("module.colony.autobuild.buildings");
 
+Room.prototype.roomEconomy = function () {
+    let cpuStart = Game.cpu.getUsed();
+    var numberOfSources = this.find(FIND_SOURCES).length
+    var rcl = this.controller.level
+
+    var maxEnergyIncome = (numberOfSources * SOURCE_ENERGY_CAPACITY) / ENERGY_REGEN_TIME //max 20 e/t
+
+    //in room miners
+    var numberOfMiners = _.filter(Game.creeps, (c) => c.memory.home == this.name && c.memory.role == "miner");
+    //var miningPerTick = _.countBy(buildingPlans.miner[rcl].body).work * HARVEST_POWER
+    var miningPerTickMax = (numberOfMiners.length * SOURCE_ENERGY_CAPACITY) / ENERGY_REGEN_TIME
+
+    //remote miners
+    var numberOfRemoteMiners = _.filter(Game.creeps, (c) => c.memory.home == this.name && c.memory.role == "longDistanceMiner");
+    //var remoteMiningPerTick = _.countBy(buildingPlans.longDistanceMiner[rcl].body).work * HARVEST_POWER
+    var remoteMiningPerTickMax = (numberOfRemoteMiners.length * SOURCE_ENERGY_CAPACITY) / ENERGY_REGEN_TIME
+
+    var numberOfRoads = this.find(FIND_STRUCTURES, {
+        filter: (f) => f.structureType == STRUCTURE_ROAD
+    }).length
+    var roadDecay = (numberOfRoads * ROAD_DECAY_AMOUNT) / ROAD_DECAY_TIME / REPAIR_POWER //without wearout, non spawm roads only
+
+    var numberOfRamparts = this.find(FIND_STRUCTURES, {
+        filter: (f) => f.structureType == STRUCTURE_RAMPART
+    }).length
+    var rampartsDecay = (numberOfRamparts * RAMPART_DECAY_AMOUNT) / RAMPART_DECAY_TIME / REPAIR_POWER
+
+    var numberOfContainers = this.find(FIND_STRUCTURES, {
+        filter: (f) => f.structureType == STRUCTURE_CONTAINER
+    }).length
+    var containersDecay = (numberOfContainers * CONTAINER_DECAY) / CONTAINER_DECAY_TIME_OWNED / REPAIR_POWER
+
+
+
+    //energy needed for construction
+    var constructions = this.find(FIND_CONSTRUCTION_SITES)
+    var constructionCost = _.sum(constructions, "progressTotal") - _.sum(constructions, "progress")
+
+    //energy needed for walls
+    var numberOfWallRepairers = _.filter(Game.creeps, (c) => c.memory.home == this.name && c.memory.role == "wallRepairer");
+    var fortifyPerTickMax = _.countBy(buildingPlans.wallRepairer[rcl].body).work * REPAIR_POWER
+    var fortifyCostPerTick = _.countBy(buildingPlans.wallRepairer[rcl].body).work //costs one nergy per work part
+    var structuresToBeFortified = this.find(FIND_STRUCTURES, {
+        filter: (f) => f.structureType == STRUCTURE_WALL || f.structureType == STRUCTURE_RAMPART
+    })
+    var fortifyWorkLeft = (structuresToBeFortified.length * WALLMAX) - _.sum(structuresToBeFortified, "hits")
+    var fortifyWorkLeftTicks = fortifyWorkLeft / fortifyPerTickMax
+    if (fortifyWorkLeftTicks < 0) {
+        fortifyWorkLeftTicks = 0
+    }
+
+    //rcl
+    var praiseLeft = this.controller.progressTotal-this.controller.progress
+
+    var oldProgress = this.memory.RCLprogress
+    var amountPraisedLastTick = this.controller.progress-oldProgress
+    this.memory.RCLprogress = this.controller.progress
+    
+
+
+    //aproximate amount energy avalible per tick
+    var energySurpluss = miningPerTickMax + remoteMiningPerTickMax - roadDecay - rampartsDecay - containersDecay - (numberOfWallRepairers.length * fortifyCostPerTick)
+
+    this.visual.text("Room: energy production: " + (remoteMiningPerTickMax + miningPerTickMax) + " with " + numberOfRemoteMiners.length + " remote miners (CPU used: " + (Game.cpu.getUsed() - cpuStart).toFixed(2)+")",
+        2, 5, {
+            size: '0.7',
+            align: 'left',
+            opacity: 0.5,
+            'backgroundColor': '#040404',
+            color: 'white'
+        });
+    this.visual.text("Roads: " + roadDecay.toFixed(2) + " | Ramparts: " + rampartsDecay.toFixed(2) + " | Containers: " + containersDecay.toFixed(2) + " | Fortify: " + (numberOfWallRepairers.length * fortifyCostPerTick).toFixed(2),
+        2, 6, {
+            size: '0.7',
+            align: 'left',
+            opacity: 0.5,
+            'backgroundColor': '#040404',
+            color: 'white'
+        });
+    this.visual.text("Energy surpluss: " + energySurpluss.toFixed(2) + " | construction cost left: " + constructionCost + " | fortify left: " + fortifyWorkLeftTicks.toFixed(2) + " ticks",
+        2, 7, {
+            size: '0.7',
+            align: 'left',
+            opacity: 0.5,
+            'backgroundColor': '#040404',
+            color: 'white'
+        });
+        this.visual.text("RCL Praise left: " + praiseLeft.toFixed(2) + " ("+(praiseLeft/energySurpluss).toFixed(2)+" ticks) | Praised last tick: "+amountPraisedLastTick+" ("+(praiseLeft/amountPraisedLastTick).toFixed(2)+" ticks)",
+        2, 8, {
+            size: '0.7',
+            align: 'left',
+            opacity: 0.5,
+            'backgroundColor': '#040404',
+            color: 'white'
+        });
+
+    return energySurpluss;
+}
+
+Room.prototype.countDefences = function () {
+    var structures = this.find(FIND_STRUCTURES, {
+        filter: (f) => f.structureType == STRUCTURE_WALL || f.structureType == STRUCTURE_RAMPART
+    })
+    return structures.length
+}
 
 Room.prototype.basicVisuals = function () {
     var rcl = this.controller.level

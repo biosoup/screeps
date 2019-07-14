@@ -1,7 +1,6 @@
 StructureTower.prototype.defend = function (hostiles) {
     //check for invaders
-    var invaders
-    //var invaders = _.filter(hostiles, (h) => h.owner == "Invader")
+    var invaders = _.filter(hostiles, (h) => h.owner == "Invader")
 
     var lowHealthTarget = _.min(hostiles, "hits")
     var distancetoTarget = this.pos.getRangeTo(lowHealthTarget)
@@ -16,7 +15,6 @@ StructureTower.prototype.defend = function (hostiles) {
 
     //get needed distance for siege defence
     var effectiveRange = this.getDistanceForTower()
-    console.log("Range: " + effectiveRange)
     // tower attack
     if (distancetoTarget >= effectiveRange && lowHealthTarget.hits < lowHealthTarget.hitsMax) {
         this.attack(lowHealthTarget);

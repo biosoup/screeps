@@ -172,14 +172,19 @@ module.exports.loop = function () {
                                     }
                                 }
                             }
-                            distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+                            if (!_.isEmpty(distance)) {
+                                distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
 
-                            //check if flag does not exists
-                            var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
-                            if (_.isEmpty(whiteFlags)) {
-                                //set a flag
-                                Game.rooms[roomName].createFlag(25, 25, "DEFEND-" + roomName + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
-                                console.log(roomName + " in troubles!! Sending response team!!")
+                                //check if flag does not exists
+                                var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
+                                if (_.isEmpty(whiteFlags)) {
+                                    //set a flag
+                                    Game.rooms[roomName].createFlag(25, 25, "DEFEND-" + roomName + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
+                                    console.log(roomName + " in troubles!! Sending response team!!")
+                                }
+                            } else {
+                                //no room to send help from
+                                console.log("No room to send help :(")
                             }
 
                         }
@@ -216,6 +221,7 @@ module.exports.loop = function () {
 
             //add room visuals
             Game.rooms[roomName].basicVisuals()
+            Game.rooms[roomName].roomEconomy()
 
             if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
                 //refresh room data
