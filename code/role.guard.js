@@ -48,7 +48,7 @@ module.exports = {
 
 
                 //get in for the kill
-                creep.task = Tasks.meleeAttack(hostile)
+                creep.task = Tasks.attack(hostile)
                 creep.say("Hostile!" + EM_SWORDS);
                 return;
             } else {

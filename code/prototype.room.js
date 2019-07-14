@@ -5,6 +5,7 @@
     - road building system
     - bunker around spawn
 */
+var Tasks = require("tools.creep-tasks");
 
 //import the base blueprints
 require("module.colony.autobuild.buildings");
@@ -1072,6 +1073,7 @@ Room.prototype.creepSpawnRun =
                         for (var c in avaliableGuards) {
                             //send all to deal with stuff
                             avaliableGuards[c].memory.target = flag.pos.roomName
+                            avaliableGuards[c].task = Tasks.fork(goToRoom(avaliableGuards[c].memory.target))
                         }
                     } else {
                         //spawn more guards
@@ -1080,6 +1082,14 @@ Room.prototype.creepSpawnRun =
                         //builders & guard = boolean
                         roomInterests[flag.pos.roomName] = [0, 0, 0, 2, 0, flag.secondaryColor]
                         var defend = flag.pos.roomName;
+                    }
+                    //break tasks for all creeps in room
+                    var creepsInDanger = _.filter(allMyCreeps, (c) => c.memory.role != 'guard' && c.memory.target == flag.pos.roomName)
+                    for (var c in creepsInDanger) {
+                        if (creepsInDanger[s].room.name != creepsInDanger[s].memory.home) {
+                            //if other room than home -> go home
+                            creepsInDanger[s].task = Tasks.fork(goToroom(creepsInDanger[s].memory.home))
+                        }
                     }
                 }
             }
@@ -1896,12 +1906,8 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
 };
 
 Room.prototype.checkForHostiles = function (roomName) {
-    /*  TODO:
-        return number of hostiles
-        return number of attack & heal parts combined
-    */
-
-    //FIXME: add a check for friendly units / Invaders
+    //FIXME: add a check for friendly units
+    var roomName = this
     var hostiles = roomName.find(FIND_HOSTILE_CREEPS);
     if (hostiles.length > 0) {
         var value = {};
@@ -1945,6 +1951,10 @@ Room.prototype.checkForHostiles = function (roomName) {
 
         if (hostiles.length == 1 && maxAttackBodyParts == 0 && maxHealBodyParts == 0) {
             value["scout"] = true
+        }
+
+        if (!_.isEmpty(hostiles[0].owner)) {
+            value["username"] = hostiles[0].owner.username
         }
 
         return value;

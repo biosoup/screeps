@@ -92,7 +92,7 @@ module.exports.loop = function () {
             }
         } catch (err) {
             Game.creeps[creep].say("RUN ROLE ERR!!")
-            console.log("RUN ROLE ERR: " + creep + " " + err.stack)
+            console.log("RUN ROLE ERR: " + creep + " at " + err.stack)
         }
     }
 
@@ -109,7 +109,7 @@ module.exports.loop = function () {
                     if (hostileValues.numberOfAttackBodyParts > 0) {
                         var avaliableGuards = _.filter(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
                         if ((Game.time % 3) == 0) {
-                            console.log("Hostiles in " + roomName + "! Response team of: " + avaliableGuards.length)
+                            console.log("Hostiles in " + roomName + " from "+hostileValues.username+"! Response team of: " + avaliableGuards.length)
                         }
                     }
                 }
@@ -319,6 +319,7 @@ module.exports.loop = function () {
         } catch (err) {
             Game.creeps[creep].say("MAIN ERR!!")
             console.log("MAIN ERR: " + creep + " at: " + err.stack)
+            //Game.creeps[creep].suicide()
             Game.creeps[creep].task = {}
         }
     }

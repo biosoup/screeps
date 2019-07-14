@@ -69,12 +69,13 @@ Creep.prototype.getEnergy = function (creep, useSource) {
     var hostiles = creep.room.find(FIND_HOSTILE_CREEPS)
     if (hostiles.length == 0) {
         //look for dropped resources
-        var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
+        var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES, {filter: s => s.targetedBy.length == 0})
+        droppedEnergy = creep.pos.findClosestByPath(droppedEnergy)
         if (!_.isEmpty(droppedEnergy)) {
             creep.task = Tasks.pickup(droppedEnergy);
             return;
         }
-        var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0)
+        var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0 && t.targetedBy.length == 0)
         if (!_.isEmpty(tombstones)) {
             tombstone = creep.pos.findClosestByPath(tombstones)
             if (!_.isEmpty(tombstone)) {
