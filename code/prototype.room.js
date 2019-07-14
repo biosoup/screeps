@@ -72,12 +72,17 @@ Room.prototype.roomEconomy = function () {
     var amountPraisedLastTick = this.controller.progress - oldProgress
     this.memory.RCLprogress = this.controller.progress
 
-
-
     //aproximate amount energy avalible per tick
     var energySurpluss = miningPerTickMax + remoteMiningPerTickMax - roadDecay - rampartsDecay - containersDecay - (numberOfWallRepairers.length * fortifyCostPerTick)
 
-    this.visual.text("Room: energy production: " + (remoteMiningPerTickMax + miningPerTickMax) + " with " + numberOfRemoteMiners.length + " remote miners (CPU used: " + (Game.cpu.getUsed() - cpuStart).toFixed(2) + ")",
+    //storage
+    if (!_.isEmpty(this.storage)) {
+        var storageEnergy = this.storage.store[RESOURCE_ENERGY]
+        var storageTarget = 100000 * rcl
+        var ticksToStorageTarget = ((storageTarget - storageEnergy) / energySurpluss).toFixed(2)
+    }
+
+    this.visual.text("Room: energy production: " + (remoteMiningPerTickMax + miningPerTickMax) + " with " + numberOfRemoteMiners.length + " remote miners",
         2, 5, {
             size: '0.7',
             align: 'left',
@@ -103,6 +108,14 @@ Room.prototype.roomEconomy = function () {
         });
     this.visual.text("RCL Praise left: " + praiseLeft.toFixed(2) + " (" + (praiseLeft / energySurpluss).toFixed(2) + " ticks) | Praised last tick: " + amountPraisedLastTick + " (" + (praiseLeft / amountPraisedLastTick).toFixed(2) + " ticks)",
         2, 8, {
+            size: '0.7',
+            align: 'left',
+            opacity: 0.5,
+            'backgroundColor': '#040404',
+            color: 'white'
+        });
+    this.visual.text("Storage energy target: " + storageTarget + " | Ticks to reach: " + ticksToStorageTarget + " | (CPU used: " + (Game.cpu.getUsed() - cpuStart).toFixed(2) + ")",
+        2, 9, {
             size: '0.7',
             align: 'left',
             opacity: 0.5,
@@ -629,13 +642,6 @@ Room.prototype.refreshContainerSources = function (r) {
                 }
             }
         }
-        //console.log(r.name + " " + JSON.stringify(r.memory.containerSources));
-
-        /*  
-        W28N14 {"5cfed049c4be3409e53dab3d":{"pos":{"x":15,"y":35,"roomName":"W27N15"},"energy":2000,"time":8004585,"distance":82},"5cff24da5b0b7e667bffeb4f":{"pos":{"x":38,"y":21,"roomName":"W27N14"},"energy":1610,"time":8004585,"distance":75},"5cff237a63738f09b78089bb":{"pos":{"x":34,"y":17,"roomName":"W28N15"},"energy":1470,"time":8004585,"distance":81},"5cfed38c15b6e542a338d399":{"pos":{"x":20,"y":10,"roomName":"W28N13"},"energy":1207,"time":8004585,"distance":19},"5cfeeb0fff1e577e6595b3d4":{"pos":{"x":25,"y":16,"roomName":"W28N13"},"energy":1756,"time":8004585,"distance":28}}
-        W29N14 {"5d0748ce001e5f10d3711de2":{"pos":{"x":5,"y":23,"roomName":"W29N13"},"energy":1950,"time":8004585,"distance":36}}
-        W32N13 {"5d09fae741a69b286384a8fd":{"pos":{"x":23,"y":8,"roomName":"W33N13"},"energy":0,"time":8004585,"distance":70},"5d0a00100c39a428613cc024":{"pos":{"x":35,"y":24,"roomName":"W33N13"},"energy":2000,"time":8004585,"distance":54}} 
-        */
     } else {
         return -1;
     }
@@ -1059,10 +1065,22 @@ Room.prototype.creepSpawnRun =
             var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
             if (!_.isEmpty(whiteFlags)) {
                 for (var flag of whiteFlags) {
-                    //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
-                    //builders & guard = boolean
-                    roomInterests[flag.pos.roomName] = [0, 0, 0, 2, 0, flag.secondaryColor]
-                    var defend = flag.pos.roomName;
+                    //check if there are avaliable quards
+                    var avaliableGuards = _.filter(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
+                    if (avaliableGuards.length > 0) {
+                        //we have guards ready
+                        for (var c in avaliableGuards) {
+                            //send all to deal with stuff
+                            avaliableGuards[c].memory.target = flag.pos.roomName
+                        }
+                    } else {
+                        //spawn more guards
+
+                        //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
+                        //builders & guard = boolean
+                        roomInterests[flag.pos.roomName] = [0, 0, 0, 2, 0, flag.secondaryColor]
+                        var defend = flag.pos.roomName;
+                    }
                 }
             }
         }
@@ -1254,7 +1272,7 @@ Room.prototype.creepSpawnRun =
                         }
                         //FIXME: not spawning enough guards
 
-                        console.log("Enemy in " + interest + " with " + inRooms + " guards dispathed from " + spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
+                        //console.log("Enemy in " + interest + " with " + inRooms + " guards dispathed from " + spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
                     }
                 } else {
                     //we do not have vision - rely on flag
@@ -1273,10 +1291,10 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        if (minimumSpawnOf.guard > 0) {
+        /* if (minimumSpawnOf.guard > 0) {
             var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.home == spawnRoom.name)
             console.log("Enemy! " + inRooms + " guards from " + spawnRoom.name + " " + JSON.stringify(guard) + " " + minimumSpawnOf.guard)
-        }
+        } */
 
         /**Spawning volumes scaling with # of sources in room**/
         var constructionSites = spawnRoom.find(FIND_MY_CONSTRUCTION_SITES);
@@ -1356,7 +1374,15 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["miner"] = numberOfSources;
 
         //minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
-        minimumSpawnOf["lorry"] = 2;
+        if (numberOfMiners > 0) {
+            minimumSpawnOf["lorry"] = 2;
+            var numberOfFullContainers = this.find(FIND_STRUCTURES, {
+                filter: (f) => f.structureType == STRUCTURE_CONTAINER && f.store[RESOURCE_ENERGY] == f.storeCapacity
+            }).length
+            if (numberOfFullContainers >= 2) {
+                minimumSpawnOf["lorry"]++;
+            }
+        }
 
 
         minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners / 2) - numberOfLorries - numberOfSA
@@ -1458,6 +1484,12 @@ Room.prototype.creepSpawnRun =
             }
         }
 
+        //keep at least one guard ready
+        var avaliableGuards = _.filter(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
+        if (avaliableGuards.length == 0) {
+            minimumSpawnOf.guard = 1;
+            guard[spawnRoom.name] = 1;
+        }
 
 
 
@@ -1506,7 +1538,6 @@ Room.prototype.creepSpawnRun =
                 }
             } else {
                 minimumSpawnOf.harvester = numberOfSources * 2
-                minimumSpawnOf.lorry = numberOfSources
             }
         }
 

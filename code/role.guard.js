@@ -74,7 +74,9 @@ module.exports = {
 
                 if ((Game.time % 3) == 0) {
                     creep.say(EM_SINGING)
-                    //creep.task = Tasks.goTo(creep.room.controller)
+
+                    //send guard home
+                    creep.memory.target = creep.memory.home;
                     return
                 }
 

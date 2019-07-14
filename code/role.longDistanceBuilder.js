@@ -5,6 +5,16 @@ module.exports = {
     /** @param {Creep} creep */
     newTask: function (creep) {
 
+        //check for hostiles
+        let hostileValues = creep.room.checkForHostiles(creep.room)
+        if (!_.isEmpty(hostileValues)) {
+            if (hostileValues.numHostiles > 0) {
+                creep.room.createFlag(25, 25, "DEFEND-" + creep.room.name + "-" + creep.memory.home, COLOR_WHITE, COLOR_RED)
+                creep.task = Tasks.goToRoom(creep.memory.home);
+                return
+            }
+        }
+
         // if target is defined and creep is not in target room
         if (!_.isEmpty(creep.memory.target) && creep.room.name != creep.memory.target) {
             creep.task = Tasks.goToRoom(creep.memory.target)

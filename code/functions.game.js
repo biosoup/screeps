@@ -496,8 +496,8 @@ global.buy = function (orderID, amount) {
         return "Not enough credits!"
     }
 
-    if (Memory.buyOrder != undefined) {
-        return "Active buy order found: " + Game.memory.buyOrder;
+    if (!_.isEmpty(Memory.buyOrder)) {
+        return "Active buy order found: " + Memory.buyOrder;
     }
 
     Memory.buyOrder = amount + ":" + order.id;

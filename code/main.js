@@ -102,6 +102,21 @@ module.exports.loop = function () {
     //go through rooms
     for (let roomName in Game.rooms) {
         if (!_.isEmpty(Game.rooms[roomName].controller)) {
+            //check for hostiles and response force
+            var hostileValues = Game.rooms[roomName].checkForHostiles(roomName);
+            if (!_.isEmpty(hostileValues)) {
+                if (hostileValues.numHostiles > 0) {
+                    if (hostileValues.numberOfAttackBodyParts > 0) {
+                        var avaliableGuards = _.filter(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
+                        if ((Game.time % 3) == 0) {
+                            console.log("Hostiles in " + roomName + "! Response team of: " + avaliableGuards.length)
+                        }
+                    }
+                }
+            }
+
+
+
             if (Game.rooms[roomName].controller.my) {
                 //check for hostiles
                 var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS, {
@@ -220,8 +235,16 @@ module.exports.loop = function () {
             }
 
             //add room visuals
-            Game.rooms[roomName].basicVisuals()
-            Game.rooms[roomName].roomEconomy()
+            try {
+                Game.rooms[roomName].basicVisuals()
+                Game.rooms[roomName].roomEconomy()
+            } catch (err) {
+                console.log("VISUALS ERR: " + tower + " " + err.stack)
+            }
+
+            if (_.isEmpty(Game.rooms[roomName].memory.masterSpawn)) {
+                Game.rooms[roomName].refreshData(roomName)
+            }
 
             if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
                 //refresh room data
