@@ -157,29 +157,62 @@ Room.prototype.basicVisuals = function () {
         'backgroundColor': '#040404',
         color: 'white'
     });
+
+    if (!_.isEmpty(this.spawns)) {
+        var spawningCreep = {}
+        for (var s in this.spawns) {
+            var spawnName = this.spawns[s]
+            //if spawning just add visuals
+            if (spawnName.spawning) {
+                spawningCreep[spawnName] = {}
+                spawningCreep[spawnName].name = spawnName.spawning.name;
+                spawningCreep[spawnName].percent = (((spawnName.spawning.needTime - spawnName.spawning.remainingTime) / spawnName.spawning.needTime) * 100).toFixed(2);
+            }
+        }
+        var i = 0
+        if (!_.isEmpty(spawningCreep)) {
+            for (var s in spawningCreep) {
+                this.visual.text(
+                    spawningCreep[s].percent + '% ' + spawningCreep[s].name + ' ', 47, 2 + i, {
+                        size: '0.7',
+                        align: 'right',
+                        opacity: 0.5,
+                        'backgroundColor': '#040404',
+                        color: 'white'
+                    });
+                i++;
+            }
+        }
+    }
 }
 
 Room.prototype.buildRoad = function (from, to) {
     //requires two IDs
     var origin = Game.getObjectById(from)
     var destination = Game.getObjectById(to)
-    console.log("Create road from: " + origin + "to: " + destination);
 
     var path = origin.pos.findPathTo(destination, {
         ignoreCreeps: true,
         ignoreRoads: false
     });
     const terrain = origin.room.getTerrain();
+
+    var number = 0
     for (var step in path) {
 
         var tile = terrain.get(path[step].x, path[step].y)
         if (tile == TERRAIN_MASK_WALL) {
             //something already there
         } else {
-            origin.room.createConstructionSite(path[step].x, path[step].y, STRUCTURE_ROAD);
+            var response = origin.room.createConstructionSite(path[step].x, path[step].y, STRUCTURE_ROAD);
+            if (response == OK) {
+                number++;
+            }
         }
-    } //for
-    console.log("finsihed for loop");
+    }
+    if (number > 0) {
+        console.log("finished road building loop with " + number + " new roads");
+    }
 };
 
 Room.prototype.buildRoadXY = function (fx, fy, tx, ty) {
@@ -391,7 +424,7 @@ Room.prototype.baseRCLBuild = function () {
     }
 
     if (!_.isEmpty(base)) {
-        if (!this.baseRCLBuildCheck()) {
+        if (!this.baseRCLBuildCheck() && rcl > 2) {
             //not current layout
             return "not current layout";
         }
@@ -1073,7 +1106,7 @@ Room.prototype.creepSpawnRun =
                         for (var c in avaliableGuards) {
                             //send all to deal with stuff
                             avaliableGuards[c].memory.target = flag.pos.roomName
-                            avaliableGuards[c].task = Tasks.fork(goToRoom(avaliableGuards[c].memory.target))
+                            avaliableGuards[c].fork(Tasks.goToRoom(avaliableGuards[c].memory.target))
                         }
                     } else {
                         //spawn more guards
@@ -1086,9 +1119,9 @@ Room.prototype.creepSpawnRun =
                     //break tasks for all creeps in room
                     var creepsInDanger = _.filter(allMyCreeps, (c) => c.memory.role != 'guard' && c.memory.target == flag.pos.roomName)
                     for (var c in creepsInDanger) {
-                        if (creepsInDanger[s].room.name != creepsInDanger[s].memory.home) {
+                        if (creepsInDanger[c].room.name != creepsInDanger[c].memory.home) {
                             //if other room than home -> go home
-                            creepsInDanger[s].task = Tasks.fork(goToroom(creepsInDanger[s].memory.home))
+                            creepsInDanger[c].fork(Tasks.goToroom(creepsInDanger[c].memory.home))
                         }
                     }
                 }

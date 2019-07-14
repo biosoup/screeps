@@ -59,6 +59,9 @@ module.exports = {
                         if (container.hits < container.hitsMax && creep.carry.energy > 0) {
                             creep.task = Tasks.repair(container)
                             creep.say(EM_WRENCH)
+
+                            //run a road to home storage
+                            creep.room.buildRoad(container.id, Game.rooms[creep.memory.home].storage.id)
                             return;
                         } else {
                             //if there is a free space in container
