@@ -69,15 +69,17 @@ Creep.prototype.getEnergy = function (creep, useSource) {
     var hostiles = creep.room.find(FIND_HOSTILE_CREEPS)
     if (hostiles.length == 0) {
         //look for dropped resources
-        var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES, {filter: s => s.targetedBy.length == 0})
-        droppedEnergy = creep.pos.findClosestByPath(droppedEnergy)
+        var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES, {
+            filter: s => s.targetedBy.length == 0
+        })
         if (!_.isEmpty(droppedEnergy)) {
+            droppedEnergy = creep.pos.findClosestByRange(droppedEnergy)
             creep.task = Tasks.pickup(droppedEnergy);
             return;
         }
         var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0 && t.targetedBy.length == 0)
         if (!_.isEmpty(tombstones)) {
-            tombstone = creep.pos.findClosestByPath(tombstones)
+            tombstone = creep.pos.findClosestByRange(tombstones)
             if (!_.isEmpty(tombstone)) {
                 if (!_.isEmpty(creep.room.storage)) {
                     creep.task = Tasks.withdrawAll(tombstone);
@@ -101,7 +103,7 @@ Creep.prototype.getEnergy = function (creep, useSource) {
     //get from continer
     var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] >= 100)
     if (!_.isEmpty(containers)) {
-        var container = creep.pos.findClosestByPath(containers)
+        var container = creep.pos.findClosestByRange(containers)
         if (!_.isEmpty(container)) {
             creep.task = Tasks.withdraw(container);
             return true;
@@ -113,7 +115,7 @@ Creep.prototype.getEnergy = function (creep, useSource) {
         let sources = creep.room.find(FIND_SOURCES);
         let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
         if (!_.isEmpty(unattendedSource)) {
-            unattendedSource = creep.pos.findClosestByPath(unattendedSource);
+            unattendedSource = creep.pos.findClosestByRange(unattendedSource);
             if (!_.isEmpty(unattendedSource)) {
                 creep.task = Tasks.harvest(unattendedSource);
                 creep.say(EM_HAMMER)
@@ -153,32 +155,34 @@ Creep.prototype.getEnergy = function (creep, useSource) {
 };
 
 Creep.prototype.fillStructures = function (creep) {
+    //FIXME: change to findClosestByRange, add targetedBy check
+
     //fill towers
     var towers = creep.room.towers.filter(s => s.energy < 500)
-    var tower = creep.pos.findClosestByPath(towers)
+    var tower = creep.pos.findClosestByRange(towers)
     if (!_.isEmpty(tower)) {
         creep.task = Tasks.transfer(tower);
         return true;
     }
 
     //fill main structures
-    var spawns = creep.room.spawns.filter(s => s.energy < s.energyCapacity)
-    var structure = creep.pos.findClosestByPath(spawns)
+    var spawns = creep.room.spawns.filter(s => s.energy < s.energyCapacity && s.targetedBy.length == 0)
+    var structure = creep.pos.findClosestByRange(spawns)
     if (!_.isEmpty(structure)) {
         creep.task = Tasks.transfer(structure);
         return true;
     }
 
-    var extensions = creep.room.extensions.filter(s => s.energy < s.energyCapacity)
-    var structure = creep.pos.findClosestByPath(extensions)
+    var extensions = creep.room.extensions.filter(s => s.energy < s.energyCapacity && s.targetedBy.length == 0)
+    var structure = creep.pos.findClosestByRange(extensions)
     if (!_.isEmpty(structure)) {
         creep.task = Tasks.transfer(structure);
         return true;
     }
 
     //fill towers
-    var towers = creep.room.towers.filter(s => s.energy < s.energyCapacity)
-    var tower = creep.pos.findClosestByPath(towers)
+    var towers = creep.room.towers.filter(s => s.energy < s.energyCapacity && s.targetedBy.length == 0)
+    var tower = creep.pos.findClosestByRange(towers)
     if (!_.isEmpty(tower)) {
         creep.task = Tasks.transfer(tower);
         return true;
@@ -186,7 +190,7 @@ Creep.prototype.fillStructures = function (creep) {
 
     //fill upgrade container
     var container = _.first(creep.room.controller.pos.findInRange(creep.room.containers, 2, {
-        filter: f => f.store[RESOURCE_ENERGY] < (f.storeCapacity / 3)
+        filter: f => f.store[RESOURCE_ENERGY] < f.storeCapacity && f.targetedBy.length == 0
     }))
     if (!_.isEmpty(container)) {
         creep.task = Tasks.transfer(container);
@@ -399,7 +403,7 @@ Creep.prototype.findResource =
             }
 
             //Get path to collected objects
-            var target = this.pos.findClosestByPath(IDBasket);
+            var target = this.pos.findClosestByRange(IDBasket);
             this.memory.resourceBuffer = resource;
             if (target != null) {
                 this.memory.targetBuffer = target.id;

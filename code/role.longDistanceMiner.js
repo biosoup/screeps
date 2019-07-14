@@ -24,15 +24,15 @@ module.exports = {
 
             //console.log(creep.room.containers)
 
-            if(!_.isEmpty(creep.memory.container)) {
+            if (!_.isEmpty(creep.memory.container)) {
                 var cID = Game.getObjectById(creep.memory.container)
                 var source = cID.pos.findInRange(FIND_SOURCES)
             }
 
             let sources = creep.room.find(FIND_SOURCES);
             let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
-            if (!_.isEmpty(unattendedSource) && _.isEmpty(source)) {
-                var source = creep.pos.findClosestByPath(unattendedSource);
+            if (!_.isEmpty(unattendedSource) && _.isEmpty(source)) {
+                var source = creep.pos.findClosestByRange(unattendedSource);
             }
 
             if (_.isEmpty(source)) {
@@ -61,7 +61,13 @@ module.exports = {
                             creep.say(EM_WRENCH)
 
                             //run a road to home storage
-                            creep.room.buildRoad(container.id, Game.rooms[creep.memory.home].storage.id)
+                            if (creep.memory.buildRoadCounter == 20 || _.isEmpty(creep.memory.buildRoadCounter)) {
+                                creep.room.buildRoad(container.id, Game.rooms[creep.memory.home].storage.id)
+                                creep.memory.buildRoadCounter = 0
+                            }
+                            creep.memory.buildRoadCounter++
+                            
+                            
                             return;
                         } else {
                             //if there is a free space in container
@@ -90,7 +96,7 @@ module.exports = {
                         return
                     } else {
                         //go build stuff?
-                        var buildSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+                        var buildSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
                         if (!_.isEmpty(buildSite)) {
                             creep.task = Tasks.build(buildSite);
                             creep.say(EM_WRENCH)

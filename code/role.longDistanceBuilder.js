@@ -29,7 +29,7 @@ module.exports = {
                 }
 
                 //find important buidlsites
-                var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                var closestImportantConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
                     filter: (s) =>
                         s.structureType == STRUCTURE_SPAWN
                 });
@@ -39,7 +39,7 @@ module.exports = {
                     return;
                 }
 
-                var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                var closestImportantConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
                     filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
                         s.structureType == STRUCTURE_EXTENSION ||
                         s.structureType == STRUCTURE_TOWER
@@ -51,7 +51,7 @@ module.exports = {
                 }
 
                 //find buildsites
-                var closestConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+                var closestConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
                 if (!_.isEmpty(closestConstructionSite)) {
                     creep.task = Tasks.build(closestConstructionSite);
                     creep.say(EM_BUILD);

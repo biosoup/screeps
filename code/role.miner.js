@@ -62,7 +62,7 @@ module.exports = {
                     creep.task = Tasks.harvest(source);
                     return
                 } else {
-                    var buildSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+                    var buildSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
                     if (!_.isEmpty(buildSite)) {
                         creep.task = Tasks.build(buildSite);
                         creep.say(EM_BUILD)

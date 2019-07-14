@@ -80,7 +80,8 @@ module.exports.loop = function () {
         }
         // ************ NEW TASK SYSTEM ************
         for (let creep in Game.creeps) {
-            //if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" work Code: " + Game.cpu.getUsed())}
+            if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" work Code: " + Game.cpu.getUsed())}
+            
             //console.log(Game.creeps[creep])
 
             try {

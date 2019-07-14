@@ -2,7 +2,7 @@
 
 /** ADD
 - structure placement
-    - road building system
+    - road building system for main room
     - bunker around spawn
 */
 var Tasks = require("tools.creep-tasks");
@@ -12,8 +12,14 @@ require("module.colony.autobuild.buildings");
 
 Room.prototype.roomEconomy = function () {
     let cpuStart = Game.cpu.getUsed();
-    var numberOfSources = this.find(FIND_SOURCES).length
     var rcl = this.controller.level
+
+    if(rcl == 0) {
+        //run only in relevant rooms
+        return null
+    }
+
+    var numberOfSources = this.find(FIND_SOURCES).length
 
     var maxEnergyIncome = (numberOfSources * SOURCE_ENERGY_CAPACITY) / ENERGY_REGEN_TIME //max 20 e/t
 
@@ -354,14 +360,14 @@ Room.prototype.baseRCLBuild = function () {
                 //set containers for sources
                 var freeSpaces = s.room.lookForAtArea(LOOK_TERRAIN, s.pos.y - 1, s.pos.x - 1, s.pos.y + 1, s.pos.x + 1, true);
                 freeSpaces = freeSpaces.filter(f => f.terrain != "wall" && f.terrain != "source")
-                var closestPlaceForContainer = s1.pos.findClosestByPath(freeSpaces) // <- isuue here??
+                var closestPlaceForContainer = s1.pos.findClosestByRange(freeSpaces) // <- isuue here??
                 room.createConstructionSite(closestPlaceForContainer.pos.x, closestPlaceForContainer.pos.y, STRUCTURE_CONTAINER)
             }
 
             //container for controller
             var freeSpaces = room.controller.room.lookForAtArea(LOOK_TERRAIN, room.controller.pos.y - 1, room.controller.pos.x - 1, room.controller.pos.y + 1, room.controller.pos.x + 1, true);
             freeSpaces = freeSpaces.filter(f => f.terrain != "wall" && f.terrain != "controller")
-            var closestPlaceForContainer = s1.pos.findClosestByPath(freeSpaces)
+            var closestPlaceForContainer = s1.pos.findClosestByRange(freeSpaces)
             room.createConstructionSite(closestPlaceForContainer.pos.x, closestPlaceForContainer.pos.y, STRUCTURE_CONTAINER)
 
             break
@@ -1106,7 +1112,7 @@ Room.prototype.creepSpawnRun =
                         for (var c in avaliableGuards) {
                             //send all to deal with stuff
                             avaliableGuards[c].memory.target = flag.pos.roomName
-                            avaliableGuards[c].fork(Tasks.goToRoom(avaliableGuards[c].memory.target))
+                            //FIXME: avaliableGuards[c].fork(Tasks.goToRoom(avaliableGuards[c].memory.target))
                         }
                     } else {
                         //spawn more guards
@@ -1121,7 +1127,7 @@ Room.prototype.creepSpawnRun =
                     for (var c in creepsInDanger) {
                         if (creepsInDanger[c].room.name != creepsInDanger[c].memory.home) {
                             //if other room than home -> go home
-                            creepsInDanger[c].fork(Tasks.goToroom(creepsInDanger[c].memory.home))
+                            //FIXME: creepsInDanger[c].fork(Tasks.goToroom(creepsInDanger[c].memory.home))
                         }
                     }
                 }

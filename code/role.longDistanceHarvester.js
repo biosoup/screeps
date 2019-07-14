@@ -40,7 +40,7 @@ let longDistanceHarvester = {
                 let sources = creep.room.find(FIND_SOURCES);
                 let unattendedSource = _.filter(sources, source => source.targetedBy.length == 0);
                 if (!_.isEmpty(unattendedSource)) {
-                    unattendedSource = creep.pos.findClosestByPath(unattendedSource);
+                    unattendedSource = creep.pos.findClosestByRange(unattendedSource);
                     if (!_.isEmpty(unattendedSource)) {
                         creep.task = Tasks.harvest(unattendedSource);
                         creep.say(EM_HAMMER)

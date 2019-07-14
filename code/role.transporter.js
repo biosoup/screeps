@@ -170,7 +170,7 @@ module.exports = {
                             //Look for minerals in containers
                             let container;
                             if (creep.memory.myMineralContainer == undefined) {
-                                container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                                container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                                     filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < _.sum(s.store)
                                 });
                                 if (container != null) {

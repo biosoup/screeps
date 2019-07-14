@@ -8,7 +8,7 @@ module.exports = {
             //has energy -> do work
 
             //find important buidlsites -> SPAWN
-            var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+            var closestImportantConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
                 filter: (s) => s.structureType == STRUCTURE_SPAWN
             });
             //FIXME: get construction sites once, then filter on top of them
@@ -20,7 +20,7 @@ module.exports = {
             }
 
             //find important buidlsites -> TOWER
-            var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+            var closestImportantConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
                 filter: (s) => s.structureType == STRUCTURE_TOWER
             });
             if (!_.isEmpty(closestImportantConstructionSite)) {
@@ -30,7 +30,7 @@ module.exports = {
             }
 
             //find important buidlsites
-            var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+            var closestImportantConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
                     s.structureType == STRUCTURE_EXTENSION || 
                     s.structureType == STRUCTURE_STORAGE
@@ -42,7 +42,7 @@ module.exports = {
             }
 
             //find buildsites
-            var closestConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+            var closestConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
             if (!_.isEmpty(closestConstructionSite)) {
                 creep.task = Tasks.build(closestConstructionSite);
                 creep.say(EM_BUILD);
@@ -50,7 +50,7 @@ module.exports = {
             }
 
             //find repairs
-            var closestRepairSite = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+            var closestRepairSite = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                 filter: (s) =>
                     s.structureType != STRUCTURE_CONTROLLER &&
                     s.structureType != STRUCTURE_WALL &&

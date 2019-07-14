@@ -955,13 +955,15 @@ global.listCreeps = function (displayRole) {
 
     //Prepare header row
     for (var r in myRooms) {
-        returnstring = returnstring.concat("<th>" + Game.rooms[r].name + "  </th>");
-        let roomCreeps = _.filter(Game.creeps, function (c) {
-            return c.memory.homeroom == myRooms[r].name;
-        });
-        for (let c in roomCreeps) {
-            if (roleTable.indexOf(roomCreeps[c].memory.role) == -1) {
-                roleTable.push(roomCreeps[c].memory.role);
+        if (myRooms[r].controller.level > 0) {
+            returnstring = returnstring.concat("<th>" + Game.rooms[r].name + "  </th>");
+            let roomCreeps = _.filter(Game.creeps, function (c) {
+                return c.memory.home == myRooms[r].name;
+            });
+            for (let c in roomCreeps) {
+                if (roleTable.indexOf(roomCreeps[c].memory.role) == -1) {
+                    roleTable.push(roomCreeps[c].memory.role);
+                }
             }
         }
     }
@@ -972,17 +974,19 @@ global.listCreeps = function (displayRole) {
             returnstring = returnstring.concat("<tr></tr><td>" + roleTable[role] + "  </td>");
             let c = -1;
             for (var r in myRooms) {
-                c++;
-                let amount;
-                let roleCreeps = _.filter(Game.creeps, function (c) {
-                    return (c.memory.role == roleTable[role] && c.memory.homeroom == myRooms[r].name);
-                });
-                amount = roleCreeps.length;
-                returnstring = returnstring.concat("<td>" + prettyInt(amount) + "  </td>");
-                if (total[c] == undefined) {
-                    total[c] = amount;
-                } else {
-                    total[c] += amount;
+                if (myRooms[r].controller.level > 0) {
+                    c++;
+                    let amount;
+                    let roleCreeps = _.filter(Game.creeps, function (c) {
+                        return (c.memory.role == roleTable[role] && c.memory.home == myRooms[r].name);
+                    });
+                    amount = roleCreeps.length;
+                    returnstring = returnstring.concat("<td>" + prettyInt(amount) + "  </td>");
+                    if (total[c] == undefined) {
+                        total[c] = amount;
+                    } else {
+                        total[c] += amount;
+                    }
                 }
             }
             returnstring = returnstring.concat("</tr>");

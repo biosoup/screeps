@@ -45,14 +45,15 @@ module.exports = {
             var hostiles = creep.room.find(FIND_HOSTILE_CREEPS)
             if (hostiles.length == 0) {
                 //look for dropped resources
-                var droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
+                var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES, {filter: s => s.targetedBy.length == 0})
                 if (!_.isEmpty(droppedEnergy)) {
+                    droppedEnergy = creep.pos.findClosestByRange(droppedEnergy)
                     creep.task = Tasks.pickup(droppedEnergy);
                     return;
                 }
-                var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0)
+                var tombstones = _.filter(creep.room.find(FIND_TOMBSTONES), (t) => _.sum(t.store) > 0 && t.targetedBy.length == 0)
                 if (!_.isEmpty(tombstones)) {
-                    tombstone = creep.pos.findClosestByPath(tombstones)
+                    tombstone = creep.pos.findClosestByRange(tombstones)
                     if (!_.isEmpty(tombstone)) {
                         if (!_.isEmpty(creep.room.storage)) {
                             creep.task = Tasks.withdrawAll(tombstone);
@@ -66,9 +67,9 @@ module.exports = {
             }
 
             //get from continer
-            var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] == s.storeCapacity)
-            var container = creep.pos.findClosestByPath(containers)
-            if (!_.isEmpty(container)) {
+            var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] == s.storeCapacity && s.targetedBy.length == 0)
+            if (!_.isEmpty(containers)) {
+                var container = creep.pos.findClosestByRange(containers)
                 creep.task = Tasks.withdraw(container);
                 return;
             }

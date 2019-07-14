@@ -17,7 +17,7 @@ module.exports = {
             }
 
             //find important buidlsites
-            var closestImportantConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+            var closestImportantConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER ||
                     s.structureType == STRUCTURE_EXTENSION
             });

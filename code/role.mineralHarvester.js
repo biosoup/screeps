@@ -16,7 +16,7 @@ module.exports = {
             }
         } else {
             //go mine minerals
-            let source = creep.pos.findClosestByPath(FIND_MINERALS, {filter: (s) => s.mineralAmount > 0});
+            let source = creep.pos.findClosestByRange(FIND_MINERALS, {filter: (s) => s.mineralAmount > 0});
             if (!_.isEmpty(source)) {
                 creep.task = Tasks.harvest(source);
                 creep.say(EM_FLEX)
@@ -24,7 +24,7 @@ module.exports = {
             }else {
                 creep.say(EM_EXCLAMATION)
                 
-                /* let spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS)
+                /* let spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS)
                 creep.task = Tasks.getRecycled(spawn); */
                 creep.suicide()
             }

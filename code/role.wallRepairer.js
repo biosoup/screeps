@@ -9,7 +9,7 @@ module.exports = {
         } else {
             if (creep.carry.energy > 0) {
                 //find buildsites for walls and ramparts
-                var closestConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+                var closestConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
                     filter: (s) => s.structureType == STRUCTURE_RAMPART || s.structureType == STRUCTURE_WALL
                 });
                 if (!_.isEmpty(closestConstructionSite)) {
