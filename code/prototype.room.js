@@ -48,9 +48,14 @@ Room.prototype.roomEconomy = function () {
     var constructionCost = _.sum(constructions, "progressTotal") - _.sum(constructions, "progress")
 
     //energy needed for walls
-    var numberOfWallRepairers = _.filter(Game.creeps, (c) => c.memory.home == this.name && c.memory.role == "wallRepairer");
-    var fortifyPerTickMax = _.countBy(buildingPlans.wallRepairer[rcl].body).work * REPAIR_POWER
-    var fortifyCostPerTick = _.countBy(buildingPlans.wallRepairer[rcl].body).work //costs one nergy per work part
+    var numberOfWallRepairers = _.filter(Game.creeps, (c) => c.memory.home == this.name && (c.memory.role == "wallRepairer" || c.memory.role == "builder"));
+    if (!_.isEmpty(buildingPlans.wallRepairer[rcl])) {
+        var fortifyPerTickMax = _.countBy(buildingPlans.wallRepairer[rcl].body).work * REPAIR_POWER
+        var fortifyCostPerTick = _.countBy(buildingPlans.wallRepairer[rcl].body).work //costs one nergy per work part
+    } else {
+        var fortifyPerTickMax = 0
+        var fortifyCostPerTick = 0
+    }
     var structuresToBeFortified = this.find(FIND_STRUCTURES, {
         filter: (f) => f.structureType == STRUCTURE_WALL || f.structureType == STRUCTURE_RAMPART
     })
@@ -61,18 +66,18 @@ Room.prototype.roomEconomy = function () {
     }
 
     //rcl
-    var praiseLeft = this.controller.progressTotal-this.controller.progress
+    var praiseLeft = this.controller.progressTotal - this.controller.progress
 
     var oldProgress = this.memory.RCLprogress
-    var amountPraisedLastTick = this.controller.progress-oldProgress
+    var amountPraisedLastTick = this.controller.progress - oldProgress
     this.memory.RCLprogress = this.controller.progress
-    
+
 
 
     //aproximate amount energy avalible per tick
     var energySurpluss = miningPerTickMax + remoteMiningPerTickMax - roadDecay - rampartsDecay - containersDecay - (numberOfWallRepairers.length * fortifyCostPerTick)
 
-    this.visual.text("Room: energy production: " + (remoteMiningPerTickMax + miningPerTickMax) + " with " + numberOfRemoteMiners.length + " remote miners (CPU used: " + (Game.cpu.getUsed() - cpuStart).toFixed(2)+")",
+    this.visual.text("Room: energy production: " + (remoteMiningPerTickMax + miningPerTickMax) + " with " + numberOfRemoteMiners.length + " remote miners (CPU used: " + (Game.cpu.getUsed() - cpuStart).toFixed(2) + ")",
         2, 5, {
             size: '0.7',
             align: 'left',
@@ -80,7 +85,7 @@ Room.prototype.roomEconomy = function () {
             'backgroundColor': '#040404',
             color: 'white'
         });
-    this.visual.text("Roads: " + roadDecay.toFixed(2) + " | Ramparts: " + rampartsDecay.toFixed(2) + " | Containers: " + containersDecay.toFixed(2) + " | Fortify: " + (numberOfWallRepairers.length * fortifyCostPerTick).toFixed(2),
+    this.visual.text("Roads: " + roadDecay.toFixed(2) + " | Ramparts: " + rampartsDecay.toFixed(2) + " | Containers: " + containersDecay.toFixed(2) + " | F/R/B: " + (numberOfWallRepairers.length * fortifyCostPerTick).toFixed(2),
         2, 6, {
             size: '0.7',
             align: 'left',
@@ -96,7 +101,7 @@ Room.prototype.roomEconomy = function () {
             'backgroundColor': '#040404',
             color: 'white'
         });
-        this.visual.text("RCL Praise left: " + praiseLeft.toFixed(2) + " ("+(praiseLeft/energySurpluss).toFixed(2)+" ticks) | Praised last tick: "+amountPraisedLastTick+" ("+(praiseLeft/amountPraisedLastTick).toFixed(2)+" ticks)",
+    this.visual.text("RCL Praise left: " + praiseLeft.toFixed(2) + " (" + (praiseLeft / energySurpluss).toFixed(2) + " ticks) | Praised last tick: " + amountPraisedLastTick + " (" + (praiseLeft / amountPraisedLastTick).toFixed(2) + " ticks)",
         2, 8, {
             size: '0.7',
             align: 'left',
