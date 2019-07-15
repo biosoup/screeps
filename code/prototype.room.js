@@ -216,6 +216,7 @@ Room.prototype.buildRoad = function (from, to) {
             }
         }
     }
+    //TODO: for a road ending at room end, check road coming from the other side as well
     if (number > 0) {
         console.log("finished road building loop with " + number + " new roads");
     }
@@ -1441,6 +1442,8 @@ Room.prototype.creepSpawnRun =
             if (numberOfFullContainers >= 2) {
                 minimumSpawnOf["lorry"]++;
             }
+        } else {
+            minimumSpawnOf["lorry"] = 1;
         }
 
 
@@ -1730,7 +1733,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         miniharvester: {
             name: "miniharvester",
-            prio: 5,
+            prio: 1,
             energyRole: true,
             min: 0,
             max: 0,
@@ -1916,12 +1919,15 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
 
     if ((numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant) == 0) {
         // Set up miniHarvester to spawn
-        tableImportance.miniharvester.min = 1;
+        tableImportance.miniharvester.min = 1
     }
 
     tableImportance = _.filter(tableImportance, function (x) {
         return (!(x.min == 0 || x.min == x.max || x.max > x.min))
     });
+
+    //console.log(numberOf.harvester +" " +numberOf.lorry +" "+ numberOf.spawnAttendant+" "+JSON.stringify(tableImportance))
+
     if (tableImportance.length > 0) {
         tableImportance = _.sortBy(tableImportance, "prio");
 
@@ -1932,7 +1938,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
             }
         }
 
-        var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
+        /* var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
 
         //Surplus Upgrader Spawning
         if (numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant > 0 && hostiles.length == 0 && spawnRoom.controller.level < 8) {
@@ -1946,7 +1952,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
             if (containerEnergy > (100000 * spawnRoom.controller.level) + 100000) {
                 //spawnList.push("upgrader");
             }
-        }
+        } */
 
         return spawnList;
     } else {
