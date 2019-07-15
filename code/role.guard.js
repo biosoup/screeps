@@ -72,6 +72,9 @@ module.exports = {
                     whiteFlags.remove()
                 }
 
+                //go sign the controller
+                creep.graffity()
+
                 if ((Game.time % 3) == 0) {
                     creep.say(EM_SINGING)
 

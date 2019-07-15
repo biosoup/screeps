@@ -19,6 +19,24 @@ module.exports = {
         if (!_.isEmpty(creep.memory.target) && creep.room.name != creep.memory.target) {
             creep.task = Tasks.goToRoom(creep.memory.target)
         } else {
+            //step away from edge and from road
+            if (creep.pos.y == 49) {
+                var step = new RoomPosition(creep.pos.x, 48, creep.room.name)
+                creep.travelTo(step)
+            } else if (creep.pos.y == 0) {
+                var step = new RoomPosition(creep.pos.x, 1, creep.room.name)
+                creep.travelTo(step)
+            } else if (creep.pos.x == 49) {
+                var step = new RoomPosition(48, creep.pos.y, creep.room.name)
+                creep.travelTo(step)
+            } else if (creep.pos.y == 0) {
+                var step = new RoomPosition(1, creep.pos.y, creep.room.name)
+                creep.travelTo(step)
+            } else if (!_.isEmpty(creep.pos.lookFor(LOOK_STRUCTURES))) {
+                var step = new RoomPosition(creep.pos.x + _.random(1), creep.pos.y + _.random(1), creep.room.name)
+                creep.travelTo(step)
+            }
+
             if (creep.carry.energy > 0) {
                 //has energy -> do work
 
@@ -78,7 +96,8 @@ module.exports = {
                     return;
                 } else {
                     creep.say(EM_SINGING);
-                    creep.task = Tasks.signController(creep.room.controller, roomSign)
+                    //go sign the controller
+                    creep.graffity()
                     return
                 }
 

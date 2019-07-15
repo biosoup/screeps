@@ -45,7 +45,9 @@ module.exports = {
             var hostiles = creep.room.find(FIND_HOSTILE_CREEPS)
             if (hostiles.length == 0) {
                 //look for dropped resources
-                var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES, {filter: s => s.targetedBy.length == 0})
+                var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES, {
+                    filter: s => s.targetedBy.length == 0
+                })
                 if (!_.isEmpty(droppedEnergy)) {
                     droppedEnergy = creep.pos.findClosestByRange(droppedEnergy)
                     creep.task = Tasks.pickup(droppedEnergy);
@@ -86,6 +88,9 @@ module.exports = {
                         creep.task = Tasks.withdraw(link);
                         return;
                     } else {
+                        //go sign the controller
+                        creep.graffity()
+
                         //no link -> creep standby
                         if ((Game.time % 3) == 0) {
                             creep.say(EM_TEA)
@@ -97,9 +102,13 @@ module.exports = {
                     return;
                 }
             } else {
+                //go sign the controller
+                creep.graffity()
+
                 if ((Game.time % 3) == 0) {
                     creep.say(EM_TEA)
                 }
+
             }
 
         }

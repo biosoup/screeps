@@ -14,7 +14,7 @@ Room.prototype.roomEconomy = function () {
     let cpuStart = Game.cpu.getUsed();
     var rcl = this.controller.level
 
-    if(rcl == 0) {
+    if (rcl == 0) {
         //run only in relevant rooms
         return null
     }
@@ -1093,7 +1093,7 @@ Room.prototype.creepSpawnRun =
                 for (var flag of purpleFlags) {
                     //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                     //builders & guard = boolean
-                    roomInterests[flag.pos.roomName] = [0, flag.secondaryColor, 1.5, 1, 1, 1]
+                    roomInterests[flag.pos.roomName] = [0, flag.secondaryColor, 1.2, 1, 1, 1]
                     //FIXME: dynamic number of lorries, based on distance, e/t and RCL
                 }
             }
@@ -1112,7 +1112,7 @@ Room.prototype.creepSpawnRun =
                         for (var c in avaliableGuards) {
                             //send all to deal with stuff
                             avaliableGuards[c].memory.target = flag.pos.roomName
-                            //FIXME: avaliableGuards[c].fork(Tasks.goToRoom(avaliableGuards[c].memory.target))
+                            //FIXME: avaliableGuards[c].task.fork() = Tasks.goToRoom(avaliableGuards[c].memory.target)
                         }
                     } else {
                         //spawn more guards
@@ -1127,7 +1127,7 @@ Room.prototype.creepSpawnRun =
                     for (var c in creepsInDanger) {
                         if (creepsInDanger[c].room.name != creepsInDanger[c].memory.home) {
                             //if other room than home -> go home
-                            //FIXME: creepsInDanger[c].fork(Tasks.goToroom(creepsInDanger[c].memory.home))
+                            //FIXME: creepsInDanger[c].task.fork() = Tasks.goToroom(creepsInDanger[c].memory.home)
                         }
                     }
                 }
@@ -1145,12 +1145,8 @@ Room.prototype.creepSpawnRun =
                     for (var flag of greyFlags) {
                         //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                         //builders & guard = boolean
-                        /* if (Game.room[flag.room].controller.my) {
-                            roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
-                        } else { */
                         roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 1, 1]
                         var newRoom = flag.pos.roomName;
-                        //}
                     }
                 }
             } else {
@@ -1161,6 +1157,7 @@ Room.prototype.creepSpawnRun =
                             //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                             //builders & guard = boolean
                             roomInterests[flag.pos.roomName] = [0, 0, 0, flag.secondaryColor, 0, 1]
+                            var newRoom = flag.pos.roomName;
                         } else {
                             //remove flag
                             flag.remove()
@@ -1241,18 +1238,21 @@ Room.prototype.creepSpawnRun =
                             s.structureType != STRUCTURE_RAMPART
                     });
                     //console.log(interest+" "+numOfConstrustions.length +" "+ numOfRepairsites.length)
-                    if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
-                        roomInterests[interest][3] = _.ceil((numOfConstrustions.length + numOfRepairsites.length) / 10)
-                    } else if (interest == newRoom) {
+                    if (interest == newRoom) {
                         minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
+                    } else if ((numOfConstrustions.length + numOfRepairsites.length) > 0) {
+                        roomInterests[interest][3] = _.ceil((numOfConstrustions.length + numOfRepairsites.length) / 10)
                     } else {
                         roomInterests[interest][3] = 0
                     }
+
 
                     minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
                     if (inRooms < roomInterests[interest][3]) {
                         longDistanceBuilder[interest] = roomInterests[interest][3]
                     }
+
+                    //console.log(interest + " " + newRoom + " " + roomInterests[interest][3] + " " + minimumSpawnOf.longDistanceBuilder)
                 } else {
                     //no vision into the room
                     if (interest == newRoom) {

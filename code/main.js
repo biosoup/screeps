@@ -80,8 +80,10 @@ module.exports.loop = function () {
         }
         // ************ NEW TASK SYSTEM ************
         for (let creep in Game.creeps) {
-            if (CPUdebug == true) {CPUdebugString = CPUdebugString.concat("<br>Start Creep"+creep+" work Code: " + Game.cpu.getUsed())}
-            
+            if (CPUdebug == true) {
+                CPUdebugString = CPUdebugString.concat("<br>Start Creep" + creep + " work Code: " + Game.cpu.getUsed())
+            }
+
             //console.log(Game.creeps[creep])
 
             try {
@@ -109,7 +111,7 @@ module.exports.loop = function () {
                     if (hostileValues.numHostiles > 0) {
                         if (hostileValues.numberOfAttackBodyParts > 0) {
                             var avaliableGuards = _.filter(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
-                            if ((Game.time % 3) == 0) {
+                            if ((Game.time % 3) == 0 && hostileValues.username != "Invader") {
                                 console.log("Hostiles in " + roomName + ": " + hostileValues.username + "! Response team of: " + avaliableGuards.length)
                             }
                         }
@@ -261,21 +263,27 @@ module.exports.loop = function () {
                 } catch (err) {
                     console.log("TOWER ERR: " + tower + " " + err.stack)
                 }
-                // default resource limits
-                market.resourceLimits(roomName);
-                // balance resources
-                market.resourceBalance(CPUdebug);
-                // terminal transfers
-                market.terminalCode(roomName, CPUdebug);
 
-                market.productionCode(roomName);
+                if (Game.cpu.bucket > CPU_THRESHOLD * 2) {
+                    // default resource limits
+                    market.resourceLimits(roomName);
+                    // balance resources
+                    market.resourceBalance(CPUdebug);
+                    // terminal transfers
+                    market.terminalCode(roomName, CPUdebug);
 
-                market.labCode(roomName);
+                    market.productionCode(roomName);
+
+                    market.labCode(roomName);
+                }
             }
         }
 
-        //run market code
-        market.marketCode();
+        if (Game.cpu.bucket > CPU_THRESHOLD * 2) {
+            //run market code
+            market.marketCode();
+
+        }
 
         if (CPUdebug == true) {
             CPUdebugString = CPUdebugString.concat("<br>Start Creep run Code: " + Game.cpu.getUsed())

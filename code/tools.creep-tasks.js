@@ -1003,6 +1003,9 @@ function initializeTask(protoTask) {
         case TaskGetRenewed.taskName:
             task = new TaskGetRenewed(target);
             break;
+        case TaskGetRecycled.taskName:
+            task = new TaskGetRecycled(target);
+            break;
         case TaskGoTo.taskName:
             task = new TaskGoTo(derefRoomPosition(protoTask._target._pos));
             break;
