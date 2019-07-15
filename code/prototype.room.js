@@ -253,29 +253,35 @@ Room.prototype.removeSites = function () {
     }
 };
 
-Room.prototype.buildRoadsRoom = function (room) {
-    // NOT CURRENTLY IN USE
-    var sources = room.find(FIND_SOURCES);
-    var controller = room.controller;
-    var spawns = room.find(FIND_MY_SPAWNS);
-    var structures = room.find(FIND_MY_STRUCTURES, {
-        filter: function (structure) {
-            return structure.structureType == STRUCTURE_EXTRACTOR ||
-                structure.structureType == STRUCTURE_STORAGE
-        }
-    });
+Room.prototype.buildRoadsRoom = function () {
+    var room = this
+
+    if (!_.isEmpty(room.storage)) {
+        var center = room.storage
+    } else {
+        var center = room.spawns[0];
+    }
+
+    var structures = room.containers
+    structures.push(room.controller)
+    if (!_.isEmpty(room.extractor)) {
+        structures.push(room.extractor)
+    }
+
+
     //TODO: add exits
+    // can be null when no path
+    /* var exit_top = center.pos.findClosestByPath(FIND_EXIT_TOP)
+    var exit_left = center.pos.findClosestByPath(FIND_EXIT_LEFT)
+    var exit_right = center.pos.findClosestByPath(FIND_EXIT_RIGHT)
+    var exit_bottom = center.pos.findClosestByPath(FIND_EXIT_BOTTOM) */
 
-    sources.concat(spawns);
-    structures.push(controller);
 
-    console.log(room, "buildroads betwen", structures);
+    //TODO: make smarter and check existing road construction sites?
+
+    console.log(room, "buildroads for", structures.length);
     for (var i = 0; i < structures.length; i++) {
-        for (var j = 0; j < structures.length; j++) {
-            if (i != j) {
-                this.buildRoad(structures[i].id, structures[j].id);
-            }
-        }
+        this.buildRoad(structures[i].id, center.id);
     }
 };
 
@@ -1112,7 +1118,9 @@ Room.prototype.creepSpawnRun =
                         for (var c in avaliableGuards) {
                             //send all to deal with stuff
                             avaliableGuards[c].memory.target = flag.pos.roomName
-                            //FIXME: avaliableGuards[c].task.fork() = Tasks.goToRoom(avaliableGuards[c].memory.target)
+                            if (avaliableGuards[c].hasValidTask) {
+                                avaliableGuards[c].task.fork(creepsInDanger[c].runRole())
+                            }
                         }
                     } else {
                         //spawn more guards
@@ -1127,7 +1135,9 @@ Room.prototype.creepSpawnRun =
                     for (var c in creepsInDanger) {
                         if (creepsInDanger[c].room.name != creepsInDanger[c].memory.home) {
                             //if other room than home -> go home
-                            //FIXME: creepsInDanger[c].task.fork() = Tasks.goToroom(creepsInDanger[c].memory.home)
+                            if (creepsInDanger[c].hasValidTask) {
+                                creepsInDanger[c].task.fork(creepsInDanger[c].runRole())
+                            }
                         }
                     }
                 }

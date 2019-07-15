@@ -9,7 +9,7 @@ module.exports = {
         } else {
             if (creep.carry.energy > 0) {
                 //find buildsites for walls and ramparts
-                var closestConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES, {
+                var closestConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
                     filter: (s) => s.structureType == STRUCTURE_RAMPART || s.structureType == STRUCTURE_WALL
                 });
                 if (!_.isEmpty(closestConstructionSite)) {
@@ -20,10 +20,10 @@ module.exports = {
 
                 //find structures that need repairing
                 if (!_.isEmpty(creep.room.ramparts)) {
-                    var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX);
+                    var ramparts = creep.room.ramparts.filter(s => s.hits < WALLMAX && s.hits < s.hitsMax);
                 }
                 if (!_.isEmpty(creep.room.constructedWalls)) {
-                    var walls = creep.room.constructedWalls.filter(s => s.hits < WALLMAX);
+                    var walls = creep.room.constructedWalls.filter(s => s.hits < WALLMAX && s.hits < s.hitsMax);
                 }
                 //sort by hits
                 var rampart = _.first(_.sortBy(ramparts, "hits"));
