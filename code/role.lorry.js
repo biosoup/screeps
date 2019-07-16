@@ -69,7 +69,7 @@ module.exports = {
             }
 
             //get from continer
-            var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] == s.storeCapacity && s.targetedBy.length == 0)
+            var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] >= (s.storeCapacity - creep.carryCapacity - 50) && s.targetedBy.length == 0)
             if (!_.isEmpty(containers)) {
                 var container = creep.pos.findClosestByRange(containers)
                 creep.task = Tasks.withdraw(container);
@@ -94,6 +94,46 @@ module.exports = {
                         //no link -> creep standby
                         if ((Game.time % 3) == 0) {
                             creep.say(EM_TEA)
+                        }
+
+                        //switch to transporter, if needed
+                        var spawnTransporter = false;
+                        if (spawnRoom.terminal != undefined) {
+                            if (spawnRoom.memory.terminalTransfer != undefined) {
+                                spawnTransporter = true;
+                            } else {
+                                var terminalDelta;
+                                if (spawnRoom.memory.terminalDelta == undefined || Game.time % 10 == 0 || spawnRoom.memory.terminalDelta != 0) {
+                                    terminalDelta = 0;
+                                    for (var res in spawnRoom.terminal.store) {
+                                        var delta = checkTerminalLimits(spawnRoom, res);
+                                        terminalDelta += Math.abs(delta.amount);
+                                        //console.log(terminalDelta)
+                                    }
+
+                                    for (var res in spawnRoom.storage.store) {
+                                        var delta = checkTerminalLimits(spawnRoom, res);
+                                        terminalDelta += Math.abs(delta.amount);
+                                        //console.log(terminalDelta)
+                                    }
+                                } else {
+                                    terminalDelta = spawnRoom.memory.terminalDelta;
+                                }
+                                if (terminalDelta > 0) {
+                                    spawnTransporter = true;
+                                }
+                            }
+                            if (spawnTransporter) {
+                                creep.memory.role = "transporter"
+                            }
+                        }
+
+                        //switch to scientist, if needed
+                        if (spawnRoom.memory.labOrder != undefined) {
+                            var info = spawnRoom.memory.labOrder.split(":");
+                            if (info[3] == "prepare" || info[3] == "done") {
+                                creep.memory.role = "scientist"
+                            }
                         }
                     }
                 } else {

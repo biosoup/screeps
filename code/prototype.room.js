@@ -197,6 +197,12 @@ Room.prototype.buildRoad = function (from, to) {
     var origin = Game.getObjectById(from)
     var destination = Game.getObjectById(to)
 
+    //work only when there are NO construction sites
+    var constructionSites = origin.room.find(FIND_CONSTRUCTION_SITES)
+    if (constructionSites.length > 0) {
+        return "already constructing"
+    }
+
     var path = origin.pos.findPathTo(destination, {
         ignoreCreeps: true,
         ignoreRoads: false
@@ -1120,7 +1126,7 @@ Room.prototype.creepSpawnRun =
                             //send all to deal with stuff
                             avaliableGuards[c].memory.target = flag.pos.roomName
                             if (avaliableGuards[c].hasValidTask) {
-                                avaliableGuards[c].task.fork(creepsInDanger[c].runRole())
+                                //avaliableGuards[c].task.fork(creepsInDanger[c].runRole())
                             }
                         }
                     } else {
@@ -1137,7 +1143,7 @@ Room.prototype.creepSpawnRun =
                         if (creepsInDanger[c].room.name != creepsInDanger[c].memory.home) {
                             //if other room than home -> go home
                             if (creepsInDanger[c].hasValidTask) {
-                                creepsInDanger[c].task.fork(creepsInDanger[c].runRole())
+                                //creepsInDanger[c].task.fork(creepsInDanger[c].runRole())
                             }
                         }
                     }

@@ -213,7 +213,8 @@ module.exports = {
                             }
                         }
                     } else {
-                        creep.say("bored")
+                        //waiting for next tick and next work
+                        //creep.say("bored")
                     }
                 }
             }
