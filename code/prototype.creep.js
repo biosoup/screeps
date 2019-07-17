@@ -9,6 +9,7 @@ let claimer = require('role.claimer')
 let miner = require('role.miner')
 let lorry = require('role.lorry')
 let guard = require('role.guard')
+let einarr = require('role.einarr')
 let spawnAttendant = require('role.spawnAttendant')
 let transporter = require('role.transporter')
 let mineralHarvester = require('role.mineralHarvester')
@@ -39,6 +40,8 @@ Creep.prototype.runRole =
             lorry.newTask(this)
         } else if (this.memory.role == 'guard') {
             guard.nonTask(this)
+        } else if (this.memory.role == 'einarr') {
+            einarr.nonTask(this)
         } else if (this.memory.role == 'spawnAttendant') {
             spawnAttendant.newTask(this)
         } else if (this.memory.role == 'transporter') {

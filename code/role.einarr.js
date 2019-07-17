@@ -50,9 +50,10 @@ module.exports = {
                 //get in for the kill
                 if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
                     creep.travelTo(hostile);
-                } 
-                if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(hostile);
+                } else {
+                    if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
+                        creep.travelTo(hostile);
+                    }
                 }
                 creep.say("Hostile!" + EM_SWORDS);
                 return;
@@ -71,11 +72,11 @@ module.exports = {
 
 
                 //remove flags when no enemies
-                var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
+                /* var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
                 if (!_.isEmpty(whiteFlags)) {
                     creep.say(EM_FLAG)
                     whiteFlags.remove()
-                }
+                } */
 
                 //go sign the controller
                 creep.graffity()
@@ -84,8 +85,8 @@ module.exports = {
                     creep.say(EM_SINGING)
 
                     //send guard home
-                    creep.memory.target = creep.memory.home;
-                    return
+                    /* creep.memory.target = creep.memory.home;
+                    return */
                 }
 
 

@@ -1184,9 +1184,20 @@ Room.prototype.creepSpawnRun =
             }
         }
 
+        //ATTACK
+        var attackFlags = _.filter(Game.flags, (f) => f.color == COLOR_BROWN && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+        var einarr = {}
+        if (!_.isEmpty(attackFlags)) {
+            for (var flag of attackFlags) {
+                minimumSpawnOf.einarr = flag.secondaryColor
+                einarr[flag.pos.roomName] = flag.secondaryColor
+            }
+        }
 
 
-        //console.log(spawnRoom.name+" "+JSON.stringify(roomInterests))
+        if (einarr.length > 0) {
+            console.log(spawnRoom.name + " " + JSON.stringify(einarr))
+        }
 
         let longDistanceHarvester = {}
         let longDistanceMiner = {}
@@ -1697,6 +1708,10 @@ Room.prototype.creepSpawnRun =
                         }
                     } else if (spawnList[spawnEntry] == "longDistanceBuilder") {
                         for (var roomName in longDistanceBuilder) {
+                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
+                        }
+                    } else if (spawnList[spawnEntry] == "einarr") {
+                        for (var roomName in einarr) {
                             name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "guard") {
