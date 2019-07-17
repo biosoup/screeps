@@ -93,7 +93,7 @@ module.exports = {
 
         } else {
             //go to target room
-            creep.task = Tasks.goToRoom(creep.memory.target)
+            creep.task = Tasks.goToRoom(creep.memory.target, {preferHighway: true})
         }
 
     }

@@ -110,9 +110,9 @@ module.exports.loop = function () {
                 if (!_.isEmpty(hostileValues)) {
                     if (hostileValues.numHostiles > 0) {
                         if (hostileValues.numberOfAttackBodyParts > 0) {
-                            var avaliableGuards = _.filter(Game.creeps, (c) => c.memory.role == 'guard' && c.memory.target == roomName)
+                            var avaliableGuards = _.filter(Game.creeps, (c) => (c.memory.role == 'guard' || c.memory.role == "einarr") && c.memory.target == roomName)
                             if ((Game.time % 3) == 0 && hostileValues.username != "Invader") {
-                                console.log("Hostiles in " + roomName + ": " + hostileValues.username + "! Response team of: " + avaliableGuards.length)
+                                console.log("Hostiles in " + roomName + ": " + hostileValues.username + "! " + hostileValues.numHostiles + " hostile with " + hostileValues.numberOfAttackBodyParts + " ATTACK and " + hostileValues.numberOfHealBodyParts + " HEAL. Response team of: " + avaliableGuards.length)
                             }
                         }
                     }
