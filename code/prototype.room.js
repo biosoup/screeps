@@ -1425,10 +1425,10 @@ Room.prototype.creepSpawnRun =
 
             //pull back on lorries when storage is overflowing
             if (_.sum(spawnRoom.storage.store) > 900000) {
-                minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry / 3);
+                minimumSpawnOf.longDistanceLorry = Math.floor(minimumSpawnOf.longDistanceLorry / 3);
             } else {
                 //round that number
-                minimumSpawnOf.longDistanceLorry = Math.ceil(minimumSpawnOf.longDistanceLorry);
+                minimumSpawnOf.longDistanceLorry = Math.floor(minimumSpawnOf.longDistanceLorry);
             }
         }
 

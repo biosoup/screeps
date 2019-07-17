@@ -33,6 +33,9 @@ module.exports = {
                         //creep.task = Tasks.transfer(creep.room.storage);
                         return;
                     }
+                } else {
+                    creep.task = Tasks.transfer(creep.room.storage);
+                    return;
                 }
             } else {
                 creep.say("no storage")
@@ -98,26 +101,26 @@ module.exports = {
 
                         //switch to transporter, if needed
                         var spawnTransporter = false;
-                        if (spawnRoom.terminal != undefined) {
-                            if (spawnRoom.memory.terminalTransfer != undefined) {
+                        if (creep.room.terminal != undefined) {
+                            if (creep.room.memory.terminalTransfer != undefined) {
                                 spawnTransporter = true;
                             } else {
                                 var terminalDelta;
-                                if (spawnRoom.memory.terminalDelta == undefined || Game.time % 10 == 0 || spawnRoom.memory.terminalDelta != 0) {
+                                if (creep.room.memory.terminalDelta == undefined || Game.time % 10 == 0 || creep.room.memory.terminalDelta != 0) {
                                     terminalDelta = 0;
-                                    for (var res in spawnRoom.terminal.store) {
-                                        var delta = checkTerminalLimits(spawnRoom, res);
+                                    for (var res in creep.room.terminal.store) {
+                                        var delta = checkTerminalLimits(creep.room, res);
                                         terminalDelta += Math.abs(delta.amount);
                                         //console.log(terminalDelta)
                                     }
 
-                                    for (var res in spawnRoom.storage.store) {
-                                        var delta = checkTerminalLimits(spawnRoom, res);
+                                    for (var res in creep.room.storage.store) {
+                                        var delta = checkTerminalLimits(creep.room, res);
                                         terminalDelta += Math.abs(delta.amount);
                                         //console.log(terminalDelta)
                                     }
                                 } else {
-                                    terminalDelta = spawnRoom.memory.terminalDelta;
+                                    terminalDelta = creep.room.memory.terminalDelta;
                                 }
                                 if (terminalDelta > 0) {
                                     spawnTransporter = true;
@@ -129,8 +132,8 @@ module.exports = {
                         }
 
                         //switch to scientist, if needed
-                        if (spawnRoom.memory.labOrder != undefined) {
-                            var info = spawnRoom.memory.labOrder.split(":");
+                        if (creep.room.memory.labOrder != undefined) {
+                            var info = creep.room.memory.labOrder.split(":");
                             if (info[3] == "prepare" || info[3] == "done") {
                                 creep.memory.role = "scientist"
                             }

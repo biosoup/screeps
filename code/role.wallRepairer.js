@@ -7,7 +7,12 @@ module.exports = {
         if (!_.isEmpty(creep.memory.home) && creep.room.name != creep.memory.home) {
             creep.task = Tasks.goToRoom(creep.memory.target)
         } else {
-            if (creep.carry.energy > 0) {
+            if (_.sum(creep.carry) > creep.carry[RESOURCE_ENERGY] && !_.isEmpty(creep.room.storage)) {
+                //creep has something other than energy
+                creep.task = Tasks.transferAll(creep.room.storage);
+                creep.say("other")
+                return;
+            } else if (creep.carry.energy > 0) {
                 //find buildsites for walls and ramparts
                 var closestConstructionSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
                     filter: (s) => s.structureType == STRUCTURE_RAMPART || s.structureType == STRUCTURE_WALL
