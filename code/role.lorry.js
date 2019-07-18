@@ -101,12 +101,12 @@ module.exports = {
 
                         //switch to transporter, if needed
                         var spawnTransporter = false;
-                        if (creep.room.terminal != undefined) {
-                            if (creep.room.memory.terminalTransfer != undefined) {
+                        if (!_.isEmpty(creep.room.terminal)) {
+                            if (!_.isEmpty(creep.room.memory.terminalTransfer)) {
                                 spawnTransporter = true;
                             } else {
                                 var terminalDelta;
-                                if (creep.room.memory.terminalDelta == undefined || Game.time % 10 == 0 || creep.room.memory.terminalDelta != 0) {
+                                if (_.isEmpty(creep.room.memory.terminalDelta) || Game.time % 10 == 0 || creep.room.memory.terminalDelta != 0) {
                                     terminalDelta = 0;
                                     for (var res in creep.room.terminal.store) {
                                         var delta = checkTerminalLimits(creep.room, res);
@@ -126,18 +126,26 @@ module.exports = {
                                     spawnTransporter = true;
                                 }
                             }
-                            if (spawnTransporter) {
+                            var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'transporter' && c.memory.home == creep.room.name)
+                            if (spawnTransporter && inRooms == 0) {
                                 creep.memory.role = "transporter"
+                                return
                             }
                         }
 
                         //switch to scientist, if needed
-                        if (creep.room.memory.labOrder != undefined) {
+                        var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'scientist' && c.memory.home == creep.room.name)
+                        if (!_.isEmpty(creep.room.memory.labOrder) && inRooms == 0) {
                             var info = creep.room.memory.labOrder.split(":");
                             if (info[3] == "prepare" || info[3] == "done") {
                                 creep.memory.role = "scientist"
+                                return
                             }
                         }
+
+                        //enough energy in storage
+                        creep.task = Tasks.withdraw(creep.room.storage);
+                        return;
                     }
                 } else {
                     //enough energy in storage

@@ -10,6 +10,12 @@ module.exports = {
             creep.say("other")
             return;
         } else if (creep.carry.energy > 50) {
+            /*
+                NEW TODO:
+                - lofic for lookFor around the creep
+                - refill and move on the same tick
+            */
+
             //do the actual job
             if (creep.fillStructures(creep)) {
                 return;

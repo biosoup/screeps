@@ -102,9 +102,10 @@ module.exports = {
             if (terminalDelta == 0) {
                 //Everything perfect!
                 if (creep.storeAllBut(RESOURCE_ENERGY) == true) {
-                    //creep.roleEnergyTransporter();
+                    
                     creep.say("all done!")
                     creep.storeAllBut();
+                    creep.memory.role = "lorry"
                 }
             } else {
                 if (_.sum(creep.carry) > 0) {
