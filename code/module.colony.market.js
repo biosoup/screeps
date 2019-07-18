@@ -401,6 +401,7 @@ module.exports = {
                         } else {
                             storageLevel = Game.rooms[r].storage.store[RESOURCES_ALL[res]];
                         }
+                        //console.log((storageLevel) +" "+ Game.rooms[r].memory.resourceLimits[RESOURCES_ALL[res]].minProduction +" "+ JSON.stringify(Game.rooms[r].memory.resourceLimits[RESOURCES_ALL[res]]))
 
                         if ((storageLevel) < Game.rooms[r].memory.resourceLimits[RESOURCES_ALL[res]].minProduction) {
                             //Try to produce resource

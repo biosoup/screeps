@@ -264,7 +264,7 @@ module.exports.loop = function () {
                     console.log("TOWER ERR: " + tower + " " + err.stack)
                 }
 
-                if (Game.cpu.bucket > CPU_THRESHOLD * 2) {
+                if (Game.cpu.bucket > CPU_THRESHOLD * 2 && Game.rooms[roomName].controller.my) {
                     try {
                         // default resource limits
                         market.resourceLimits(roomName);

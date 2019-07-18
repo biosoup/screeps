@@ -196,6 +196,13 @@ Creep.prototype.fillStructures = function (creep) {
         return true;
     }
 
+    //fill powerSpawns with energy
+    var powerSpawn = creep.room.find(FIND_MY_STRUCTURES, {filter: f=> f.structureType == STRUCTURE_POWER_SPAWN})
+    if (!_.isEmpty(powerSpawn)) {
+        creep.task = Tasks.transfer(powerSpawn[0]);
+        return true;
+    }
+
     //fill upgrade container
     var container = _.first(creep.room.controller.pos.findInRange(creep.room.containers, 2, {
         filter: f => f.store[RESOURCE_ENERGY] < f.storeCapacity && f.targetedBy.length == 0

@@ -1134,7 +1134,7 @@ Room.prototype.creepSpawnRun =
 
                         //roomInterests.room = [harvesters, sources/miners, lorries, builders, claimers, guards]
                         //builders & guard = boolean
-                        roomInterests[flag.pos.roomName] = [0, 0, 0, 2, 0, flag.secondaryColor]
+                        roomInterests[flag.pos.roomName] = [0, 0, 0, 0, 0, flag.secondaryColor]
                         var defend = flag.pos.roomName;
                     }
                     //break tasks for all creeps in room
@@ -1194,7 +1194,7 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        //ATTACK
+        //DEMOLISH
         var demoFlags = _.filter(Game.flags, (f) => f.color == COLOR_ORANGE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
         var demolisher = {}
         if (!_.isEmpty(demoFlags)) {

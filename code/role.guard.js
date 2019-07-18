@@ -57,28 +57,6 @@ module.exports = {
                 creep.say("Hostile!" + EM_SWORDS);
                 return;
             } else {
-                //find enemy structures
-                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {filter: f => f.structureType != STRUCTURE_CONTROLLER})
-                if (!_.isEmpty(hostile)) {
-                    //get in for the kill
-                    if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile);
-                    }
-                    if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile);
-                    }
-                    creep.say("Hostile!" + EM_SWORDS);
-                    return;
-                }
-
-                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CONSTRUCTION_SITES)
-                if (!_.isEmpty(hostile)) {
-                    //get in for the kill
-                    creep.travelTo(hostile);
-                    creep.say("Hostile!" + EM_SWORDS);
-                    return;
-                }
-
                 //find damaged creeps
                 var hitCreeps = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
                     filter: c => c.hits < c.hitsMax
