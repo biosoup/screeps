@@ -265,16 +265,20 @@ module.exports.loop = function () {
                 }
 
                 if (Game.cpu.bucket > CPU_THRESHOLD * 2) {
-                    // default resource limits
-                    market.resourceLimits(roomName);
-                    // balance resources
-                    market.resourceBalance(CPUdebug);
-                    // terminal transfers
-                    market.terminalCode(roomName, CPUdebug);
+                    try {
+                        // default resource limits
+                        market.resourceLimits(roomName);
+                        // balance resources
+                        market.resourceBalance(CPUdebug);
+                        // terminal transfers
+                        market.terminalCode(roomName, CPUdebug);
 
-                    market.productionCode(roomName);
+                        market.productionCode(roomName);
 
-                    market.labCode(roomName);
+                        market.labCode(roomName);
+                    } catch (err) {
+                        console.log("ROOM FNC ERR: " + roomName + " " + err.stack)
+                    }
                 }
             }
         }

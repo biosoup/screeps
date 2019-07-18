@@ -1431,7 +1431,7 @@ Room.prototype.creepSpawnRun =
             if (_.isEmpty(spawnRoom.storage)) {
                 minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
             } else {
-                if (spawnRoom.storage.store[RESOURCE_ENERGY] > 50000) {
+                if (spawnRoom.storage.store[RESOURCE_ENERGY] > 500000) {
                     minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
                 } else {
                     minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);

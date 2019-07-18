@@ -1,6 +1,6 @@
 var Tasks = require("tools.creep-tasks");
 
-let longDistanceHarvester = {
+module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
     newTask: function (creep) {

@@ -393,7 +393,7 @@ module.exports = {
         if (Game.cpu.bucket > CPU_THRESHOLD && Game.time % DELAYPRODUCTION == 0 && Game.rooms[r].memory.innerLabs != undefined && Game.rooms[r].memory.innerLabs[0] != "[LAB_ID]" && Game.rooms[r].memory.innerLabs[1] != "[LAB_ID]" &&
             Game.rooms[r].memory.labOrder == undefined && Game.rooms[r].memory.labTarget == undefined && !_.isEmpty(Game.rooms[r].storage)) {
             for (let res in RESOURCES_ALL) {
-                if (!_.isEmpty(mineralDescriptions[RESOURCES_ALL[res]])) {
+                if (!_.isEmpty(mineralDescriptions[RESOURCES_ALL[res]]) && !_.isEmpty(RESOURCES_ALL[res])) {
                     if (RESOURCES_ALL[res] != RESOURCE_ENERGY && RESOURCES_ALL[res] != RESOURCE_POWER && mineralDescriptions[RESOURCES_ALL[res]].tier > 0) {
                         var storageLevel;
                         if (Game.rooms[r].storage.store[RESOURCES_ALL[res]] == undefined) {
