@@ -1069,13 +1069,13 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["guard"] = 0;
         minimumSpawnOf["miner"] = 0;
         minimumSpawnOf["longDistanceMiner"] = 0;
-        minimumSpawnOf["demolisher"] = 0; //unused
+        minimumSpawnOf["demolisher"] = 0; 
         minimumSpawnOf["spawnAttendant"] = 0;
         minimumSpawnOf["longDistanceLorry"] = 0;
         minimumSpawnOf["longDistanceBuilder"] = 0;
         minimumSpawnOf["attacker"] = 0; //unused
         minimumSpawnOf["healer"] = 0; //unused
-        minimumSpawnOf["einarr"] = 0; //unused
+        minimumSpawnOf["einarr"] = 0; 
         minimumSpawnOf["archer"] = 0; //unused
         minimumSpawnOf["scientist"] = 0; //unused
         minimumSpawnOf["transporter"] = 0;
@@ -1191,6 +1191,16 @@ Room.prototype.creepSpawnRun =
             for (var flag of attackFlags) {
                 minimumSpawnOf.einarr = flag.secondaryColor
                 einarr[flag.pos.roomName] = flag.secondaryColor
+            }
+        }
+
+        //ATTACK
+        var demoFlags = _.filter(Game.flags, (f) => f.color == COLOR_ORANGE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
+        var demolisher = {}
+        if (!_.isEmpty(demoFlags)) {
+            for (var flag of demoFlags) {
+                minimumSpawnOf.demolisher = flag.secondaryColor
+                demolisher[flag.pos.roomName] = flag.secondaryColor
             }
         }
 
@@ -1712,6 +1722,10 @@ Room.prototype.creepSpawnRun =
                         }
                     } else if (spawnList[spawnEntry] == "einarr") {
                         for (var roomName in einarr) {
+                            name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
+                        }
+                    } else if (spawnList[spawnEntry] == "demolisher") {
+                        for (var roomName in demolisher) {
                             name = testSpawn.createCustomCreep(energy, spawnList[spawnEntry], spawnRoom.name, roomName);
                         }
                     } else if (spawnList[spawnEntry] == "guard") {

@@ -19,6 +19,7 @@ let longDistanceBuilder = require('role.longDistanceBuilder')
 let scientist = require('role.scientist')
 let wallRepairer = require('role.wallRepairer')
 let safecreep = require('role.safecreep')
+let demolisher = require('role.demolisher')
 
 
 Creep.prototype.runRole =
@@ -60,6 +61,8 @@ Creep.prototype.runRole =
             wallRepairer.newTask(this)
         } else if (this.memory.role == 'safecreep') {
             safecreep.newTask(this)
+        } else if (this.memory.role == 'demolisher') {
+            demolisher.newTask(this)
         } else {
             console.log("error - missing creep role " + this.memory.role + " " + this.room.name)
         }

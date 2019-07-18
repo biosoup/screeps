@@ -58,7 +58,7 @@ module.exports = {
                 return;
             } else {
                 //find enemy structures
-                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES)
+                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {filter: f => f.structureType != STRUCTURE_CONTROLLER})
                 if (!_.isEmpty(hostile)) {
                     //get in for the kill
                     if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
