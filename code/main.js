@@ -10,6 +10,10 @@ if (CPUdebug == true) {
 }
 
 //system imports
+//import MemHack from './tools.MemHack'
+const MemHack = require('tools.MemHack');
+MemHack.register()
+
 require('globals')
 require('./tools.prototype.Room.structures');
 const profiler = require('tools.screeps-profiler');
@@ -30,6 +34,7 @@ profiler.enable();
 
 module.exports.loop = function () {
     profiler.wrap(function () {
+        MemHack.pretick()
         stats.reset()
 
         let cpu = Game.cpu.getUsed();

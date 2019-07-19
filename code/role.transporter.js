@@ -102,10 +102,14 @@ module.exports = {
             if (terminalDelta == 0) {
                 //Everything perfect!
                 if (creep.storeAllBut(RESOURCE_ENERGY) == true) {
-                    
+
                     creep.say("all done!")
                     creep.storeAllBut();
-                    creep.memory.role = "lorry"
+
+                    //switch lorries back
+                    if (_.first(_.words(creep.name, /[^-]+/g)) != "transporter") {
+                        creep.memory.role = "lorry"
+                    }
                 }
             } else {
                 if (_.sum(creep.carry) > 0) {
@@ -202,7 +206,7 @@ module.exports = {
                                     return
                                 }
                             }
-                            
+
 
                             var spawn = _.first(creep.room.find(STRUCTURE_SPAWN, {
                                 filter: s => _.isEmpty(s.spawning.name)
