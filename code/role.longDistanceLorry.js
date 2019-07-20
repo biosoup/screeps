@@ -25,7 +25,7 @@ module.exports = {
                 var creepPossibleDistance = (creep.ticksToLive / 2) - 40;
 
                 //get all possible targets
-                var allContainers = _.filter(r.memory.containerSources, (c) => c.energy >= creep.carryCapacity && c.distance != false && c.distance < creepPossibleDistance);
+                var allContainers = _.filter(r.memory.containerSources, (c) => (c.energy + (c.distance * 10)) >= creep.carryCapacity && c.distance != false && c.distance < creepPossibleDistance);
 
                 //console.log(JSON.stringify(validContainers))
                 //console.log(JSON.stringify(_.difference(containerTargets, allContainers)))
@@ -37,13 +37,18 @@ module.exports = {
                     validContainer = _.sortByOrder(allContainers, ['ed'], ['desc'], _.values)
 
                     //get other long distance lorries, and their check for same target
-                    var allMinerCreeps = _.map(_.filter(Game.creeps, (c) => c.memory.home == r.name && c.memory.role == "longDistanceLorry"), "c.memory.target");
+                    var allLorriesTargets = _.map(_.map(_.filter(Game.creeps, (c) => c.memory.home == r.name && c.memory.role == "longDistanceLorry"), "memory"), "target")
+
+                    //console.log(JSON.stringify(allLorriesTargets))
+
+                    // TODO: ability to send multiple creeps for a full container in distance
 
                     //check for duplicate targets
                     var validTarget;
-                    for (var c in allMinerCreeps) {
+                    for (var c in allLorriesTargets) {
                         for (i = 0; i < _.size(validContainer); i++) {
-                            if (c.id != validContainer[i].id) {
+                            //console.log(JSON.stringify(allLorriesTargets[c]))
+                            if (allLorriesTargets[c] != validContainer[i].id) {
                                 validTarget = validContainer[i]
                                 break;
                             }
@@ -52,25 +57,20 @@ module.exports = {
 
                     if (!_.isEmpty(validTarget)) {
                         //target found, add it to creep.memory.target
-                        creep.memory.target = validTarget;
+                        creep.memory.target = validTarget.id;
                         container = Game.getObjectById(validTarget.id)
                         if (!_.isEmpty(container)) {
-                            if (validTarget.energy >= creep.carryCapacity) {
-                                //go work the target
-                                creep.task = Tasks.withdraw(container);
-                                creep.say(EM_TRUCK)
+                            //go work the target
+                            creep.task = Tasks.withdraw(container);
+                            creep.say(EM_TRUCK)
 
-                                //substract current request
-                                r.memory.containerSources[validTarget.id].energy = r.memory.containerSources[validTarget.id].energy - creep.carryCapacity
-                                validTarget.energy = validTarget.energy - creep.carryCapacity
+                            //substract current request
+                            r.memory.containerSources[validTarget.id].energy = (r.memory.containerSources[validTarget.id].energy + (r.memory.containerSources[validTarget.id].distance * 10)) - creep.carryCapacity
+                            energyLeft = (validTarget.energy + (validTarget.distance * 10)) - creep.carryCapacity
 
-                                if (creep.carryCapacity > container.store[RESOURCE_ENERGY]) {
-                                    var carry = container.store[RESOURCE_ENERGY]
-                                } else {
-                                    var carry = creep.carryCapacity
-                                }
-                                //console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] + "(" + validTarget.energy + ") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
-                            }
+                            /* console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] +
+                                "(" + energyLeft + "/" + r.memory.containerSources[validTarget.id].energy + ") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
+                                 */
                         } else {
                             console.log(creep.name + " ERRRRR!!!  target not valid " + JSON.stringify(validTarget) + " " + JSON.stringify(allContainers) + " " + JSON.stringify(container))
                             delete r.memory.containerSources[validTarget.id]
@@ -102,7 +102,7 @@ module.exports = {
                 }
             } else if (creep.room.name == creep.memory.home && !_.isEmpty(creep.memory.target)) {
                 //creep is home, nad target is valid
-                var validContainer = creep.memory.target
+                var validContainer = Game.getObjectById(creep.memory.target)
 
                 if (!_.isEmpty(validContainer)) {
                     //go work the target

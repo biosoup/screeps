@@ -1910,7 +1910,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         claimer: {
             name: "claimer",
-            prio: 150,
+            prio: 140,
             energyRole: false,
             min: minimumSpawnOf.claimer,
             max: numberOf.claimer,
@@ -1942,7 +1942,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         longDistanceLorry: {
             name: "longDistanceLorry",
-            prio: 140,
+            prio: 150,
             energyRole: true,
             min: minimumSpawnOf.longDistanceLorry,
             max: numberOf.longDistanceLorry,

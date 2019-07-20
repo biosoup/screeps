@@ -328,26 +328,13 @@ module.exports.loop = function () {
             }
             stats.addStat('spawn-busy', {}, spawnBusy)
 
-            var containerStats = {};
-            var hostilesStats = {};
             var countHostiles = 0;
             for (var roomName in Game.rooms) {
-                var containers = Game.rooms[roomName].containers
-                var containerStorage = 0;
-                if (!_.isEmpty(containers)) {
-                    for (var container of containers) {
-                        containerStorage = containerStorage + container.store[RESOURCE_ENERGY];
-                    }
-                    containerStats[Game.rooms[roomName].name] = containerStorage;
-                }
                 var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
                 if (hostiles.length > 0) {
                     countHostiles = countHostiles + hostiles.length
-                    hostilesStats[Game.rooms[roomName].name] = hostiles.length
                 }
             }
-            stats.addStat('energy-container', {}, containerStats)
-            stats.addStat('hostiles-room', {}, hostilesStats)
 
             //check for hostiles in any room
             stats.addSimpleStat('hostiles', countHostiles);
