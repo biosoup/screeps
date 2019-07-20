@@ -236,10 +236,12 @@ module.exports.loop = function () {
                     Game.rooms[roomName].baseRCLBuild()
                 }
 
-                //run link balancing
+                
                 if ((Game.time % DELAYLINK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
+                    //run link balancing
                     Game.rooms[roomName].linksRun(roomName)
 
+                    //refresh refresh remote containers
                     Game.rooms[roomName].refreshContainerSources(roomName)
                 }
 
@@ -317,7 +319,7 @@ module.exports.loop = function () {
         }
         //other stats
         //var elapsedInSeconds = ((new Date()).getTime() - Memory.stats.lastTS) / 1000
-        if ((Game.time % 10) == 0 && Game.cpu.bucket > 100) {
+        if ((Game.time % 5) == 0 && Game.cpu.bucket > 100) {
             var spawnBusy = {};
             for (var spawnName in Game.spawns) {
                 if (Game.spawns[spawnName].spawning) {

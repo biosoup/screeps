@@ -615,11 +615,11 @@ Room.prototype.refreshContainerSources = function (r) {
         var containerList = [];
         for (let roomName of inRooms) {
             if (!_.isEmpty(roomName)) {
-                if (Game.rooms[roomName] != undefined) {
-                    var roomContainers = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                        filter: s => s.structureType == STRUCTURE_CONTAINER
-                    });
-                    containerList = [...containerList, ...roomContainers]
+                if (!_.isEmpty(Game.rooms[roomName])) {
+                    if (!_.isEmpty(Game.rooms[roomName].containers)) {
+                        var roomContainers = Game.rooms[roomName].containers
+                        containerList = [...containerList, ...roomContainers]
+                    }
                 }
             }
         }
@@ -631,7 +631,7 @@ Room.prototype.refreshContainerSources = function (r) {
             r.memory.containerSources = {};
         }
 
-        //if refersh time, empty all continer data
+        //if refersh time, empty all container data
         if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > 5000) {
             r.memory.containerSources = {};
         }
@@ -645,15 +645,45 @@ Room.prototype.refreshContainerSources = function (r) {
 
         //get info about containers
         for (let container of containerList) {
-            if (container != undefined && container != null) {
-                if (r.memory.containerSources[container.id] != undefined) {
+            if (!_.isEmpty(container) && !_.isEmpty(container)) {
+                if (!_.isEmpty(r.memory.containerSources[container.id])) {
+                    //check for how many creep target it
+                    var incomingLorries = _.filter(container.targetedBy, f => _.first(_.words(f.name, /[^-]+/g)) == "longDistanceLorry")
+                    var carryParts = 0
+                    if (!_.isEmpty(incomingLorries)) {
+                        //get their body size
+                        for (var h in incomingLorries) {
+                            for (var part in incomingLorries[h].body) {
+                                if (incomingLorries[h].body[part].type == CARRY) {
+                                    carryParts++;
+                                }
+                            }
+                        }
+                        
+                    }
+
+
+                    var energyForDistance = container.store[RESOURCE_ENERGY] + 10 * r.memory.containerSources[container.id].distance
+                    var energyNeededForCarry = carryParts * CARRY_CAPACITY
+
+                    var valid = false
+                    if(container.store[RESOURCE_ENERGY] >= energyNeededForCarry) {
+                        valid = true
+                    }
+                    //console.log(carryParts + " " + incomingLorries.length+ " "+valid)
+                
                     if ((r.memory.containerSources[container.id].time + 30) < Game.time) {
                         //if the container ID exists, just update it
                         r.memory.containerSources[container.id].id = container.id
                         r.memory.containerSources[container.id].pos = container.pos
-                        r.memory.containerSources[container.id].energyCapacity = energyCapacity
-                        r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
                         r.memory.containerSources[container.id].time = Game.time
+                        //add info about validity of target
+                        r.memory.containerSources[container.id].valid = valid
+                        //add info about the current capacity based on reservation
+                        r.memory.containerSources[container.id].energyCapacity = energyCapacity
+                        //add info about current energy levels
+                        r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
+                        //add info for sorting
                         r.memory.containerSources[container.id].ed = container.store[RESOURCE_ENERGY] / (r.memory.containerSources[container.id].distance * 2)
                     }
                 } else {
@@ -661,6 +691,7 @@ Room.prototype.refreshContainerSources = function (r) {
                     r.memory.containerSources[container.id] = {}
                     r.memory.containerSources[container.id].id = container.id
                     r.memory.containerSources[container.id].pos = container.pos
+                    r.memory.containerSources[container.id].valid = valid
                     r.memory.containerSources[container.id].energyCapacity = energyCapacity
                     r.memory.containerSources[container.id].energy = container.store[RESOURCE_ENERGY]
                     r.memory.containerSources[container.id].time = Game.time
@@ -1096,7 +1127,7 @@ Room.prototype.creepSpawnRun =
         //room interests
         let roomInterests = {}
 
-        //get all flags with code PURPLE for remote HARVESTERS
+        // REMOTE HARVEST
         var redFlags = _.filter(Game.flags, (f) => f.color == COLOR_RED && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
         //get remote mining rooms for this spawnroom
         if (!_.isEmpty(redFlags)) {
@@ -1106,7 +1137,7 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        // flag based remote mining
+        // REMOTE MINING
         if (!_.isEmpty(spawnRoom.storage)) {
             //get all flags with code PURPLE for remote MINERS
             var purpleFlags = _.filter(Game.flags, (f) => f.color == COLOR_PURPLE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
@@ -1147,15 +1178,17 @@ Room.prototype.creepSpawnRun =
 
             var creepsNeeded = carryNeeded / numCarryBody
 
-/*             var creepsCrurrent = _.filter(allMyCreeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.home == spawnRoom.name).length
-            console.log(spawnRoom.name + " distance: " + sumDistance + " count: " + count + " e/t: " + energyProduced+" "+avgEnergyCapacity + " energyDist: " + energyDistance + " bodySize: " +
-                numCarryBody + " carryNeed: " + carryNeeded + " = creepsNeed: " + creepsNeeded + " currently: " + creepsCrurrent);
- */
+            if (false) {
+                var creepsCrurrent = _.filter(allMyCreeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.home == spawnRoom.name).length
+                console.log(spawnRoom.name + " distance: " + sumDistance + " count: " + count + " e/t: " + energyProduced + " " + avgEnergyCapacity + " energyDist: " + energyDistance + " bodySize: " +
+                    numCarryBody + " carryNeed: " + carryNeeded + " = creepsNeed: " + creepsNeeded + " currently: " + creepsCrurrent);
+            }
+
             minimumSpawnOf.longDistanceLorry = _.floor(creepsNeeded)
         }
 
 
-        //flag based room defense
+        // DEFENSE
         if (!_.isEmpty(spawnRoom.storage)) {
             //get gcl and number of rooms
             var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)

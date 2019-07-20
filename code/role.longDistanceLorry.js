@@ -25,35 +25,16 @@ module.exports = {
                 var creepPossibleDistance = (creep.ticksToLive / 2) - 40;
 
                 //get all possible targets
-                var allContainers = _.filter(r.memory.containerSources, (c) => (c.energy + (c.distance * 10)) >= creep.carryCapacity && c.distance != false && c.distance < creepPossibleDistance);
+                var allContainers = _.filter(r.memory.containerSources, (c) => (c.energy + (c.distance * 10)) >= creep.carryCapacity && c.distance != false && c.distance < creepPossibleDistance && c.valid == true);
 
-                //console.log(JSON.stringify(validContainers))
-                //console.log(JSON.stringify(_.difference(containerTargets, allContainers)))
-                //console.log(_.size(validContainers)+" "+JSON.stringify(_.sortByOrder(validContainers, ['ed'], ['desc'], _.values)[0]))
+                if (!_.isEmpty(allContainers)) {
+                    //console.log(JSON.stringify(allContainers))
+                }
 
                 //sort by distance and amount
                 if (_.size(allContainers) > 0) {
                     //sort valid conteiners by best
-                    validContainer = _.sortByOrder(allContainers, ['ed'], ['desc'], _.values)
-
-                    //get other long distance lorries, and their check for same target
-                    var allLorriesTargets = _.map(_.map(_.filter(Game.creeps, (c) => c.memory.home == r.name && c.memory.role == "longDistanceLorry"), "memory"), "target")
-
-                    //console.log(JSON.stringify(allLorriesTargets))
-
-                    // TODO: ability to send multiple creeps for a full container in distance
-
-                    //check for duplicate targets
-                    var validTarget;
-                    for (var c in allLorriesTargets) {
-                        for (i = 0; i < _.size(validContainer); i++) {
-                            //console.log(JSON.stringify(allLorriesTargets[c]))
-                            if (allLorriesTargets[c] != validContainer[i].id) {
-                                validTarget = validContainer[i]
-                                break;
-                            }
-                        }
-                    }
+                    validTarget = _.first(_.sortByOrder(allContainers, ['ed'], ['desc'], _.values))
 
                     if (!_.isEmpty(validTarget)) {
                         //target found, add it to creep.memory.target
@@ -68,9 +49,11 @@ module.exports = {
                             r.memory.containerSources[validTarget.id].energy = (r.memory.containerSources[validTarget.id].energy + (r.memory.containerSources[validTarget.id].distance * 10)) - creep.carryCapacity
                             energyLeft = (validTarget.energy + (validTarget.distance * 10)) - creep.carryCapacity
 
-                            /* console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] +
-                                "(" + energyLeft + "/" + r.memory.containerSources[validTarget.id].energy + ") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed)
-                                 */
+                            if (true) {
+                                console.log(creep.name + " going for " + container.id + " in " + container.room.name + " with " + container.store[RESOURCE_ENERGY] +
+                                    "(" + energyLeft + "/" + r.memory.containerSources[validTarget.id].energy + ") in distance " + validTarget.distance + " for a return of e/d " + validTarget.ed.toFixed(2) + " (CPU used: " + (Game.cpu.getUsed() - cpuStart).toFixed(2) + ")")
+                            }
+
                         } else {
                             console.log(creep.name + " ERRRRR!!!  target not valid " + JSON.stringify(validTarget) + " " + JSON.stringify(allContainers) + " " + JSON.stringify(container))
                             delete r.memory.containerSources[validTarget.id]
