@@ -85,7 +85,7 @@ Room.prototype.roomEconomy = function () {
     //storage
     if (!_.isEmpty(this.storage)) {
         var storageEnergy = this.storage.store[RESOURCE_ENERGY]
-        var storageTarget = 100000 * rcl
+        var storageTarget = MINSURPLUSENERGY * rcl
         var ticksToStorageTarget = ((storageTarget - storageEnergy) / energySurpluss).toFixed(2)
     }
 
@@ -407,6 +407,11 @@ Room.prototype.baseRCLBuild = function () {
             if (!_.isEmpty(baseRCL4)) {
                 var base = baseRCL4
             }
+
+            if(!_.isEmpty(baseRCLdefences)) {
+                //TODO: adjust postition x-1, y-1 & add to the base array
+
+            }
             break
         case 5:
             //+10 extensions, +1 tower, 2 links
@@ -436,11 +441,11 @@ Room.prototype.baseRCLBuild = function () {
             // define inner labs, only when build
             if (room.labs.length >= 3 && room.memory.innerLabs[0].labID == "[LAB_ID]" && room.memory.innerLabs[1].labID == "[LAB_ID]") {
                 //labs IDs not defined
-                
+
                 //look for stuctures
                 var lab0 = _.first(_.filter(room.lookForAt(LOOK_STRUCTURES, tlc.x + 5, tlc.y + 1), f => f.structureType == STRUCTURE_LAB))
                 var lab1 = _.first(_.filter(room.lookForAt(LOOK_STRUCTURES, tlc.x + 5, tlc.y + 2), f => f.structureType == STRUCTURE_LAB))
-                console.log("Lab0: "+lab0.id+" Lab1: "+lab1.id)
+                console.log("Lab0: " + lab0.id + " Lab1: " + lab1.id)
                 //check if they are truly there
                 if (!_.isEmpty(lab0.id) && !_.isEmpty(lab1.id)) {
                     room.memory.innerLabs[0].labID = lab0.id;
@@ -1025,6 +1030,12 @@ Room.prototype.linksRun =
 
 Room.prototype.checkForDefeat = function (spawnRoom) {
     if (_.isEmpty(spawnRoom.controller.owner)) {
+        //check for DEMOLITION flag
+        var demoFlags = _.filter(Game.flags, (f) => f.color == COLOR_ORANGE && f.pos.roomName == spawnRoom.name)
+        if (!_.isEmpty(demoFlags)) {
+            return "demolition in progress"
+        }
+
         var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS)
         if (hostiles.length == 0) {
             //get closest other spawns
@@ -1040,7 +1051,7 @@ Room.prototype.checkForDefeat = function (spawnRoom) {
                     }
                 }
             }
-            distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+            var distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
 
             spawnRoom.createFlag(25, 25, "DEFEND-" + spawnRoom.name + "-" + distanceName, COLOR_WHITE, COLOR_YELLOW)
             console.log(spawnRoom.name + " has been defeated!! Sending recovery team!!")
@@ -1048,7 +1059,8 @@ Room.prototype.checkForDefeat = function (spawnRoom) {
             //FIXME: claim flag only when safe –> when full complement of guards is in place
 
             //var inRooms = _.sum(allMyCreeps, (c) => c.memory.role == 'guard' && c.memory.target == spawnRoom.name)
-            spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-" + distanceName, COLOR_GREY, COLOR_PURPLE)
+
+            //spawnRoom.createFlag(24, 24, "CLAIM-" + spawnRoom.name + "-" + distanceName, COLOR_GREY, COLOR_PURPLE)
         } else {
             console.log(spawnRoom.name + " has been defeated!! Occupied by " + hostiles.length)
         }
@@ -1280,20 +1292,20 @@ Room.prototype.creepSpawnRun =
             }
         }
 
+        if (einarr.length > 0) {
+            console.log(spawnRoom.name + " " + JSON.stringify(einarr))
+        }
+
         //DEMOLISH
         var demoFlags = _.filter(Game.flags, (f) => f.color == COLOR_ORANGE && _.last(_.words(f.name, /[^-]+/g)) == spawnRoom.name)
         var demolisher = {}
         if (!_.isEmpty(demoFlags)) {
             for (var flag of demoFlags) {
-                minimumSpawnOf.demolisher = flag.secondaryColor
+                minimumSpawnOf.demolisher = minimumSpawnOf.demolisher + flag.secondaryColor
                 demolisher[flag.pos.roomName] = flag.secondaryColor
             }
         }
 
-
-        if (einarr.length > 0) {
-            console.log(spawnRoom.name + " " + JSON.stringify(einarr))
-        }
 
         let longDistanceHarvester = {}
         let longDistanceMiner = {}
