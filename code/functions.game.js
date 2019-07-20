@@ -609,7 +609,7 @@ global.sellHigh = function (amount, resource) {
 global.buyLow = function (amount, resource, priceLimit) {
     // buy as much as need below price limit
     if (arguments.length == 0) {
-        return "sellHigh (amount, resource, priceLimit)";
+        return "buyLow (amount, resource, priceLimit)";
     }
     let amountBuffer = amount;
     let orders = Game.market.getAllOrders({

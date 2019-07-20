@@ -652,26 +652,17 @@ Room.prototype.refreshContainerSources = function (r) {
                     var carryParts = 0
                     if (!_.isEmpty(incomingLorries)) {
                         //get their body size
-                        for (var h in incomingLorries) {
-                            for (var part in incomingLorries[h].body) {
-                                if (incomingLorries[h].body[part].type == CARRY) {
-                                    carryParts++;
-                                }
-                            }
-                        }
-                        
+                        carryParts = _.sum(incomingLorries, h => _.sum(h.body, part => part.type === CARRY))
                     }
 
-
-                    var energyForDistance = container.store[RESOURCE_ENERGY] + 10 * r.memory.containerSources[container.id].distance
                     var energyNeededForCarry = carryParts * CARRY_CAPACITY
 
                     var valid = false
-                    if(container.store[RESOURCE_ENERGY] >= energyNeededForCarry) {
+                    if (container.store[RESOURCE_ENERGY] >= energyNeededForCarry) {
                         valid = true
                     }
                     //console.log(carryParts + " " + incomingLorries.length+ " "+valid)
-                
+
                     if ((r.memory.containerSources[container.id].time + 30) < Game.time) {
                         //if the container ID exists, just update it
                         r.memory.containerSources[container.id].id = container.id
@@ -1184,7 +1175,11 @@ Room.prototype.creepSpawnRun =
                     numCarryBody + " carryNeed: " + carryNeeded + " = creepsNeed: " + creepsNeeded + " currently: " + creepsCrurrent);
             }
 
-            minimumSpawnOf.longDistanceLorry = _.floor(creepsNeeded)
+            if (!_.isEmpty(spawnRoom.storage)) {
+                if (_.sum(spawnRoom.storage.store) < 950000) {
+                    minimumSpawnOf.longDistanceLorry = _.floor(creepsNeeded)
+                }
+            }
         }
 
 
