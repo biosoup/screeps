@@ -408,7 +408,7 @@ Room.prototype.baseRCLBuild = function () {
                 var base = baseRCL4
             }
 
-            if(!_.isEmpty(baseRCLdefences)) {
+            if (!_.isEmpty(baseRCLdefences)) {
                 //TODO: adjust postition x-1, y-1 & add to the base array
 
             }
@@ -1139,6 +1139,7 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["transporter"] = 0;
         minimumSpawnOf["SKHarvester"] = 0; //unused
         minimumSpawnOf["SKHauler"] = 0; //unused
+        minimumSpawnOf["herocreep"] = 0;
 
         // LL code for miners and long distances
 
@@ -1537,7 +1538,7 @@ Room.prototype.creepSpawnRun =
             if (_.isEmpty(spawnRoom.storage)) {
                 minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
             } else {
-                if (spawnRoom.storage.store[RESOURCE_ENERGY] > 500000) {
+                if (spawnRoom.storage.store[RESOURCE_ENERGY] > (MINSURPLUSENERGY * spawnRoom.controller.level)) {
                     minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
                 } else {
                     minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
@@ -1633,6 +1634,22 @@ Room.prototype.creepSpawnRun =
                 minimumSpawnOf.scientist = 1;
             }
         }
+
+        //HEROcreep
+        if (!_.isEmpty(spawnRoom.storage)) {
+            var powerSpawn = spawnRoom.find(FIND_STRUCTURES, {
+                filter: f => f.structureType == STRUCTURE_POWER_SPAWN
+            })
+            if (!_.isEmpty(powerSpawn) && spawnRoom.storage.store[RESOURCE_POWER] >= 100 && spawnRoom.storage.store[RESOURCE_ENERGY] >= MINSURPLUSENERGY) {
+                minimumSpawnOf.herocreep = 1
+            }
+
+            if (spawnRoom.storage.store[RESOURCE_GHODIUM] >= 1000 && spawnRoom.controller.safeModeAvailable <= 3) {
+                minimumSpawnOf.herocreep = 1
+            }
+        }
+
+
 
         // Adjustments in case of hostile presence
         var hostileValues = spawnRoom.checkForHostiles(spawnRoom);
@@ -2056,6 +2073,14 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
             min: minimumSpawnOf.transporter,
             max: numberOf.transporter,
             minEnergy: buildingPlans.transporter[rcl - 1].minEnergy
+        },
+        herocreep: {
+            name: "herocreep",
+            prio: 90,
+            energyRole: false,
+            min: minimumSpawnOf.herocreep,
+            max: numberOf.herocreep,
+            minEnergy: buildingPlans.herocreep[rcl - 1].minEnergy
         }
     };
 

@@ -6,7 +6,7 @@ module.exports = {
     newTask: function (creep) {
         if (creep.memory.home != undefined && creep.room.name == creep.memory.home) {
             //creep is home
-            if (creep.carry.energy > 0) {
+            if (_.sum(creep.carry) > 0) {
                 //dump into storage
                 if (!_.isEmpty(creep.room.storage)) {
                     creep.say(EM_PACKAGE)

@@ -226,7 +226,7 @@ module.exports.loop = function () {
                 if (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL ||
                     (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" && Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]")) {
                     var response = Game.rooms[roomName].baseRCLBuild()
-                    console.log(roomName+" RCL upgrade! " + response)
+                    console.log(roomName + " RCL upgrade! " + response)
                 }
                 Game.rooms[roomName].memory.RCL = Game.rooms[roomName].controller.level;
 
@@ -355,6 +355,17 @@ module.exports.loop = function () {
                     
                 } */
             }
+            for (var roomName in Game.rooms) {
+                var powerSpawn = _.first(Game.rooms[roomName].find(FIND_STRUCTURES, {
+                    filter: f => f.structureType == STRUCTURE_POWER_SPAWN
+                }))
+                if (!_.isEmpty(powerSpawn) && (Game.rooms[roomName].storage.store[RESOURCE_ENERGY] > (MINSURPLUSENERGY * Game.rooms[roomName].controller.level))) {
+                    if (powerSpawn.energy >= 50 && powerSpawn.power >= 1) {
+                        powerSpawn.processPower()
+                    }
+                }
+            }
+
         } catch (err) {
             console.log("ERR: " + err)
         }

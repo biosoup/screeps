@@ -89,6 +89,12 @@ class InfluxDB {
       progressTotal: Game.gcl.progressTotal,
       progressPercent: (Game.gcl.progress / Game.gcl.progressTotal) * 100
     })
+    this.addStat('gpl', {}, {
+      level: Game.gpl.level,
+      progress: Game.gpl.progress,
+      progressTotal: Game.gpl.progressTotal,
+      progressPercent: (Game.gpl.progress / Game.gpl.progressTotal) * 100
+    })
     this.addStat('market', {}, {
       credits: Game.market.credits
     })
