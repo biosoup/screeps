@@ -16,58 +16,34 @@ module.exports = {
                 if (Game.rooms[r].memory.roomArray != undefined && Game.rooms[r].memory.roomArray.minerals != undefined && Game.getObjectById(Game.rooms[r].memory.roomArray.minerals[0]).mineralType == RESOURCES_ALL[res]) {
                     //Room mineral
                     limit = {
-                        minTerminal: 0,
-                        maxStorage: 6000,
-                        minMarket: 500000,
-                        minProduction: 600000
+                        minTerminal: 20000,
+                        maxStorage: 30000,
+                        minMarket: 50000,
+                        minProduction: 900000
                     };
                 } else if (RESOURCES_ALL[res] == RESOURCE_ENERGY) {
                     //Energy
                     limit = {
-                        minTerminal: 0,
-                        maxStorage: 400000,
+                        minTerminal: 50000,
+                        maxStorage: 500000,
                         minMarket: 900000,
                         minProduction: 1000000
-                    };
-                } else if (RESOURCES_ALL[res] == RESOURCE_ZYNTHIUM_KEANITE) {
-                    //ZK
-                    limit = {
-                        minTerminal: 0,
-                        maxStorage: 6000,
-                        minMarket: 900000,
-                        minProduction: 500
-                    };
-                } else if (RESOURCES_ALL[res] == RESOURCE_UTRIUM_LEMERGITE) {
-                    //UL
-                    limit = {
-                        minTerminal: 0,
-                        maxStorage: 6000,
-                        minMarket: 900000,
-                        minProduction: 500
                     };
                 } else if (RESOURCES_ALL[res] == RESOURCE_GHODIUM) {
                     //G
                     limit = {
-                        minTerminal: 0,
-                        maxStorage: 6000,
+                        minTerminal: 5000,
+                        maxStorage: 20000,
                         minMarket: 900000,
                         minProduction: 5000
-                    };
-                } else if (RESOURCES_ALL[res] == RESOURCE_GHODIUM_HYDRIDE) {
-                    //GH
-                    limit = {
-                        minTerminal: 0,
-                        maxStorage: 6000,
-                        minMarket: 900000,
-                        minProduction: 1000
                     };
                 } else {
                     // Rest
                     limit = {
-                        minTerminal: 0,
-                        maxStorage: 6000,
+                        minTerminal: 500,
+                        maxStorage: 20000,
                         minMarket: 900000,
-                        minProduction: 0
+                        minProduction: 1000
                     };
                 }
                 roomLimits[RESOURCES_ALL[res]] = limit;

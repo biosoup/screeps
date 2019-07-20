@@ -98,6 +98,15 @@ Creep.prototype.getEnergy = function (creep, useSource) {
         }
     }
 
+    //get from terminal, when full
+    if (!_.isEmpty(creep.room.terminal)) {
+        if (creep.room.terminal.store[RESOURCE_ENERGY] > (creep.room.memory.resourceLimits.energy.minTerminal * 1.2)) {
+            //we have excess energy, probably incoming
+            creep.task = Tasks.withdraw(creep.room.terminal, RESOURCE_ENERGY);
+            return;
+        }
+    }
+
     //get from storage
     if (!_.isEmpty(creep.room.storage)) {
         if (creep.room.storage.store[RESOURCE_ENERGY] > 100) {
@@ -197,7 +206,9 @@ Creep.prototype.fillStructures = function (creep) {
     }
 
     //fill powerSpawns with energy
-    var powerSpawn = creep.room.find(FIND_MY_STRUCTURES, {filter: f=> f.structureType == STRUCTURE_POWER_SPAWN})
+    var powerSpawn = creep.room.find(FIND_MY_STRUCTURES, {
+        filter: f => f.structureType == STRUCTURE_POWER_SPAWN
+    })
     if (!_.isEmpty(powerSpawn)) {
         creep.task = Tasks.transfer(powerSpawn[0]);
         return true;

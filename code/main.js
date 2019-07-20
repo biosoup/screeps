@@ -223,9 +223,10 @@ module.exports.loop = function () {
                     Game.rooms[roomName].refreshData(roomName)
                 }
 
-                if (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL) {
+                if (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL ||
+                    (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" && Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]")) {
                     var response = Game.rooms[roomName].baseRCLBuild()
-                    console.log("RCL upgrade! " + response)
+                    console.log(roomName+" RCL upgrade! " + response)
                 }
                 Game.rooms[roomName].memory.RCL = Game.rooms[roomName].controller.level;
 
@@ -236,7 +237,7 @@ module.exports.loop = function () {
                     Game.rooms[roomName].baseRCLBuild()
                 }
 
-                
+
                 if ((Game.time % DELAYLINK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
                     //run link balancing
                     Game.rooms[roomName].linksRun(roomName)

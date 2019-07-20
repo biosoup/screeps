@@ -364,6 +364,12 @@ Room.prototype.baseRCLBuild = function () {
     var rcl = this.controller.level
     var room = Game.rooms[s1.pos.roomName];
 
+    if (!this.baseRCLBuildCheck() && rcl > 2) {
+        //not current layout
+        return "not current layout";
+    }
+
+
     //fixed placement for each RCL level
     switch (rcl) {
         case 1:
@@ -415,18 +421,32 @@ Room.prototype.baseRCLBuild = function () {
             }
 
             //build an extractor
-            //FIXME: run only once
-            /* var mineral = _.first(this.find(FIND_MINERALS))
+            var mineral = _.first(this.find(FIND_MINERALS))
             if (!_.isEmpty(mineral)) {
-                var place = room.lookForAt(LOOK_STRUCTURES, mineral)
-                if (place.length == 0) {
-                    this.createConstructionSite(mineral, STRUCTURE_EXTRACTOR)
+                if (_.isEmpty(room.extractor)) {
+                    var place = room.lookForAt(LOOK_STRUCTURES, mineral)
+                    if (place.length == 0) {
+                        this.createConstructionSite(mineral, STRUCTURE_EXTRACTOR)
+                    }
+                    //and build a road for it
+                    this.buildRoad(this.storage.id, mineral.id)
                 }
-                //and build a road for it
-                this.buildRoad(this.storage.id, mineral.id)
-            } */
+            }
 
-            //TODO: define inner labs, when build
+            // define inner labs, only when build
+            if (room.labs.length >= 3 && room.memory.innerLabs[0].labID == "[LAB_ID]" && room.memory.innerLabs[1].labID == "[LAB_ID]") {
+                //labs IDs not defined
+                
+                //look for stuctures
+                var lab0 = _.first(_.filter(room.lookForAt(LOOK_STRUCTURES, tlc.x + 5, tlc.y + 1), f => f.structureType == STRUCTURE_LAB))
+                var lab1 = _.first(_.filter(room.lookForAt(LOOK_STRUCTURES, tlc.x + 5, tlc.y + 2), f => f.structureType == STRUCTURE_LAB))
+                console.log("Lab0: "+lab0.id+" Lab1: "+lab1.id)
+                //check if they are truly there
+                if (!_.isEmpty(lab0.id) && !_.isEmpty(lab1.id)) {
+                    room.memory.innerLabs[0].labID = lab0.id;
+                    room.memory.innerLabs[1].labID = lab1.id;
+                }
+            }
             break
         case 7:
             //+10 extensions, +1 tower, +1 link, +3 labs, +1 spawn
@@ -443,11 +463,6 @@ Room.prototype.baseRCLBuild = function () {
     }
 
     if (!_.isEmpty(base)) {
-        if (!this.baseRCLBuildCheck() && rcl > 2) {
-            //not current layout
-            return "not current layout";
-        }
-
         //place the buildings
         if (!_.isEmpty(base.buildings.extension)) {
             for (var s of base.buildings.extension.pos) {
@@ -1167,7 +1182,7 @@ Room.prototype.creepSpawnRun =
             var LDLorryBody = buildingPlans["longDistanceLorry"][rrcl - 1].body
             var numCarryBody = _.sum(LDLorryBody, b => b == "carry")
 
-            var creepsNeeded = carryNeeded / numCarryBody
+            var creepsNeeded = (carryNeeded / numCarryBody) * 0.8 //substract a bit repairs
 
             if (false) {
                 var creepsCrurrent = _.filter(allMyCreeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.home == spawnRoom.name).length
@@ -1485,10 +1500,16 @@ Room.prototype.creepSpawnRun =
 
         // Upgrader
         minimumSpawnOf["upgrader"] = 1;
-        if (spawnRoom.storage != undefined) {
-            if (spawnRoom.storage.store[RESOURCE_ENERGY] > (100000 * spawnRoom.controller.level) && spawnRoom.controller.level < 8) {
+        if (!_.isEmpty(spawnRoom.storage)) {
+            var terminalExcessEnergy = 0
+            if (!_.isEmpty(spawnRoom.terminal)) {
+                if (spawnRoom.terminal.store[RESOURCE_ENERGY] > (spawnRoom.memory.resourceLimits.energy.minTerminal * 1.2)) {
+                    terminalExcessEnergy = spawnRoom.terminal.store[RESOURCE_ENERGY] - (spawnRoom.memory.resourceLimits.energy.minTerminal * 1.2)
+                }
+            }
+            if ((spawnRoom.storage.store[RESOURCE_ENERGY] + terminalExcessEnergy) > (MINSURPLUSENERGY * spawnRoom.controller.level) && spawnRoom.controller.level < 8) {
                 //add more upgraders
-                var mutiply = spawnRoom.storage.store[RESOURCE_ENERGY] / (100000 * spawnRoom.controller.level)
+                var mutiply = spawnRoom.storage.store[RESOURCE_ENERGY] / (MINSURPLUSENERGY * spawnRoom.controller.level)
                 minimumSpawnOf.upgrader = _.ceil(2 * mutiply)
             }
         }
@@ -1970,7 +1991,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         longDistanceLorry: {
             name: "longDistanceLorry",
-            prio: 150,
+            prio: 200,
             energyRole: true,
             min: minimumSpawnOf.longDistanceLorry,
             max: numberOf.longDistanceLorry,
@@ -2018,7 +2039,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         transporter: {
             name: "transporter",
-            prio: 2400,
+            prio: 2000,
             energyRole: false,
             min: minimumSpawnOf.transporter,
             max: numberOf.transporter,
@@ -2058,7 +2079,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
             for (let e in container) {
                 containerEnergy += container[e].store[RESOURCE_ENERGY];
             }
-            if (containerEnergy > (100000 * spawnRoom.controller.level) + 100000) {
+            if (containerEnergy > (MINSURPLUSENERGY * spawnRoom.controller.level) + 100000) {
                 //spawnList.push("upgrader");
             }
         } */
