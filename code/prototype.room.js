@@ -954,8 +954,10 @@ Room.prototype.refreshData =
             } else if (Game.rooms[r].memory.roomArray.spawns.length > 1) {
                 for (var id in Game.rooms[r].memory.roomArray.spawns) {
                     var testSpawn = Game.getObjectById(Game.rooms[r].memory.roomArray.spawns[id]);
-                    if (testSpawn.memory.spawnRole == 1) {
-                        Game.rooms[r].memory.masterSpawn = Game.rooms[r].memory.roomArray.spawns[id];
+                    if (!_.isEmpty(testSpawn)) {
+                        if (testSpawn.memory.spawnRole == 1) {
+                            Game.rooms[r].memory.masterSpawn = Game.rooms[r].memory.roomArray.spawns[id];
+                        }
                     }
                 }
             }
@@ -2139,13 +2141,17 @@ Room.prototype.checkForHostiles = function (roomName) {
         //check hostiles body composition
         var maxAttackBodyParts = 0;
         var maxHealBodyParts = 0;
+        var maxCarryBodyParts = 0;
         var numberOfAttackBodyParts = 0;
         var numberOfHealBodyParts = 0;
+        var numberOfCarryBodyParts = 0;
         var AttackBodyParts = 0;
         var HealBodyParts = 0;
+        var carryBodyParts = 0;
         for (var h in hostiles) {
             AttackBodyParts = 0;
             HealBodyParts = 0;
+            carryBodyParts = 0;
             for (var part in hostiles[h].body) {
                 if (hostiles[h].body[part].type == ATTACK || hostiles[h].body[part].type == RANGED_ATTACK) {
                     //attacking body part found
@@ -2154,6 +2160,10 @@ Room.prototype.checkForHostiles = function (roomName) {
                 if (hostiles[h].body[part].type == HEAL) {
                     //attacking body part found
                     HealBodyParts++;
+                }
+                if (hostiles[h].body[part].type == CARRY) {
+                    //attacking body part found
+                    CarryBodyParts++;
                 }
             }
             if (AttackBodyParts > maxAttackBodyParts) {
@@ -2164,6 +2174,10 @@ Room.prototype.checkForHostiles = function (roomName) {
                 maxHealBodyParts = HealBodyParts;
                 numberOfHealBodyParts += HealBodyParts;
             }
+            if (carryBodyParts > maxCarryBodyParts) {
+                maxCarryBodyParts = carryBodyParts;
+                numberOfCarryBodyParts += carryBodyParts;
+            }
         }
 
         value["numHostiles"] = hostiles.length;
@@ -2171,10 +2185,13 @@ Room.prototype.checkForHostiles = function (roomName) {
         value["maxAttackBodyParts"] = maxAttackBodyParts;
         value["numberOfAttackBodyParts"] = numberOfAttackBodyParts;
 
-        value["maxmaxHealBodyPartsHeal"] = maxHealBodyParts;
+        value["maxHealBodyParts"] = maxHealBodyParts;
         value["numberOfHealBodyParts"] = numberOfHealBodyParts;
 
-        if (hostiles.length == 1 && maxAttackBodyParts == 0 && maxHealBodyParts == 0) {
+        value["maxCarryBodyParts"] = maxCarryBodyParts;
+        value["numberOfCarryBodyParts"] = numberOfCarryBodyParts;
+
+        if (hostiles.length == 1 && maxAttackBodyParts == 0 && maxHealBodyParts == 0 && maxCarryBodyParts == 0) {
             value["scout"] = true
         }
 

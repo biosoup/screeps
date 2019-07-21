@@ -58,7 +58,10 @@ module.exports = {
 
                     //find structures to withdraw energy from
                     var storages = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                        filter: f => (f.structureType == STRUCTURE_STORAGE || f.structureType == STRUCTURE_CONTAINER) && _.sum(f.store) > 0
+                        filter: f => (f.structureType == STRUCTURE_STORAGE ||
+                            f.structureType == STRUCTURE_CONTAINER ||
+                            f.structureType == STRUCTURE_POWER_SPAWN ||
+                            f.structureType == STRUCTURE_TERMINAL) && _.sum(f.store) > 0
                     })
                     if (!_.isEmpty(storages)) {
                         creep.say(EM_PACKAGE, true)
@@ -66,12 +69,20 @@ module.exports = {
                         return
                     }
 
-                    var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                        filter: f => f.energy > 0
+                    //find structures to withdraw energy from
+                    var energies = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                        filter: f => (f.structureType == STRUCTURE_STORAGE ||
+                            f.structureType == STRUCTURE_CONTAINER ||
+                            f.structureType == STRUCTURE_EXTENSION ||
+                            f.structureType == STRUCTURE_SPAWN ||
+                            f.structureType == STRUCTURE_POWER_SPAWN ||
+                            f.structureType == STRUCTURE_LINK ||
+                            f.structureType == STRUCTURE_TOWER ||
+                            f.structureType == STRUCTURE_TERMINAL) && f.energy > 0
                     })
-                    if (!_.isEmpty(structure)) {
-                        creep.say(EM_PACKAGE, true)
-                        creep.task = Tasks.withdrawAll(structure)
+                    if (!_.isEmpty(energies)) {
+                        creep.say(EM_PACKAGE+"2", true)
+                        creep.task = Tasks.withdraw(energies)
                         return
                     }
 
