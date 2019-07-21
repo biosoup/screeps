@@ -223,8 +223,8 @@ module.exports.loop = function () {
                     Game.rooms[roomName].refreshData(roomName)
                 }
 
-                if (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL ||
-                    (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" && Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]")) {
+                if ((Game.time % 10) == 0 && (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL ||
+                    (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" && Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]"))) {
                     var response = Game.rooms[roomName].baseRCLBuild()
                     console.log(roomName + " RCL upgrade! " + response)
                 }

@@ -943,6 +943,24 @@ global.roomCallback = function (roomName) {
     return room.costMatrix;
 }; */
 
+global.countCreeps = function () {
+    var totalCount = 0
+    for (var roomName in Game.rooms) {
+        if (!_.isEmpty(Game.rooms[roomName].spawns)) {
+            var creeps = _.filter(Game.creeps, (c) => c.memory.home == Game.rooms[roomName].name)
+            var creepsPerSpawn = creeps.length / (Game.rooms[roomName].spawns).length
+
+            //sum of parts
+            var parts = _.sum(creeps, h => _.sum(h.body, part => part.type != ""))
+
+            totalCount = totalCount + creeps.length
+            console.log(roomName + " Has " + creeps.length + " creeps alive with " + parts + " (avgSize: " + (creepsPerSpawn).toFixed(2) + ") parts from " + (Game.rooms[roomName].spawns).length +
+                " spawns. Parts left for spawning: " + ((500 * (Game.rooms[roomName].spawns).length) - parts))
+        }
+    }
+    return totalCount;
+}
+
 
 global.listCreeps = function (displayRole) {
     var returnstring = "<table><tr><th>Role  </th>";

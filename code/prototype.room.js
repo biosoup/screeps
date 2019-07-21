@@ -655,18 +655,21 @@ Room.prototype.refreshContainerSources = function (r) {
         if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > 5000) {
             r.memory.containerSources = {};
         }
-        if (!_.isEmpty(r.controller.reservation)) {
-            if (r.controller.reservation.username == playerUsername) {
-                var energyCapacity = SOURCE_ENERGY_CAPACITY
-            }
-        } else {
-            var energyCapacity = SOURCE_ENERGY_NEUTRAL_CAPACITY
-        }
+
+
 
         //get info about containers
         for (let container of containerList) {
             if (!_.isEmpty(container) && !_.isEmpty(container)) {
                 if (!_.isEmpty(r.memory.containerSources[container.id])) {
+                    if (!_.isEmpty(container.room.controller.reservation)) {
+                        if (container.room.controller.reservation.username == playerUsername) {
+                            var energyCapacity = SOURCE_ENERGY_CAPACITY
+                        }
+                    } else {
+                        var energyCapacity = SOURCE_ENERGY_NEUTRAL_CAPACITY
+                    }
+
                     //check for how many creep target it
                     var incomingLorries = _.filter(container.targetedBy, f => _.first(_.words(f.name, /[^-]+/g)) == "longDistanceLorry")
                     var carryParts = 0
@@ -1179,33 +1182,33 @@ Room.prototype.creepSpawnRun =
             // get combined distance to all sources
             var sumDistance = _.sum(cS, c => c.distance) * 2 //times 2 for round trip
             var count = _.keys(cS).length
+            var avgDistance = sumDistance / count
 
             // add overhead
 
-            //we have 10e/t production at the targets
-            var avgEnergyCapacity = _.sum(cS, c => c.energyCapacity)
-            var energyProduced = avgEnergyCapacity / ENERGY_REGEN_TIME
+            //we have 5-10e/t production at the targets
+            var avgEnergyCapacity = (_.sum(cS, c => c.energyCapacity) / ENERGY_REGEN_TIME) / count
 
-            // calculate the number of carry parts
-            var energyDistance = sumDistance * energyProduced
-            var carryNeeded = energyDistance / CARRY_CAPACITY
 
             // calculate the number of creeps needed
             let rrcl = spawnRoom.controller.level;
             var LDLorryBody = buildingPlans["longDistanceLorry"][rrcl - 1].body
             var numCarryBody = _.sum(LDLorryBody, b => b == "carry")
+            var lorryCarryCapacity = numCarryBody * CARRY_CAPACITY
 
-            var creepsNeeded = (carryNeeded / numCarryBody) * 0.8 //substract a bit repairs
 
-            if (false) {
+            var creepsNeeded = ((avgDistance * avgEnergyCapacity) / lorryCarryCapacity) * count
+
+
+            if (true) {
                 var creepsCrurrent = _.filter(allMyCreeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.home == spawnRoom.name).length
-                console.log(spawnRoom.name + " distance: " + sumDistance + " count: " + count + " e/t: " + energyProduced + " " + avgEnergyCapacity + " energyDist: " + energyDistance + " bodySize: " +
-                    numCarryBody + " carryNeed: " + carryNeeded + " = creepsNeed: " + creepsNeeded + " currently: " + creepsCrurrent);
+                console.log(spawnRoom.name + " distance: " + sumDistance + " count: " + count + " e/t: " + avgEnergyCapacity + " avgDist: " + (avgDistance).toFixed(2) + " carryCapacity: " +
+                    lorryCarryCapacity + " = creepsNeed: " + (creepsNeeded).toFixed(2) + " currently: " + creepsCrurrent);
             }
 
             if (!_.isEmpty(spawnRoom.storage)) {
                 if (_.sum(spawnRoom.storage.store) < 950000) {
-                    minimumSpawnOf.longDistanceLorry = _.floor(creepsNeeded)
+                    minimumSpawnOf.longDistanceLorry = _.ceil(creepsNeeded)
                 }
             }
         }
