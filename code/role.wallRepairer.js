@@ -19,7 +19,7 @@ module.exports = {
                 });
                 if (!_.isEmpty(closestConstructionSite)) {
                     creep.task = Tasks.build(closestConstructionSite);
-                    creep.say(EM_BUILD);
+                    creep.say(EM_BUILD, true);
                     return;
                 }
 
@@ -50,16 +50,16 @@ module.exports = {
                 // if we find a wall that has to be repaired
                 if (!_.isEmpty(target)) {
                     creep.task = Tasks.fortify(target)
-                    creep.say(EM_WRENCH)
+                    creep.say(EM_WRENCH, true)
                     return
                 } else {
                     //nothing to do -> upgrade controller
                     if (creep.room.controller.my) {
                         creep.task = Tasks.upgrade(creep.room.controller);
-                        creep.say(EM_LIGHTNING);
+                        creep.say(EM_LIGHTNING, true);
                         return;
                     } else {
-                        creep.say(EM_SINGING);
+                        creep.say(EM_SINGING, true);
                         return
                     }
                 }

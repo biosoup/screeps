@@ -133,7 +133,7 @@ Creep.prototype.getEnergy = function (creep, useSource) {
             unattendedSource = creep.pos.findClosestByRange(unattendedSource);
             if (!_.isEmpty(unattendedSource)) {
                 creep.task = Tasks.harvest(unattendedSource);
-                creep.say(EM_HAMMER)
+                creep.say(EM_HAMMER, true)
                 return true;
             }
         } else {
@@ -156,12 +156,12 @@ Creep.prototype.getEnergy = function (creep, useSource) {
                 if (!_.isEmpty(targetSource)) {
                     var rand = _.random(targetSource.length - 1)
                     creep.task = Tasks.harvest(targetSource[rand]);
-                    creep.say(EM_HAMMER)
+                    creep.say(EM_HAMMER, true)
                     return true;
                 } else {
                     var rand = _.random(sources.length - 1)
                     creep.task = Tasks.harvest(sources[rand]);
-                    creep.say(EM_HAMMER)
+                    creep.say(EM_HAMMER, true)
                     return true;
                 }
             }

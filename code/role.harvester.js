@@ -23,7 +23,7 @@ module.exports = {
             });
             if (!_.isEmpty(closestImportantConstructionSite)) {
                 creep.task = Tasks.build(closestImportantConstructionSite);
-                creep.say(EM_BUILD + " " + EM_EXCLAMATION);
+                creep.say(EM_BUILD + " " + EM_EXCLAMATION, true);
                 return;
             }
 
@@ -35,11 +35,11 @@ module.exports = {
                 //nothing to do -> upgrade controller
                 if (creep.room.controller.my) {
                     creep.task = Tasks.upgrade(creep.room.controller);
-                    creep.say(EM_LIGHTNING);
+                    creep.say(EM_LIGHTNING, true);
                     return;
                 } else {
                     creep.task = Tasks.upgrade(creep.room.controller);
-                    creep.say(EM_SINGING);
+                    creep.say(EM_SINGING, true);
                     return
                 }
             }

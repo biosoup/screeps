@@ -9,7 +9,7 @@ module.exports = {
             if (_.sum(creep.carry) > 0) {
                 //dump into storage
                 if (!_.isEmpty(creep.room.storage)) {
-                    creep.say(EM_PACKAGE)
+                    creep.say(EM_PACKAGE, true)
                     creep.task = Tasks.transferAll(creep.room.storage);
                     return;
                 } else {
@@ -30,7 +30,7 @@ module.exports = {
             if (!_.isEmpty(hostileValues)) {
                 if (hostileValues.numHostiles > 0) {
                     creep.room.createFlag(25, 25, "DEFEND-" + creep.room.name + "-" + creep.memory.home, COLOR_WHITE, COLOR_RED)
-                    creep.say(EM_KILL)
+                    creep.say(EM_KILL, true)
                     creep.task = Tasks.goToRoom(creep.memory.home);
                     return
                 }
@@ -41,7 +41,7 @@ module.exports = {
                         filter: s => s.targetedBy.length == 0
                     })
                     if (!_.isEmpty(droppedEnergy)) {
-                        creep.say(EM_PIN)
+                        creep.say(EM_PIN, true)
                         droppedEnergy = creep.pos.findClosestByRange(droppedEnergy)
                         creep.task = Tasks.pickup(droppedEnergy);
                         return;
@@ -50,7 +50,7 @@ module.exports = {
                     if (!_.isEmpty(tombstones)) {
                         tombstone = creep.pos.findClosestByRange(tombstones)
                         if (!_.isEmpty(tombstone)) {
-                            creep.say(EM_KILL)
+                            creep.say(EM_KILL, true)
                             creep.task = Tasks.withdrawAll(tombstone);
                             return;
                         }
@@ -61,7 +61,7 @@ module.exports = {
                         filter: f => (f.structureType == STRUCTURE_STORAGE || f.structureType == STRUCTURE_CONTAINER) && _.sum(f.store) > 0
                     })
                     if (!_.isEmpty(storages)) {
-                        creep.say(EM_PACKAGE)
+                        creep.say(EM_PACKAGE, true)
                         creep.task = Tasks.withdrawAll(storages)
                         return
                     }
@@ -70,7 +70,7 @@ module.exports = {
                         filter: f => f.energy > 0
                     })
                     if (!_.isEmpty(structure)) {
-                        creep.say(EM_PACKAGE)
+                        creep.say(EM_PACKAGE, true)
                         creep.task = Tasks.withdrawAll(structure)
                         return
                     }
@@ -80,13 +80,13 @@ module.exports = {
                         filter: f => f.structureType != STRUCTURE_CONTROLLER || f.structureType != STRUCTURE_ROAD || f.structureType != STRUCTURE_KEEPER_LAIR
                     })
                     if (!_.isEmpty(demo)) {
-                        creep.say(EM_BOMB)
+                        creep.say(EM_BOMB, true)
                         creep.task = Tasks.dismantle(demo)
                         return
                     }
                 } else {
                     //creep is full
-                    creep.say(EM_TRUCK)
+                    creep.say(EM_TRUCK, true)
                     creep.task = Tasks.goToRoom(creep.memory.home);
                     return
                 }

@@ -7,7 +7,7 @@ module.exports = {
         if (_.sum(creep.carry) > creep.carry[RESOURCE_ENERGY] && !_.isEmpty(creep.room.storage)) {
             //creep has something other than energy
             creep.task = Tasks.transferAll(creep.room.storage);
-            creep.say("other")
+            creep.say("other!", true)
             return;
         } else if (creep.carry.energy > 50) {
             /*

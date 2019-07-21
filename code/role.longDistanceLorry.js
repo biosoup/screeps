@@ -43,7 +43,7 @@ module.exports = {
                         if (!_.isEmpty(container)) {
                             //go work the target
                             creep.task = Tasks.withdraw(container);
-                            creep.say(EM_TRUCK)
+                            creep.say(EM_TRUCK, true)
 
                             //substract current request
                             r.memory.containerSources[validTarget.id].valid = false
@@ -61,13 +61,13 @@ module.exports = {
                     }
                 } else {
                     if (creepPossibleDistance < 50) {
-                        creep.say("dying")
+                        creep.say("dying", true)
                         /* let spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS)
                         creep.task = Tasks.getRecycled(spawn); */
                         creep.suicide()
                     } else {
                         creep.memory.target = {};
-                        creep.say(EM_ZZZ)
+                        creep.say(EM_ZZZ, true)
                     }
                 }
             } else if (creep.room.name == creep.memory.home && creep.carry.energy > 0) {
@@ -78,7 +78,7 @@ module.exports = {
                 if (!_.isEmpty(homeStorage)) {
                     //put energy into storage
                     creep.task = Tasks.transfer(homeStorage)
-                    creep.say("storage full!")
+                    creep.say("storage full!", true)
                 } else {
                     console.log("storage not found!!! " + creep.name + " " + creep.room.name + " " + creep.memory.home)
                     creep.say("confused storage")
@@ -102,7 +102,7 @@ module.exports = {
                     //put energy into storage
                     creep.task = Tasks.transfer(homeStorage)
                     //FIXME: add road repair code & road placement code
-                    creep.say(EM_TRUCK)
+                    creep.say(EM_TRUCK, true)
                 } else {
                     console.log("storage not found!!! " + creep.name + " " + creep.room.name + " " + creep.memory.home)
                     creep.say("confused")
@@ -114,7 +114,7 @@ module.exports = {
                     if (!_.isEmpty(homeStorage)) {
                         //put energy into storage
                         creep.task = Tasks.transfer(homeStorage)
-                        creep.say("to storage!")
+                        creep.say("to storage!", true)
                     } else {
                         console.log("storage not found!!! " + creep.name + " " + creep.room.name + " " + creep.memory.home)
                         creep.say("confused")
@@ -135,7 +135,7 @@ module.exports = {
                     if (validTarget.store[RESOURCE_ENERGY] > 0) {
                         //go work the target
                         creep.task = Tasks.withdraw(validTarget);
-                        creep.say(EM_PIN + "" + EM_TRUCK)
+                        creep.say(EM_PIN + "" + EM_TRUCK, true)
                     } else {
                         creep.say("target empty")
                         creep.memory.target = {}

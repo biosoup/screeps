@@ -103,7 +103,7 @@ module.exports = {
                 //Everything perfect!
                 if (creep.storeAllBut(RESOURCE_ENERGY) == true) {
 
-                    creep.say("all done!")
+                    creep.say("all done!", true)
                     creep.storeAllBut();
 
                     //switch lorries back
@@ -145,7 +145,7 @@ module.exports = {
                                 load = creep.carryCapacity;
                             }
                             creep.task = Tasks.withdraw(creep.room.terminal, res, load)
-                            creep.say(EM_PACKAGE)
+                            creep.say(EM_PACKAGE, true)
                             terminalDelta++;
                             break;
                         }
@@ -164,7 +164,7 @@ module.exports = {
                                 }
 
                                 creep.task = Tasks.withdraw(creep.room.storage, res, load)
-                                creep.say(EM_COOKIE)
+                                creep.say(EM_COOKIE, true)
                                 breaker = true;
                                 break;
                             }
@@ -214,12 +214,12 @@ module.exports = {
                             if (!_.isEmpty(spawn)) {
                                 //creep.task = Tasks.getRenewed(spawn);
                             } else {
-                                creep.say(EM_TEA)
+                                creep.say(EM_TEA, true)
                             }
                         }
                     } else {
                         //waiting for next tick and next work
-                        //creep.say("bored")
+                        //creep.say("bored", true)
                     }
                 }
             }

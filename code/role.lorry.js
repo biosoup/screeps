@@ -97,7 +97,7 @@ module.exports = {
 
                         //no link -> creep standby
                         if ((Game.time % 3) == 0) {
-                            creep.say(EM_TEA)
+                            creep.say(EM_TEA, true)
                         }
 
                         //switch to transporter, if needed
@@ -158,7 +158,7 @@ module.exports = {
                 creep.graffity()
 
                 if ((Game.time % 3) == 0) {
-                    creep.say(EM_TEA)
+                    creep.say(EM_TEA, true)
                 }
 
             }

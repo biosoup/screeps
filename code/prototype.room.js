@@ -1200,7 +1200,7 @@ Room.prototype.creepSpawnRun =
             var creepsNeeded = ((avgDistance * avgEnergyCapacity) / lorryCarryCapacity) * count
 
 
-            if (true) {
+            if (false) {
                 var creepsCrurrent = _.filter(allMyCreeps, (c) => c.memory.role == 'longDistanceLorry' && c.memory.home == spawnRoom.name).length
                 console.log(spawnRoom.name + " distance: " + sumDistance + " count: " + count + " e/t: " + avgEnergyCapacity + " avgDist: " + (avgDistance).toFixed(2) + " carryCapacity: " +
                     lorryCarryCapacity + " = creepsNeed: " + (creepsNeeded).toFixed(2) + " currently: " + creepsCrurrent);
@@ -1253,7 +1253,7 @@ Room.prototype.creepSpawnRun =
             }
         }
 
-        //flag based room claiming
+        // CLAIM ROOM
         if (!_.isEmpty(spawnRoom.storage)) {
             //get gcl and number of rooms
             var gcl = Game.gcl.level;

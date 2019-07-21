@@ -19,10 +19,10 @@ module.exports = {
                     //nothing to do -> upgrade controller
                     if (creep.room.controller.my) {
                         creep.task = Tasks.upgrade(creep.room.controller);
-                        creep.say(EM_LIGHTNING);
+                        creep.say(EM_LIGHTNING, true);
                         return;
                     } else {
-                        creep.say(EM_SINGING);
+                        creep.say(EM_SINGING, true);
                         return
                     }
                 }
@@ -43,13 +43,13 @@ module.exports = {
                     unattendedSource = creep.pos.findClosestByRange(unattendedSource);
                     if (!_.isEmpty(unattendedSource)) {
                         creep.task = Tasks.harvest(unattendedSource);
-                        creep.say(EM_HAMMER)
+                        creep.say(EM_HAMMER, true)
                         return
                     }
                 } else {
                     if (!_.isEmpty(sources)) {
                         creep.task = Tasks.harvest(sources[0]);
-                        creep.say(EM_HAMMER)
+                        creep.say(EM_HAMMER, true)
                         return
                     }
                 }

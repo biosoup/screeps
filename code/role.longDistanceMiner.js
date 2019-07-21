@@ -58,7 +58,7 @@ module.exports = {
                         //if container needs repairs
                         if (container.hits < container.hitsMax && creep.carry.energy > 0) {
                             creep.task = Tasks.repair(container)
-                            creep.say(EM_WRENCH)
+                            creep.say(EM_WRENCH, true)
 
                             //run a road to home storage
                             if (creep.memory.buildRoadCounter == 20 || _.isEmpty(creep.memory.buildRoadCounter)) {
@@ -74,14 +74,14 @@ module.exports = {
                             if (container.store[RESOURCE_ENERGY] < container.storeCapacity) {
                                 // harvest source
                                 creep.task = Tasks.harvest(source);
-                                creep.say(EM_HAMMER)
+                                creep.say(EM_HAMMER, true)
                                 return
                             } else {
                                 if (container.hits < container.hitsMax && container.store[RESOURCE_ENERGY] == container.storeCapacity) {
                                     creep.task = Tasks.withdraw(container);
                                     return
                                 }
-                                creep.say(EM_ZZZ)
+                                creep.say(EM_ZZZ, true)
                                 return
                             }
                         }
@@ -99,7 +99,7 @@ module.exports = {
                         var buildSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
                         if (!_.isEmpty(buildSite)) {
                             creep.task = Tasks.build(buildSite);
-                            creep.say(EM_WRENCH)
+                            creep.say(EM_WRENCH, true)
                             return
                         }
                     }

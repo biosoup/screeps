@@ -21,7 +21,7 @@ module.exports = upgrader = {
             var link = creep.room.controller.pos.findInRange(creep.room.links, 2, {filter: f=> f.energy > 0})
             if (!_.isEmpty(link)) {
                 creep.task = Tasks.withdraw(link[0]);
-                creep.say(EM_LIGHTNING)
+                creep.say(EM_LIGHTNING, true)
                 return;
             }
 
@@ -29,7 +29,7 @@ module.exports = upgrader = {
             var container = creep.room.controller.pos.findInRange(creep.room.containers, 2, {filter: f=> f.store[RESOURCE_ENERGY] > 0})
             if (!_.isEmpty(container)) {
                 creep.task = Tasks.withdraw(container[0]);
-                creep.say(EM_PACKAGE)
+                creep.say(EM_PACKAGE, true)
                 return;
             }
 

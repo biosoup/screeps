@@ -7,7 +7,7 @@ module.exports = {
         if (creep.room.name != creep.memory.target) {
             //go to target room
             creep.task = Tasks.goToRoom(creep.memory.target)
-            creep.say(EM_TRUCK);
+            creep.say(EM_TRUCK, true);
             return;
 
         } else if (creep.room.name == creep.memory.target) {
@@ -31,10 +31,10 @@ module.exports = {
                 // try to claim controller
                 if (!creep.room.controller.my) {
                     creep.task = Tasks.claim(creep.room.controller)
-                    creep.say(EM_FLAG + "" + EM_FLAG + "" + EM_FLAG)
+                    creep.say(EM_FLAG + "" + EM_FLAG + "" + EM_FLAG, true)
                     return;
                 } else {
-                    creep.say(EM_FLAG + "" + EM_COOKIE + "" + EM_TEA)
+                    creep.say(EM_FLAG + "" + EM_COOKIE + "" + EM_TEA, true)
                     creep.suicide()
                 }
             } else {
@@ -47,7 +47,7 @@ module.exports = {
                     creep.task = Tasks.signController(creep.room.controller, roomSign)
                 }
                 creep.task = Tasks.reserve(creep.room.controller);
-                creep.say(EM_FLAG)
+                creep.say(EM_FLAG, true)
                 return;
 
             }

@@ -3,7 +3,7 @@ var Tasks = require("tools.creep-tasks");
 module.exports = {
     newTask: function (creep) {
         if (creep.ticksToLive < 50 && _.sum(creep.carry) == 0) {
-            creep.say("dying")
+            creep.say("dying", true)
             creep.suicide()
         } else {
             if (creep.room.memory.labOrder != undefined && creep.room.memory.innerLabs != undefined) {
@@ -15,7 +15,7 @@ module.exports = {
                 if (innerLabs.length != 2) {
                     return "Not enough inner labs found!";
                 }
-                creep.say(status)
+                creep.say(status, true)
                 switch (status) {
                     case "prepare":
                         var labs = [];
@@ -64,7 +64,7 @@ module.exports = {
                             }
                         }
                         if (labsReady == 2) {
-                            creep.say("Waiting")
+                            creep.say("Waiting", true)
                             creep.memory.sleep = 5;
                         }
                         break;
@@ -151,7 +151,7 @@ module.exports = {
                 if (emptylabs == creep.room.memory.roomArray.labs.length) {
                     delete creep.memory.targetBuffer;
                     delete creep.memory.resourceBuffer;
-                    creep.say("nothing to do")
+                    creep.say("nothing to do", true)
                 }
             }
         }

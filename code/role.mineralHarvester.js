@@ -9,10 +9,10 @@ module.exports = {
             if (!_.isEmpty(creep.room.storage)) {
                 //if structure found, do work
                 creep.task = Tasks.transferAll(creep.room.storage);
-                creep.say(EM_TRUCK)
+                creep.say(EM_TRUCK, true)
                 return
             } else {
-                creep.say(EM_EXCLAMATION)
+                creep.say(EM_EXCLAMATION, true)
             }
         } else {
             //go mine minerals
@@ -22,7 +22,7 @@ module.exports = {
                 creep.say(EM_FLEX)
                 return
             }else {
-                creep.say(EM_EXCLAMATION)
+                creep.say(EM_EXCLAMATION, true)
                 
                 /* let spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS)
                 creep.task = Tasks.getRecycled(spawn); */

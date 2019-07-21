@@ -15,7 +15,7 @@ module.exports = {
                 if (creep.pos.isEqualTo(container.pos)) {
                     if (container.hits < container.hitsMax && creep.carry.energy > 0) {
                         creep.task = Tasks.repair(container)
-                        creep.say(EM_WRENCH)
+                        creep.say(EM_WRENCH, true)
                         return
                     } else if (creep.carry.energy == creep.carryCapacity) {
                         //look for a link
@@ -48,7 +48,7 @@ module.exports = {
                             return
                         } else {
                             //no free space
-                            creep.say(EM_EXCLAMATION + "" + EM_PACKAGE)
+                            creep.say(EM_EXCLAMATION + "" + EM_PACKAGE, true)
                         }
                     }
                 } else {
@@ -65,7 +65,7 @@ module.exports = {
                     var buildSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
                     if (!_.isEmpty(buildSite)) {
                         creep.task = Tasks.build(buildSite);
-                        creep.say(EM_BUILD)
+                        creep.say(EM_BUILD, true)
                         return
                     } else {
                         //no container, check for link
@@ -74,11 +74,11 @@ module.exports = {
                             if (link.energy < link.energyCapacity) {
                                 //there is a space in the link
                                 creep.task = Tasks.transfer(link);
-                                creep.say(EM_LIGHTNING)
+                                creep.say(EM_LIGHTNING, true)
                                 return
                             }
                         } else {
-                            creep.say(EM_EXCLAMATION + "" + EM_LIGHTNING)
+                            creep.say(EM_EXCLAMATION + "" + EM_LIGHTNING, true)
                         }
                     }
 

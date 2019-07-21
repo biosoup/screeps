@@ -54,7 +54,7 @@ module.exports = {
                 if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
                     creep.travelTo(hostile);
                 }
-                creep.say("Hostile!" + EM_SWORDS);
+                creep.say("Hostile!" + EM_SWORDS, true);
                 return;
             } else {
                 //find damaged creeps
@@ -63,7 +63,7 @@ module.exports = {
                 })
                 if (!_.isEmpty(hitCreeps)) {
                     creep.task = Tasks.heal(hitCreeps)
-                    creep.say(EM_SYRINGE)
+                    creep.say(EM_SYRINGE, true)
                     return
                 }
 
@@ -71,7 +71,7 @@ module.exports = {
                 //remove flags when no enemies
                 var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
                 if (!_.isEmpty(whiteFlags)) {
-                    creep.say(EM_FLAG)
+                    creep.say(EM_FLAG, true)
                     whiteFlags.remove()
                 }
 
@@ -79,7 +79,7 @@ module.exports = {
                 creep.graffity()
 
                 if ((Game.time % 3) == 0) {
-                    creep.say(EM_SINGING)
+                    creep.say(EM_SINGING, true)
 
                     //send guard home
                     creep.memory.target = creep.memory.home;

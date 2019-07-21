@@ -52,8 +52,8 @@ module.exports = {
                         s.structureType == STRUCTURE_SPAWN
                 });
                 if (!_.isEmpty(closestImportantConstructionSite)) {
-                    creep.task = Tasks.build(closestImportantConstructionSite);
-                    creep.say(EM_BUILD + " " + EM_EXCLAMATION);
+                    creep.task = Tasks.build(closestImportantConstructionSite, {range: 1});
+                    creep.say(EM_BUILD + " " + EM_EXCLAMATION, true);
                     return;
                 }
 
@@ -64,7 +64,7 @@ module.exports = {
                 });
                 if (!_.isEmpty(closestImportantConstructionSite)) {
                     creep.task = Tasks.build(closestImportantConstructionSite);
-                    creep.say(EM_BUILD + " " + EM_EXCLAMATION);
+                    creep.say(EM_BUILD + " " + EM_EXCLAMATION, true);
                     return;
                 }
 
@@ -72,7 +72,7 @@ module.exports = {
                 var closestConstructionSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
                 if (!_.isEmpty(closestConstructionSite)) {
                     creep.task = Tasks.build(closestConstructionSite);
-                    creep.say(EM_BUILD);
+                    creep.say(EM_BUILD, true);
                     return;
                 }
 
@@ -85,17 +85,17 @@ module.exports = {
                 if (!_.isEmpty(closestRepairSite)) {
                     //sort them by hits
                     creep.task = Tasks.repair(closestRepairSite);
-                    creep.say(EM_WRENCH);
+                    creep.say(EM_WRENCH, true);
                     return;
                 }
 
                 //nothing to do -> upgrade controller
                 if (creep.room.controller.my) {
                     creep.task = Tasks.upgrade(creep.room.controller);
-                    creep.say(EM_LIGHTNING);
+                    creep.say(EM_LIGHTNING, true);
                     return;
                 } else {
-                    creep.say(EM_SINGING);
+                    creep.say(EM_SINGING, true);
                     //go sign the controller
                     creep.graffity()
                     return
