@@ -10,6 +10,7 @@ let miner = require('role.miner')
 let guard = require('role.guard')
 let einarr = require('role.einarr')
 let runner = require('./role.runner')
+let scout = require('./role.scout')
 let transporter = require('role.transporter')
 let mineralHarvester = require('role.mineralHarvester')
 let longDistanceMiner = require('role.longDistanceMiner')
@@ -42,6 +43,8 @@ Creep.prototype.runRole =
             einarr.nonTask(this)
         } else if (this.memory.role == 'runner') {
             runner.newTask(this)
+        } else if (this.memory.role == 'scout') {
+            scout.newTask(this)
         } else if (this.memory.role == 'transporter') {
             transporter.newTask(this)
         } else if (this.memory.role == 'mineralHarvester') {
@@ -61,7 +64,7 @@ Creep.prototype.runRole =
         } else if (this.memory.role == 'demolisher') {
             demolisher.newTask(this)
         } else {
-            console.log("error - missing creep role " + this.memory.role + " " + this.room.name)
+            console.log("error - missing creep " + this.name + " role " + this.memory.role + " " + this.room.name)
             //purge old/wrong roles
             if (this.memory.role == "spawnAttendant" || this.memory.role == "lorry") {
                 this.suicide()
@@ -104,6 +107,17 @@ Creep.prototype.getEnergy = function (creep, useSource) {
         if (creep.room.terminal.store[RESOURCE_ENERGY] > (creep.room.memory.resourceLimits.energy.minTerminal * 1.2)) {
             //we have excess energy, probably incoming
             creep.task = Tasks.withdraw(creep.room.terminal, RESOURCE_ENERGY);
+            return;
+        }
+    }
+
+    //link in body core
+    if (!_.isEmpty(creep.room.storage)) {
+        var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
+            filter: s => s.structureType == STRUCTURE_LINK && s.energy == s.energyCapacity
+        })[0];
+        if (!_.isEmpty(link)) {
+            creep.task = Tasks.withdraw(link);
             return;
         }
     }

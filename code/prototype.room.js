@@ -1134,6 +1134,7 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["longDistanceMiner"] = 0;
         minimumSpawnOf["demolisher"] = 0;
         minimumSpawnOf["runner"] = 0;
+        minimumSpawnOf["scout"] = 0;
         minimumSpawnOf["longDistanceLorry"] = 0;
         minimumSpawnOf["longDistanceBuilder"] = 0;
         minimumSpawnOf["attacker"] = 0; //unused
@@ -1572,7 +1573,11 @@ Room.prototype.creepSpawnRun =
         var numberOfMiners = _.sum(allMyCreeps, (c) => c.memory.role == 'miner' && c.memory.home == spawnRoom.name)
         var numberOfSA = _.sum(allMyCreeps, (c) => c.memory.role == 'runner' && c.memory.home == spawnRoom.name)
 
+        // lorry, Harvester & Repairer
+        minimumSpawnOf["miner"] = numberOfSources;
         minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners / 2) - numberOfSA
+
+
 
         /** Rest **/
 
@@ -1581,7 +1586,6 @@ Room.prototype.creepSpawnRun =
         if (spawnRoom.storage == undefined || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]) == null || Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]).mineralAmount == 0) {
             minimumSpawnOf.mineralHarvester = 0;
         }
-        //console.log("mineralHarvester "+spawnRoom.name+"–"+minimumSpawnOf["mineralHarvester"]+"–"+numberOfExploitableMineralSources)
 
         // Transporter
         var spawnTransporter = false;
@@ -1637,6 +1641,8 @@ Room.prototype.creepSpawnRun =
             }
         }
 
+
+        //Scout
 
 
         // Adjustments in case of hostile presence
@@ -1768,6 +1774,9 @@ Room.prototype.creepSpawnRun =
         let neededTicksThreshold = 1300 * spawnRoom.memory.roomArray.spawns.length;
         if (neededTicksToSpawn > neededTicksThreshold) {
             console.log("<font color=#ff0000 type='highlight'>Warning: Possible bottleneck to spawn creeps needed for room " + spawnRoom.name + "  detected: " + neededTicksToSpawn + " ticks > " + neededTicksThreshold + " ticks</font>");
+            minimumSpawnOf.runner = minimumSpawnOf.runner + 1
+        }
+        if (spawnRoom.energyAvailable < (spawnRoom.energyCapacityAvailable / 2) && minimumSpawnOf.runner == 1) {
             minimumSpawnOf.runner = minimumSpawnOf.runner + 1
         }
         let spawnList = this.getSpawnList(spawnRoom, minimumSpawnOf, numberOf);
@@ -1944,7 +1953,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         scientist: {
             name: "scientist",
-            prio: 220,
+            prio: 200,
             energyRole: false,
             min: minimumSpawnOf.scientist,
             max: numberOf.scientist,
@@ -2000,7 +2009,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         },
         longDistanceLorry: {
             name: "longDistanceLorry",
-            prio: 200,
+            prio: 220,
             energyRole: true,
             min: minimumSpawnOf.longDistanceLorry,
             max: numberOf.longDistanceLorry,
@@ -2064,7 +2073,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         }
     };
 
-    if ((numberOf.harvester+ numberOf.runner) == 0) {
+    if ((numberOf.harvester + numberOf.runner) == 0) {
         // Set up miniHarvester to spawn
         tableImportance.miniharvester.min = 1
     }

@@ -1390,5 +1390,47 @@ buildingPlans = {
             minEnergy: 1250,
             body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY]
         }
+    ],
+
+    scout: [{
+            //Level 1 (max 300)
+            minEnergy: 60,
+            body: [TOUGH, MOVE]
+        },
+        {
+            //Level 2 (max 550)
+            minEnergy: 60,
+            body: [TOUGH, MOVE]
+        },
+        {
+            //Level 3 (max 800)
+            minEnergy: 60,
+            body: [TOUGH, MOVE]
+        },
+        {
+            //Level 4 (max 1300)
+            minEnergy: 160,
+            body: [TOUGH, MOVE, MOVE, CARRY]
+        },
+        {
+            //Level 5 (max 1800)
+            minEnergy: 160,
+            body: [TOUGH, MOVE, MOVE, CARRY]
+        },
+        {
+            //Level 6 (max 2300)
+            minEnergy: 160,
+            body: [TOUGH, MOVE, MOVE, CARRY]
+        },
+        {
+            //Level 7 (max 5600)
+            minEnergy: 160,
+            body: [TOUGH, MOVE, MOVE, CARRY]
+        },
+        {
+            //Level 8 (max 12900)
+            minEnergy: 160,
+            body: [TOUGH, MOVE, MOVE, CARRY]
+        }
     ]
 };

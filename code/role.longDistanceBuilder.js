@@ -52,7 +52,9 @@ module.exports = {
                         s.structureType == STRUCTURE_SPAWN
                 });
                 if (!_.isEmpty(closestImportantConstructionSite)) {
-                    creep.task = Tasks.build(closestImportantConstructionSite, {range: 1});
+                    creep.task = Tasks.build(closestImportantConstructionSite, {
+                        range: 1
+                    });
                     creep.say(EM_BUILD + " " + EM_EXCLAMATION, true);
                     return;
                 }
@@ -79,11 +81,13 @@ module.exports = {
                 //find repairs
                 var closestRepairSite = creep.room.find(FIND_STRUCTURES, {
                     filter: (s) =>
-                        s.structureType != STRUCTURE_CONTROLLER && s.hits < s.hitsMax
+                        (s.structureType != STRUCTURE_CONTROLLER || 
+                            s.structureType != STRUCTURE_RAMPART || 
+                            s.structureType != STRUCTURE_WALL) && s.hits < s.hitsMax
                 });
-                var closestRepairSite = _.first(_.sortBy(closestRepairSite, "hits"))
                 if (!_.isEmpty(closestRepairSite)) {
                     //sort them by hits
+                    var closestRepairSite = _.first(_.sortBy(closestRepairSite, "hits"))
                     creep.task = Tasks.repair(closestRepairSite);
                     creep.say(EM_WRENCH, true);
                     return;
