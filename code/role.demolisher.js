@@ -92,6 +92,7 @@ module.exports = {
                     })
                     if (!_.isEmpty(demo)) {
                         creep.say(EM_BOMB, true)
+                        //FIXME: custom dismantle
                         creep.task = Tasks.dismantle(demo)
                         return
                     }

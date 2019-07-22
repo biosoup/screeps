@@ -49,10 +49,10 @@ module.exports = {
 
                 //get in for the kill
                 if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(hostile);
+                    creep.travelTo(hostile, {movingTarget: true});
                 }
                 if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(hostile);
+                    creep.travelTo(hostile, {movingTarget: true});
                 }
                 creep.say("Hostile!" + EM_SWORDS, true);
                 return;

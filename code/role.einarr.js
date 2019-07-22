@@ -49,10 +49,10 @@ module.exports = {
 
                 //get in for the kill
                 if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(hostile);
+                    creep.travelTo(hostile, {movingTarget: true});
                 } else {
                     if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile);
+                        creep.travelTo(hostile, {movingTarget: true});
                     }
                 }
                 creep.say("Hostile!" + EM_SWORDS, true);
@@ -63,10 +63,10 @@ module.exports = {
                 if (!_.isEmpty(hostile)) {
                     //get in for the kill
                     if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile);
+                        creep.travelTo(hostile, {movingTarget: true});
                     }
                     if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile);
+                        creep.travelTo(hostile, {movingTarget: true});
                     }
                     creep.say("Hostile!" + EM_SWORDS, true);
                     return;
@@ -75,7 +75,7 @@ module.exports = {
                 var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CONSTRUCTION_SITES)
                 if (!_.isEmpty(hostile)) {
                     //get in for the kill
-                    creep.travelTo(hostile);
+                    creep.travelTo(hostile, {movingTarget: true});
                     creep.say("Hostile!" + EM_SWORDS, true);
                     return;
                 }

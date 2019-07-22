@@ -4,6 +4,16 @@ module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
     newTask: function (creep) {
+        //check for hostiles
+        let hostileValues = creep.room.checkForHostiles(creep.room)
+        if (!_.isEmpty(hostileValues)) {
+            if (hostileValues.numHostiles > 0) {
+                creep.room.createFlag(25, 25, "DEFEND-" + creep.room.name + "-" + creep.memory.home, COLOR_WHITE, COLOR_RED)
+                creep.task = Tasks.goToRoom(creep.memory.home);
+                return
+            }
+        }
+        
         if (creep.memory.home != undefined && creep.room.name == creep.memory.home) {
             //if in home room
             if (creep.carry.energy > 0) {

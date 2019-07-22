@@ -16,6 +16,9 @@ module.exports = {
             }
         }
 
+        //creep.say("transport!")
+        //console.log(creep.name+" "+JSON.stringify(creep.memory.target))
+
         if (!_.isEmpty(Game.rooms[creep.memory.home].memory.containerSources)) {
             if (creep.room.name == creep.memory.home && (creep.carry.energy == 0 || _.isEmpty(creep.memory.target))) {
                 //creep is home, empty, with no target
@@ -101,13 +104,13 @@ module.exports = {
                 if (!_.isEmpty(homeStorage)) {
                     //put energy into storage
                     creep.task = Tasks.transfer(homeStorage)
-                    //FIXME: add road repair code & road placement code
                     creep.say(EM_TRUCK, true)
                 } else {
                     console.log("storage not found!!! " + creep.name + " " + creep.room.name + " " + creep.memory.home)
                     creep.say("confused")
                 }
             } else if (_.isEmpty(creep.memory.target)) {
+                creep.say("what?")
                 if (creep.carry.energy > 0) {
                     //get home storage
                     var homeStorage = Game.rooms[creep.memory.home].storage;

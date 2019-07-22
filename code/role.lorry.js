@@ -83,10 +83,10 @@ module.exports = {
             //no suitable containers
             if (!_.isEmpty(creep.room.storage)) {
                 //we have storage
-                if (creep.room.storage.store[RESOURCE_ENERGY] < (100000 * creep.room.controller.level)) {
+                if (creep.room.storage.store[RESOURCE_ENERGY] < (100000 * creep.room.controller.level) && creep.room.energyAvailable > (creep.room.energyCapacityAvailable/2)) {
                     //if storage energy is low, look for link nearby and get enegy from it
                     var link = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 2, {
-                        filter: s => s.structureType == STRUCTURE_LINK
+                        filter: s => s.structureType == STRUCTURE_LINK && s.energy == s.energyCapacity
                     })[0];
                     if (!_.isEmpty(link)) {
                         creep.task = Tasks.withdraw(link);
@@ -129,7 +129,7 @@ module.exports = {
                             }
                             var inRooms = _.sum(Game.creeps, (c) => c.memory.role == 'transporter' && c.memory.home == creep.room.name)
                             if (spawnTransporter && inRooms == 0) {
-                                creep.memory.role = "transporter"
+                                //creep.memory.role = "transporter"
                                 return
                             }
                         }
@@ -139,7 +139,7 @@ module.exports = {
                         if (!_.isEmpty(creep.room.memory.labOrder) && inRooms == 0) {
                             var info = creep.room.memory.labOrder.split(":");
                             if (info[3] == "prepare" || info[3] == "done") {
-                                creep.memory.role = "scientist"
+                                //creep.memory.role = "scientist"
                                 return
                             }
                         }

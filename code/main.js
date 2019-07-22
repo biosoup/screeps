@@ -84,23 +84,25 @@ module.exports.loop = function () {
             CPUdebugString = CPUdebugString.concat("<br>Start Tasks Code: " + Game.cpu.getUsed())
         }
         // ************ NEW TASK SYSTEM ************
-        for (let creep in Game.creeps) {
-            if (CPUdebug == true) {
-                CPUdebugString = CPUdebugString.concat("<br>Start Creep" + creep + " work Code: " + Game.cpu.getUsed())
-            }
-
-            //console.log(Game.creeps[creep])
-
-            try {
-                //if creep is idle, give him work
-                if (Game.creeps[creep].isIdle) {
-                    Game.creeps[creep].runRole()
-                } else if (!Game.creeps[creep].hasValidTask) {
-                    Game.creeps[creep].runRole()
+        if (Game.cpu.bucket > CPU_THRESHOLD) {
+            for (let creep in Game.creeps) {
+                if (CPUdebug == true) {
+                    CPUdebugString = CPUdebugString.concat("<br>Start Creep" + creep + " work Code: " + Game.cpu.getUsed())
                 }
-            } catch (err) {
-                Game.creeps[creep].say("RUN ROLE ERR!!")
-                console.log("RUN ROLE ERR: " + creep + " at " + err.stack)
+
+                //console.log(Game.creeps[creep])
+
+                try {
+                    //if creep is idle, give him work
+                    if (Game.creeps[creep].isIdle) {
+                        Game.creeps[creep].runRole()
+                    } else if (!Game.creeps[creep].hasValidTask) {
+                        Game.creeps[creep].runRole()
+                    }
+                } catch (err) {
+                    Game.creeps[creep].say("RUN ROLE ERR!!")
+                    console.log("RUN ROLE ERR: " + creep + " at " + err.stack)
+                }
             }
         }
 
@@ -211,20 +213,23 @@ module.exports.loop = function () {
                 }
 
                 //add room visuals
-                try {
-                    Game.rooms[roomName].basicVisuals()
-                    Game.rooms[roomName].roomEconomy()
-                } catch (err) {
-                    console.log("VISUALS ERR: " + tower + " " + err.stack)
+                if (Game.cpu.bucket > CPU_THRESHOLD) {
+                    try {
+                        Game.rooms[roomName].basicVisuals()
+                        Game.rooms[roomName].roomEconomy()
+                    } catch (err) {
+                        console.log("VISUALS ERR: " + tower + " " + err.stack)
+                    }
                 }
 
                 //base refreshes
-                if (_.isEmpty(Game.rooms[roomName].memory.masterSpawn)) {
+                if (_.isEmpty(Game.rooms[roomName].memory.masterSpawn) && Game.cpu.bucket > CPU_THRESHOLD) {
                     Game.rooms[roomName].refreshData(roomName)
                 }
 
                 if ((Game.time % 10) == 0 && (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL ||
-                    (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" && Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]"))) {
+                        (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" &&
+                            Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]")) && Game.cpu.bucket > CPU_THRESHOLD) {
                     var response = Game.rooms[roomName].baseRCLBuild()
                     console.log(roomName + " RCL upgrade! " + response)
                 }
@@ -359,7 +364,7 @@ module.exports.loop = function () {
                 var powerSpawn = _.first(Game.rooms[roomName].find(FIND_STRUCTURES, {
                     filter: f => f.structureType == STRUCTURE_POWER_SPAWN
                 }))
-                if (!_.isEmpty(powerSpawn) && (Game.rooms[roomName].storage.store[RESOURCE_ENERGY] > (MINSURPLUSENERGY * Game.rooms[roomName].controller.level))) {
+                if (!_.isEmpty(powerSpawn) && (Game.rooms[roomName].storage.store[RESOURCE_ENERGY] > (MINSURPLUSENERGY * Game.rooms[roomName].controller.level)) && Game.cpu.bucket > CPU_THRESHOLD) {
                     if (powerSpawn.energy >= 50 && powerSpawn.power >= 1) {
                         powerSpawn.processPower()
                     }

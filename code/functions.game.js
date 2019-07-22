@@ -1,3 +1,5 @@
+var AsciiTable = require('tools.ascii-table')
+
 global.getMasterSpawn = function (roomName) {
     return Game.rooms[roomName].memory.masterSpawn;
 };
@@ -163,14 +165,26 @@ global.terminalTransferX = function (transferResource, transferAmount, sourceRoo
 };
 
 global.listStorages = function (displayResource) {
-    var returnstring = "<table><tr><th>Resource  </th>";
+    /* var table = AsciiTable.factory({
+        title: 'listStorages()',
+        heading: ['id', 'name'],
+        rows: [
+            [1, 'Bob'],
+            [2, 'Steve']
+        ]
+    }) */
+    var tableObject = {}
+    tableObject.title = 'listStorages()'
+    var tableRooms = []
+    tableRooms.push("Rooms")
+
     var resourceTable = [];
     var total = [];
 
     //Prepare header row
     for (var r in myRooms) {
         if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
-            returnstring = returnstring.concat("<th>" + Game.rooms[r].name + "  </th>");
+            tableRooms.push(Game.rooms[r].name)
             for (var res in myRooms[r].storage.store) {
                 if (resourceTable.indexOf(res) == -1) {
                     resourceTable.push(res);
@@ -178,32 +192,37 @@ global.listStorages = function (displayResource) {
             }
         }
     }
-    returnstring = returnstring.concat("</tr>");
+    tableObject.heading = tableRooms;
+    tableObject.rows = []
+    var tableResources = []
+
     resourceTable = _.sortBy(resourceTable, function (res) {
         return res.length;
     });
     for (res in resourceTable) {
         if (arguments.length == 0 || displayResource == resourceTable[res]) {
-            returnstring = returnstring.concat("<tr></tr><td>" + resourceTable[res] + "  </td>");
             let c = -1;
+            tableResources.push(resourceTable[res])
+            
             for (var r in myRooms) {
                 if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
                     c++;
                     var amount;
                     var color;
+                    var code;
                     if (Game.rooms[r].storage.store[resourceTable[res]] == undefined) {
                         amount = 0;
                     } else {
                         amount = Game.rooms[r].storage.store[resourceTable[res]];
                     }
                     if (amount < Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage) {
-                        color = "#ff3333";
+                        code = "!"
                     } else if (amount > Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage) {
-                        color = "#00ff00"
+                        code = "$"
                     } else {
-                        color = "#aaffff";
+                        code = ""
                     }
-                    returnstring = returnstring.concat("<td><font color='" + color + "'>" + prettyInt(amount) + "  </font></td>");
+                    tableResources.push(prettyInt(amount)+" "+code)
 
                     if (total[c] == undefined) {
                         total[c] = amount;
@@ -212,15 +231,21 @@ global.listStorages = function (displayResource) {
                     }
                 }
             }
-            returnstring = returnstring.concat("</tr>");
+            tableObject.rows.push(tableResources);
+            tableResources = []
         }
     }
-    returnstring = returnstring.concat("<tr></tr><td>Total  </td>");
+
+    var tableTotal = []
+    tableTotal.push("Total")
     for (let c in total) {
-        returnstring = returnstring.concat("<td>" + prettyInt(total[c]) + " </td>");
+        tableTotal.push(prettyInt(total[c]))
     }
-    returnstring = returnstring.concat("</tr></table>");
-    return returnstring;
+    
+    tableObject.rows.push(tableTotal)
+    var table = AsciiTable.factory(tableObject)
+
+    return table.toString()
 };
 
 global.prettyInt = function (int) {

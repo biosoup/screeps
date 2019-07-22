@@ -1390,6 +1390,9 @@ Room.prototype.creepSpawnRun =
                         roomInterests[interest][3] = 0
                     }
 
+                    if (roomInterests[interest][3] > 2) {
+                        roomInterests[interest][3] = 2
+                    }
 
                     minimumSpawnOf.longDistanceBuilder += roomInterests[interest][3];
                     if (inRooms < roomInterests[interest][3]) {
@@ -1574,7 +1577,7 @@ Room.prototype.creepSpawnRun =
 
         //minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
         if (numberOfMiners > 0) {
-            minimumSpawnOf["lorry"] = 2;
+            minimumSpawnOf["lorry"] = 1;
             var numberOfFullContainers = this.find(FIND_STRUCTURES, {
                 filter: (f) => f.structureType == STRUCTURE_CONTAINER && f.store[RESOURCE_ENERGY] == f.storeCapacity
             }).length
@@ -2163,7 +2166,7 @@ Room.prototype.checkForHostiles = function (roomName) {
                 }
                 if (hostiles[h].body[part].type == CARRY) {
                     //attacking body part found
-                    CarryBodyParts++;
+                    carryBodyParts++;
                 }
             }
             if (AttackBodyParts > maxAttackBodyParts) {
