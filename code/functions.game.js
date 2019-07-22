@@ -1,3 +1,4 @@
+"use strict"
 var AsciiTable = require('tools.ascii-table')
 
 global.getMasterSpawn = function (roomName) {
@@ -16,8 +17,8 @@ global.countConstructionSites = function () {
 
 global.terminalTransfer = function (transferResource, transferAmount, targetRoomName, transferFlag) {
     // transfer resources to remote room from whatever room(s) is cheapest
-    var roomCandidates = new Array();
-    var tempArray = new Array();
+    var roomCandidates = [];
+    var tempArray = [];
     var resourceTotal = 0;
 
     if (arguments.length == 0) {
@@ -129,7 +130,7 @@ global.terminalTransfer = function (transferResource, transferAmount, targetRoom
 
 global.terminalTransferX = function (transferResource, transferAmount, sourceRoomName, targetRoomName, transferFlag) {
     // transfer resources to from source to target
-    var roomCandidates = new Array();
+    var roomCandidates = [];
     var sourceRoom = Game.rooms[sourceRoomName];
 
     if (arguments.length == 0) {

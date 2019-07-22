@@ -2,6 +2,7 @@
     "name": "screeps",
     "version": "0.1.0",
     "devDependencies": {
+        "eslint": "^6.1.0",
         "grunt": "^1.0.4",
         "grunt-screeps": "^1.4.0"
     },

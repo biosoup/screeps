@@ -2,7 +2,7 @@
 const CPUdebug = false;
 
 if (CPUdebug == true) {
-    let cpu = Game.cpu.getUsed();
+	let cpu = Game.cpu.getUsed();
     console.log("CPU@Start: " + cpu + " / Tick: " + Game.time + " / Bucket: " + Game.cpu.bucket);
     global.reqCPU = Game.cpu.getUsed();
     global.start = Game.time;
@@ -18,8 +18,9 @@ require('globals')
 require('./tools.prototype.Room.structures');
 const profiler = require('tools.screeps-profiler');
 const stats = require('tools.stats');
-require("tools.creep-tasks");
+// eslint-disable-next-line no-unused-vars
 var Traveler = require('tools.Traveler');
+require("tools.creep-tasks");
 require('functions.game');
 
 // import modules
@@ -130,7 +131,7 @@ module.exports.loop = function () {
                             //activate safemode, when non-invaders get too close to spawn
                             var closeRange = 0;
 
-                            closeRangeHostile = Game.rooms[roomName].spawns[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
+                            var closeRangeHostile = Game.rooms[roomName].spawns[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
                                 filter: f => f.owner.username != "Invader"
                             })
                             closeRange = Game.rooms[roomName].spawns[0].pos.getRangeTo(closeRangeHostile);
@@ -162,7 +163,7 @@ module.exports.loop = function () {
                                             }
                                         }
                                     }
-                                    distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+                                    var distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
 
                                     //check if flag does not exists
                                     var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
@@ -192,7 +193,7 @@ module.exports.loop = function () {
                                         }
                                     }
                                     if (!_.isEmpty(distance)) {
-                                        distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
+                                        var distanceName = _.first(_.map(_.sortByOrder(distance, ['dist'], ['asc']), _.values))[0];
 
                                         //check if flag does not exists
                                         var whiteFlags = _.filter(Game.flags, (f) => f.color == COLOR_WHITE && _.words(f.name, /[^-]+/g)[1] == Game.rooms[roomName].name)
@@ -222,11 +223,17 @@ module.exports.loop = function () {
                     }
                 }
 
-                //base refreshes
-                if (_.isEmpty(Game.rooms[roomName].memory.masterSpawn) && Game.cpu.bucket > CPU_THRESHOLD) {
+                // refresh every 10 ticks if we have no master spawn on our own room
+                if ((Game.time % 10) == 0 && _.isEmpty(Game.rooms[roomName].memory.masterSpawn) &&
+                    Game.cpu.bucket > CPU_THRESHOLD &&
+                    Game.rooms[roomName].controller != undefined &&
+                    Game.rooms[roomName].controller.owner != undefined &&
+                    Game.rooms[roomName].controller.owner.username == playerUsername) {
+
                     Game.rooms[roomName].refreshData(roomName)
                 }
 
+                //refresh blueprints after RCL upgrade
                 if ((Game.time % 10) == 0 && (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL ||
                         (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" &&
                             Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]")) && Game.cpu.bucket > CPU_THRESHOLD) {
@@ -235,7 +242,13 @@ module.exports.loop = function () {
                 }
                 Game.rooms[roomName].memory.RCL = Game.rooms[roomName].controller.level;
 
-                if ((Game.time % DELAYFLOWROOMCHECK) == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
+                // refresh room data 
+                if ((Game.time % DELAYFLOWROOMCHECK) == 0 &&
+                    Game.cpu.bucket > CPU_THRESHOLD &&
+                    Game.rooms[roomName].controller != undefined &&
+                    Game.rooms[roomName].controller.owner != undefined &&
+                    Game.rooms[roomName].controller.owner.username == playerUsername) {
+                        
                     //refresh room data
                     Game.rooms[roomName].refreshData(roomName)
                     //refreshed room buildings

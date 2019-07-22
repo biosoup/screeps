@@ -5,7 +5,6 @@
     - road building system for main room
     - bunker around spawn
 */
-var Tasks = require("tools.creep-tasks");
 
 //import the base blueprints
 require("module.colony.autobuild.buildings");
@@ -322,7 +321,7 @@ Room.prototype.baseRCLBuildCheck = function () {
         return null
     }
     var tlc = new RoomPosition(s1.pos.x - 5, s1.pos.y - 9, s1.pos.roomName)
-    var room = Game.rooms[s1.pos.roomName];
+    room = Game.rooms[s1.pos.roomName];
     var base = baseRCL2; //check against lvl2
 
     if (!_.isEmpty(base.buildings.extension)) {
@@ -362,7 +361,7 @@ Room.prototype.baseRCLBuild = function () {
     }
     var tlc = new RoomPosition(s1.pos.x - 5, s1.pos.y - 9, s1.pos.roomName)
     var rcl = this.controller.level
-    var room = Game.rooms[s1.pos.roomName];
+    room = Game.rooms[s1.pos.roomName];
 
     if (!this.baseRCLBuildCheck() && rcl > 2) {
         //not current layout
@@ -768,180 +767,268 @@ Room.prototype.refreshData =
             Game.rooms[r].memory.roomArray = {};
         }
 
+        //FIXME: add postion to IDs as well
+
         var searchResult;
         if (roomCreeps > 0 || (Game.rooms[r].controller != undefined &&
                 Game.rooms[r].controller.owner != undefined &&
                 Game.rooms[r].controller.owner.username == playerUsername) ||
             Game.rooms[r].memory.roomArray == undefined) {
 
+            // Preloading room structure
             if (Game.rooms[r].memory.roomArray == undefined) {
                 Game.rooms[r].memory.roomArray = {};
             }
 
-            // Preloading room structure
+            //time of last check
+            Game.rooms[r].memory.roomArray.lastCheck = Game.time;
+
+            //Hostile structures
+            var hostileStructures = [];
+            var hostileStructuresPos = [];
+            searchResult = Game.rooms[r].find(FIND_HOSTILE_STRUCTURES);
+            for (let s in searchResult) {
+                hostileStructures.push(searchResult[s].id);
+                hostileStructuresPos.push(searchResult[s].pos);
+            }
+            Game.rooms[r].memory.roomArray.hostileStructures = hostileStructures;
+            Game.rooms[r].memory.roomArray.hostileStructuresPos = hostileStructuresPos;
+
+            //Hostile creeps
+            var hostiles = Game.rooms[r].find(FIND_HOSTILE_CREEPS, {
+                filter: h => h.owner.username != "Invader"
+            })
+            if (hostiles > 0) {
+                Game.rooms[r].memory.roomArray.hostileCreeps = [hostiles.length, _.first(hostiles).owner.username];
+            } else {
+                Game.rooms[r].memory.roomArray.hostileCreeps = [0, null]
+            }
+
+
+
+            //avaliable exits
+            Game.rooms[r].memory.roomArray.exits = Game.map.describeExits(r);
+
+            //Room sources
             if (Game.rooms[r].memory.roomArraySources != undefined) {
                 delete Game.rooms[r].memory.roomArraySources;
             }
             var sourceIDs = [];
+            var sourceIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_SOURCES);
             for (let s in searchResult) {
                 sourceIDs.push(searchResult[s].id);
+                sourceIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.sources = sourceIDs;
+            Game.rooms[r].memory.roomArray.sourcesPos = sourceIDsPos;
 
             if (Game.rooms[r].memory.roomArrayMinerals != undefined) {
                 delete Game.rooms[r].memory.roomArrayMinerals;
             }
             var mineralIDs = [];
+            var mineralIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MINERALS);
             for (let s in searchResult) {
                 mineralIDs.push(searchResult[s].id);
+                mineralIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.minerals = mineralIDs;
+            Game.rooms[r].memory.roomArray.mineralsPos = mineralIDsPos;
 
+            //containers
             if (Game.rooms[r].memory.roomArrayContainers != undefined) {
                 delete Game.rooms[r].memory.roomArrayContainers;
             }
             var containerIDs = [];
+            var containerIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER
             });
             for (let s in searchResult) {
                 containerIDs.push(searchResult[s].id);
+                containerIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.containers = containerIDs;
+            Game.rooms[r].memory.roomArray.containersPos = containerIDsPos;
 
+            //room MY_structures
             if (Game.rooms[r].memory.roomArrayPowerSpawns != undefined) {
                 delete Game.rooms[r].memory.roomArrayPowerSpawns;
             }
             var powerSpawnIDs = [];
+            var powerSpawnIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_POWER_SPAWN
             });
             for (let s in searchResult) {
                 powerSpawnIDs.push(searchResult[s].id);
+                powerSpawnIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.powerSpawns = powerSpawnIDs;
+            Game.rooms[r].memory.roomArray.powerSpawns = powerSpawnIDsPos;
 
             if (Game.rooms[r].memory.roomArraySpawns != undefined) {
                 delete Game.rooms[r].memory.roomArraySpawns;
             }
             var spawnIDs = [];
+            var spawnIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_SPAWN
             });
             for (let s in searchResult) {
                 spawnIDs.push(searchResult[s].id);
+                spawnIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.spawns = spawnIDs;
+            Game.rooms[r].memory.roomArray.spawns = spawnIDsPos;
 
             if (Game.rooms[r].memory.roomArrayExtensions != undefined) {
                 delete Game.rooms[r].memory.roomArrayExtensions;
             }
             var extensionIDs = [];
+            var extensionIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_EXTENSION
             });
             for (let s in searchResult) {
                 extensionIDs.push(searchResult[s].id);
+                extensionIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.extensions = extensionIDs;
+            Game.rooms[r].memory.roomArray.extensionsPos = extensionIDsPos;
 
             if (Game.rooms[r].memory.roomArrayLinks != undefined) {
                 delete Game.rooms[r].memory.roomArrayLinks;
             }
             var LinkIDs = [];
+            var LinkIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_LINK
             });
             for (let s in searchResult) {
                 LinkIDs.push(searchResult[s].id);
+                LinkIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.links = LinkIDs;
+            Game.rooms[r].memory.roomArray.linksPos = LinkIDsPos;
 
             if (Game.rooms[r].memory.roomArrayLabs != undefined) {
                 delete Game.rooms[r].memory.roomArrayLabs;
             }
             var LabIDs = [];
+            var LabIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_LAB
             });
             for (let s in searchResult) {
                 LabIDs.push(searchResult[s].id);
+                LabIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.labs = LabIDs;
+            Game.rooms[r].memory.roomArray.labsPos = LabIDsPos;
 
             if (Game.rooms[r].memory.roomArrayExtractors != undefined) {
                 delete Game.rooms[r].memory.roomArrayExtractors;
             }
             var ExtractorIDs = [];
+            var ExtractorIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_EXTRACTOR
             });
             for (let s in searchResult) {
                 ExtractorIDs.push(searchResult[s].id);
+                ExtractorIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.extractors = ExtractorIDs;
+            Game.rooms[r].memory.roomArray.extractorsPos = ExtractorIDsPos;
 
             if (Game.rooms[r].memory.roomArrayRamparts != undefined) {
                 delete Game.rooms[r].memory.roomArrayRamparts;
             }
             var rampartIDs = [];
+            var rampartIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_RAMPART
             });
             for (let s in searchResult) {
                 rampartIDs.push(searchResult[s].id);
+                rampartIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.ramparts = rampartIDs;
+            Game.rooms[r].memory.roomArray.rampartsPos = rampartIDsPos;
 
             if (Game.rooms[r].memory.roomArrayNukers != undefined) {
                 delete Game.rooms[r].memory.roomArrayNukers;
             }
             var nukerIDs = [];
+            var nukerIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_NUKER
             });
             for (let s in searchResult) {
                 nukerIDs.push(searchResult[s].id);
+                nukerIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.nukers = nukerIDs;
+            Game.rooms[r].memory.roomArray.nukersPos = nukerIDsPos;
 
             if (Game.rooms[r].memory.roomArrayObservers != undefined) {
                 delete Game.rooms[r].memory.roomArrayObservers;
             }
             var observerIDs = [];
+            var observerIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_OBSERVER
             });
             for (let s in searchResult) {
                 observerIDs.push(searchResult[s].id);
+                observerIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.observers = observerIDs;
+            Game.rooms[r].memory.roomArray.observersPos = observerIDsPos;
 
             if (Game.rooms[r].memory.roomArrayTowers != undefined) {
                 delete Game.rooms[r].memory.roomArrayTowers;
             }
             var towerIDs = [];
+            var towerIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_MY_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_TOWER
             });
             for (let s in searchResult) {
                 towerIDs.push(searchResult[s].id);
+                towerIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.towers = towerIDs;
+            Game.rooms[r].memory.roomArray.towersPos = towerIDsPos;
 
+            //Source Keepers
             if (Game.rooms[r].memory.roomArrayLairs != undefined) {
                 delete Game.rooms[r].memory.roomArrayLairs;
             }
             var lairIDs = [];
+            var lairIDsPos = [];
             searchResult = Game.rooms[r].find(FIND_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_KEEPER_LAIR
             });
             for (let s in searchResult) {
                 lairIDs.push(searchResult[s].id);
+                lairIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.lairs = lairIDs;
+            Game.rooms[r].memory.roomArray.lairsPos = lairIDsPos;
+
+            if (hostileStructures.length > 0) {
+                //we got a hostile room
+                Game.rooms[r].memory.roomArray.type = "hostile"
+            } else if (lairIDs.length > 0) {
+                // SK room
+                Game.rooms[r].memory.roomArray.type = "SK"
+            } else {
+                //normal room
+                Game.rooms[r].memory.roomArray.type = "normal"
+            }
         }
 
         //Check master spawn
@@ -1112,16 +1199,6 @@ Room.prototype.creepSpawnRun =
         //Check for sources & minerals
         let numberOfSources = spawnRoom.memory.roomArray.sources.length;
         let numberOfExploitableMineralSources = spawnRoom.memory.roomArray.extractors.length;
-        let roomMineralType;
-
-        //Check mineral type of the room
-        if (numberOfExploitableMineralSources > 0) {
-            // Assumption: There is only one mineral source per room
-            let mineral = Game.getObjectById(spawnRoom.memory.roomArray.minerals[0]);
-            if (mineral != undefined) {
-                roomMineralType = mineral.mineralType;
-            }
-        }
 
         // Define spawn minima
         let minimumSpawnOf = {};
@@ -1316,7 +1393,6 @@ Room.prototype.creepSpawnRun =
 
         let longDistanceHarvester = {}
         let longDistanceMiner = {}
-        let longDistanceLorry = {}
         let longDistanceBuilder = {}
         let claimer = {}
         let guard = {}
@@ -1714,10 +1790,6 @@ Room.prototype.creepSpawnRun =
         let energy = spawnRoom.energyCapacityAvailable;
         let name = undefined;
         let rcl = spawnRoom.controller.level;
-
-        var containerEnergy = spawnRoom.find(FIND_STRUCTURES, {
-            filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 1900
-        });
 
         /* 
         FIXME:
