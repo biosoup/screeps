@@ -108,7 +108,7 @@ module.exports = {
 
                     //switch lorries back
                     if (_.first(_.words(creep.name, /[^-]+/g)) != "transporter") {
-                        creep.memory.role = "lorry"
+                        creep.memory.role = "runner"
                     }
                 }
             } else {

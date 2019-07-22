@@ -7,10 +7,9 @@ let harvester = require('role.harvester')
 let longDistanceHarvester = require('role.longDistanceHarvester')
 let claimer = require('role.claimer')
 let miner = require('role.miner')
-let lorry = require('role.lorry')
 let guard = require('role.guard')
 let einarr = require('role.einarr')
-let spawnAttendant = require('role.spawnAttendant')
+let runner = require('./role.runner')
 let transporter = require('role.transporter')
 let mineralHarvester = require('role.mineralHarvester')
 let longDistanceMiner = require('role.longDistanceMiner')
@@ -37,14 +36,12 @@ Creep.prototype.runRole =
             claimer.newTask(this)
         } else if (this.memory.role == 'miner') {
             miner.newTask(this)
-        } else if (this.memory.role == 'lorry') {
-            lorry.newTask(this)
         } else if (this.memory.role == 'guard') {
             guard.nonTask(this)
         } else if (this.memory.role == 'einarr') {
             einarr.nonTask(this)
-        } else if (this.memory.role == 'spawnAttendant') {
-            spawnAttendant.newTask(this)
+        } else if (this.memory.role == 'runner') {
+            runner.newTask(this)
         } else if (this.memory.role == 'transporter') {
             transporter.newTask(this)
         } else if (this.memory.role == 'mineralHarvester') {
@@ -65,6 +62,10 @@ Creep.prototype.runRole =
             demolisher.newTask(this)
         } else {
             console.log("error - missing creep role " + this.memory.role + " " + this.room.name)
+            //purge old/wrong roles
+            if (this.memory.role == "spawnAttendant" || this.memory.role == "lorry") {
+                this.suicide()
+            }
         }
     };
 

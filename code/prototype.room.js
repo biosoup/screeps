@@ -1133,7 +1133,7 @@ Room.prototype.creepSpawnRun =
         minimumSpawnOf["miner"] = 0;
         minimumSpawnOf["longDistanceMiner"] = 0;
         minimumSpawnOf["demolisher"] = 0;
-        minimumSpawnOf["spawnAttendant"] = 0;
+        minimumSpawnOf["runner"] = 0;
         minimumSpawnOf["longDistanceLorry"] = 0;
         minimumSpawnOf["longDistanceBuilder"] = 0;
         minimumSpawnOf["attacker"] = 0; //unused
@@ -1547,7 +1547,8 @@ Room.prototype.creepSpawnRun =
                 minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
             } else {
                 if (spawnRoom.storage.store[RESOURCE_ENERGY] > (MINSURPLUSENERGY * spawnRoom.controller.level)) {
-                    minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
+                    //minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources);
+                    minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
                 } else {
                     minimumSpawnOf["wallRepairer"] = Math.ceil(numberOfSources * 0.5);
                 }
@@ -1555,9 +1556,9 @@ Room.prototype.creepSpawnRun =
         }
 
 
-        // spawnAttendant
+        // runner
         if (spawnRoom.storage != undefined) {
-            minimumSpawnOf["spawnAttendant"] = 1;
+            minimumSpawnOf["runner"] = 1;
 
             //pull back on lorries when storage is overflowing
             if (_.sum(spawnRoom.storage.store) > 900000) {
@@ -1569,30 +1570,9 @@ Room.prototype.creepSpawnRun =
         }
 
         var numberOfMiners = _.sum(allMyCreeps, (c) => c.memory.role == 'miner' && c.memory.home == spawnRoom.name)
-        var numberOfSA = _.sum(allMyCreeps, (c) => c.memory.role == 'spawnAttendant' && c.memory.home == spawnRoom.name)
-        var numberOfLorries = _.sum(allMyCreeps, (c) => c.memory.role == 'lorry' && c.memory.home == spawnRoom.name)
+        var numberOfSA = _.sum(allMyCreeps, (c) => c.memory.role == 'runner' && c.memory.home == spawnRoom.name)
 
-        // lorry, Harvester & Repairer
-        minimumSpawnOf["miner"] = numberOfSources;
-
-        //minimumSpawnOf["lorry"] = minimumSpawnOf.miner - numberOfSA
-        if (numberOfMiners > 0) {
-            minimumSpawnOf["lorry"] = 1;
-            var numberOfFullContainers = this.find(FIND_STRUCTURES, {
-                filter: (f) => f.structureType == STRUCTURE_CONTAINER && f.store[RESOURCE_ENERGY] == f.storeCapacity
-            }).length
-            if (numberOfFullContainers >= 2) {
-                minimumSpawnOf["lorry"]++;
-            }
-        } else {
-            minimumSpawnOf["lorry"] = 1;
-        }
-
-
-        minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners / 2) - numberOfLorries - numberOfSA
-        //minimumSpawnOf["builder"] = Math.ceil(numberOfSources * 0.5);
-
-        //console.log(spawnRoom.name+" "+minimumSpawnOf["harvester"])
+        minimumSpawnOf["harvester"] = numberOfSources - Math.ceil(numberOfMiners / 2) - numberOfSA
 
         /** Rest **/
 
@@ -1694,7 +1674,7 @@ Room.prototype.creepSpawnRun =
                     minimumSpawnOf.builder = 0;
                     minimumSpawnOf.longDistanceHarvester = 0;
                     minimumSpawnOf.mineralHarvester = 0;
-                    minimumSpawnOf.spawnAttendant = 0;
+                    minimumSpawnOf.runner = 0;
                     minimumSpawnOf.longDistanceMiner = 0;
                     minimumSpawnOf.longDistanceLorry = 0;
                     minimumSpawnOf.longDistanceBuilder = 0;
@@ -1762,7 +1742,7 @@ Room.prototype.creepSpawnRun =
         }
 
         if (rcl <= 2) {
-            minimumSpawnOf.lorry = 1
+            minimumSpawnOf.runner = 1
         }
 
         //we can claim new room, pause upgraders
@@ -1788,7 +1768,7 @@ Room.prototype.creepSpawnRun =
         let neededTicksThreshold = 1300 * spawnRoom.memory.roomArray.spawns.length;
         if (neededTicksToSpawn > neededTicksThreshold) {
             console.log("<font color=#ff0000 type='highlight'>Warning: Possible bottleneck to spawn creeps needed for room " + spawnRoom.name + "  detected: " + neededTicksToSpawn + " ticks > " + neededTicksThreshold + " ticks</font>");
-            minimumSpawnOf.spawnAttendant = minimumSpawnOf.spawnAttendant + 1
+            minimumSpawnOf.runner = minimumSpawnOf.runner + 1
         }
         let spawnList = this.getSpawnList(spawnRoom, minimumSpawnOf, numberOf);
         let spawnEntry = 0;
@@ -1954,21 +1934,13 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
             max: numberOf.upgrader,
             minEnergy: buildingPlans.upgrader[rcl - 1].minEnergy
         },
-        spawnAttendant: {
-            name: "spawnAttendant",
+        runner: {
+            name: "runner",
             prio: 15,
             energyRole: false,
-            min: minimumSpawnOf.spawnAttendant,
-            max: numberOf.spawnAttendant,
-            minEnergy: buildingPlans.spawnAttendant[rcl - 1].minEnergy
-        },
-        lorry: {
-            name: "lorry",
-            prio: 20,
-            energyRole: true,
-            min: minimumSpawnOf.lorry,
-            max: numberOf.lorry,
-            minEnergy: buildingPlans.lorry[rcl - 1].minEnergy
+            min: minimumSpawnOf.runner,
+            max: numberOf.runner,
+            minEnergy: buildingPlans.runner[rcl - 1].minEnergy
         },
         scientist: {
             name: "scientist",
@@ -2092,7 +2064,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         }
     };
 
-    if ((numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant) == 0) {
+    if ((numberOf.harvester+ numberOf.runner) == 0) {
         // Set up miniHarvester to spawn
         tableImportance.miniharvester.min = 1
     }
@@ -2100,8 +2072,6 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
     tableImportance = _.filter(tableImportance, function (x) {
         return (!(x.min == 0 || x.min == x.max || x.max > x.min))
     });
-
-    //console.log(numberOf.harvester +" " +numberOf.lorry +" "+ numberOf.spawnAttendant+" "+JSON.stringify(tableImportance))
 
     if (tableImportance.length > 0) {
         tableImportance = _.sortBy(tableImportance, "prio");
@@ -2116,7 +2086,7 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
         /* var hostiles = spawnRoom.find(FIND_HOSTILE_CREEPS);
 
         //Surplus Upgrader Spawning
-        if (numberOf.harvester + numberOf.lorry + numberOf.spawnAttendant > 0 && hostiles.length == 0 && spawnRoom.controller.level < 8) {
+        if (numberOf.harvester + numberOf.runner > 0 && hostiles.length == 0 && spawnRoom.controller.level < 8) {
             let container = spawnRoom.find(FIND_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE
             });
