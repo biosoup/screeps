@@ -1,10 +1,15 @@
-var Tasks = require("tools.creep-tasks");
+var Tasks = require("../tools/creep-tasks");
 
 module.exports = {
     // a function to run the logic for this role
     /** @param {Creep} creep */
     newTask: function (creep) {
-        if (creep.carry.energy > 0) {
+        if (_.sum(creep.carry) > creep.carry[RESOURCE_ENERGY] && !_.isEmpty(creep.room.storage)) {
+            //creep has something other than energy
+            creep.task = Tasks.transferAll(creep.room.storage);
+            creep.say("other")
+            return;
+        } else if (creep.carry.energy > 0) {
             //do not let controleer to downgrade
             if (creep.room.controller.ticksToDowngrade < 5000) {
                 creep.task = Tasks.upgrade(creep.room.controller)

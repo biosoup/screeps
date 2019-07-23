@@ -7,7 +7,7 @@
 */
 
 //import the base blueprints
-require("module.colony.autobuild.buildings");
+require("../base.blueprint");
 
 Room.prototype.roomEconomy = function () {
     let cpuStart = Game.cpu.getUsed();

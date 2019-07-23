@@ -1,4 +1,4 @@
-var Tasks = require("tools.creep-tasks");
+var Tasks = require("../tools/creep-tasks");
 
 module.exports = {
     // a function to run the logic for this role
@@ -50,36 +50,13 @@ module.exports = {
                 //get in for the kill
                 if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
                     creep.travelTo(hostile, {movingTarget: true});
-                } else {
-                    if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile, {movingTarget: true});
-                    }
+                }
+                if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
+                    creep.travelTo(hostile, {movingTarget: true});
                 }
                 creep.say("Hostile!" + EM_SWORDS, true);
                 return;
             } else {
-                //find enemy structures
-                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {filter: f => f.structureType != STRUCTURE_CONTROLLER})
-                if (!_.isEmpty(hostile)) {
-                    //get in for the kill
-                    if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile, {movingTarget: true});
-                    }
-                    if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                        creep.travelTo(hostile, {movingTarget: true});
-                    }
-                    creep.say("Hostile!" + EM_SWORDS, true);
-                    return;
-                }
-
-                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CONSTRUCTION_SITES)
-                if (!_.isEmpty(hostile)) {
-                    //get in for the kill
-                    creep.travelTo(hostile, {movingTarget: true});
-                    creep.say("Hostile!" + EM_SWORDS, true);
-                    return;
-                }
-
                 //find damaged creeps
                 var hitCreeps = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
                     filter: c => c.hits < c.hitsMax
@@ -92,11 +69,11 @@ module.exports = {
 
 
                 //remove flags when no enemies
-                /* var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
+                var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
                 if (!_.isEmpty(whiteFlags)) {
-                    creep.say(EM_FLAG)
+                    creep.say(EM_FLAG, true)
                     whiteFlags.remove()
-                } */
+                }
 
                 //go sign the controller
                 creep.graffity()
@@ -105,8 +82,8 @@ module.exports = {
                     creep.say(EM_SINGING, true)
 
                     //send guard home
-                    /* creep.memory.target = creep.memory.home;
-                    return */
+                    creep.memory.target = creep.memory.home;
+                    return
                 }
 
 
@@ -114,7 +91,9 @@ module.exports = {
 
         } else {
             //go to target room
-            creep.task = Tasks.goToRoom(creep.memory.target, {preferHighway: true})
+            creep.task = Tasks.goToRoom(creep.memory.target, {
+                preferHighway: true
+            })
         }
 
     }

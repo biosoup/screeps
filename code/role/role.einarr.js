@@ -1,4 +1,4 @@
-var Tasks = require("tools.creep-tasks");
+var Tasks = require("../tools/creep-tasks");
 
 module.exports = {
     // a function to run the logic for this role
@@ -17,6 +17,7 @@ module.exports = {
                 creep.heal(injuredCreep);
             }
         }
+
 
         if (creep.room.name == creep.memory.target) {
             //if in target room
@@ -45,18 +46,50 @@ module.exports = {
             //find hostiles
             var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
             if (!_.isEmpty(hostile)) {
-
-
+                if (_.isEmpty(creep.memory.travelData)) {
+                    creep.memory.travelData = {}
+                }
                 //get in for the kill
                 if (creep.rangedAttack(hostile) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(hostile, {movingTarget: true});
+                    creep.travelTo(hostile, {
+                        movingTarget: true,
+                        travelData: travelData
+                    });
+                } else {
+                    if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
+                        creep.travelTo(hostile, {
+                            movingTarget: true,
+                            travelData: creep.memory.travelData
+                        });
+                    }
                 }
-                if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(hostile, {movingTarget: true});
-                }
+                console.log(JSON.stringify(creep.memory.travelData))
                 creep.say("Hostile!" + EM_SWORDS, true);
                 return;
             } else {
+                //find enemy structures
+                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
+                    filter: f => f.structureType != STRUCTURE_CONTROLLER
+                })
+                if (!_.isEmpty(hostile)) {
+                    //get in for the kill
+                    creep.task = Tasks.attack(hostile, {
+                        movingTarget: true
+                    })
+                    creep.say("Hostile!" + EM_SWORDS, true);
+                    return;
+                }
+
+                var hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CONSTRUCTION_SITES)
+                if (!_.isEmpty(hostile)) {
+                    //get in for the kill
+                    creep.travelTo(hostile, {
+                        movingTarget: true
+                    });
+                    creep.say("Hostile!" + EM_SWORDS, true);
+                    return;
+                }
+
                 //find damaged creeps
                 var hitCreeps = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
                     filter: c => c.hits < c.hitsMax
@@ -69,11 +102,11 @@ module.exports = {
 
 
                 //remove flags when no enemies
-                var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
+                /* var whiteFlags = _.first(_.filter(Game.flags, (f) => f.color == COLOR_WHITE && f.room == creep.room))
                 if (!_.isEmpty(whiteFlags)) {
-                    creep.say(EM_FLAG, true)
+                    creep.say(EM_FLAG)
                     whiteFlags.remove()
-                }
+                } */
 
                 //go sign the controller
                 creep.graffity()
@@ -82,8 +115,8 @@ module.exports = {
                     creep.say(EM_SINGING, true)
 
                     //send guard home
-                    creep.memory.target = creep.memory.home;
-                    return
+                    /* creep.memory.target = creep.memory.home;
+                    return */
                 }
 
 

@@ -1,25 +1,25 @@
-require("tools.creep-tasks");
-var Tasks = require("tools.creep-tasks");
+require("../tools/creep-tasks");
+var Tasks = require("../tools/creep-tasks");
 
-let builder = require('role.builder')
-let upgrader = require('role.upgrader')
-let harvester = require('role.harvester')
-let longDistanceHarvester = require('role.longDistanceHarvester')
-let claimer = require('role.claimer')
-let miner = require('role.miner')
-let guard = require('role.guard')
-let einarr = require('role.einarr')
-let runner = require('./role.runner')
-let scout = require('./role.scout')
-let transporter = require('role.transporter')
-let mineralHarvester = require('role.mineralHarvester')
-let longDistanceMiner = require('role.longDistanceMiner')
-let longDistanceLorry = require('role.longDistanceLorry')
-let longDistanceBuilder = require('role.longDistanceBuilder')
-let scientist = require('role.scientist')
-let wallRepairer = require('role.wallRepairer')
-let herocreep = require('./role.herocreep')
-let demolisher = require('role.demolisher')
+let builder = require('../role/role.builder')
+let upgrader = require('../role/role.upgrader')
+let harvester = require('../role/role.harvester')
+let longDistanceHarvester = require('../role/role.longDistanceHarvester')
+let claimer = require('../role/role.claimer')
+let miner = require('../role/role.miner')
+let guard = require('../role/role.guard')
+let einarr = require('../role/role.einarr')
+let runner = require('../role/role.runner')
+let scout = require('../role/role.scout')
+let transporter = require('../role/role.transporter')
+let mineralHarvester = require('../role/role.mineralHarvester')
+let longDistanceMiner = require('../role/role.longDistanceMiner')
+let longDistanceLorry = require('../role/role.longDistanceLorry')
+let longDistanceBuilder = require('../role/role.longDistanceBuilder')
+let scientist = require('../role/role.scientist')
+let wallRepairer = require('../role/role.wallRepairer')
+let herocreep = require('../role/role.herocreep')
+let demolisher = require('../role/role.demolisher')
 
 
 Creep.prototype.runRole =
@@ -475,5 +475,81 @@ Creep.prototype.findResource = function (resource, sourceTypes) {
         } else {
             return null;
         }
+    }
+};
+
+Creep.prototype.findWalkableExitToTargetRoom = function (targetRoom) {
+    //all exit tiles as goals
+    var goals = Game.rooms[targetRoom].find(FIND_EXIT)
+    //navigate from random structur in the room itself
+    var center = _.sample(Game.rooms[targetRoom].find(FIND_STRUCTURES, {
+        filter: f => f.structureType != STRUCTURE_RAMPART &&
+            f.structureType != STRUCTURE_WALL
+    }))
+
+    //find a valid path from center to exit
+    let ret = PathFinder.search(
+        center, goals, {
+            roomCallback: function (roomName) {
+                let room = Game.rooms[roomName];
+
+                if (!room) return;
+                let costs = new PathFinder.CostMatrix;
+
+                room.find(FIND_STRUCTURES).forEach(function (struct) {
+                    if (struct.structureType !== STRUCTURE_WALL &&
+                        (struct.structureType !== STRUCTURE_RAMPART ||
+                            !struct.my)) {
+                        // Can't walk through non-walkable buildings
+                        costs.set(struct.pos.x, struct.pos.y, 0xff);
+                    }
+                });
+                return costs;
+            },
+        }
+    );
+
+    if (!ret.incomplete) {
+        //we've found a valid path
+        let exitPos = ret.path[ret.length]
+        //get rooms around, to get the room to enter from
+        let roomsAround = Game.map.describeExits(targetRoom);
+
+        //mirror position for the exact tile, but in the other room
+        let mirrorPos
+        if (exitPos.x == 0) {
+            //left
+            mirrorPos = new RoomPosition(49, exitPos.y, roomsAround["7"])
+        } else if (exitPos.x == 49) {
+            //right
+            mirrorPos = new RoomPosition(0, exitPos.y, roomsAround["3"])
+        } else if (exitPos.y == 0) {
+            //bottom
+            mirrorPos = new RoomPosition(exitPos.x, 49, roomsAround["5"])
+        } else if (exitPos.y == 49) {
+            //top
+            mirrorPos = new RoomPosition(exitPos.x, 0, roomsAround["1"])
+        }
+
+        if (!_.isEmpty(mirrorPos)) {
+            //get a route that avoids target room to navigate around it to the room to enter from
+            const route = Game.map.findRoute(this.room, mirrorPos.roomName, {
+                routeCallback(roomName, fromRoomName) {
+                    if (roomName == targetRoom) { // avoid this room
+                        return Infinity;
+                    }
+                    return 1;
+                }
+            });
+            //return route
+            return route
+            //the rest of the logic is on the creep itself
+        } else {
+            return "err"
+        }
+    } else {
+        //no valid path found
+        return false
+        //let the creep deal with it
     }
 };
