@@ -13,7 +13,7 @@ module.exports = {
         } else if (creep.carry[RESOURCE_ENERGY] > 0) {
             // creep has energy -> work
 
-            if (creep.fillStructures(creep)) {
+            if (creep.fillStructures(creep, false)) {
                 return;
             }
 

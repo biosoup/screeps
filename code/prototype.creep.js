@@ -122,20 +122,22 @@ Creep.prototype.getEnergy = function (creep, useSource) {
         }
     }
 
+    //get from continer
+    if (_.isEmpty(creep.room.links)) {
+        var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] >= 1000)
+        if (!_.isEmpty(containers)) {
+            var container = creep.pos.findClosestByRange(containers)
+            if (!_.isEmpty(container)) {
+                creep.task = Tasks.withdraw(container);
+                return true;
+            }
+        }
+    }
+
     //get from storage
     if (!_.isEmpty(creep.room.storage)) {
         if (creep.room.storage.store[RESOURCE_ENERGY] > 100) {
             creep.task = Tasks.withdraw(creep.room.storage);
-            return true;
-        }
-    }
-
-    //get from continer
-    var containers = creep.room.containers.filter(s => s.store[RESOURCE_ENERGY] >= 100)
-    if (!_.isEmpty(containers)) {
-        var container = creep.pos.findClosestByRange(containers)
-        if (!_.isEmpty(container)) {
-            creep.task = Tasks.withdraw(container);
             return true;
         }
     }
@@ -184,7 +186,7 @@ Creep.prototype.getEnergy = function (creep, useSource) {
     }
 };
 
-Creep.prototype.fillStructures = function (creep) {
+Creep.prototype.fillStructures = function (creep, workpart = false) {
     //FIXME: change to findClosestByRange, add targetedBy check
 
     //fill towers
@@ -230,12 +232,20 @@ Creep.prototype.fillStructures = function (creep) {
     }
 
     //fill upgrade container
-    var container = _.first(creep.room.controller.pos.findInRange(creep.room.containers, 2, {
-        filter: f => f.store[RESOURCE_ENERGY] < f.storeCapacity && f.targetedBy.length == 0
-    }))
-    if (!_.isEmpty(container)) {
-        creep.task = Tasks.transfer(container);
-        return;
+    if (workpart) {
+        var container = _.first(creep.room.controller.pos.findInRange(creep.room.containers, 2, {
+            filter: f => f.store[RESOURCE_ENERGY] < f.storeCapacity && f.targetedBy.length == 0
+        }))
+        if (!_.isEmpty(container)) {
+            creep.task = Tasks.transfer(container);
+            return;
+        }
+    }
+
+    //put into storage
+    if (!_.isEmpty(creep.room.storage)) {
+        creep.task = Tasks.transfer(creep.room.storage);
+        return true;
     }
 
 };

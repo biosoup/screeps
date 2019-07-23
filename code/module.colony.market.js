@@ -174,95 +174,97 @@ module.exports = {
     resourceBalance: function () {
         if (Game.time % DELAYRESOURCEBALANCING == 0 && Game.cpu.bucket > CPU_THRESHOLD) {
             // Inter-room resource balancing
-            for (let r in myRooms) {
-                if (Game.rooms[r].terminal != undefined && Game.rooms[r].terminal.cooldown == 0 && Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername &&
-                    Game.rooms[r].storage.store[RESOURCE_ENERGY] > 5000 && Game.rooms[r].memory.terminalTransfer == undefined) {
-                    var combinedResources = [];
-                    if (_.sum(Game.rooms[r].terminal.store) < Game.rooms[r].terminal.storeCapacity * 0.75) {
-                        for (let e in Game.rooms[r].storage.store) {
+            if (!_.isEmpty(myRooms)) {
+                for (let r in myRooms) {
+                    if (Game.rooms[r].terminal != undefined && Game.rooms[r].terminal.cooldown == 0 && Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername &&
+                        Game.rooms[r].storage.store[RESOURCE_ENERGY] > 5000 && Game.rooms[r].memory.terminalTransfer == undefined) {
+                        var combinedResources = [];
+                        if (_.sum(Game.rooms[r].terminal.store) < Game.rooms[r].terminal.storeCapacity * 0.75) {
+                            for (let e in Game.rooms[r].storage.store) {
+                                if (combinedResources.indexOf(e) == -1) {
+                                    combinedResources.push(e);
+                                }
+                            }
+                        }
+                        for (let e in Game.rooms[r].terminal.store) {
                             if (combinedResources.indexOf(e) == -1) {
                                 combinedResources.push(e);
                             }
                         }
-                    }
-                    for (let e in Game.rooms[r].terminal.store) {
-                        if (combinedResources.indexOf(e) == -1) {
-                            combinedResources.push(e);
+                        var checkedResources = [];
+                        if (_.sum(Game.rooms[r].terminal.store) < Game.rooms[r].terminal.storeCapacity * 0.75) {
+                            combinedResources = _.sortBy(combinedResources, function (res) {
+                                return checkTerminalLimits(Game.rooms[r], res);
+                            });
+                            combinedResources = combinedResources.reverse();
+                        } else {
+                            combinedResources = _.sortBy(combinedResources, function (res) {
+                                return checkStorageLimits(Game.rooms[r], res);
+                            });
+                            combinedResources = combinedResources.reverse();
                         }
-                    }
-                    var checkedResources = [];
-                    if (_.sum(Game.rooms[r].terminal.store) < Game.rooms[r].terminal.storeCapacity * 0.75) {
-                        combinedResources = _.sortBy(combinedResources, function (res) {
-                            return checkTerminalLimits(Game.rooms[r], res);
-                        });
-                        combinedResources = combinedResources.reverse();
-                    } else {
-                        combinedResources = _.sortBy(combinedResources, function (res) {
-                            return checkStorageLimits(Game.rooms[r], res);
-                        });
-                        combinedResources = combinedResources.reverse();
-                    }
 
-                    for (let n in combinedResources) {
-                        //Iterate through resources in terminal and/or storage
-                        if (checkedResources.indexOf(combinedResources[n]) == -1) {
-                            var storageDelta = checkStorageLimits(Game.rooms[r], combinedResources[n]);
-                            var packetSize = RBS_PACKETSIZE;
-                            if (combinedResources[n] == RESOURCE_ENERGY) {
-                                packetSize = RBS_PACKETSIZE * 2;
-                            }
-
-                            if (Game.rooms[r].memory.terminalTransfer == undefined && (_.sum(Game.rooms[r].terminal.store) >= Game.rooms[r].terminal.storeCapacity * 0.70 ||
-                                    (storageDelta >= (Game.rooms[r].memory.resourceLimits[combinedResources[n]].maxStorage * 0.1) && packetSize <= Game.rooms[r].storage.store[combinedResources[n]] && storageDelta <= Game.rooms[r].storage.store[combinedResources[n]]))) {
-                                // Resource can be shared with other rooms if their maxStorage is not reached yet
-                                checkedResources.push(n);
-                                let recipientRooms = [];
-                                let fullRooms = [];
-                                for (var ru in myRooms) {
-                                    if (Game.rooms[ru].name != Game.rooms[r].name && Game.rooms[ru].storage != undefined && Game.rooms[ru].terminal != undefined && Game.rooms[ru].storage.owner.username == playerUsername) {
-                                        if (_.sum(Game.rooms[ru].terminal.store) < Game.rooms[ru].terminal.storeCapacity * 0.75 && checkStorageLimits(Game.rooms[ru], combinedResources[n]) < 0) {
-                                            recipientRooms.push(Game.rooms[ru]);
-                                        } else if (_.sum(Game.rooms[ru].terminal.store) < Game.rooms[ru].terminal.storeCapacity * 0.75) {
-                                            fullRooms.push(Game.rooms[ru]);
-                                        }
-                                    }
+                        for (let n in combinedResources) {
+                            //Iterate through resources in terminal and/or storage
+                            if (checkedResources.indexOf(combinedResources[n]) == -1) {
+                                var storageDelta = checkStorageLimits(Game.rooms[r], combinedResources[n]);
+                                var packetSize = RBS_PACKETSIZE;
+                                if (combinedResources[n] == RESOURCE_ENERGY) {
+                                    packetSize = RBS_PACKETSIZE * 2;
                                 }
-                                recipientRooms = _.sortBy(recipientRooms, function (room) {
-                                    return checkStorageLimits(room, combinedResources[n]);
-                                });
-                                fullRooms = _.sortBy(fullRooms, function (room) {
-                                    return checkStorageLimits(room, combinedResources[n]);
-                                });
 
-                                if (recipientRooms.length > 0) {
-                                    let recipientDelta = checkStorageLimits(recipientRooms[0], combinedResources[n]);
-                                    if (recipientDelta < 0) {
-                                        // Recipient room need the resource
-                                        let transferAmount;
-                                        if (storageDelta + recipientDelta >= 0) {
-                                            transferAmount = Math.abs(recipientDelta);
-                                        } else {
-                                            transferAmount = storageDelta;
+                                if (Game.rooms[r].memory.terminalTransfer == undefined && (_.sum(Game.rooms[r].terminal.store) >= Game.rooms[r].terminal.storeCapacity * 0.70 ||
+                                        (storageDelta >= (Game.rooms[r].memory.resourceLimits[combinedResources[n]].maxStorage * 0.1) && packetSize <= Game.rooms[r].storage.store[combinedResources[n]] && storageDelta <= Game.rooms[r].storage.store[combinedResources[n]]))) {
+                                    // Resource can be shared with other rooms if their maxStorage is not reached yet
+                                    checkedResources.push(n);
+                                    let recipientRooms = [];
+                                    let fullRooms = [];
+                                    for (var ru in myRooms) {
+                                        if (Game.rooms[ru].name != Game.rooms[r].name && Game.rooms[ru].storage != undefined && Game.rooms[ru].terminal != undefined && Game.rooms[ru].storage.owner.username == playerUsername) {
+                                            if (_.sum(Game.rooms[ru].terminal.store) < Game.rooms[ru].terminal.storeCapacity * 0.75 && checkStorageLimits(Game.rooms[ru], combinedResources[n]) < 0) {
+                                                recipientRooms.push(Game.rooms[ru]);
+                                            } else if (_.sum(Game.rooms[ru].terminal.store) < Game.rooms[ru].terminal.storeCapacity * 0.75) {
+                                                fullRooms.push(Game.rooms[ru]);
+                                            }
                                         }
-
-                                        if (transferAmount < 100) {
-                                            transferAmount = 100;
-                                        }
-
-                                        if (transferAmount > packetSize) {
-                                            transferAmount = packetSize;
-                                        }
-
-                                        terminalTransferX(combinedResources[n], transferAmount, Game.rooms[r].name, recipientRooms[0].name, true);
-                                        break;
                                     }
-                                } else if (fullRooms.length > 0) {
-                                    // Room is over storage limit --> look for rooms with less of the resource
-                                    for (let p in fullRooms) {
-                                        if (fullRooms[p].storage != undefined && (fullRooms[p].storage.store[combinedResources[n]] == undefined || checkStorageLimits(Game.rooms[r], combinedResources[n]) > checkStorageLimits(fullRooms[p], combinedResources[n]) + packetSize)) {
-                                            //room with less minerals found
-                                            terminalTransferX(combinedResources[n], packetSize / 2, Game.rooms[r].name, fullRooms[p].name, true);
+                                    recipientRooms = _.sortBy(recipientRooms, function (room) {
+                                        return checkStorageLimits(room, combinedResources[n]);
+                                    });
+                                    fullRooms = _.sortBy(fullRooms, function (room) {
+                                        return checkStorageLimits(room, combinedResources[n]);
+                                    });
+
+                                    if (recipientRooms.length > 0) {
+                                        let recipientDelta = checkStorageLimits(recipientRooms[0], combinedResources[n]);
+                                        if (recipientDelta < 0) {
+                                            // Recipient room need the resource
+                                            let transferAmount;
+                                            if (storageDelta + recipientDelta >= 0) {
+                                                transferAmount = Math.abs(recipientDelta);
+                                            } else {
+                                                transferAmount = storageDelta;
+                                            }
+
+                                            if (transferAmount < 100) {
+                                                transferAmount = 100;
+                                            }
+
+                                            if (transferAmount > packetSize) {
+                                                transferAmount = packetSize;
+                                            }
+
+                                            terminalTransferX(combinedResources[n], transferAmount, Game.rooms[r].name, recipientRooms[0].name, true);
                                             break;
+                                        }
+                                    } else if (fullRooms.length > 0) {
+                                        // Room is over storage limit --> look for rooms with less of the resource
+                                        for (let p in fullRooms) {
+                                            if (fullRooms[p].storage != undefined && (fullRooms[p].storage.store[combinedResources[n]] == undefined || checkStorageLimits(Game.rooms[r], combinedResources[n]) > checkStorageLimits(fullRooms[p], combinedResources[n]) + packetSize)) {
+                                                //room with less minerals found
+                                                terminalTransferX(combinedResources[n], packetSize / 2, Game.rooms[r].name, fullRooms[p].name, true);
+                                                break;
+                                            }
                                         }
                                     }
                                 }

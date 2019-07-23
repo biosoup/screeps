@@ -81,18 +81,26 @@ module.exports = {
                             f.structureType == STRUCTURE_TERMINAL) && f.energy > 0
                     })
                     if (!_.isEmpty(energies)) {
-                        creep.say(EM_PACKAGE+"2", true)
+                        creep.say(EM_PACKAGE + "2", true)
                         creep.task = Tasks.withdraw(energies)
                         return
                     }
 
                     //find nearest structure, or wall and demolish until full
-                    var demo = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                        filter: f => f.structureType != STRUCTURE_CONTROLLER || f.structureType != STRUCTURE_ROAD || f.structureType != STRUCTURE_KEEPER_LAIR
-                    })
+                    var demo = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES)
                     if (!_.isEmpty(demo)) {
                         creep.say(EM_BOMB, true)
-                        //FIXME: custom dismantle
+                        creep.task = Tasks.dismantle(demo)
+                        return
+                    }
+
+                    var demo = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                        filter: f =>
+                            f.structureType == STRUCTURE_WALL ||
+                            f.structureType == STRUCTURE_CONTAINER
+                    })
+                    if (!_.isEmpty(demo)) {
+                        creep.say(EM_BOMB + "2", true)
                         creep.task = Tasks.dismantle(demo)
                         return
                     }

@@ -14,7 +14,7 @@ module.exports = upgrader = {
             } else {
                 creep.task = Tasks.signController(creep.room.controller, roomSign)
             }
-            creep.task = Tasks.upgrade(creep.room.controller);
+            creep.task = Tasks.upgrade(creep.room.controller, {workOffRoad: true});
             return
         } else {
             //first link nearby

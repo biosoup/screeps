@@ -88,7 +88,8 @@ StructureTower.prototype.repairStructures = function () {
                 s.structureType != STRUCTURE_WALL &&
                 s.structureType != STRUCTURE_RAMPART &&
                 s.structureType != STRUCTURE_EXTRACTOR &&
-                s.structureType != STRUCTURE_SPAWN
+                s.structureType != STRUCTURE_SPAWN &&
+                s.structureType != STRUCTURE_CONTAINER
         });
 
         if (targets.length > 0) {

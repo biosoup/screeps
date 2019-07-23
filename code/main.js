@@ -2,7 +2,7 @@
 const CPUdebug = false;
 
 if (CPUdebug == true) {
-	let cpu = Game.cpu.getUsed();
+    let cpu = Game.cpu.getUsed();
     console.log("CPU@Start: " + cpu + " / Tick: " + Game.time + " / Bucket: " + Game.cpu.bucket);
     global.reqCPU = Game.cpu.getUsed();
     global.start = Game.time;
@@ -63,6 +63,7 @@ module.exports.loop = function () {
         }
 
         //Fill myRooms
+        var myroomlist = _.values(Game.rooms).filter(r => _.get(r, ['controller', 'owner', 'username'], undefined) === playerUsername);
         for (let m in myroomlist) {
             myRooms[myroomlist[m].name] = myroomlist[m];
         }
@@ -77,6 +78,9 @@ module.exports.loop = function () {
                     if (!_.isEmpty(Game.rooms[roomName].memory.roomArray.spawns)) {
                         Game.rooms[roomName].creepSpawnRun(Game.rooms[roomName]);
                     }
+                } else {
+                    //refresh room data
+                    Game.rooms[roomName].refreshData(roomName)
                 }
             }
         }
@@ -234,9 +238,7 @@ module.exports.loop = function () {
                 }
 
                 //refresh blueprints after RCL upgrade
-                if ((Game.time % 10) == 0 && (Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL ||
-                        (Game.rooms[roomName].controller.level >= 6 && Game.rooms[roomName].memory.innerLabs[0].labID == "[LAB_ID]" &&
-                            Game.rooms[roomName].memory.innerLabs[1].labID == "[LAB_ID]")) && Game.cpu.bucket > CPU_THRESHOLD) {
+                if ((Game.time % 10) == 0 && Game.rooms[roomName].controller.level > Game.rooms[roomName].memory.RCL && Game.cpu.bucket > CPU_THRESHOLD) {
                     var response = Game.rooms[roomName].baseRCLBuild()
                     console.log(roomName + " RCL upgrade! " + response)
                 }
@@ -247,8 +249,8 @@ module.exports.loop = function () {
                     Game.cpu.bucket > CPU_THRESHOLD &&
                     Game.rooms[roomName].controller != undefined &&
                     Game.rooms[roomName].controller.owner != undefined &&
-                    Game.rooms[roomName].controller.owner.username == playerUsername) {
-                        
+                    Game.rooms[roomName].controller.owner.username == playerUsername || ROOMARRAY_REFRESH == true) {
+
                     //refresh room data
                     Game.rooms[roomName].refreshData(roomName)
                     //refreshed room buildings
@@ -311,7 +313,11 @@ module.exports.loop = function () {
 
         if (Game.cpu.bucket > CPU_THRESHOLD * 2) {
             //run market code
-            market.marketCode();
+            try {
+                market.marketCode();
+            } catch (err) {
+                console.log("ROOM FNC ERR: " + roomName + " " + err.stack)
+            }
 
         }
 

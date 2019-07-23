@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 DELAYFLOWROOMCHECK = 313;
 DELAYMARKETAUTOSELL = 7;
 DELAYMARKETBUY = 3;
@@ -28,11 +29,11 @@ LOG_SPAWN = false;
 LOG_EXPIRE = true;
 LOG_PANICFLAG = true;
 LOG_INFO = true;
+ROOMARRAY_REFRESH = false;
 
 playerUsername = "biosoup";
 roomSign = "Not fully automated, yet!"
 allies = [];
-myroomlist = _.values(Game.rooms).filter(r => _.get(r, ['controller', 'owner', 'username'], undefined) === playerUsername);
 myRooms = {};
 
 /**

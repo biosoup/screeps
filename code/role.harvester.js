@@ -12,7 +12,7 @@ module.exports = {
             }
 
             //fill structures
-            if (creep.fillStructures(creep)) {
+            if (creep.fillStructures(creep, true)) {
                 return;
             }
 

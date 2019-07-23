@@ -17,7 +17,7 @@ module.exports = {
         if (creep.memory.home != undefined && creep.room.name == creep.memory.home) {
             //if in home room
             if (creep.carry.energy > 0) {
-                if(creep.fillStructures(creep)) {
+                if(creep.fillStructures(creep, true)) {
                     return;
                 }
 

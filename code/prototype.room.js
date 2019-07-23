@@ -866,7 +866,7 @@ Room.prototype.refreshData =
                 powerSpawnIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.powerSpawns = powerSpawnIDs;
-            Game.rooms[r].memory.roomArray.powerSpawns = powerSpawnIDsPos;
+            Game.rooms[r].memory.roomArray.powerSpawnsPos = powerSpawnIDsPos;
 
             if (Game.rooms[r].memory.roomArraySpawns != undefined) {
                 delete Game.rooms[r].memory.roomArraySpawns;
@@ -881,7 +881,7 @@ Room.prototype.refreshData =
                 spawnIDsPos.push(searchResult[s].pos);
             }
             Game.rooms[r].memory.roomArray.spawns = spawnIDs;
-            Game.rooms[r].memory.roomArray.spawns = spawnIDsPos;
+            Game.rooms[r].memory.roomArray.spawnsPos = spawnIDsPos;
 
             if (Game.rooms[r].memory.roomArrayExtensions != undefined) {
                 delete Game.rooms[r].memory.roomArrayExtensions;
@@ -1719,6 +1719,7 @@ Room.prototype.creepSpawnRun =
 
 
         //Scout
+        //minimumSpawnOf.scout = 1;
 
 
         // Adjustments in case of hostile presence
@@ -1859,9 +1860,11 @@ Room.prototype.creepSpawnRun =
                 // Iterate through spawns
                 let testSpawn = Game.getObjectById(spawnRoom.memory.roomArray.spawns[s]);
                 if (testSpawn != null && testSpawn.spawning == null && testSpawn.memory.spawnRole != "x") {
-                    var debug = [spawnList, minimumSpawnOf, numberOf]
-
-                    //console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
+                    
+                    if (false) {
+                        var debug = [spawnList, minimumSpawnOf, numberOf]
+                        console.log(spawnRoom.name + " " + JSON.stringify(debug) + " *** ticks needed: " + neededTicksToSpawn)
+                    }
 
                     // Spawn!
                     if (spawnList[spawnEntry] == "miner") {
@@ -2142,6 +2145,14 @@ Room.prototype.getSpawnList = function (spawnRoom, minimumSpawnOf, numberOf) {
             min: minimumSpawnOf.herocreep,
             max: numberOf.herocreep,
             minEnergy: buildingPlans.herocreep[rcl - 1].minEnergy
+        },
+        scout: {
+            name: "scout",
+            prio: 20,
+            energyRole: false,
+            min: minimumSpawnOf.scout,
+            max: numberOf.scout,
+            minEnergy: buildingPlans.scout[rcl - 1].minEnergy
         }
     };
 
