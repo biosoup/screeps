@@ -1,13 +1,16 @@
 /** main.js */
 'use strict';
 
-/* global DEFER_REQUIRE, ENV */
+/* global DEFER_REQUIRE */
 
 const MemHack = require('./tools/MemHack');
 MemHack.register()
+
 const profiler = require('./tools/screeps-profiler');
 const stats = require('./tools/stats');
 const Traveler = require('./tools/Traveler');
+
+global.Player = require('Player');
 
 // Deffered modules though we can load when we have cpu for it
 DEFER_REQUIRE('global');

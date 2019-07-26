@@ -2,12 +2,11 @@
  * global.js - Configuration Constants
  */
 'use strict';
+var AsciiTable = require('./tools/ascii-table')
 
 /* eslint-disable no-magic-numbers, no-undef */
 
 global.WHOAMI = (_.find(Game.structures) || _.find(Game.creeps)).owner.username;
-global.PREVENT_UNCLAIM = ['E59S39', 'E58S41'];
-global.MARKET_ORDER_LIMIT = 50;
 
 global.MAX_ROOM_LEVEL = 8;							// Because this should really be a constant.
 global.MAX_OWNED_ROOMS = Infinity;					// Lower this if we can't afford more.
@@ -58,11 +57,6 @@ global.GCL_LEVEL = (i) => ((i ** GCL_POW) - ((i - 1) ** GCL_POW)) * GCL_MULTIPLY
 
 global.ENERGY_CAPACITY_AT_LEVEL = (x) => (CONTROLLER_STRUCTURES[STRUCTURE_SPAWN][x] * SPAWN_ENERGY_START) + CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][x] * EXTENSION_ENERGY_CAPACITY[x];
 
-/*
-global.CONTROLLER_DOWNGRADE_FULL = {1: CONTROLLER_DOWNGRADE[1]};
-for(i=2; i<=8; i++)
-	CONTROLLER_DOWNGRADE_FULL[i] = CONTROLLER_DOWNGRADE_FULL[i-1] + CONTROLLER_DOWNGRADE[i];	
-*/
 global.TICKS_TILL_DEAD = (level, currentTimer) => _.sum(_.slice(_.values(CONTROLLER_DOWNGRADE), 0, level - 1)) + currentTimer;
 
 /**
@@ -112,6 +106,7 @@ global.BUCKET_LIMITER_UPPER = 6000;
 global.CRITICAL_INFRASTRUCTURE = [STRUCTURE_LINK, STRUCTURE_STORAGE, STRUCTURE_SPAWN, STRUCTURE_TERMINAL, STRUCTURE_NUKER, STRUCTURE_OBSERVER, STRUCTURE_TOWER, STRUCTURE_POWER_SPAWN, STRUCTURE_LAB, STRUCTURE_NUKER, STRUCTURE_POWER_SPAWN];
 
 /** primary flag types */
+//TODO: adjust
 global.FLAG_MILITARY = COLOR_RED;	// Military
 global.FLAG_MINING = COLOR_YELLOW;	// Economy
 
@@ -369,6 +364,64 @@ global.RES_COLORS = {
 	XGHO2: '#FFFFFF'
 };
 
+global.DELAYFLOWROOMCHECK = 313;
+global.DELAYMARKETAUTOSELL = 7;
+global.DELAYMARKETBUY = 3;
+global.DELAYFLAGCOLORS = 31;
+global.DELAYRESOURCEBALANCING = 9;
+global.DELAYROOMSCANNING = 23;
+global.DELAYFLAGFINDING = 20;
+global.DELAYRESOURCEFINDING = 3;
+global.DELAYPANICFLAG = 5;
+global.DELAYSPAWNING = 13;
+global.DELAYLINK = 2;
+global.DELAYPRODUCTION = 7;
+global.DELAYLAB = 10;
+global.DELAYRCL8INSTALLATION = 100;
+global.DELAYDROPPEDENERGY = 3;
+global.RESOURCE_SPACE = "space";
+global.TERMINAL_PACKETSIZE = 5000; //Size of packets in resource balancing system
+global.AUTOSELL_PACKETSIZE = 5000;
+global.BUY_PACKETSIZE = 5000;
+global.TERMINALMARKETSTORE = 50000;
+global.RBS_PACKETSIZE = 5000;
+global.CPU_THRESHOLD = 500;
+global.WALLMAX = 10000000;
+global.MINSURPLUSENERGY = 50000; //multiplied by RCL to get storage energy stresholds
+global.LOG_TERMINAL = true;
+global.LOG_MARKET = true;
+global.LOG_SPAWN = false;
+global.LOG_EXPIRE = true;
+global.LOG_PANICFLAG = true;
+global.LOG_INFO = true;
+global.ROOMARRAY_REFRESH = false;
+
+/**
+ * Emoji constants! (Because github integration mangles them in a non-nice way)
+ */
+
+global.EM_ZZZ = "\ud83d\udca4"; // "💤"
+global.EM_COOKIE = "\ud83c\udf6a"; // "🍪"
+global.EM_TEA = "\ud83c\udf75"; // "🍵"
+global.EM_COFFEE = "\u2615"; // "☕"
+global.EM_LIGHTNING = "\u26a1"; // "⚡"
+global.EM_BUILD = "\u2692"; // "⚒"
+global.EM_HAMMER = "\ud83d\udd28"; // "🔨"
+global.EM_BOMB = "\ud83d\udca3"; // "💣"
+global.EM_PACKAGE = "\ud83d\udce6"; // "📦"
+global.EM_TRUCK = "\ud83d\ude9a"; // "🚚"
+global.EM_EXCLAMATION = "\u2757"; // "❗"
+global.EM_PIN = "\ud83d\udccd"; // "📍"
+global.EM_WRENCH = "\ud83d\udd27"; // "🔧"
+global.EM_FLEX = "\ud83d\udcaa"; // "💪"
+global.EM_FLAG = "\ud83d\udea9"; // "🚩"
+global.EM_KILL = "\u2620\ufe0f"; // "☠️"
+global.EM_SWORDS = "\u2694"; // "⚔"
+global.EM_ARROW = "\u2650"; // "♐"
+global.EM_SYRINGE = "\ud83d\udc89"; // "💉"
+global.EM_SWIMMING = "\ud83c\udfca"; // "🏊"
+global.EM_SINGING = "\u266b\u266a\u266b"; // "♫♪♫"
+
 /**
  * Global functions
  * @todo stick in actual cache?
@@ -511,4 +564,796 @@ global.forEachFn = function forEachFn(proto, cb) {
 /** Set height of console, author Spedwards */
 global.setConsoleLines = function (lines) {
 	console.log(`<script>document.querySelector('.editor-panel').style.height = "${Math.ceil(lines * 22.5714) + 30}px";</script>`);
+};
+
+global.countCreeps = function () {
+    var totalCount = 0
+    for (var roomName in Game.rooms) {
+        if (!_.isEmpty(Game.rooms[roomName].spawns)) {
+            var creeps = _.filter(Game.creeps, (c) => c.memory.home == Game.rooms[roomName].name)
+            var creepsPerSpawn = creeps.length / (Game.rooms[roomName].spawns).length
+
+            //sum of parts
+            var parts = _.sum(creeps, h => _.sum(h.body, part => part.type != ""))
+
+            totalCount = totalCount + creeps.length
+            console.log(roomName + " Has " + creeps.length + " creeps alive with " + parts + " (avgSize: " + (creepsPerSpawn).toFixed(2) + ") parts from " + (Game.rooms[roomName].spawns).length +
+                " spawns. Parts left for spawning: " + ((500 * (Game.rooms[roomName].spawns).length) - parts))
+        }
+    }
+    return totalCount;
+}
+
+
+global.listCreeps = function (displayRole) {
+    var returnstring = "<table><tr><th>Role  </th>";
+    var roleTable = [];
+    var total = [];
+
+    myRooms = Game.rooms
+
+    // ISSUES - my creeps do not have "homeroom" set up
+
+    //Prepare header row
+    for (var r in myRooms) {
+        if (myRooms[r].controller.level > 0) {
+            returnstring = returnstring.concat("<th>" + Game.rooms[r].name + "  </th>");
+            let roomCreeps = _.filter(Game.creeps, function (c) {
+                return c.memory.home == myRooms[r].name;
+            });
+            for (let c in roomCreeps) {
+                if (roleTable.indexOf(roomCreeps[c].memory.role) == -1) {
+                    roleTable.push(roomCreeps[c].memory.role);
+                }
+            }
+        }
+    }
+    returnstring = returnstring.concat("</tr>");
+    roleTable.sort();
+    for (let role in roleTable) {
+        if (arguments.length == 0 || displayRole == roleTable[role]) {
+            returnstring = returnstring.concat("<tr></tr><td>" + roleTable[role] + "  </td>");
+            let c = -1;
+            for (var r in myRooms) {
+                if (myRooms[r].controller.level > 0) {
+                    c++;
+                    let amount;
+                    let roleCreeps = _.filter(Game.creeps, function (c) {
+                        return (c.memory.role == roleTable[role] && c.memory.home == myRooms[r].name);
+                    });
+                    amount = roleCreeps.length;
+                    returnstring = returnstring.concat("<td>" + prettyInt(amount) + "  </td>");
+                    if (total[c] == undefined) {
+                        total[c] = amount;
+                    } else {
+                        total[c] += amount;
+                    }
+                }
+            }
+            returnstring = returnstring.concat("</tr>");
+        }
+    }
+    returnstring = returnstring.concat("<tr></tr><td>Total  </td>");
+    for (let c in total) {
+        returnstring = returnstring.concat("<td>" + prettyInt(total[c]) + " </td>");
+    }
+    returnstring = returnstring.concat("</tr></table>");
+    return returnstring;
+};
+
+/**
+ * Unicode escape function.
+ * Sauced from: https://gist.github.com/mathiasbynens/1243213
+ */
+global.unicodeEscape = function (str) {
+    return str.replace(/[\s\S]/g, function (character) {
+        var escape = character.charCodeAt().toString(16),
+            longhand = escape.length > 2;
+        return '\\' + (longhand ? 'u' : 'x') + ('0000' + escape).slice(longhand ? -4 : -2);
+    });
+};
+
+global.activeTerminals = function () {
+    let entries = 0;
+    let returnString = "";
+    for (r in myRooms) {
+        if (myRooms[r].memory.terminalTransfer != undefined) {
+            entries++;
+            var info = myRooms[r].memory.terminalTransfer.split(":");
+            let targetRoom = info[0];
+            let amount = parseInt(info[1]);
+            let resource = info[2];
+            let comment = info[3];
+            if (comment == "MarketOrder") {
+                returnString = returnString.concat(myRooms[r].name + ": " + "Sending " + amount + " " + resource + " to room " + targetRoom + "<br>");
+            } else {
+                returnString = returnString.concat(myRooms[r].name + ": " + "Sending " + amount + " " + resource + " to room " + targetRoom + "<br>");
+            }
+        }
+    }
+
+    if (entries == 0) {
+        returnString = "No active terminals.";
+    }
+
+    return returnString;
+};
+
+global.activeLabs = function () {
+    let entries = 0;
+    let returnString = "";
+    for (r in myRooms) {
+        if (myRooms[r].memory.labOrder != undefined) {
+            entries++;
+            var info = myRooms[r].memory.labOrder.split(":");
+            let amount = parseInt(info[0]);
+            let resource1 = info[1];
+            let resource2 = info[2];
+            returnString = returnString.concat(myRooms[r].name + ": " + "Reaction -> [ " + amount + " " + resource1 + " + " + resource2 + " ]<br>");
+        }
+    }
+
+    if (entries == 0) {
+        returnString = "No active labs.";
+    }
+
+    return returnString;
+};
+
+
+global.buy = function (orderID, amount) {
+    if (arguments.length == 0) {
+        return "buy (orderID, amount)";
+    }
+    var order = Game.market.getOrderById(orderID);
+
+    if (order == null) {
+        return "Invalid order ID!"
+    }
+
+    if (order.remainingAmount < amount) {
+        return "Order does not contain enough material!"
+    }
+
+    if (Game.market.credits < order.price * amount) {
+        return "Not enough credits!"
+    }
+
+    if (!_.isEmpty(Memory.buyOrder)) {
+        return "Active buy order found: " + Memory.buyOrder;
+    }
+
+    Memory.buyOrder = amount + ":" + order.id;
+    return "Buy queue created!";
+};
+
+global.sell = function (orderID, amount, roomName) {
+    if (arguments.length == 0) {
+        return "sell (orderID, amount, roomName)";
+    }
+    let order = Game.market.getOrderById(orderID);
+
+    if (order == null) {
+        return "Invalid order ID!"
+    }
+    if (Game.rooms[roomName].memory.terminalTransfer == undefined) {
+        Game.rooms[roomName].memory.terminalTransfer = order.id + ":" + amount + ":" + order.resourceType + ":MarketOrder";
+        return "Selling transfer scheduled.";
+    } else {
+        return "Ongoing terminal transfer found. Try later.";
+    }
+};
+
+global.sellBulk = function (amount, resource) {
+    // Sell as much as possible as fast as possible, no matter the energy costs or price
+    if (arguments.length == 0) {
+        return "sellBulk (amount, resource)";
+    }
+    let amountBuffer = amount;
+    let orders = Game.market.getAllOrders({
+        type: ORDER_BUY,
+        resourceType: resource
+    });
+    if (orders.length > 0) {
+
+
+        orders = _.sortBy(orders, "price");
+        orders = _.sortBy(orders, "amount");
+        orders.reverse();
+
+        let orderIndex = 0;
+        for (let r in myRooms) {
+            if (orders[orderIndex] != undefined && myRooms[r].terminal != undefined && myRooms[r].memory.terminalTransfer == undefined) {
+                let sellAmount;
+                if (orders[orderIndex].amount > amount) {
+                    sellAmount = amount;
+                } else {
+                    sellAmount = orders[orderIndex].amount;
+                }
+
+                if (sellAmount <= 0) {
+                    break;
+                } else {
+                    sell(orders[orderIndex].id, sellAmount, r);
+                }
+                amount -= sellAmount;
+                orderIndex++;
+            }
+        }
+    }
+    if (amount < 0) {
+        amount = 0;
+    }
+    return (amountBuffer - amount) + " units queued for sale.";
+};
+
+global.sellHigh = function (amount, resource) {
+    // Sell as much as possible as expensive as possible, no matter the energy costs
+    if (arguments.length == 0) {
+        return "sellHigh (amount, resource)";
+    }
+    let amountBuffer = amount;
+    let orders = Game.market.getAllOrders({
+        type: ORDER_BUY,
+        resourceType: resource
+    });
+    if (orders.length > 0) {
+
+        orders = _.sortBy(orders, "amount");
+        orders = _.sortBy(orders, "price");
+        orders.reverse();
+
+        let orderIndex = 0;
+        for (let r in myRooms) {
+            if (myRooms[r].terminal != undefined && myRooms[r].memory.terminalTransfer == undefined) {
+                let sellAmount;
+                if (orders[orderIndex].amount > amount) {
+                    sellAmount = amount;
+                } else {
+                    sellAmount = orders[orderIndex].amount;
+                }
+
+                if (sellAmount <= 0) {
+                    break;
+                } else {
+                    sell(orders[orderIndex].id, sellAmount, r);
+                }
+                amount -= sellAmount;
+                orderIndex++;
+            }
+        }
+    }
+    if (amount < 0) {
+        amount = 0;
+    }
+    return (amountBuffer - amount) + " units queued for sale.";
+};
+
+global.buyLow = function (amount, resource, priceLimit) {
+    // buy as much as need below price limit
+    if (arguments.length == 0) {
+        return "buyLow (amount, resource, priceLimit)";
+    }
+    let amountBuffer = amount;
+    let orders = Game.market.getAllOrders({
+        type: ORDER_SELL,
+        resourceType: resource
+    });
+    if (orders.length > 0) {
+        orders = _.filter(orders, (f) => f.price <= priceLimit && f.remainingAmount > 0)
+        orders = _.sortBy(orders, "amount");
+        orders = _.sortBy(orders, "price");
+
+        //this.console.log(this.JSON.stringify(orders))
+        if (!_.isEmpty(orders)) {
+            let orderIndex = 0;
+            for (let r in myRooms) {
+                if (myRooms[r].terminal != undefined && myRooms[r].memory.terminalTransfer == undefined) {
+                    let buyAmount;
+                    if (orders[orderIndex].amount > amount) {
+                        buyAmount = amount;
+                    } else {
+                        buyAmount = orders[orderIndex].amount;
+                    }
+
+                    if (buyAmount <= 0) {
+                        break;
+                    } else {
+                        buy(orders[orderIndex].id, buyAmount);
+
+                        amount -= buyAmount;
+                        return (amountBuffer - amount) + " units queued for buy." + orders[orderIndex].id + " " + buyAmount + " " + orders[orderIndex].price;
+                    }
+
+                    orderIndex++;
+                }
+            }
+        }
+    } else {
+        return "No valid sell orders on the market!"
+    }
+    if (amount < 0) {
+        amount = 0;
+    }
+    return (amountBuffer - amount) + " units queued for buy.";
+};
+
+global.sellOrder = function (amount, resource, roomName, price) {
+    if (arguments.length == 0) {
+        return "sellOrder (amount, resource, roomName, price)";
+    }
+
+    if (Game.rooms[roomName].storage != undefined && Game.rooms[roomName].storage.store[resource] >= amount) {
+        if (Game.market.createOrder(ORDER_SELL, resource, price, amount, roomName) == OK) {
+            return "Sell order created!";
+        }
+    } else {
+        return "Room " + roomName + " is not able to sell this resource.";
+    }
+};
+
+global.buyOrder = function (amount, resource, roomName, price) {
+    if (arguments.length == 0) {
+        return "buyOrder (amount, resource, roomName, price)";
+    }
+    if (Game.market.createOrder(ORDER_BUY, resource, price, amount, roomName) == OK) {
+        return "Buy order created!";
+    }
+};
+
+global.countConstructionSites = function () {
+    //shard wide check for number of construction sites
+    var count = 0
+    for (var roomName in Game.rooms) {
+        var cs = Game.rooms[roomName].find(FIND_CONSTRUCTION_SITES)
+        count = count + cs.length
+    }
+    return count
+}
+
+global.terminalTransfer = function (transferResource, transferAmount, targetRoomName, transferFlag) {
+    // transfer resources to remote room from whatever room(s) is cheapest
+    var roomCandidates = [];
+    var tempArray = [];
+    var resourceTotal = 0;
+
+    if (arguments.length == 0) {
+        return "terminalTransfer (transferResource, transferAmount, targetRoomName, transferFlag) --> terminalTransfer(\"Z\", 10000, \"W16S47\", false)";
+    }
+
+    if (transferAmount < 100) {
+        return "Minimal amount for terminal transfers are 100 units.";
+    }
+
+    for (var r in myRooms) {
+        if (Game.rooms[r].terminal != undefined && Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
+            //Fill candidate array with rooms
+            var roomResourceTotal = 0;
+            var roomArray = [];
+
+            // Add resource in storage
+            if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.store[transferResource] != undefined) {
+                roomResourceTotal += Game.rooms[r].storage.store[transferResource];
+            }
+
+            // Add resource in containers
+            tempArray = Game.rooms[r].memory.roomArrayContainers;
+            var container;
+            for (var s in tempArray) {
+                container = Game.getObjectById(tempArray[s]);
+                if (container != undefined) {
+                    if (container.store[transferResource] != undefined) {
+                        roomResourceTotal += container.store[transferResource];
+                    }
+                }
+            }
+
+            if (transferResource == RESOURCE_ENERGY) {
+                // Add resource in links
+                tempArray = Game.rooms[r].memory.roomArrayLinks;
+                for (var s in tempArray) {
+                    container = Game.getObjectById(tempArray[s]);
+                    if (container != undefined) {
+                        roomResourceTotal += Game.getObjectById(tempArray[s]).energy;
+                    }
+                }
+            }
+
+            if (roomResourceTotal > 0 && Game.rooms[r].name != targetRoomName) {
+                roomArray["name"] = Game.rooms[r].name;
+                roomArray["volume"] = roomResourceTotal;
+
+                if (roomResourceTotal > transferAmount) {
+                    roomArray["totalCost"] = Game.market.calcTransactionCost(transferAmount, Game.rooms[r].name, targetRoomName);
+                } else {
+                    roomArray["totalCost"] = Game.market.calcTransactionCost(roomResourceTotal, Game.rooms[r].name, targetRoomName);
+                }
+                roomArray["cost"] = Game.market.calcTransactionCost(100, roomArray.name, targetRoomName);
+
+                if (transferFlag == false) {
+                    console.log(roomArray.name + ": " + roomResourceTotal + " of " + transferResource + " (energy factor: " + roomArray.cost + ")");
+                }
+
+                roomCandidates.push(roomArray);
+                resourceTotal += roomResourceTotal;
+            }
+        }
+    }
+
+    var totalVolume = 0;
+    var totalCost = 0;
+
+    if (roomCandidates.length == 0) {
+        return "No rooms with " + transferResource + " found.";
+    } else if (resourceTotal < transferAmount) {
+        return "Not enough " + transferResource + " found.";
+    } else {
+        // There are rooms holding enough of the transfer resource
+        var candidatesByCost = _.sortBy(roomCandidates, "cost");
+
+        for (var c in candidatesByCost) {
+            if (Game.rooms[candidatesByCost[c].name].memory.terminalTransfer == undefined) {
+                if (candidatesByCost[c].volume > transferAmount) {
+                    if (transferFlag == false) {
+                        console.log("Terminal Transfer Preview for room " + candidatesByCost[c].name + " // " + targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer // Total Energy Cost: " + candidatesByCost[c].totalCost);
+                    } else if (transferFlag == true) {
+                        Game.rooms[candidatesByCost[c].name].memory.terminalTransfer = targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer";
+                        //console.log(transferAmount + " " + transferResource + " scheduled from room " + candidatesByCost[c].name + " to room " + targetRoomName + " for " + candidatesByCost[c].totalCost + " energy.");
+                    }
+                    totalVolume += transferAmount;
+                    totalCost += candidatesByCost[c].totalCost;
+                    break;
+                } else {
+                    if (transferFlag == false) {
+                        console.log("Terminal Transfer Preview for room " + candidatesByCost[c].name + " // " + targetRoomName + ":" + candidatesByCost[c].volume + ":" + transferResource + ":TerminalTransfer // Total Energy Cost: " + candidatesByCost[c].totalCost);
+                    } else if (transferFlag == true) {
+                        Game.rooms[candidatesByCost[c].name].memory.terminalTransfer = targetRoomName + ":" + candidatesByCost[c].volume + ":" + transferResource + ":TerminalTransfer";
+                        //console.log(candidatesByCost[c].volume + " " + transferResource + " scheduled from room " + candidatesByCost[c].name + " to room " + targetRoomName + " for " + candidatesByCost[c].totalCost + " energy.");
+                    }
+                    totalVolume += candidatesByCost[c].volume;
+                    totalCost += candidatesByCost[c].totalCost;
+                    transferAmount -= candidatesByCost[c].volume;
+                }
+            }
+        }
+
+        if (transferFlag == "cost") {
+            return totalCost;
+        }
+        return "OK";
+    }
+};
+
+global.terminalTransferX = function (transferResource, transferAmount, sourceRoomName, targetRoomName, transferFlag) {
+    // transfer resources to from source to target
+    var roomCandidates = [];
+    var sourceRoom = Game.rooms[sourceRoomName];
+
+    if (arguments.length == 0) {
+        return "terminalTransferX (transferResource, transferAmount, sourceRoomName, targetRoomName, transferFlag) --> terminalTransfer(\"Z\", 10000, \"W18S49\", \"W16S47\", false)";
+    }
+
+    if (transferAmount < 100) {
+        return "Minimal amount for terminal transfers are 100 units.";
+    }
+
+    if (sourceRoom.memory.terminalTransfer != undefined) {
+        return "There is already an ongoing terminal transfer in room " + sourceRoomName + ".";
+    }
+
+    var totalCost = 0;
+    if (sourceRoom.storage == undefined || sourceRoom.terminal == undefined || (sourceRoom.storage.store[transferResource] + sourceRoom.terminal.store[transferResource]) < transferAmount) {
+        return "Error scheduling terminal transfer job.";
+    } else {
+        if (transferFlag == false) {
+            console.log("Terminal Transfer Preview for room " + sourceRoom.name + " // " + targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer // Total Energy Cost: " + Game.market.calcTransactionCost(transferAmount, sourceRoomName, targetRoomName));
+        } else if (transferFlag == true) {
+            sourceRoom.memory.terminalTransfer = targetRoomName + ":" + transferAmount + ":" + transferResource + ":TerminalTransfer";
+            //console.log(transferAmount + " " + transferResource + " scheduled from room " + sourceRoomName + " to room " + targetRoomName + " for " + Game.market.calcTransactionCost(transferAmount, sourceRoomName, targetRoomName) + " energy.");
+        } else {
+            return "Transfer Flag missing.";
+        }
+
+        if (transferFlag == "cost") {
+            return totalCost;
+        }
+        return "OK";
+    }
+};
+
+global.listStorages = function (displayResource) {
+    /* var table = AsciiTable.factory({
+        title: 'listStorages()',
+        heading: ['id', 'name'],
+        rows: [
+            [1, 'Bob'],
+            [2, 'Steve']
+        ]
+    }) */
+    var tableObject = {}
+    tableObject.title = 'listStorages()'
+    var tableRooms = []
+    tableRooms.push("Rooms")
+
+    var resourceTable = [];
+    var total = [];
+
+    //Prepare header row
+    for (var r in myRooms) {
+        if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
+            tableRooms.push(Game.rooms[r].name)
+            for (var res in myRooms[r].storage.store) {
+                if (resourceTable.indexOf(res) == -1) {
+                    resourceTable.push(res);
+                }
+            }
+        }
+    }
+    tableObject.heading = tableRooms;
+    tableObject.rows = []
+    var tableResources = []
+
+    resourceTable = _.sortBy(resourceTable, function (res) {
+        return res.length;
+    });
+    for (res in resourceTable) {
+        if (arguments.length == 0 || displayResource == resourceTable[res]) {
+            let c = -1;
+            tableResources.push(resourceTable[res])
+            
+            for (var r in myRooms) {
+                if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
+                    c++;
+                    var amount;
+                    var code;
+                    if (Game.rooms[r].storage.store[resourceTable[res]] == undefined) {
+                        amount = 0;
+                    } else {
+                        amount = Game.rooms[r].storage.store[resourceTable[res]];
+                    }
+                    if (amount < Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage) {
+                        code = "!"
+                    } else if (amount > Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage) {
+                        code = "$"
+                    } else {
+                        code = ""
+                    }
+                    tableResources.push(prettyInt(amount)+" "+code)
+
+                    if (total[c] == undefined) {
+                        total[c] = amount;
+                    } else {
+                        total[c] += amount;
+                    }
+                }
+            }
+            tableObject.rows.push(tableResources);
+            tableResources = []
+        }
+    }
+
+    var tableTotal = []
+    tableTotal.push("Total")
+    for (let c in total) {
+        tableTotal.push(prettyInt(total[c]))
+    }
+    
+    tableObject.rows.push(tableTotal)
+    var table = AsciiTable.factory(tableObject)
+
+    return table.toString()
+};
+
+global.prettyInt = function (int) {
+    var string = int.toString();
+    var numbers = string.length;
+    var rest = numbers % 3;
+    var returnString = "";
+    if (rest > 0) {
+        returnString = string.substr(0, rest);
+        if (numbers > 3) {
+            returnString += "'";
+        }
+    }
+    numbers -= rest;
+
+    while (numbers > 0) {
+        returnString += string.substr(rest, 3);
+        if (numbers > 3) {
+            returnString += "'";
+        }
+        rest += 3;
+        numbers -= 3;
+    }
+    return returnString;
+};
+
+global.listLimits = function (limitType, displayResource) {
+    if (arguments.length == 0) {
+        return "listLimits (limitTyoe, [displayResource]) - Known limit types: \"market\", \"storage\", \"production\", \"terminal\"";
+    }
+    var returnstring = "<table><tr><th>Resource  </th>";
+    var resourceTable = [];
+    if (limitType == "market") {
+        limitType = "minMarket"
+    } else if (limitType == "production") {
+        limitType = "minProduction"
+    } else if (limitType == "terminal") {
+        limitType = "minTerminal"
+    } else if (limitType == "storage") {
+        limitType = "maxStorage"
+    } else {
+        return "Invalid limit type."
+    }
+
+    //Prepare header row
+    for (var r in myRooms) {
+        if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
+            returnstring = returnstring.concat("<th>" + Game.rooms[r].name + "  </th>");
+            for (var res in myRooms[r].memory.resourceLimits) {
+                if (resourceTable.indexOf(res) == -1) {
+                    resourceTable.push(res);
+                }
+            }
+        }
+    }
+    returnstring = returnstring.concat("</tr>");
+    resourceTable = _.sortBy(resourceTable, function (res) {
+        return res.length;
+    });
+    for (res in resourceTable) {
+        if (arguments.length == 1 || displayResource == resourceTable[res]) {
+            var tempstring = "<tr><td>" + resourceTable[res] + "  </td>";
+            var tempsum = 0;
+            for (var r in myRooms) {
+                if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
+                    tempstring = tempstring.concat("<td>" + prettyInt(Game.rooms[r].memory.resourceLimits[resourceTable[res]][limitType]) + "  </td>");
+                    tempsum += Game.rooms[r].memory.resourceLimits[resourceTable[res]].maxStorage;
+                }
+            }
+            if (tempsum > 0) {
+                returnstring = returnstring.concat(tempstring + "</tr>");
+            }
+        }
+    }
+    returnstring = returnstring.concat("</table>");
+    return returnstring;
+};
+
+global.setLimit = function (roomName, type, resource, limit) {
+    if (arguments.length == 0) {
+        return "setLimit (roomName, limitType, resource, limit) - Known limit types: \"market\", \"storage\", \"production\", \"terminal\"";
+    }
+    var roomNames = [];
+    var resources = [];
+
+    if (roomName == "*") {
+        for (var t in myRooms) {
+            roomNames.push(myRooms[t].name);
+        }
+    } else {
+        roomNames.push(roomName);
+    }
+
+    if (resource == "*") {
+        for (var t in RESOURCES_ALL) {
+            resources.push(RESOURCES_ALL[t]);
+        }
+    } else {
+        resources.push(resource);
+    }
+
+    for (var i in roomNames) {
+        for (let m in resources) {
+            switch (type) {
+                case "market":
+                    Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].minMarket = limit;
+                    break;
+                case "terminal":
+                    Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].minTerminal = limit;
+                    break;
+                case "storage":
+                    Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].maxStorage = limit;
+                    break;
+                case "production":
+                    Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].minProduction = limit;
+                    break;
+                case "*":
+                    Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].minMarket = limit;
+                    Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].minTerminal = limit;
+                    Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].maxStorage = limit;
+					Game.rooms[roomNames[i]].memory.resourceLimits[resources[m]].minProduction = limit;
+					break;
+                default:
+                    return "Unknown type";
+            }
+            console.log("Room " + Game.rooms[roomNames[i]].name + " has set the " + type + " limit for " + resources[m] + " to " + limit + ".");
+        }
+    }
+    return "OK";
+};
+
+global.checkTerminalLimits = function (room, resource) {
+    // Check if terminal has exactly what it needs. If everything is as it should be true is returned.
+    // If material is missing or too much is in terminal, an array will be returned with the following format:
+    // delta.type = Type of resource / delta.amount = volume (positive number means surplus material)
+
+    //Check terminal limits
+    var uplift = 0;
+    var delta = {};
+    delta["type"] = resource;
+    if (room.memory.resourceLimits == undefined || room.terminal == undefined || room.storage == undefined) {
+        delta["amount"] = 0;
+        return delta;
+    }
+
+    var roomLimits = room.memory.resourceLimits;
+    if (roomLimits[resource] != undefined && room.terminal.store[resource] != undefined) {
+        delta.amount = room.terminal.store[resource] - roomLimits[resource].minTerminal;
+    } else if (room.terminal.store[resource] == undefined) {
+        delta.amount = roomLimits[resource].minTerminal;
+    } else {
+        delta.amount = 0
+    }
+
+    //console.log(JSON.stringify(roomLimits)+" "+delta.amount)
+
+    //Check market selling orders to add minerals to terminal
+    if (Object.keys(Game.market.orders).length > 0) {
+        //Look through orders to determine whether additional material is needed in terminal
+
+        var relevantOrders = _.filter(Game.market.orders, function (order) {
+            if (order.resourceType == resource && order.roomName == room.name && order.type == ORDER_SELL) {
+                return true
+            } else {
+                return false
+            }
+        });
+
+        if (relevantOrders.length > 0) {
+            for (let o in relevantOrders) {
+                if (relevantOrders[o].remainingAmount > TERMINALMARKETSTORE) {
+                    uplift += TERMINALMARKETSTORE;
+                } else {
+                    uplift += relevantOrders[o].remainingAmount;
+                }
+            }
+            delta.amount -= uplift;
+        }
+    }
+
+    //Check single buying orders to add energy to terminal
+    if (Memory.buyOrder != undefined && Memory.buyRoom == room.name && resource == RESOURCE_ENERGY) {
+        let info = Memory.buyOrder.split(":");
+        let order = Game.market.getOrderById(info[1]);
+        if (order != null) {
+            if (info[0] > 5000) {
+                info[0] = 5000;
+            }
+            if (info[0] > order.amount) {
+                info[0] = order.amount;
+            }
+            let plusEnergy = Game.market.calcTransactionCost(info[0], Memory.buyRoom, order.roomName);
+            delta.amount -= plusEnergy;
+        }
+    }
+
+    return delta;
+};
+
+global.checkStorageLimits = function (room, resource) {
+    // Check if storage has exactly what it needs. Return delta to maxStorage
+    // If everything is as it should be 0 is returned.
+    // If material is missing a negative amount will be returned
+    // If there is surplus a positive amount will be returned
+    var terminalDelta = 0;
+    if (room.storage == undefined) {
+        return 0;
+    }
+    terminalDelta = checkTerminalLimits(room, resource);
+    if (room.storage.store[resource] != undefined) {
+        return (terminalDelta.amount + room.storage.store[resource] - room.memory.resourceLimits[resource].maxStorage)
+    } else {
+        return (terminalDelta.amount - room.memory.resourceLimits[resource].maxStorage);
+    }
 };

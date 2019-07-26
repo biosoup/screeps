@@ -12,6 +12,7 @@ module.exports = {
         "Memory": "readonly",
         "_": "readonly",
         "Room": "readonly",
+        "Creep": "readonly"
     },
     "parserOptions": {
         "ecmaVersion": 2018
