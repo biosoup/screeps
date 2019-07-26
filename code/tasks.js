@@ -34,7 +34,7 @@ class tasks {
 
 	get memory() {
 		if (this._memory === undefined) {
-			this._memory = Memory.empire.tasks;
+			this._memory = Memory.tasks[this._empire];
 			if (this._memory === undefined)
 				this._memory = this.memory = {
 					list: [],

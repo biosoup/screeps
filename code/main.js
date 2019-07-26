@@ -8,9 +8,11 @@ MemHack.register()
 
 const profiler = require('./tools/screeps-profiler');
 const stats = require('./tools/stats');
+// eslint-disable-next-line no-unused-vars
 const Traveler = require('./tools/Traveler');
 
-global.Player = require('Player');
+//Management modules
+let mngEmpire = require('mngEmpire');
 
 // Deffered modules though we can load when we have cpu for it
 DEFER_REQUIRE('global');
@@ -23,35 +25,8 @@ module.exports.loop = function () {
 		MemHack.pretick()
 		stats.reset()
 
-		// 0) Garbage collection
-		if (Game.time % 1 == 0) {
-			if (Memory.creeps)
-				_.difference(Object.keys(Memory.creeps), Object.keys(Game.creeps)).forEach(function (key) {
-					if (Memory.creeps[key].tasks)
-						for (let roomName in Memory.creeps[key].tasks) {
-							let taskCode = Memory.creeps[key].tasks[roomName];
-							if (Game.rooms[roomName] && Game.rooms[roomName].getTasks().collection[taskCode])
-								Game.rooms[roomName].getTasks().collection[taskCode].assignmentDelete(key);
-						}
-					delete Memory.creeps[key]
-				});
-			if (Memory.flags)
-				_.difference(Object.keys(Memory.flags), Object.keys(Game.flags)).forEach(function (key) {
-					delete Memory.flags[key]
-				});
-			if (Memory.rooms)
-				//_.difference(Object.keys(Memory.rooms),Object.keys(Game.rooms)).forEach(function(key) {delete Memory.rooms[key]});
-				if (Memory.spawns)
-					_.difference(Object.keys(Memory.spawns), Object.keys(Game.spawns)).forEach(function (key) {
-						delete Memory.spawns[key]
-					});
-			if (Memory.structures)
-				_.difference(Object.keys(Memory.structures), Object.keys(Game.structures)).forEach(function (key) {
-					delete Memory.structures[key]
-				});
-		}
-
-		// 1) empire tasks
+		// 1) empire run
+		mngEmpire.garbageCollection()
 
 		// 2) colony tasks
 

@@ -8,13 +8,13 @@ var AsciiTable = require('./tools/ascii-table')
 
 global.WHOAMI = (_.find(Game.structures) || _.find(Game.creeps)).owner.username;
 
-global.MAX_ROOM_LEVEL = 8;							// Because this should really be a constant.
-global.MAX_OWNED_ROOMS = Infinity;					// Lower this if we can't afford more.
+global.MAX_ROOM_LEVEL = 8; // Because this should really be a constant.
+global.MAX_OWNED_ROOMS = Infinity; // Lower this if we can't afford more.
 
 global.CONST_COST = 0.2;
-global.HARD_UNIT_CAP = Game.cpu.limit / CONST_COST;			// Anything above this value is guaranteed to eat bucket.
-global.SOFT_UNIT_CAP = 60;									// Arbritary limit, as we're already eating bucket.
-global.HARD_CONST_CAP = Game.cpu.tickLimit / CONST_COST;	// Hard cap on number of const actions per tick.
+global.HARD_UNIT_CAP = Game.cpu.limit / CONST_COST; // Anything above this value is guaranteed to eat bucket.
+global.SOFT_UNIT_CAP = 60; // Arbritary limit, as we're already eating bucket.
+global.HARD_CONST_CAP = Game.cpu.tickLimit / CONST_COST; // Hard cap on number of const actions per tick.
 
 // General energy-per-tick (EPT) goal to aim for
 global.SOURCE_GOAL_OWNED = SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME;
@@ -107,31 +107,31 @@ global.CRITICAL_INFRASTRUCTURE = [STRUCTURE_LINK, STRUCTURE_STORAGE, STRUCTURE_S
 
 /** primary flag types */
 //TODO: adjust
-global.FLAG_MILITARY = COLOR_RED;	// Military
-global.FLAG_MINING = COLOR_YELLOW;	// Economy
+global.FLAG_MILITARY = COLOR_RED; // Military
+global.FLAG_MINING = COLOR_YELLOW; // Economy
 
 /** military flags */
 global.STRATEGY_ATTACK = COLOR_RED;
-global.STRATEGY_DISMANTLE = COLOR_PURPLE;	// Similar to PLAN_DEMOLISH, but no carry. Just take shit apart.
-global.STRATEGY_SCOUT = COLOR_BLUE;	// Assign a scout to this location (memory: auto disable?)
-global.STRATEGY_STEAL = COLOR_CYAN;	// (MOVE,CARRY) drains resources
-global.STRATEGY_DEFEND = COLOR_GREEN;	// Maintain a guard post. (melee or ranged though?)
-global.STRATEGY_RESPOND = COLOR_YELLOW;	// Summons specialized guards to respond to threats.
+global.STRATEGY_DISMANTLE = COLOR_PURPLE; // Similar to PLAN_DEMOLISH, but no carry. Just take shit apart.
+global.STRATEGY_SCOUT = COLOR_BLUE; // Assign a scout to this location (memory: auto disable?)
+global.STRATEGY_STEAL = COLOR_CYAN; // (MOVE,CARRY) drains resources
+global.STRATEGY_DEFEND = COLOR_GREEN; // Maintain a guard post. (melee or ranged though?)
+global.STRATEGY_RESPOND = COLOR_YELLOW; // Summons specialized guards to respond to threats.
 global.STRATEGY_RESERVE = COLOR_ORANGE;
 global.STRATEGY_G = COLOR_BROWN;
-global.STRATEGY_H = COLOR_GREY;	// put a reserver here to hold the room.
+global.STRATEGY_H = COLOR_GREY; // put a reserver here to hold the room.
 global.STRATEGY_I = COLOR_WHITE;
 
 /** economy flags */ // SITE_SK?
 global.SITE_DUAL_MINER = COLOR_RED;
 global.SITE_STATUS_UNKNOWN = COLOR_PURPLE;
-global.SITE_SKMINE = COLOR_BLUE;				// ? requests guards?
-global.SITE_PICKUP = COLOR_CYAN;				// in use, desginated pickup site for haulers
+global.SITE_SKMINE = COLOR_BLUE; // ? requests guards?
+global.SITE_PICKUP = COLOR_CYAN; // in use, desginated pickup site for haulers
 global.SITE_LOCAL = COLOR_YELLOW;
-global.SITE_MINERAL = COLOR_ORANGE;				// in use, builds extractors
+global.SITE_MINERAL = COLOR_ORANGE; // in use, builds extractors
 global.SITE_LAB = COLOR_BROWN;
 global.SITE_REMOTE = COLOR_GREY;
-global.SITE_IDLE = COLOR_WHITE;					// in use, idle sites are ignored
+global.SITE_IDLE = COLOR_WHITE; // in use, idle sites are ignored
 
 Object.defineProperty(global, 'CPU_LIMITER', {
 	get: function () {
@@ -157,16 +157,16 @@ global.BODYPART_THREAT = {
  */
 global.STRUCTURE_THREAT = {
 	[STRUCTURE_SPAWN]: 1.0,
-	[STRUCTURE_TOWER]: 0.95,	// These _must_ die.
+	[STRUCTURE_TOWER]: 0.95, // These _must_ die.
 	[STRUCTURE_EXTENSION]: 0.75,
-	[STRUCTURE_STORAGE]: 0.75,	// May be adjusted for contents
+	[STRUCTURE_STORAGE]: 0.75, // May be adjusted for contents
 	[STRUCTURE_TERMINAL]: 0.75,
 	[STRUCTURE_LINK]: 0.10,
 	[STRUCTURE_WALL]: 0.5,
 	[STRUCTURE_OBSERVER]: 0,
 	[STRUCTURE_EXTRACTOR]: 0,
-	[STRUCTURE_ROAD]: 0,		// These aren't threats
-	[STRUCTURE_RAMPART]: 0,		// will be dealth with if in the way.
+	[STRUCTURE_ROAD]: 0, // These aren't threats
+	[STRUCTURE_RAMPART]: 0, // will be dealth with if in the way.
 	[STRUCTURE_WALL]: 0,
 	[STRUCTURE_CONTAINER]: 0,
 };
@@ -183,13 +183,13 @@ global.STRUCTURE_BUILD_PRIORITY = {
 	[STRUCTURE_EXTENSION]: 0.65,
 	[STRUCTURE_STORAGE]: 0.5,
 	[STRUCTURE_OBSERVER]: 0.5,
-	[STRUCTURE_TERMINAL]: 0.5,	// Should build before extractor
+	[STRUCTURE_TERMINAL]: 0.5, // Should build before extractor
 	[STRUCTURE_EXTRACTOR]: 0.4,
 	[STRUCTURE_CONTAINER]: 0.35,
 	[STRUCTURE_WALL]: 0.25,
 	[STRUCTURE_RAMPART]: 0.25,
 	[STRUCTURE_ROAD]: 0.25,
-	[STRUCTURE_NUKER]: 0.20,	// Not important to infrastructure
+	[STRUCTURE_NUKER]: 0.20, // Not important to infrastructure
 	[STRUCTURE_POWER_SPAWN]: 0.10,
 	[STRUCTURE_LAB]: 0.10
 };
@@ -248,69 +248,105 @@ global.REVERSE_DIR = {
  * https://github.com/dragoonreas/Screeps/blob/9a1c6dbccad327d481a774f20b8152ecce117a0b/scripts/globals.js
  */
 global.ICONS = {
-	[STRUCTURE_CONTROLLER]: "\uD83C\uDFF0"
-	, [STRUCTURE_SPAWN]: "\uD83C\uDFE5"
-	, [STRUCTURE_EXTENSION]: "\uD83C\uDFEA"
-	, [STRUCTURE_CONTAINER]: "\uD83D\uDCE4"
-	, [STRUCTURE_STORAGE]: "\uD83C\uDFE6"
-	, [STRUCTURE_RAMPART]: "\uD83D\uDEA7"
-	, [STRUCTURE_WALL]: "\u26F0"
-	, [STRUCTURE_TOWER]: "\uD83D\uDD2B"
-	, [STRUCTURE_ROAD]: "\uD83D\uDEE3"
-	, [STRUCTURE_LINK]: "\uD83D\uDCEE"
-	, [STRUCTURE_EXTRACTOR]: "\uD83C\uDFED"
-	, [STRUCTURE_LAB]: "\u2697"
-	, [STRUCTURE_TERMINAL]: "\uD83C\uDFEC"
-	, [STRUCTURE_OBSERVER]: "\uD83D\uDCE1"
-	, [STRUCTURE_POWER_SPAWN]: "\uD83C\uDFDB"
-	, [STRUCTURE_NUKER]: "\u2622"
-	, [STRUCTURE_KEEPER_LAIR]: "" // TODO: Add icon for keeper lair
-	, [STRUCTURE_PORTAL]: "" // TODO: Add icon for portal
-	, [STRUCTURE_POWER_BANK]: "" // TODO: Add icon for power bank
-	, source: "" // TODO: Add icon for source
-	, constructionSite: "\uD83C\uDFD7"
-	, resource: "\uD83D\uDEE2"
-	, creep: "" // TODO: Add icon for creep
-	, moveTo: "\u27A1"
-	, attack: "\uD83D\uDDE1" // NOTE: Same as attackController
-	, build: "\uD83D\uDD28"
-	, repair: "\uD83D\uDD27"
-	, dismantle: "\u2692"
-	, harvest: "\u26CF"
-	, pickup: "\u2B07" // NOTE: Same as withdraw
-	, withdraw: "\u2B07" // NOTE: Same as pickup
-	, transfer: "\u2B06" // NOTE: Same as upgradeController
-	, upgradeController: "\u2B06" // NOTE: Same as transfer
-	, claimController: "\uD83D\uDDDD"
-	, reserveController: "\uD83D\uDD12"
-	, attackController: "\uD83D\uDDE1" // NOTE: Same as attack
-	, recycle: "\u267B"
-	, wait0: "\uD83D\uDD5B" // 12:00
-	, wait1: "\uD83D\uDD67" // 12:30
-	, wait2: "\uD83D\uDD50" // 01:00
-	, wait3: "\uD83D\uDD5C" // 01:30
-	, wait4: "\uD83D\uDD51" // 02:00
-	, wait5: "\uD83D\uDD5D" // 02:30
-	, wait6: "\uD83D\uDD52" // 03:00
-	, wait7: "\uD83D\uDD5E" // 03:30
-	, wait8: "\uD83D\uDD53" // 04:00
-	, wait9: "\uD83D\uDD5F" // 04:30
-	, wait10: "\uD83D\uDD54" // 05:00
-	, wait11: "\uD83D\uDD60" // 05:30
-	, wait12: "\uD83D\uDD55" // 06:00
-	, wait13: "\uD83D\uDD61" // 06:30
-	, wait14: "\uD83D\uDD56" // 07:00
-	, wait15: "\uD83D\uDD62" // 07:30
-	, wait16: "\uD83D\uDD57" // 08:00
-	, wait17: "\uD83D\uDD63" // 08:30
-	, wait18: "\uD83D\uDD58" // 09:00
-	, wait19: "\uD83D\uDD64" // 09:30
-	, wait20: "\uD83D\uDD59" // 10:00
-	, wait21: "\uD83D\uDD65" // 10:30
-	, wait22: "\uD83D\uDD5A" // 11:00
-	, wait23: "\uD83D\uDD66" // 11:30
-	, testPassed: "\uD83C\uDF89" // for when scout reaches its goal location
-	, testFinished: "\uD83C\uDFC1" // for when scout has finished its test run
+	[STRUCTURE_CONTROLLER]: "\uD83C\uDFF0",
+	[STRUCTURE_SPAWN]: "\uD83C\uDFE5",
+	[STRUCTURE_EXTENSION]: "\uD83C\uDFEA",
+	[STRUCTURE_CONTAINER]: "\uD83D\uDCE4",
+	[STRUCTURE_STORAGE]: "\uD83C\uDFE6",
+	[STRUCTURE_RAMPART]: "\uD83D\uDEA7",
+	[STRUCTURE_WALL]: "\u26F0",
+	[STRUCTURE_TOWER]: "\uD83D\uDD2B",
+	[STRUCTURE_ROAD]: "\uD83D\uDEE3",
+	[STRUCTURE_LINK]: "\uD83D\uDCEE",
+	[STRUCTURE_EXTRACTOR]: "\uD83C\uDFED",
+	[STRUCTURE_LAB]: "\u2697",
+	[STRUCTURE_TERMINAL]: "\uD83C\uDFEC",
+	[STRUCTURE_OBSERVER]: "\uD83D\uDCE1",
+	[STRUCTURE_POWER_SPAWN]: "\uD83C\uDFDB",
+	[STRUCTURE_NUKER]: "\u2622",
+	[STRUCTURE_KEEPER_LAIR]: "" // TODO: Add icon for keeper lair
+		,
+	[STRUCTURE_PORTAL]: "" // TODO: Add icon for portal
+		,
+	[STRUCTURE_POWER_BANK]: "" // TODO: Add icon for power bank
+		,
+	source: "" // TODO: Add icon for source
+		,
+	constructionSite: "\uD83C\uDFD7",
+	resource: "\uD83D\uDEE2",
+	creep: "" // TODO: Add icon for creep
+		,
+	moveTo: "\u27A1",
+	attack: "\uD83D\uDDE1" // NOTE: Same as attackController
+		,
+	build: "\uD83D\uDD28",
+	repair: "\uD83D\uDD27",
+	dismantle: "\u2692",
+	harvest: "\u26CF",
+	pickup: "\u2B07" // NOTE: Same as withdraw
+		,
+	withdraw: "\u2B07" // NOTE: Same as pickup
+		,
+	transfer: "\u2B06" // NOTE: Same as upgradeController
+		,
+	upgradeController: "\u2B06" // NOTE: Same as transfer
+		,
+	claimController: "\uD83D\uDDDD",
+	reserveController: "\uD83D\uDD12",
+	attackController: "\uD83D\uDDE1" // NOTE: Same as attack
+		,
+	recycle: "\u267B",
+	wait0: "\uD83D\uDD5B" // 12:00
+		,
+	wait1: "\uD83D\uDD67" // 12:30
+		,
+	wait2: "\uD83D\uDD50" // 01:00
+		,
+	wait3: "\uD83D\uDD5C" // 01:30
+		,
+	wait4: "\uD83D\uDD51" // 02:00
+		,
+	wait5: "\uD83D\uDD5D" // 02:30
+		,
+	wait6: "\uD83D\uDD52" // 03:00
+		,
+	wait7: "\uD83D\uDD5E" // 03:30
+		,
+	wait8: "\uD83D\uDD53" // 04:00
+		,
+	wait9: "\uD83D\uDD5F" // 04:30
+		,
+	wait10: "\uD83D\uDD54" // 05:00
+		,
+	wait11: "\uD83D\uDD60" // 05:30
+		,
+	wait12: "\uD83D\uDD55" // 06:00
+		,
+	wait13: "\uD83D\uDD61" // 06:30
+		,
+	wait14: "\uD83D\uDD56" // 07:00
+		,
+	wait15: "\uD83D\uDD62" // 07:30
+		,
+	wait16: "\uD83D\uDD57" // 08:00
+		,
+	wait17: "\uD83D\uDD63" // 08:30
+		,
+	wait18: "\uD83D\uDD58" // 09:00
+		,
+	wait19: "\uD83D\uDD64" // 09:30
+		,
+	wait20: "\uD83D\uDD59" // 10:00
+		,
+	wait21: "\uD83D\uDD65" // 10:30
+		,
+	wait22: "\uD83D\uDD5A" // 11:00
+		,
+	wait23: "\uD83D\uDD66" // 11:30
+		,
+	testPassed: "\uD83C\uDF89" // for when scout reaches its goal location
+		,
+	testFinished: "\uD83C\uDFC1" // for when scout has finished its test run
 };
 
 // Appropriated from engineeryo
@@ -455,7 +491,9 @@ global.DEFINE_GETTER = function (proto, propertyName, fn, enumerable = false) {
 };
 
 global.DEFINE_BACKED_PROPERTY = function (proto, propertyName, store, opts = {}) {
-	const { enumerable = false, key = propertyName } = opts;
+	const {
+		enumerable = false, key = propertyName
+	} = opts;
 	Object.defineProperty(proto, propertyName, {
 		get: function () {
 			return this[store][key];
@@ -503,11 +541,11 @@ global.profile = function (ticks = 30, filter = null) {
 // ncshupheo's wall score
 global.wcmc = (hits) => Math.floor(254 * Math.sqrt(Math.sqrt(hits / WALL_HITS_MAX)) + 1);
 
-global.goid = (x) => Game.getObjectById(x);				// get object by id
+global.goid = (x) => Game.getObjectById(x); // get object by id
 global.exg = (x) => ex(goid(x));
 
-global.wroom = function (roomName, fn) {			// with room
-	const ob = _.find(Game.structures, (s) => s.structureType === STRUCTURE_OBSERVER && Game.map.getRoomLinearDistance(s.pos.roomName, roomName) <= OBSERVER_RANGE && s.exec(roomName,fn) === OK);
+global.wroom = function (roomName, fn) { // with room
+	const ob = _.find(Game.structures, (s) => s.structureType === STRUCTURE_OBSERVER && Game.map.getRoomLinearDistance(s.pos.roomName, roomName) <= OBSERVER_RANGE && s.exec(roomName, fn) === OK);
 	if (!ob)
 		return "No observer in range";
 	return ob;
@@ -1100,7 +1138,7 @@ global.listStorages = function (displayResource) {
 		if (arguments.length == 0 || displayResource == resourceTable[res]) {
 			let c = -1;
 			tableResources.push(resourceTable[res])
-			
+
 			for (var r in myRooms) {
 				if (Game.rooms[r].storage != undefined && Game.rooms[r].storage.owner.username == playerUsername) {
 					c++;
@@ -1118,7 +1156,7 @@ global.listStorages = function (displayResource) {
 					} else {
 						code = ""
 					}
-					tableResources.push(prettyInt(amount)+" "+code)
+					tableResources.push(prettyInt(amount) + " " + code)
 
 					if (total[c] == undefined) {
 						total[c] = amount;
@@ -1137,7 +1175,7 @@ global.listStorages = function (displayResource) {
 	for (let c in total) {
 		tableTotal.push(prettyInt(total[c]))
 	}
-	
+
 	tableObject.rows.push(tableTotal)
 	var table = AsciiTable.factory(tableObject)
 
